@@ -35,7 +35,7 @@ public:
     }
 
 
-    ba::io_service ios{};
+    ba::io_context ios{};
     std::unique_ptr<tcp::acceptor> acceptor;
     std::unique_ptr<std::iostream> socketstream;
     std::unique_ptr<tcp::socket> server_socket;

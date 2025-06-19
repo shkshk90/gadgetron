@@ -7,6 +7,9 @@
 #include "connection/nodes/external/Julia.h"
 #include "log.h"
 #include "Process.h"
+#include <boost/process/v1/args.hpp>
+#include <boost/process/v1/io.hpp>
+#include <boost/process/v1/search_path.hpp>
 
 
 #if defined(_WIN32)

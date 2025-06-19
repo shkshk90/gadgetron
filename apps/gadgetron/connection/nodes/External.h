@@ -2,7 +2,10 @@
 
 #include <future>
 #include <boost/asio.hpp>
+
 #include <boost/process.hpp>
+#include <boost/process/v1/child.hpp>
+#include <boost/process/v1/system.hpp>
 
 #include "connection/config/Config.h"
 
@@ -47,7 +50,7 @@ namespace Gadgetron::Server::Connection::Nodes {
         std::shared_ptr<Serialization> serialization;
         std::shared_ptr<Configuration> configuration;
 
-        boost::asio::io_service io_service;
+        boost::asio::io_context io_service;
 
         struct {
             std::future<void> child;

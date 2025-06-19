@@ -6,6 +6,12 @@
 
 #include "log.h"
 
+#include <boost/process/v1/io.hpp>
+#include <boost/process/v1/env.hpp>
+#include <boost/process/v1/search_path.hpp>
+#include <boost/process/v1/args.hpp>
+#include <boost/process/v1/handles.hpp>
+
 namespace Gadgetron::Server::Connection::Nodes {
 
     boost::process::child start_matlab_module(

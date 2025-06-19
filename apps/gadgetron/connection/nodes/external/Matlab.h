@@ -1,6 +1,6 @@
 #pragma once
 
-#include <boost/process.hpp>
+#include <boost/process/v1/child.hpp>
 
 #include "connection/config/Config.h"
 

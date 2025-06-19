@@ -4,7 +4,9 @@
 
 #include <ismrmrd/xml.h>
 
+
 #include <boost/process.hpp>
+#include <boost/process/v1/child.hpp>
 #include <boost/program_options.hpp>
 
 #include "StorageSetup.h"

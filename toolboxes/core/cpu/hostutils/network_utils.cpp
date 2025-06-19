@@ -10,6 +10,9 @@
 #include "Process.h"
 #include <regex>
 
+#include <boost/process/v1/io.hpp>
+#include <boost/process/v1/search_path.hpp>
+
 namespace Gadgetron {
 
     void find_gadgetron_ip(std::string& host_name, std::vector<std::string>& ip_list)
@@ -17,7 +20,7 @@ namespace Gadgetron {
         try
         
         {
-            boost::asio::io_service io_service;
+            boost::asio::io_context io_service;
             boost::asio::ip::tcp::resolver resolver(io_service);
 
             ip_list.clear();

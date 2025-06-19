@@ -7,8 +7,6 @@ find_package(CUDA 12.3)
 if(CUDA_FOUND)
 
   # Enumerate the compute capabilities we will be building for if not targeting build system GPU
-  set(CUDA_NVCC_FLAGS7  "-gencode arch=compute_70,code=sm_70")
-  set(CUDA_NVCC_FLAGS75 "-gencode arch=compute_75,code=sm_75")
   set(CUDA_NVCC_FLAGS8  "-gencode arch=compute_80,code=sm_80")
   set(CUDA_NVCC_FLAGS86 "-gencode arch=compute_86,code=sm_86")
   set(CUDA_NVCC_FLAGS87 "-gencode arch=compute_87,code=sm_87")

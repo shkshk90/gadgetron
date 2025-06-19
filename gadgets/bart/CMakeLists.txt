@@ -5,7 +5,7 @@ cmake_policy(SET CMP0028 NEW) # double colon only for imported or alias librarie
 # First try to find either the BARTmain library or a path to the BART source code
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
-
+set(BART::BARTMAIN bart)
 
 # ==============================================================================
 
@@ -31,7 +31,7 @@ if(BART_MEMONLY_CFL)
 endif()
 
 add_library(gadgetron_bart SHARED ${GADGET_FILES})
-target_link_libraries(gadgetron_bart BART::BARTMAIN)
+target_link_libraries(gadgetron_bart bart)
 
 
 

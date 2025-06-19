@@ -1,4 +1,4 @@
-#include "Python.h"
+#include "Julia.h"
 
 #include <list>
 #include "Process.h"
@@ -6,6 +6,11 @@
 #include "connection/config/Config.h"
 
 #include <boost/asio.hpp>
+#include <boost/process/v1/io.hpp>
+#include <boost/process/v1/env.hpp>
+#include <boost/process/v1/search_path.hpp>
+#include <boost/process/v1/args.hpp>
+#include <boost/process/v1/handles.hpp>
 
 #include "log.h"
 #include <regex>

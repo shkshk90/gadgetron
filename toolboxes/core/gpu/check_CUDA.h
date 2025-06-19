@@ -5,6 +5,8 @@
 #pragma once
 
 #include "GadgetronCuException.h"
+#include <boost/current_function.hpp>
+
 
 namespace Gadgetron {
 

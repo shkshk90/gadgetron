@@ -209,8 +209,13 @@ namespace Gadgetron{
   };
 
   template<class T, unsigned int D> void 
-  cuLinearResampleOperator<T,D>::write_sort_arrays( thrust::device_vector<unsigned int> &sort_keys )
+  cuLinearResampleOperator<T,D>::write_sort_arrays( void* thrust_device_vector_unsigned_int_sort_keys )
   {
+    // thrust::device_vector<unsigned int> &sort_keys
+    if (thrust_device_vector_unsigned_int_sort_keys == nullptr) return;
+    thrust::device_vector<unsigned int> &sort_keys = *(thrust::device_vector<unsigned int>*)thrust_device_vector_unsigned_int_sort_keys;
+
+
     typename uint64d<D>::Type matrix_size = from_std_vector<size_t,D>(this->offsets_->get_dimensions());
     int surplus = this->offsets_->get_number_of_dimensions()-D;
     unsigned int extended_dim = (surplus == 1) ? 1 : this->offsets_->get_size(D);
@@ -262,4 +267,5 @@ namespace Gadgetron{
 
   template class EXPORTGPUREG cuLinearResampleOperator<double,4>;
   template class EXPORTGPUREG cuLinearResampleOperator<double_complext,4>;
+
 }

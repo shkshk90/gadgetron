@@ -11,6 +11,7 @@
 #include "external/Julia.h"
 
 #include <boost/asio/use_future.hpp>
+#include <boost/asio/dispatch.hpp>
 #include <boost/algorithm/string.hpp>
 #include "system_info.h"
 
@@ -54,7 +55,7 @@ namespace Gadgetron::Server::Connection::Nodes {
             std::shared_ptr<tcp::acceptor> acceptor
     ) {
         child->wait();
-        io_service.dispatch([=]() { acceptor->close(); });
+        boost::asio::dispatch(io_service, [=]() { acceptor->close(); });
     }
 
     std::shared_ptr<ExternalChannel> External::open_connection(Config::Connect connect, const StreamContext &context) {

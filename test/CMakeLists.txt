@@ -92,6 +92,7 @@ include(GoogleTest)
             gadgetron_toolbox_cpusdc
             ${GTEST_LIBRARIES}
             GTest::gmock
+            Boost::process
             )
 
     if (PYTHONLIBS_FOUND)

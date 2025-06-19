@@ -18,6 +18,6 @@ namespace Gadgetron{
 
   protected:
     virtual unsigned int get_num_neighbors();
-    virtual void write_sort_arrays( thrust::device_vector<unsigned int> &sort_keys );
+    void write_sort_arrays( void* thrust_device_vector_unsigned_int_sort_keys) override;
   };
 }

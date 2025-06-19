@@ -22,5 +22,6 @@ target_link_libraries(server_tests
         GTest::Main
         GTest::gtest
         GTest::gtest_main
+        Boost::process
         )
 

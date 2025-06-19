@@ -5,11 +5,12 @@
 
 #include <complex>
 #include <thrust/functional.h>
+#include <functional>
 
 using namespace Gadgetron;
 //using namespace std;
 
-template<typename T> struct cuNDA_abs : public thrust::unary_function<T,typename realType<T>::Type>
+template<typename T> struct cuNDA_abs : public std::function<typename realType<T>::Type(T)>
 {
   __device__ typename Gadgetron::realType<T>::Type operator()(const T &x) const {return abs(x);}
 };
@@ -38,7 +39,7 @@ Gadgetron::abs_inplace( cuNDArray<T> *x )
   thrust::transform(xPtr,xPtr+x->get_number_of_elements(),xPtr,cuNDA_abs<T>());
 }  
   
-template<typename T> struct cuNDA_abs_square : public thrust::unary_function<T,typename realType<T>::Type>
+template<typename T> struct cuNDA_abs_square : public std::function<typename realType<T>::Type(T)>
 {
   __device__ typename Gadgetron::realType<T>::Type operator()(const T &x) const 
   { 
@@ -61,7 +62,7 @@ Gadgetron::abs_square( const cuNDArray<T> *x )
   return result;
 }
 
-template<typename T> struct cuNDA_sqrt : public thrust::unary_function<T,T>
+template<typename T> struct cuNDA_sqrt : public std::function<T(T)>
 {
   __device__ T operator()(const T &x) const {return sqrt(x);}
 };
@@ -90,7 +91,7 @@ Gadgetron::sqrt_inplace( cuNDArray<T> *x )
   thrust::transform(xPtr,xPtr+x->get_number_of_elements(),xPtr,cuNDA_sqrt<T>());
 }
  
-template<typename T> struct cuNDA_square : public thrust::unary_function<T,T>
+template<typename T> struct cuNDA_square : public std::function<T(T)>
 {
   __device__ T operator()(const T &x) const {return x*x;}
 };
@@ -118,7 +119,7 @@ Gadgetron::square_inplace( cuNDArray<T> *x )
   thrust::transform(xPtr,xPtr+x->get_number_of_elements(),xPtr,cuNDA_square<T>());
 }  
 
-template<typename T> struct cuNDA_reciprocal : public thrust::unary_function<T,T>
+template<typename T> struct cuNDA_reciprocal : public std::function<T(T)>
 {
   __device__ T operator()(const T &x) const {return T(1)/x;}
 };
@@ -146,7 +147,7 @@ Gadgetron::reciprocal_inplace( cuNDArray<T> *x )
   thrust::transform(xPtr,xPtr+x->get_number_of_elements(),xPtr,cuNDA_reciprocal<T>());
 }  
  
-template<typename T> struct cuNDA_reciprocal_sqrt : public thrust::unary_function<T,T>
+template<typename T> struct cuNDA_reciprocal_sqrt : public std::function<T(T)>
 {
   __device__ T operator()(const T &x) const {return T(1)/sqrt(x);}
 };
@@ -174,7 +175,7 @@ Gadgetron::reciprocal_sqrt_inplace( cuNDArray<T> *x )
   thrust::transform(xPtr,xPtr+x->get_number_of_elements(),xPtr,cuNDA_reciprocal_sqrt<T>());
 }  
 
-template<typename T> struct cuNDA_sgn : public thrust::unary_function<T,T>
+template<typename T> struct cuNDA_sgn : public std::function<T(T)>
 {
   __device__ T operator()(const T &x) const {return sgn(x);}
 };
@@ -202,7 +203,7 @@ Gadgetron::sgn_inplace( cuNDArray<T> *x )
   thrust::transform(xPtr,xPtr+x->get_number_of_elements(),xPtr,cuNDA_sgn<T>());
 }  
  
-template<typename T> struct cuNDA_real : public thrust::unary_function<T,typename realType<T>::Type>
+template<typename T> struct cuNDA_real : public std::function<typename realType<T>::Type(T)>
 {
   __device__ typename realType<T>::Type operator()(const T &x) const {return real(x);}
 };
@@ -221,7 +222,7 @@ Gadgetron::real( const cuNDArray<T> *x )
   return result;
 }
 
-template <typename T> struct cuNDA_imag : public thrust::unary_function<T,typename realType<T>::Type>
+template <typename T> struct cuNDA_imag : public std::function<typename realType<T>::Type(T)>
 {
   __device__ typename realType<T>::Type operator()(const T &x) const {return imag(x);}
 };
@@ -240,7 +241,7 @@ Gadgetron::imag( const cuNDArray<T> *x )
   return result;
 }
 
-template <typename T> struct cuNDA_conj : public thrust::unary_function<T,T>
+template <typename T> struct cuNDA_conj : public std::function<T(T)>
 {
   __device__ T operator()(const T &x) const {return conj(x);}
 };
@@ -259,7 +260,7 @@ Gadgetron::conj( const cuNDArray<T> *x )
   return result;
 }
 
-template <typename T> struct cuNDA_real_to_complex : public thrust::unary_function<typename realType<T>::Type,T>
+template <typename T> struct cuNDA_real_to_complex : public std::function<T(typename realType<T>::Type)>
 {
   __device__ T operator()(const typename realType<T>::Type &x) const {return T(x);}
 };
@@ -278,12 +279,12 @@ Gadgetron::real_to_complex( const cuNDArray<typename realType<T>::Type> *x )
   return result;
 }
 
-template <typename T,typename T2> struct cuNDA_convert_to : public thrust::unary_function<T,T2>
+template <typename T,typename T2> struct cuNDA_convert_to : public std::function<T2(T)>
 {
   __device__ T2 operator()(T &x) const {return T2(x);}
 };
 
-template <typename T,typename T2> struct cuNDA_convert_to<complext<T>,complext<T2> > : public thrust::unary_function<complext<T>,complext<T2> >
+template <typename T,typename T2> struct cuNDA_convert_to<complext<T>,complext<T2> > : public std::function<complext<T2> (complext<T>)>
 {
   __device__ complext<T2> operator()(complext<T> &x) const {return complext<T2>(x._real,x._imag);}
 };
@@ -333,7 +334,7 @@ Gadgetron::fill( cuNDArray<T> *x, T val )
   thrust::fill(devPtr,devPtr+x->get_number_of_elements(),val);
 }  
 
-template<typename T> struct cuNDA_clamp : public thrust::unary_function<T,T>
+template<typename T> struct cuNDA_clamp : public std::function<T(T)>
 {
   cuNDA_clamp( T _min, T _max, T _min_val, T _max_val ) : min(_min), max(_max),min_val(_min_val), max_val(_max_val) {}
   __device__ T operator()(const T &x) const 
@@ -346,7 +347,7 @@ template<typename T> struct cuNDA_clamp : public thrust::unary_function<T,T>
   T min_val, max_val;
 };
 
-template<typename T> struct cuNDA_clamp< complext<T> > : public thrust::unary_function< complext<T>, complext<T> >
+template<typename T> struct cuNDA_clamp< complext<T> > : public std::function< complext<T> ( complext<T>)>
 {
 	cuNDA_clamp( T _min, T _max, complext<T> _min_val, complext<T> _max_val ) : min(_min), max(_max),min_val(_min_val), max_val(_max_val) {}
   __device__ complext<T> operator()(const complext<T> &x) const 
@@ -375,7 +376,7 @@ Gadgetron::clamp( cuNDArray<T> *x, typename realType<T>::Type min, typename real
     clamp(x,min,max,T(min),T(max));
 }
 
-template<typename T> struct cuNDA_clamp_min : public thrust::unary_function<T,T>
+template<typename T> struct cuNDA_clamp_min : public std::function<T(T)>
 {
   cuNDA_clamp_min( T _min ) : min(_min) {}
   __device__ T operator()(const T &x) const 
@@ -386,7 +387,7 @@ template<typename T> struct cuNDA_clamp_min : public thrust::unary_function<T,T>
   T min;
 };
 
-template<typename T> struct cuNDA_clamp_min< complext<T> > : public thrust::unary_function< complext<T>, complext<T> >
+template<typename T> struct cuNDA_clamp_min< complext<T> > : public std::function< complext<T> ( complext<T>)>
 {
   cuNDA_clamp_min( T _min ) : min(_min) {}
   __device__ complext<T> operator()(const complext<T> &x) const 
@@ -407,7 +408,7 @@ Gadgetron::clamp_min( cuNDArray<T> *x, typename realType<T>::Type min )
   thrust::transform(xPtr,xPtr+x->get_number_of_elements(),xPtr,cuNDA_clamp_min<T>(min));
 }  
 
-template<typename T> struct cuNDA_clamp_max : public thrust::unary_function<T,T>
+template<typename T> struct cuNDA_clamp_max : public std::function<T(T)>
 {
   cuNDA_clamp_max( T _max ) : max(_max) {}
   __device__ T operator()(const T &x) const 
@@ -418,7 +419,7 @@ template<typename T> struct cuNDA_clamp_max : public thrust::unary_function<T,T>
   T max;
 };
 
-template<typename T> struct cuNDA_clamp_max< complext<T> > : public thrust::unary_function< complext<T>, complext<T> >
+template<typename T> struct cuNDA_clamp_max< complext<T> > : public std::function< complext<T> ( complext<T>)>
 {
   cuNDA_clamp_max( T _max ) : max(_max) {}
   __device__ complext<T> operator()(const complext<T> &x) const 
@@ -453,7 +454,7 @@ Gadgetron::normalize( cuNDArray<T> *x, typename realType<T>::Type val )
 }
 
 
-template<typename T> struct cuNDA_shrink1 : public thrust::unary_function<T,T>
+template<typename T> struct cuNDA_shrink1 : public std::function<T(T)>
 {
   cuNDA_shrink1( typename realType<T>::Type _gamma ) : gamma(_gamma) {}
   __device__ T operator()(const T &x) const {
@@ -475,7 +476,7 @@ Gadgetron::shrink1( cuNDArray<T> *x, typename realType<T>::Type gamma, cuNDArray
   thrust::transform(xPtr,xPtr+x->get_number_of_elements(),outPtr,cuNDA_shrink1<T>(gamma));
 }
 
-template<typename T> struct cuNDA_pshrink : public thrust::unary_function<T,T>
+template<typename T> struct cuNDA_pshrink : public std::function<T(T)>
 {
   cuNDA_pshrink( typename realType<T>::Type _gamma, typename realType<T>::Type _p ) : gamma(_gamma),p(_p) {}
   __device__ T operator()(const T &x) const {
@@ -498,7 +499,7 @@ Gadgetron::pshrink( cuNDArray<T> *x, typename realType<T>::Type gamma,typename r
   thrust::transform(xPtr,xPtr+x->get_number_of_elements(),outPtr,cuNDA_pshrink<T>(gamma,p));
 }  
 
-template<typename T> struct cuNDA_shrinkd : public thrust::binary_function<T,typename realType<T>::Type,T>
+template<typename T> struct cuNDA_shrinkd : public std::function<T(T,typename realType<T>::Type)>
 {
   cuNDA_shrinkd( typename realType<T>::Type _gamma ) : gamma(_gamma) {}
   __device__ T operator()(const T &x, const typename realType<T>::Type &s) const {
@@ -521,7 +522,7 @@ Gadgetron::shrinkd( cuNDArray<T> *x, cuNDArray<typename realType<T>::Type> *s, t
 }  
 
 
-template<typename T> struct cuNDA_pshrinkd : public thrust::binary_function<T,typename realType<T>::Type,T>
+template<typename T> struct cuNDA_pshrinkd : public std::function<T(T,typename realType<T>::Type)>
 {
   cuNDA_pshrinkd( typename realType<T>::Type _gamma,typename realType<T>::Type _p ) : gamma(_gamma), p(_p) {}
   __device__ T operator()(const T &x, const typename realType<T>::Type &s) const {

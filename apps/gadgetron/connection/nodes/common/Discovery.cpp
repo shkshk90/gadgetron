@@ -1,9 +1,11 @@
 #include "Discovery.h"
 
-#include <boost/asio/io_service.hpp>
+#include <boost/asio/io_context.hpp>
+
 
 #include <boost/process.hpp>
-#include <boost/process/async.hpp>
+#include <boost/process/v1/async.hpp>
+#include <boost/process/v1/io.hpp>
 
 #include <boost/fusion/include/adapt_struct.hpp>
 #include <boost/fusion/include/io.hpp>
@@ -79,7 +81,7 @@ namespace Gadgetron::Server::Connection::Nodes {
                 worker_discovery_command,
                 boost::process::std_out > output,
                 boost::process::std_err > boost::process::null,
-                boost::asio::io_service{},
+                boost::asio::io_context{},
                 error_code
         );
 

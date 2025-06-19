@@ -21,22 +21,24 @@ using namespace Gadgetron::Server;
 
 using gadget_parameter = std::pair<std::string, std::string>;
 
-std::istream& operator>>(std::istream& in, gadget_parameter& param) {
-    std::string token;
-    in >> token;
-    // parse <key>=<value> into a gadget_parameter
-    auto pos = token.find('=');
-    if (pos == std::string::npos) {
-        throw std::runtime_error("Invalid gadget parameter: " + token);
+namespace std {
+    std::istream& operator>>(std::istream& in, gadget_parameter& param) {
+        std::string token;
+        in >> token;
+        // parse <key>=<value> into a gadget_parameter
+        auto pos = token.find('=');
+        if (pos == std::string::npos) {
+            throw std::runtime_error("Invalid gadget parameter: " + token);
+        }
+        param.first = token.substr(0, pos);
+        param.second = token.substr(pos + 1);
+        return in;
     }
-    param.first = token.substr(0, pos);
-    param.second = token.substr(pos + 1);
-    return in;
-}
 
-std::ostream& operator<<(std::ostream& out, const gadget_parameter& param) {
-    out << param.first << "=" << param.second;
-    return out;
+    std::ostream& operator<<(std::ostream& out, const gadget_parameter& param) {
+        out << param.first << "=" << param.second;
+        return out;
+    }
 }
 
 int main(int argc, char *argv[]) {

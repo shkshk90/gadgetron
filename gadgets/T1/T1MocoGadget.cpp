@@ -13,7 +13,7 @@
 #include "mri_core_def.h"
 #include "t1fit.h"
 #include <range/v3/algorithm.hpp>
-#include <range/v3/range_concepts.hpp>
+#include <range/v3/range/concepts.hpp>
 namespace Gadgetron {
 
 class T1MocoGadget : public Core::ChannelGadget<IsmrmrdImageArray> {

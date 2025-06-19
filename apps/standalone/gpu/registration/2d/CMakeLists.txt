@@ -8,16 +8,18 @@ include_directories(
 )
 
 target_link_libraries(register_HS_2d_gpu 
-  gadgetron_toolbox_hostutils 
-  gadgetron_toolbox_gpu 
-  ${CUDA_LIBRARIES}
-  )
+gadgetron_toolbox_hostutils 
+gadgetron_toolbox_gpu 
+Boost::process
+${CUDA_LIBRARIES}
+)
 
 target_link_libraries(register_CK_2d_gpu
-  gadgetron_toolbox_hostutils 
-  gadgetron_toolbox_gpu 
-  ${CUDA_LIBRARIES}
-  )
+gadgetron_toolbox_hostutils 
+gadgetron_toolbox_gpu 
+Boost::process
+${CUDA_LIBRARIES}
+)
 
 #target_link_libraries(test_reg_sense_recon 
 #  hostutils 
@@ -29,12 +31,13 @@ target_link_libraries(register_CK_2d_gpu
 #  gpuparallelmri 
 #  ${CUDA_LIBRARIES}
 #  )
-  
-  target_link_libraries(register_CGHS_2d_gpu 
+
+target_link_libraries(register_CGHS_2d_gpu 
   gadgetron_toolbox_hostutils 
   gadgetron_toolbox_gpu 
+  Boost::process
   ${CUDA_LIBRARIES}
-  )
+)
 
 install(TARGETS 
   register_HS_2d_gpu

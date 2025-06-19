@@ -80,6 +80,7 @@ target_link_libraries(gadgetron
         Boost::system
         Boost::filesystem
         Boost::program_options
+        Boost::process
         ${CURL_LIBRARIES}
         GTBLAS
         ${CMAKE_DL_LIBS})

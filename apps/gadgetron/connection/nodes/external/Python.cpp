@@ -1,7 +1,14 @@
 #include "Python.h"
 
 #include <list>
+
 #include "Process.h"
+
+#include <boost/process/v1/io.hpp>
+#include <boost/process/v1/env.hpp>
+#include <boost/process/v1/search_path.hpp>
+#include <boost/process/v1/args.hpp>
+#include <boost/process/v1/handles.hpp>
 
 #include "connection/config/Config.h"
 
