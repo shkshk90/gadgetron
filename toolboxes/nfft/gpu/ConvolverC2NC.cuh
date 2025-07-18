@@ -21,6 +21,10 @@
 // Transfer result from shared memory to global memory.
 //
 
+#include "complext.h"
+#include "vector_td.h"
+#include "ConvolutionKernel.h"
+#include <thrust/execution_policy.h>
 
 // Reference to shared memory
 extern __shared__ char _shared_mem[];

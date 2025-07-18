@@ -28,7 +28,7 @@ template<class T> __inline__ __host__ __device__ T get_epsilon();
 // Math prototypes
 //
 
-template<class REAL> __inline__ __device__ REAL get_pi();
+template<class REAL> __inline__ __host__ __device__ REAL get_pi();
 
 //
 // Implementation
@@ -64,6 +64,6 @@ template<> __inline__ __host__ __device__ double get_epsilon<double>()
   return DBL_EPSILON;
 }
 
-template<> __inline__ __host__ __device__ float get_pi(){ return (float)M_PI; }
-template<> __inline__ __host__ __device__ double get_pi(){ return M_PI; }
+template<> __inline__ __host__ __device__ float get_pi() { return (float)M_PI; }
+template<> __inline__ __host__ __device__ double get_pi() { return M_PI; }
 

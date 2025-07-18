@@ -1,3 +1,5 @@
+#if 0
+
 #include "cuHaarWaveletOperator.h"
 #include "cuNDArray_operators.h"
 #include "cuNDArray_elemwise.h"
@@ -314,7 +316,7 @@ template<class T, unsigned int D> void cuHaarWaveletOperator<T,D>::mult_MH(cuNDA
 		tmp_in = new cuNDArray<T>(this->domain_dims_);
 		vector_td<size_t,D> offset;
 		for (int i = 0; i < D; i++ ) offset[i] = (this->codomain_dims_[i]-this->domain_dims_[i])/2;
-		crop<T,D>(offset,tmp_out,tmp_in);
+		crop<T,D>(offset,*tmp_out,*tmp_in);
 	}
 
 	if (accumulate){
@@ -346,5 +348,7 @@ template class  cuHaarWaveletOperator<double_complext,1>;
 template class  cuHaarWaveletOperator<double_complext,2>;
 template class  cuHaarWaveletOperator<double_complext,3>;
 template class  cuHaarWaveletOperator<double_complext,4>;
+
+#endif
 
 

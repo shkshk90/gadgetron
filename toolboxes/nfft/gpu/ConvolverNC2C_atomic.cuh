@@ -49,28 +49,32 @@ __device__ double atomicAdd(double* address, double val)
 }
 #endif
 
+#include "complext.h"
+#include "vector_td.h"
+#include "ConvolutionKernel.h"
+
 //This function does not return a value. Why? Because why we can atomically add things, we cannot atomically get the result back.
 template<class T>
-__device__ void atomicAdd(complext<T>* __restrict__ address, complext<T> val){
+__device__ void atomicAdd(Gadgetron::complext<T>* __restrict__ address, Gadgetron::complext<T> val){
     atomicAdd(reinterpret_cast<T*>(address),real(val));
     atomicAdd(reinterpret_cast<T*>(address)+1,imag(val));
 }
 
 template<class T, unsigned int D, template<class, unsigned int> class K>
 __inline__ __device__
-static void NFFT_iterate_body(vector_td<unsigned int, D> matrix_size_os, 
+static void NFFT_iterate_body(Gadgetron::vector_td<unsigned int, D> matrix_size_os, 
 		   unsigned int number_of_batches, const T * __restrict__ samples,  T * __restrict__ image,
 		   unsigned int frame, unsigned int num_frames,
 		   unsigned int num_samples_per_batch, unsigned int sample_idx_in_batch, 
-       vector_td<realType_t<T>,D> sample_position, vector_td<int,D> grid_position,
-       const ConvolutionKernel<realType_t<T>, D, K>* kernel)
+       Gadgetron::vector_td<Gadgetron::realType_t<T>,D> sample_position, Gadgetron::vector_td<int,D> grid_position,
+       const Gadgetron::ConvolutionKernel<Gadgetron::realType_t<T>, D, K>* kernel)
 {
-    // Calculate the distance between current sample and the grid cell.
-    vector_td<realType_t<T>,D> grid_position_real = vector_td<realType_t<T>,D>(grid_position);
-    const vector_td<realType_t<T>,D> delta = abs(sample_position - grid_position_real);
+        // Calculate the distance between current sample and the grid cell.
+    Gadgetron::vector_td<Gadgetron::realType_t<T>,D> grid_position_real = Gadgetron::vector_td<Gadgetron::realType_t<T>,D>(grid_position);
+    const Gadgetron::vector_td<Gadgetron::realType_t<T>,D> delta = abs(sample_position - grid_position_real);
 
     // Compute convolution weight.
-    const realType_t<T> weight = kernel->get(delta);
+    const Gadgetron::realType_t<T> weight = kernel->get(delta);
 
     // Safety measure.
     if (!isfinite(weight))
@@ -86,7 +90,7 @@ static void NFFT_iterate_body(vector_td<unsigned int, D> matrix_size_os,
         
         // Determine the grid cell idx
         unsigned int grid_idx = 
-            (batch*num_frames+frame)*prod(matrix_size_os) + co_to_idx( vector_td<unsigned int, D>(grid_position), matrix_size_os );
+            (batch*num_frames+frame)*prod(matrix_size_os) + co_to_idx( Gadgetron::vector_td<unsigned int, D>(grid_position), matrix_size_os );
 
         // Atomic update.
         atomicAdd(&(image[grid_idx]), weight*sample_value);
@@ -99,18 +103,18 @@ static void NFFT_iterate_body(vector_td<unsigned int, D> matrix_size_os,
 
 template<class T, template<class, unsigned int> class K>
 __inline__ __device__
-void NFFT_iterate(vector_td<unsigned int,1> matrix_size_os, 
+void NFFT_iterate(Gadgetron::vector_td<unsigned int,1> matrix_size_os, 
 	      unsigned int number_of_batches, const T * __restrict__ samples, T * __restrict__ image,
 	      unsigned int frame, unsigned int num_frames, 
 	      unsigned int num_samples_per_batch, unsigned int sample_idx_in_batch, 
-        vector_td<realType_t<T>,1> sample_position,
-        vector_td<int,1> lower_limit, vector_td<int,1> upper_limit,
-        const ConvolutionKernel<realType_t<T>, 1, K>* kernel)
+        Gadgetron::vector_td<Gadgetron::realType_t<T>,1> sample_position,
+        Gadgetron::vector_td<int,1> lower_limit, Gadgetron::vector_td<int,1> upper_limit,
+        const Gadgetron::ConvolutionKernel<Gadgetron::realType_t<T>, 1, K>* kernel)
 {
-    // Iterate through all grid cells influencing the corresponding sample
+        // Iterate through all grid cells influencing the corresponding sample
     for( int x = lower_limit.vec[0]; x<=upper_limit.vec[0]; x++ )
     {
-        const intd<1>::Type grid_position(x);
+        const Gadgetron::intd<1>::Type grid_position(x);
         
         NFFT_iterate_body<T, 1>(matrix_size_os, number_of_batches, samples, image,
               frame, num_frames,
@@ -125,19 +129,19 @@ void NFFT_iterate(vector_td<unsigned int,1> matrix_size_os,
 
 template<class T, template<class, unsigned int> class K>
 __inline__ __device__
-void NFFT_iterate(vector_td<unsigned int,2> matrix_size_os, 
+void NFFT_iterate(Gadgetron::vector_td<unsigned int,2> matrix_size_os, 
 	      unsigned int number_of_batches, const T * __restrict__ samples, T * __restrict__ image,
 	      unsigned int frame, unsigned int num_frames, 
 	      unsigned int num_samples_per_batch, unsigned int sample_idx_in_batch, 
-        vector_td<realType_t<T>,2> sample_position,
-        vector_td<int,2> lower_limit, vector_td<int,2> upper_limit,
-        const ConvolutionKernel<realType_t<T>, 2, K>* kernel)
+        Gadgetron::vector_td<Gadgetron::realType_t<T>,2> sample_position,
+        Gadgetron::vector_td<int,2> lower_limit, Gadgetron::vector_td<int,2> upper_limit,
+        const Gadgetron::ConvolutionKernel<Gadgetron::realType_t<T>, 2, K>* kernel)
 {
   // Iterate through all grid cells influencing the corresponding sample
   for( int y = lower_limit.vec[1]; y<=upper_limit.vec[1]; y++ ){
     for( int x = lower_limit.vec[0]; x<=upper_limit.vec[0]; x++ ){
       
-      const intd<2>::Type grid_position(x,y);
+      const Gadgetron::intd<2>::Type grid_position(x,y);
       
       NFFT_iterate_body<T, 2>(matrix_size_os, number_of_batches, samples, image,
 				 frame, num_frames,
@@ -153,20 +157,20 @@ void NFFT_iterate(vector_td<unsigned int,2> matrix_size_os,
 
 template<class T, template<class, unsigned int> class K>
 __inline__ __device__
-void NFFT_iterate(vector_td<unsigned int,3> matrix_size_os, 
+void NFFT_iterate(Gadgetron::vector_td<unsigned int,3> matrix_size_os, 
 	      unsigned int number_of_batches, const T * __restrict__ samples, T * __restrict__ image,
 	      unsigned int frame, unsigned int num_frames, 	      
 	      unsigned int num_samples_per_batch, unsigned int sample_idx_in_batch, 
-        vector_td<realType_t<T>,3> sample_position,
-        vector_td<int,3> lower_limit, vector_td<int,3> upper_limit,
-        const ConvolutionKernel<realType_t<T>, 3, K>* kernel)
+        Gadgetron::vector_td<Gadgetron::realType_t<T>,3> sample_position,
+        Gadgetron::vector_td<int,3> lower_limit, Gadgetron::vector_td<int,3> upper_limit,
+        const Gadgetron::ConvolutionKernel<Gadgetron::realType_t<T>, 3, K>* kernel)
 {
   // Iterate through all grid cells influencing the corresponding sample
   for( int z = lower_limit.vec[2]; z<=upper_limit.vec[2]; z++ ){
     for( int y = lower_limit.vec[1]; y<=upper_limit.vec[1]; y++ ){
       for( int x = lower_limit.vec[0]; x<=upper_limit.vec[0]; x++ ){
 	
-	const intd<3>::Type grid_position(x,y,z);
+	const Gadgetron::intd<3>::Type grid_position(x,y,z);
 	
 	NFFT_iterate_body<T, 3>(matrix_size_os, number_of_batches, samples, image,
 				   frame, num_frames,
@@ -183,13 +187,13 @@ void NFFT_iterate(vector_td<unsigned int,3> matrix_size_os,
 
 template<class T, template<class, unsigned int> class K>
 __inline__ __device__
-void NFFT_iterate(vector_td<unsigned int,4> matrix_size_os, 
+void NFFT_iterate(Gadgetron::vector_td<unsigned int,4> matrix_size_os, 
 	      unsigned int number_of_batches, const T * __restrict__ samples, T * __restrict image,
         unsigned int frame, unsigned int num_frames, 
 	      unsigned int num_samples_per_batch, unsigned int sample_idx_in_batch, 
-        vector_td<realType_t<T>,4> sample_position,
-        vector_td<int,4> lower_limit, vector_td<int,4> upper_limit,
-        const ConvolutionKernel<realType_t<T>, 4, K>* kernel)
+        Gadgetron::vector_td<Gadgetron::realType_t<T>,4> sample_position,
+        Gadgetron::vector_td<int,4> lower_limit, Gadgetron::vector_td<int,4> upper_limit,
+        const Gadgetron::ConvolutionKernel<Gadgetron::realType_t<T>, 4, K>* kernel)
 {
   // Iterate through all grid cells influencing the corresponding sample
   for( int w = lower_limit.vec[3]; w<=upper_limit.vec[3]; w++ ){
@@ -197,7 +201,7 @@ void NFFT_iterate(vector_td<unsigned int,4> matrix_size_os,
       for( int y = lower_limit.vec[1]; y<=upper_limit.vec[1]; y++ ){
 	for( int x = lower_limit.vec[0]; x<=upper_limit.vec[0]; x++ ){
 	  
-	  const intd<4>::Type grid_position(x,y,z,w);
+	  const Gadgetron::intd<4>::Type grid_position(x,y,z,w);
 	  
 	  NFFT_iterate_body<T, 4>(matrix_size_os, number_of_batches, samples, image,
 				     frame, num_frames,
@@ -215,10 +219,10 @@ void NFFT_iterate(vector_td<unsigned int,4> matrix_size_os,
 
 template<class T, unsigned int D, template<class, unsigned int> class K>
 __global__ void
-NFFT_H_atomic_convolve_kernel(vector_td<unsigned int, D> matrix_size_os, vector_td<unsigned int, D> matrix_size_wrap,
+NFFT_H_atomic_convolve_kernel(Gadgetron::vector_td<unsigned int, D> matrix_size_os, Gadgetron::vector_td<unsigned int, D> matrix_size_wrap,
 			       unsigned int num_samples_per_frame, unsigned int num_batches, 
-			       const vector_td<realType_t<T>,D> * __restrict__ traj_positions, const T * __restrict__ samples, T * __restrict__ image,
-             const ConvolutionKernel<realType_t<T>, D, K>* kernel)
+			       const Gadgetron::vector_td<Gadgetron::realType_t<T>,D> * __restrict__ traj_positions, const T * __restrict__ samples, T * __restrict__ image,
+             const Gadgetron::ConvolutionKernel<Gadgetron::realType_t<T>, D, K>* kernel)
 {
     const unsigned int sample_idx_in_frame = (blockIdx.x * blockDim.x + threadIdx.x);
 
@@ -232,17 +236,17 @@ NFFT_H_atomic_convolve_kernel(vector_td<unsigned int, D> matrix_size_os, vector_
     const unsigned int sample_idx_in_batch = sample_idx_in_frame+frame*num_samples_per_frame;
     
     // Sample position computed in preprocessing includes a wrap zone. Remove this wrapping.
-    const vector_td<realType_t<T>,D> half_wrap_real =
-        vector_td<realType_t<T>,D>(matrix_size_wrap>>1);
-    const vector_td<realType_t<T>,D> sample_position =
+    const Gadgetron::vector_td<Gadgetron::realType_t<T>,D> half_wrap_real =
+        Gadgetron::vector_td<Gadgetron::realType_t<T>,D>(matrix_size_wrap>>1);
+    const Gadgetron::vector_td<Gadgetron::realType_t<T>,D> sample_position =
         traj_positions[sample_idx_in_batch]-half_wrap_real;
     
     // Half the kernel width
-    const vector_td<realType_t<T>,D> radius_vec(kernel->get_radius());
+    const Gadgetron::vector_td<Gadgetron::realType_t<T>,D> radius_vec(kernel->get_radius());
     
     // Limits of the subgrid to consider
-    const vector_td<int, D> lower_limit(ceil(sample_position - radius_vec));
-    const vector_td<int, D> upper_limit(floor(sample_position + radius_vec));
+    const Gadgetron::vector_td<int, D> lower_limit(ceil(sample_position - radius_vec));
+    const Gadgetron::vector_td<int, D> upper_limit(floor(sample_position + radius_vec));
 
     // Output to the grid.
     NFFT_iterate<T>(matrix_size_os, num_batches, samples, image,

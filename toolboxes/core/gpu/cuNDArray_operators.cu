@@ -21,7 +21,7 @@ using namespace Gadgetron;
   }
 
   template<typename T>
-  class cuNDA_modulus : public std::function<T(T)>
+  class cuNDA_modulus
   {
   public:
     cuNDA_modulus(int x):mod(x) {};
@@ -36,7 +36,7 @@ using namespace Gadgetron;
   template<class T,class S,class F>  
   static void equals_transform(cuNDArray<T> &x, const cuNDArray<S> &y){
     if (x.dimensions_equal(y)){
-      thrust::transform(x.begin(), x.end(), y.begin(), x.begin(), F());
+      thrust::transform(x.begin(), x.end(), y.begin(), x.begin(), [](const T& t, const S& s) { F f; return f(t, s); } );
     } else if (compatible_dimensions(x,y))
       {
         if (y.get_number_of_elements() < x.get_number_of_elements()) {
@@ -45,9 +45,9 @@ using namespace Gadgetron;
                                                                  cuNDA_modulus<int>(y.get_number_of_elements()));
           thrust::permutation_iterator<thrust::device_ptr<S>, transform_it> p = thrust::make_permutation_iterator(
                   y.begin(), indices);
-          thrust::transform(x.begin(), x.end(), p, x.begin(), F());
+          thrust::transform(x.begin(), x.end(), p, x.begin(), [](const T& t, const S& s) { F f; return f(t, s); });
         } else {
-          thrust::transform(x.begin(),x.end(),y.begin(),x.begin(),F());
+          thrust::transform(x.begin(),x.end(),y.begin(),x.begin(), [](const T& t, const S& s) { F f; return f(t, s); });
         }
 
       } else {
@@ -60,25 +60,25 @@ using namespace Gadgetron;
 
 
   template<typename T>
-  struct cuNDA_plus : public std::function< complext<T>(complext<T>, T) >
+  struct cuNDA_plus
   {
     __device__ complext<T> operator()(const complext<T> &x, const T &y) const {return x+y;}
   };
 
   template<typename T>
-  struct cuNDA_minus : public std::function< complext<T>(complext<T>, T) >
+  struct cuNDA_minus 
   {
     __device__ complext<T> operator()(const complext<T> &x, const T &y) const {return x-y;}
   };
 
   template<typename T>
-  struct cuNDA_multiply : public std::function< complext<T>(complext<T>, T) >
+  struct cuNDA_multiply 
   {
     __device__ complext<T> operator()(const complext<T> &x, const T &y) const {return x*y;}
   };
 
   template<typename T>
-  struct cuNDA_divide : public std::function< complext<T>(complext<T>, T) >
+  struct cuNDA_divide 
   {
     __device__ complext<T> operator()(const complext<T> &x, const T &y) const {return x/y;}
   };

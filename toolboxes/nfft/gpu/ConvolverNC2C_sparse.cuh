@@ -1,25 +1,29 @@
 #pragma once
+
+#include "complext.h"
 #include "vector_td.h"
 #include "vector_td_utilities.h"
 #include "setup_grid.h"
 #include "cuSparseMatrix.h"
 #include <thrust/fill.h>
+#include <thrust/extrema.h>
 #include "ConvolverNC2C_standard.cuh"
+
 namespace Gadgetron {
 
 template<unsigned int N> struct iteration_counter{};
 
 template<class T, unsigned int D, unsigned int N, template<class, unsigned int> class K>
 __device__ __inline__
-realType_t<T> ndim_loop(const vector_td<realType_t<T>,D> point, unsigned int & loop_counter,
+Gadgetron::realType_t<T> ndim_loop(const Gadgetron::vector_td<Gadgetron::realType_t<T>,D> point, unsigned int & loop_counter,
 	T * __restrict__ weights,
 		int * __restrict__ column_indices,
-		vector_td<int, D> & grid_point, const vector_td<int,D> & image_dims,
-		const ConvolutionKernel<realType_t<T>, D, K>* kernel,
+		Gadgetron::vector_td<int, D> & grid_point, const Gadgetron::vector_td<int,D> & image_dims,
+		const Gadgetron::ConvolutionKernel<Gadgetron::realType_t<T>, D, K>* kernel,
 		iteration_counter<N>)
 {
-	realType_t<T> wsum = 0;
-	realType_t<T> radius = kernel->get_radius();
+	Gadgetron::realType_t<T> wsum = 0;
+	Gadgetron::realType_t<T> radius = kernel->get_radius();
 	for (int i = ::ceil(point[N] - radius); i <= ::floor(point[N] + radius); i++)
 	{
 		grid_point[N] = i;
@@ -31,19 +35,19 @@ realType_t<T> ndim_loop(const vector_td<realType_t<T>,D> point, unsigned int & l
 
 template<class T, unsigned int D, template<class, unsigned int> class K>
 __device__ __inline__
-realType_t<T> ndim_loop(const vector_td<realType_t<T>,D> point, unsigned int & loop_counter,
+Gadgetron::realType_t<T> ndim_loop(const Gadgetron::vector_td<Gadgetron::realType_t<T>,D> point, unsigned int & loop_counter,
 		T * __restrict__ weights,
 		int * __restrict__ column_indices,
-		vector_td<int, D> & grid_point, const vector_td<int,D> & image_dims,
-		const ConvolutionKernel<realType_t<T>, D, K>* kernel,
+		Gadgetron::vector_td<int, D> & grid_point, const Gadgetron::vector_td<int,D> & image_dims,
+		const Gadgetron::ConvolutionKernel<Gadgetron::realType_t<T>, D, K>* kernel,
 		iteration_counter<0>)
 {
-	realType_t<T> wsum =0;
-	realType_t<T> radius = kernel->get_radius();
+	Gadgetron::realType_t<T> wsum =0;
+	Gadgetron::realType_t<T> radius = kernel->get_radius();
 	for (int i = ::ceil(point[0] - radius); i <= ::floor(point[0] + radius); i++)
 	{
 		grid_point[0] = i;
-		realType_t<T> weight = kernel->get(abs(point-vector_td<realType_t<T>,D>(grid_point)));
+		Gadgetron::realType_t<T> weight = kernel->get(abs(point-Gadgetron::vector_td<Gadgetron::realType_t<T>,D>(grid_point)));
 		weights[loop_counter] = weight;
 		//column_indices[loop_counter] = co_to_idx(grid_point%image_dims,image_dims);
 		column_indices[loop_counter] = co_to_idx((grid_point+image_dims)%image_dims,image_dims);
@@ -81,27 +85,27 @@ template<class T> __device__ void index_sort(T* values, int* indices, int nvals)
  */
 template<class T, unsigned int D, template<class, unsigned int> class K>
 __global__
-void make_conv_matrix_kernel(const vector_td<realType_t<T>,D> * __restrict__ points,
+void make_conv_matrix_kernel(const Gadgetron::vector_td<Gadgetron::realType_t<T>,D> * __restrict__ points,
 	const int * __restrict__ offsets, T * __restrict__ weights,
-	int * __restrict__ column_indices, const vector_td<int,D> image_dims,
+	int * __restrict__ column_indices, const Gadgetron::vector_td<int,D> image_dims,
 	unsigned int tot_size,
-	const ConvolutionKernel<realType_t<T>, D, K>* kernel
+	const Gadgetron::ConvolutionKernel<Gadgetron::realType_t<T>, D, K>* kernel
 	)
 {
 	const unsigned int idx = blockIdx.y*gridDim.x*blockDim.x + blockIdx.x*blockDim.x + threadIdx.x;
 
 	if (idx < tot_size){
-		vector_td<realType_t<T>,D> p = points[idx];
+		Gadgetron::vector_td<Gadgetron::realType_t<T>,D> p = points[idx];
 		const int offset = offsets[idx];
 
 
 		T * local_weight = weights+offset;
 		int * local_column_indices = column_indices+offset;
 		unsigned int loop_counter = 0;
-		vector_td<int,D> grid_point;
-		realType_t<T> wsum = ndim_loop(p,loop_counter, local_weight,local_column_indices,
+		Gadgetron::vector_td<int,D> grid_point;
+		Gadgetron::realType_t<T> wsum = ndim_loop(p,loop_counter, local_weight,local_column_indices,
 			grid_point,image_dims,kernel,iteration_counter<D-1>());
-		realType_t<T> inv_wsum = 1.0/wsum;
+		Gadgetron::realType_t<T> inv_wsum = 1.0/wsum;
 		for (unsigned int i = offset; i < offsets[idx+1]; i++){
 			weights[i] *= inv_wsum;
 		}
@@ -149,19 +153,19 @@ void check_csrMatrix(cuCsrMatrix<T > &matrix)
 
 template<class T, unsigned int D, template<class, unsigned int> class K>
 cuCsrMatrix<T> make_conv_matrix(
-	const thrust::device_vector<vector_td<realType_t<T>,D>> &points, 
-	const vector_td<size_t,D>& image_dims, 
-	const ConvolutionKernel<realType_t<T>, D, K>* kernel)
+	const thrust::device_vector<Gadgetron::vector_td<Gadgetron::realType_t<T>,D>> &points, 
+	const Gadgetron::vector_td<size_t,D>& image_dims, 
+	const Gadgetron::ConvolutionKernel<Gadgetron::realType_t<T>, D, K>* kernel)
 {
 	auto csrRow = thrust::device_vector<int>(points.size()+1);
 	csrRow[0] = 0;
 	CHECK_FOR_CUDA_ERROR();
 
-	realType_t<T> radius = kernel->get_radius();
+	Gadgetron::realType_t<T> radius = kernel->get_radius();
 	{
 		thrust::device_vector<int> c_p_s(points.size());
 		thrust::transform(points.begin(), points.end(), c_p_s.begin(),
-			compute_num_cells_per_sample<realType_t<T>,D>(kernel->get_radius()));
+			compute_num_cells_per_sample<Gadgetron::realType_t<T>,D>(kernel->get_radius()));
 
 		thrust::inclusive_scan( c_p_s.begin(), c_p_s.end(), csrRow.begin()+1, thrust::plus<int>()); // prefix sum
 
@@ -183,7 +187,7 @@ cuCsrMatrix<T> make_conv_matrix(
 		thrust::raw_pointer_cast(csrRow.data()),
 		thrust::raw_pointer_cast(data.data()),
 		thrust::raw_pointer_cast(csrColdnd.data()),
-		vector_td<int,D>(image_dims), points.size(),kernel);
+		Gadgetron::vector_td<int,D>(image_dims), points.size(),kernel);
 	cudaDeviceSynchronize();
 	CHECK_FOR_CUDA_ERROR();
 

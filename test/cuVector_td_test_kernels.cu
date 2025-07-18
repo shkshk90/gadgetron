@@ -28,12 +28,13 @@ template<class T, unsigned int D> void Gadgetron::test_abs(cuNDArray< vector_td<
 template<typename T, unsigned int D>
 struct test_norm_functor : public std::function<vector_td<T,D> (T)>
 {
+ __host__ __device__ test_norm_functor() = default;
  __host__ __device__ T operator()(const vector_td<T,D> &x) const {return norm(x);}
 };
 template<class T, unsigned int D> thrust::device_vector<T> Gadgetron::test_norm(cuNDArray< vector_td<T,D> >* data){
 
 	thrust::device_vector<T> out(data->get_number_of_elements());
-	thrust::transform(data->begin(),data->end(),out.begin(),test_norm_functor<T,D>());
+	thrust::transform(data->begin(),data->end(),out.begin(),[](const vector_td<T, D>& x) -> T { return norm(x); });
 	cudaDeviceSynchronize();
 	CHECK_FOR_CUDA_ERROR();
 	return out;
@@ -44,12 +45,13 @@ template<class T, unsigned int D> thrust::device_vector<T> Gadgetron::test_norm(
 template<typename T, unsigned int D>
 struct test_min_functor : public std::function<vector_td<T,D> (T)>
 {
+	__host__ __device__ test_min_functor() = default;
  __host__ __device__ T operator()(const vector_td<T,D> &x) const {return min(x);}
 };
 template<class T, unsigned int D> thrust::device_vector<T> Gadgetron::test_min(cuNDArray< vector_td<T,D> >* data){
 
 	thrust::device_vector<T> out(data->get_number_of_elements());
-	thrust::transform(data->begin(),data->end(),out.begin(),test_min_functor<T,D>());
+	thrust::transform(data->begin(),data->end(),out.begin(),[](const vector_td<T, D>& x) -> T { return min(x); });
 	cudaDeviceSynchronize();
 	CHECK_FOR_CUDA_ERROR();
 	return out;
@@ -59,12 +61,13 @@ template<class T, unsigned int D> thrust::device_vector<T> Gadgetron::test_min(c
 template<typename T, unsigned int D>
 struct test_max_functor : public std::function<vector_td<T,D> (T)>
 {
+	__host__ __device__ test_max_functor() = default;
  __host__ __device__ T operator()(const vector_td<T,D> &x) const {return max(x);}
 };
 template<class T, unsigned int D> thrust::device_vector<T> Gadgetron::test_max(cuNDArray< vector_td<T,D> >* data){
 
 	thrust::device_vector<T> out(data->get_number_of_elements());
-	thrust::transform(data->begin(),data->end(),out.begin(),test_max_functor<T,D>());
+	thrust::transform(data->begin(),data->end(),out.begin(),[](const vector_td<T, D>& x) -> T { return max(x); });
 	cudaDeviceSynchronize();
 	CHECK_FOR_CUDA_ERROR();
 	return out;
@@ -73,13 +76,14 @@ template<class T, unsigned int D> thrust::device_vector<T> Gadgetron::test_max(c
 template<typename T, unsigned int D>
 struct test_amin_functor : public std::function<vector_td<T,D>(vector_td<T,D>, vector_td<T,D>) >
 {
+	__host__ __device__ test_amin_functor() = default;
 	__host__ __device__ vector_td<T,D> operator()(const vector_td<T,D> &x, const vector_td<T,D> &y) const {return amin(x,y);}
 
 };
 
 template<class T, unsigned int D> boost::shared_ptr<cuNDArray<vector_td<T,D> > > Gadgetron::test_amin(cuNDArray< vector_td<T,D> >* data1, cuNDArray< vector_td<T,D> >* data2){
 	boost::shared_ptr<cuNDArray<vector_td<T,D> > > out( new cuNDArray<vector_td<T,D> >(data1->get_dimensions()));
-	thrust::transform(data1->begin(),data1->end(),data2->begin(),out->begin(),test_amin_functor<T,D>());
+	thrust::transform(data1->begin(),data1->end(),data2->begin(),out->begin(),[](const vector_td<T,D> &x, const vector_td<T,D> &y) -> vector_td<T,D> { return amin(x,y); });
 	return out;
 }
 
@@ -87,13 +91,14 @@ template<class T, unsigned int D> boost::shared_ptr<cuNDArray<vector_td<T,D> > >
 template<typename T, unsigned int D>
 struct test_amax_functor : public std::function<vector_td<T,D>(vector_td<T,D>, vector_td<T,D>) >
 {
+	__host__ __device__ test_amax_functor() = default;
 	__host__ __device__ vector_td<T,D> operator()(const vector_td<T,D> &x, const vector_td<T,D> &y) const {return amax(x,y);}
 
 };
 
 template<class T, unsigned int D> boost::shared_ptr<cuNDArray<vector_td<T,D> > > Gadgetron::test_amax(cuNDArray< vector_td<T,D> >* data1, cuNDArray< vector_td<T,D> >* data2){
 	boost::shared_ptr<cuNDArray<vector_td<T,D> > > out( new cuNDArray<vector_td<T,D> >(data1->get_dimensions()));
-	thrust::transform(data1->begin(),data1->end(),data2->begin(),out->begin(),test_amax_functor<T,D>());
+	thrust::transform(data1->begin(),data1->end(),data2->begin(),out->begin(), [](const vector_td<T,D> &x, const vector_td<T,D> &y) -> vector_td<T,D> { return amax(x,y); } );
 	return out;
 }
 
@@ -101,14 +106,14 @@ template<typename T, unsigned int D>
 class test_amin2_functor : public std::function<vector_td<T,D>(vector_td<T,D>) >
 {
 public:
-	test_amin2_functor(T _val): val(_val){};
+	__host__ __device__ test_amin2_functor(T _val): val(_val){};
 	__host__ __device__ vector_td<T,D> operator()(const vector_td<T,D> &x) const {return amin(x,val);}
 	T val;
 };
 
 template<class T, unsigned int D> boost::shared_ptr<cuNDArray<vector_td<T,D> > > Gadgetron::test_amin2(cuNDArray< vector_td<T,D> >* data1, T val){
 	boost::shared_ptr<cuNDArray<vector_td<T,D> > > out( new cuNDArray<vector_td<T,D> >(data1->get_dimensions()));
-	thrust::transform(data1->begin(),data1->end(),out->begin(),test_amin2_functor<T,D>(val));
+	thrust::transform(data1->begin(),data1->end(),out->begin(),[val](const vector_td<T,D> &x) -> vector_td<T,D> { return amin(x, val); });
 	return out;
 }
 
@@ -117,14 +122,14 @@ template<typename T, unsigned int D>
 class test_amax2_functor : public std::function<vector_td<T,D>(vector_td<T,D>) >
 {
 public:
-	test_amax2_functor(T _val): val(_val){};
+	__host__ __device__ test_amax2_functor(T _val): val(_val){};
 	__host__ __device__ vector_td<T,D> operator()(const vector_td<T,D> &x) const {return amax(x,val);}
 	T val;
 };
 
 template<class T, unsigned int D> boost::shared_ptr<cuNDArray<vector_td<T,D> > > Gadgetron::test_amax2(cuNDArray< vector_td<T,D> >* data1, T val){
 	boost::shared_ptr<cuNDArray<vector_td<T,D> > > out( new cuNDArray<vector_td<T,D> >(data1->get_dimensions()));
-	thrust::transform(data1->begin(),data1->end(),out->begin(),test_amax2_functor<T,D>(val));
+	thrust::transform(data1->begin(),data1->end(),out->begin(),[val](const vector_td<T,D> &x) -> vector_td<T,D> { return amax(x, val); });
 	return out;
 }
 

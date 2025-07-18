@@ -120,13 +120,13 @@ cuCartesianSenseOperator<REAL,D>::mult_MH(cuNDArray< complext<REAL> > *in, cuNDA
 // Instantiations
 //
 
-template class EXPORTGPUPMRI cuCartesianSenseOperator<float,1>;
-template class EXPORTGPUPMRI cuCartesianSenseOperator<float,2>;
-template class EXPORTGPUPMRI cuCartesianSenseOperator<float,3>;
-template class EXPORTGPUPMRI cuCartesianSenseOperator<float,4>;
+template class EXPORTGPUPMRI Gadgetron::cuCartesianSenseOperator<float,1>;
+template class EXPORTGPUPMRI Gadgetron::cuCartesianSenseOperator<float,2>;
+template class EXPORTGPUPMRI Gadgetron::cuCartesianSenseOperator<float,3>;
+template class EXPORTGPUPMRI Gadgetron::cuCartesianSenseOperator<float,4>;
 
-template class EXPORTGPUPMRI cuCartesianSenseOperator<double,1>;
-template class EXPORTGPUPMRI cuCartesianSenseOperator<double,2>;
-template class EXPORTGPUPMRI cuCartesianSenseOperator<double,3>;
-template class EXPORTGPUPMRI cuCartesianSenseOperator<double,4>;
+template class EXPORTGPUPMRI Gadgetron::cuCartesianSenseOperator<double,1>;
+template class EXPORTGPUPMRI Gadgetron::cuCartesianSenseOperator<double,2>;
+template class EXPORTGPUPMRI Gadgetron::cuCartesianSenseOperator<double,3>;
+template class EXPORTGPUPMRI Gadgetron::cuCartesianSenseOperator<double,4>;
 

@@ -1,17 +1,19 @@
 #include "b1_map.h"
 #include "hoNDArray_fileio.h"
 #include "cuNDArray.h"
-#include "ndarray_vector_td_utilities.hcu"
+// #include "ndarray_vector_td_utilities.hcu"
+#include "vector_td_utilities.h"
 #include "NFFT.h"
 #include "check_CUDA.h"
 
-#include <cutil.h>
+#include <cuda.h>
 #include <iostream>
 
 using namespace std;
 using namespace Gadgetron;
 int main( int argc, char** argv) 
 {
+  #if 0
   hoNDArray<float_complext::Type> host_data = 
     read_nd_array<float_complext::Type>("b1_mapping_data/coil_images.cplx");
   
@@ -45,4 +47,5 @@ int main( int argc, char** argv)
 
   CHECK_FOR_CUDA_ERROR();
   return 0;
+  #endif
 }
