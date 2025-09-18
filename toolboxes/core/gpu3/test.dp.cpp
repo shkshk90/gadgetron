@@ -10,7 +10,10 @@
     It follows the interface defined for std::complex.
 */
 
-
+#include <oneapi/dpl/execution>
+#include <oneapi/dpl/algorithm>
+#include <sycl/sycl.hpp>
+#include <dpct/dpct.hpp>
 #include <complex>
 #include <cmath>
 #include <iostream>
@@ -31,10 +34,7 @@
 #include <array>
 #include <numeric>
 #include <sstream>
-
-#include <cuda.h>
-#include <cuda_runtime_api.h>
-#include <thrust/device_vector.h>
+#include <dpct/dpl_utils.hpp>
 
 #include <float.h>
 
@@ -220,7 +220,11 @@ namespace Gadgetron{
   {
   public:
     cuda_error(std::string msg) : std::runtime_error(msg) {}
-    cuda_error(cudaError_t errN) : std::runtime_error(cudaGetErrorString(errN)) {
+    /*
+    DPCT1009:0: SYCL reports errors using exceptions and does not use error codes. Please replace the
+    "get_error_string_dummy(...)" with a real error-handling function.
+    */
+    cuda_error(dpct::err0 errN) : std::runtime_error(dpct::get_error_string_dummy(errN)) {
     }
   };
 }
@@ -232,8 +236,18 @@ namespace Gadgetron {
    *  inspired by cutil.h: CUT_CHECK_ERROR
    */
   inline void CHECK_FOR_CUDA_ERROR(char const * cur_fun, const char* file, const int line) {
-    cudaError_t errorCode = cudaGetLastError();
-    if (errorCode != cudaSuccess) {
+    /*
+    DPCT1010:3: SYCL uses exceptions to report errors and does not use the error codes. The cudaGetLastError function
+    call was replaced with 0. You need to rewrite this code.
+    */
+    dpct::err0 errorCode = 0;
+    /*
+    DPCT1000:2: Error handling if-stmt was detected but could not be rewritten.
+    */
+    if (errorCode != 0) {
+      /*
+      DPCT1001:1: The statement could not be removed.
+      */
       throw cuda_error(errorCode);
     }
 #ifdef DEBUG
@@ -254,7 +268,13 @@ namespace Gadgetron {
 /**
  *  Call "res", checks for CUDA errors and throws an exception if an error was detected.
  */
-#define CUDA_CALL(res) {cudaError_t errorCode = res; if (errorCode != cudaSuccess) { throw cuda_error(errorCode); }}
+/*
+DPCT1001:4: The statement could not be removed.
+*/
+/*
+DPCT1000:5: Error handling if-stmt was detected but could not be rewritten.
+*/
+#define CUDA_CALL(res) { dpct::err0 errorCode = res; if (errorCode != 0) { throw cuda_error(errorCode); } }
 
 #define CUSPARSE_CALL(res) {cusparseStatus_t errorCode = res; \
     if (errorCode != CUSPARSE_STATUS_SUCCESS){ \
@@ -280,52 +300,52 @@ namespace Gadgetron {
 // Get scalar limits of operation
 //
 
-template<class T> __inline__ __host__ __device__ T get_min();
-template<class T> __inline__ __host__ __device__ T get_max();
-template<class T> __inline__ __host__ __device__ T get_epsilon();
+template<class T> __inline__ T get_min();
+template<class T> __inline__ T get_max();
+template<class T> __inline__ T get_epsilon();
 
 //
 // Math prototypes
 //
 
-template<class REAL> __inline__ __host__ __device__ REAL get_pi();
+template<class REAL> __inline__ REAL get_pi();
 
 //
 // Implementation
 //
 
-template<> __inline__ __host__ __device__ float get_min<float>()
+template<> __inline__ float get_min<float>()
 {
   return FLT_MIN;
 }
 
-template<> __inline__ __host__ __device__ double get_min<double>()
+template<> __inline__ double get_min<double>()
 {
   return DBL_MIN;
 }
 
-template<> __inline__ __host__ __device__ float get_max<float>()
+template<> __inline__ float get_max<float>()
 {
   return FLT_MAX;
 }
 
-template<> __inline__ __host__ __device__ double get_max<double>()
+template<> __inline__ double get_max<double>()
 {
   return DBL_MAX;
 }
 
-template<> __inline__ __host__ __device__ float get_epsilon<float>()
+template<> __inline__ float get_epsilon<float>()
 {
   return FLT_EPSILON;
 }
 
-template<> __inline__ __host__ __device__ double get_epsilon<double>()
+template<> __inline__ double get_epsilon<double>()
 {
   return DBL_EPSILON;
 }
 
-template<> __inline__ __host__ __device__ float get_pi() { return (float)M_PI; }
-template<> __inline__ __host__ __device__ double get_pi() { return M_PI; }
+template<> __inline__ float get_pi() { return (float)M_PI; }
+template<> __inline__ double get_pi() { return M_PI; }
 
 
 ////////////////////////////////////////////////////////////////////////////
@@ -413,44 +433,44 @@ namespace Gadgetron {
         T _real;
         T _imag;
 
-        __inline__ __host__ __device__  T real() const {
+        __inline__ T real() const {
             return _real;
         }
 
-        __inline__ __host__ __device__  T imag() const {
+        __inline__ T imag() const {
             return _imag;
         }
 
         __inline__ complext() = default;
 
-        __inline__ __host__ __device__ complext(T real, T imag) {
+        __inline__ complext(T real, T imag) {
             _real = real;
             _imag = imag;
         }
 
         template<class R>
-        __inline__ __host__ __device__ complext(const complext<R> &tmp) {
+        __inline__ complext(const complext<R> &tmp) {
             _real = tmp._real;
             _imag = tmp._imag;
         }
 
-        __inline__ __host__ __device__ complext(const std::complex<T> &tmp) {
+        __inline__ complext(const std::complex<T> &tmp) {
             _real = tmp.real();
             _imag = tmp.imag();
         }
 
         template<class R>
-        __inline__ __host__ __device__ complext(const std::complex<R> &tmp) {
+        __inline__ complext(const std::complex<R> &tmp) {
             _real = tmp.real();
             _imag = tmp.imag();
         }
 
-        __inline__ __host__ __device__ complext(const T r) {
+        __inline__ complext(const T r) {
             _real = r;
             _imag = T(0);
         }
 
-        __inline__ __host__ __device__ void conj() {
+        __inline__ void conj() {
             _imag = -_imag;
         }
 /*
@@ -462,21 +482,21 @@ namespace Gadgetron {
             return complext<T>(_real - other._real, _imag - other._imag);
         }
 */
-        __inline__ __host__ __device__  complext<T> operator-() {
+        __inline__ complext<T> operator-() {
             return complext<T>(-_real, -_imag);
         }
 
-        __inline__ __host__ __device__  void operator-=(const complext<T> &other) {
+        __inline__ void operator-=(const complext<T> &other) {
             _real -= other._real;
             _imag -= other._imag;
         }
 
-        __inline__ __host__ __device__  void operator+=(const complext<T> &other) {
+        __inline__ void operator+=(const complext<T> &other) {
             _real += other._real;
             _imag += other._imag;
         }
 
-        __inline__ __host__ __device__  complext<T> operator*(const T &other) {
+        __inline__ complext<T> operator*(const T &other) {
             return complext<T>(_real * other, _imag * other);
         }
 /*
@@ -485,7 +505,7 @@ namespace Gadgetron {
                                _real * other._imag + _imag * other._real);
         }
 */
-        __inline__ __host__ __device__  complext<T> operator/(const T &other) {
+        __inline__ complext<T> operator/(const T &other) {
             return complext<T>(_real / other, _imag / other);
         }
 /*
@@ -496,34 +516,34 @@ namespace Gadgetron {
         }
 */
 
-        __inline__ __host__ __device__  void operator*=(const T &other) {
+        __inline__ void operator*=(const T &other) {
             _real *= other;
             _imag *= other;
         }
 
-        __inline__ __host__ __device__  void operator*=(const complext<T> &other) {
+        __inline__ void operator*=(const complext<T> &other) {
             complext<T> tmp = *this;
             _real = tmp._real * other._real - tmp._imag * other._imag;
             _imag = tmp._real * other._imag + tmp._imag * other._real;
         }
 
-        __inline__ __host__ __device__  void operator/=(const T &other) {
+        __inline__ void operator/=(const T &other) {
             _real /= other;
             _imag /= other;
         }
 
-        __inline__ __host__ __device__  void operator/=(const complext<T> &other) {
+        __inline__ void operator/=(const complext<T> &other) {
             complext<T> tmp = (*this) / other;
             _real = tmp._real;
             _imag = tmp._imag;
         }
 
-        __inline__ __host__ __device__  bool operator==(const complext<T> &comp2) {
+        __inline__ bool operator==(const complext<T> &comp2) {
 
             return _real == comp2._real && _imag == comp2._imag;
         }
 
-        __inline__ __host__ __device__  bool operator!=(const complext<T> &comp2) {
+        __inline__ bool operator!=(const complext<T> &comp2) {
 
             return not(*this == comp2);
         }
@@ -622,89 +642,89 @@ namespace Gadgetron {
 
 
 
-    __inline__ __host__ __device__ double sgn(double x) {
+    __inline__ double sgn(double x) {
         return (double(0) < x) - (x < double(0));
     }
 
-    __inline__ __host__ __device__ float sgn(float x) {
+    __inline__ float sgn(float x) {
         return (float) ((float(0) < x) - (x < float(0)));
     }
 
     template<class T>
-    __inline__ __host__ __device__ complext<T> sgn(complext<T> x) {
+    __inline__ complext<T> sgn(complext<T> x) {
         if (norm(x) <= T(0)) return complext<T>(0);
         return (x / abs(x));
     }
 
     template<class T>
-    __inline__ __host__ __device__ complext<T> polar(const T &rho, const T &theta = 0) {
+    __inline__ complext<T> polar(const T &rho, const T &theta = 0) {
         return complext<T>(rho * std::cos(theta), rho * std::sin(theta));
     }
 
     template<class T>
-    __inline__ __host__ __device__ complext<T> sqrt(complext<T> x) {
+    __inline__ complext<T> sqrt(complext<T> x) {
         T r = abs(x);
         return complext<T>(::sqrt((r + x.real()) / 2), sgn(x.imag()) * ::sqrt((r - x.real()) / 2));
     }
 
     template<class T>
-    __inline__ __host__ __device__ T abs(complext<T> comp) {
+    __inline__ T abs(complext<T> comp) {
         return sqrt(comp._real * comp._real + comp._imag * comp._imag);
     }
 
     template<class T>
-    __inline__ __host__ __device__ complext<T> sin(complext<T> comp) {
+    __inline__ complext<T> sin(complext<T> comp) {
         return complext<T>(sin(comp._real) * std::cosh(comp._imag), std::cos(comp._real) * std::sinh(comp._imag));
     }
 
     template<class T>
-    __inline__ __host__ __device__ complext<T> cos(complext<T> comp) {
+    __inline__ complext<T> cos(complext<T> comp) {
         return complext<T>(cos(comp._real) * cosh(comp._imag), -sin(comp._real) * sinh(comp._imag));
     }
 
     template<class T>
-    __inline__ __host__ __device__ complext<T> exp(complext<T> com) {
+    __inline__ complext<T> exp(complext<T> com) {
         return exp(com._real) * complext<T>(cos(com._imag), sin(com._imag));
     }
 
     template<class T>
-    __inline__ __host__ __device__ T imag(complext<T> comp) {
+    __inline__ T imag(complext<T> comp) {
         return comp._imag;
     }
 
-    __inline__ __host__ __device__ double real(double r) {
+    __inline__ double real(double r) {
         return r;
     }
 
-    __inline__ __host__ __device__ double imag(double r) {
+    __inline__ double imag(double r) {
         return 0.0;
     }
 
-    __inline__ __host__ __device__ float real(float r) {
+    __inline__ float real(float r) {
         return r;
     }
 
-    __inline__ __host__ __device__ float imag(float r) {
+    __inline__ float imag(float r) {
         return 0.0f;
     }
 
     template<class T>
-    __inline__ __host__ __device__ T real(complext<T> comp) {
+    __inline__ T real(complext<T> comp) {
         return comp._real;
     }
 
     template<class T>
-    __inline__ __host__ __device__ T arg(complext<T> comp) {
+    __inline__ T arg(complext<T> comp) {
         return atan2(comp._imag, comp._real);
     }
 
     template<class T, class S>
-    __inline__ __host__ __device__ auto operator*(const complext<T>& c1, const S& c2) -> complext<decltype(c1._real*c2)>{
+    __inline__ auto operator*(const complext<T>& c1, const S& c2) -> complext<decltype(c1._real*c2)>{
         return c2*c1;
     };
 
     template<class T, class S>
-    __inline__ __host__ __device__ auto operator*(const T& c1, const complext<S>& c2) -> complext<decltype(c1*c2._real)>{
+    __inline__ auto operator*(const T& c1, const complext<S>& c2) -> complext<decltype(c1*c2._real)>{
         auto real = c1*c2._real;
         auto imag = c1*c2._imag;
 
@@ -713,27 +733,27 @@ namespace Gadgetron {
 
 
     template<class T, class S>
-    __inline__ __host__ __device__ auto operator+(const T& c1, const complext<S>& c2) -> complext<decltype(c1+c2._real)>{
+    __inline__ auto operator+(const T& c1, const complext<S>& c2) -> complext<decltype(c1+c2._real)>{
         auto real = c1+c2._real;
         return complext<decltype(real)>(real,c2._imag);
     };
 
 
     template<class T, class S>
-    __inline__ __host__ __device__ auto operator+(const complext<T>& c1, const S& c2) -> complext<decltype(c1._real+c2)>{
+    __inline__ auto operator+(const complext<T>& c1, const S& c2) -> complext<decltype(c1._real+c2)>{
         return c2+c1;
     };
 
 
     template<class T, class S>
-    __inline__ __host__ __device__ auto operator/(const complext<T>& c1, const S& c2) -> complext<decltype(c1._real*c2)>{
+    __inline__ auto operator/(const complext<T>& c1, const S& c2) -> complext<decltype(c1._real*c2)>{
         auto real = c1._real / c2;
         auto imag = c1._imag / c2;
         return complext<decltype(real)>(real,imag);
     };
 
     template<class T, class S>
-    __inline__ __host__ __device__ auto operator/(const T& c1, const complext<S>& c2)-> complext<decltype(c1/c2._real)>{
+    __inline__ auto operator/(const T& c1, const complext<S>& c2)-> complext<decltype(c1/c2._real)>{
 
         auto real = c1*c2._real;
         auto imag = -c2._imag*c1;
@@ -743,13 +763,13 @@ namespace Gadgetron {
     };
 
     template<class T, class S>
-    __inline__ __host__ __device__ auto operator-(const T& c1, const complext<S>& c2) -> complext<decltype(c1-c2._real)>{
+    __inline__ auto operator-(const T& c1, const complext<S>& c2) -> complext<decltype(c1-c2._real)>{
         auto real = c1-c2._real;
         return complext<decltype(real)>(real,c2._imag);
     };
 
     template<class T, class S>
-    __inline__ __host__ __device__ auto operator-(const complext<T>& c1, const S& c2) -> complext<decltype(c1._real-c2)>{
+    __inline__ auto operator-(const complext<T>& c1, const S& c2) -> complext<decltype(c1._real-c2)>{
         auto real = c1._real-c2;
         return complext<decltype(real)>(real,c1._imag);
     };
@@ -757,7 +777,7 @@ namespace Gadgetron {
 
 
     template<class T, class S>
-    __inline__ __host__ __device__ auto operator*(const complext<T>& c1, const complext<S>& c2) -> complext<decltype(c1._real*c2._real)>{
+    __inline__ auto operator*(const complext<T>& c1, const complext<S>& c2) -> complext<decltype(c1._real*c2._real)>{
         auto real = c1._real*c2._real-c1._imag*c2._imag;
         auto imag = c1._imag*c2._real+c1._real*c2._imag;
 
@@ -765,21 +785,21 @@ namespace Gadgetron {
     };
 
     template<class T, class S>
-    __inline__ __host__ __device__ auto operator+(const complext<T>& c1, const complext<S>& c2)-> complext<decltype(c1._real+c2._real)>{
+    __inline__ auto operator+(const complext<T>& c1, const complext<S>& c2)-> complext<decltype(c1._real+c2._real)>{
         auto real = c1._real+c2._real;
         auto imag = c1._imag+c2._imag;
 
         return complext<decltype(real)>(real,imag);
     };
     template<class T, class S>
-    __inline__ __host__ __device__ auto operator-(const complext<T>& c1, const complext<S>& c2)-> complext<decltype(c1._real-c2._real)>{
+    __inline__ auto operator-(const complext<T>& c1, const complext<S>& c2)-> complext<decltype(c1._real-c2._real)>{
         auto real = c1._real-c2._real;
         auto imag = c1._imag-c2._imag;
 
         return complext<decltype(real)>(real,imag);
     };
     template<class T, class S>
-    __inline__ __host__ __device__ auto operator/(const complext<T>& c1, const complext<S>& c2)-> complext<decltype(c1._real/c2._real)>{
+    __inline__ auto operator/(const complext<T>& c1, const complext<S>& c2)-> complext<decltype(c1._real/c2._real)>{
 
         auto real = c1._real*c2._real+c1._imag * c2._imag;
         auto imag = c2._real*c1._imag-c2._imag*c1._real;
@@ -790,29 +810,29 @@ namespace Gadgetron {
 
 
 
-    __inline__ __host__ __device__ float norm(const float &r) {
+    __inline__ float norm(const float &r) {
         return r * r;
     }
 
-    __inline__ __host__ __device__ double norm(const double &r) {
+    __inline__ double norm(const double &r) {
         return r * r;
     }
 
     template<class T>
-    __inline__ __host__ __device__ T norm(const complext<T> &z) {
+    __inline__ T norm(const complext<T> &z) {
         return z._real * z._real + z._imag * z._imag;
     }
 
-    __inline__ __host__ __device__ double conj(const double &r) {
+    __inline__ double conj(const double &r) {
         return r;
     }
 
-    __inline__ __host__ __device__ float conj(const float &r) {
+    __inline__ float conj(const float &r) {
         return r;
     }
 
     template<class T>
-    __inline__ __host__ __device__ complext<T> conj(const complext<T> &z) {
+    __inline__ complext<T> conj(const complext<T> &z) {
         complext<T> res = z;
         res.conj();
         return res;
@@ -849,16 +869,16 @@ namespace Gadgetron {
         T vec[D];
         __inline__ vector_td() = default;
 
-        template <typename... X, typename = std::enable_if_t<(sizeof...(X) > 1)>> constexpr __inline__ __host__ __device__ explicit vector_td(X... xs) : vec{ T(xs)... } {}
+        template <typename... X, typename = std::enable_if_t<(sizeof...(X) > 1)>> constexpr __inline__ explicit vector_td(X... xs) : vec{ T(xs)... } {}
 
         // __inline__ vector_td(const vector_td& other) = default;
 
-        template <class T2> __inline__ __host__ __device__ explicit vector_td(const vector_td<T2, D>& other) {
+        template <class T2> __inline__ explicit vector_td(const vector_td<T2, D>& other) {
             for (unsigned int i = 0; i < D; i++)
                 vec[i] = (T)other[i];
         }
 
-        __inline__ __host__ __device__ explicit vector_td(T x) {
+        __inline__ explicit vector_td(T x) {
             for (unsigned int i = 0; i < D; i++)
                 vec[i] = x;
         }
@@ -873,24 +893,24 @@ namespace Gadgetron {
             std::copy(input,input+D,vec);
 
         }
-        __inline__ __host__ __device__ T& operator[](size_t i) {
+        __inline__ T& operator[](size_t i) {
             return vec[i];
         }
 
-        __inline__ __host__ __device__ const T& operator[](size_t i) const {
+        __inline__ const T& operator[](size_t i) const {
             return vec[i];
         }
 
-        __inline__ __host__ __device__ T* begin() {
+        __inline__ T* begin() {
             return vec;
         }
-        __inline__ __host__ __device__ const T* begin() const {
+        __inline__ const T* begin() const {
             return vec;
         }
-        __inline__ __host__ __device__ T* end() {
+        __inline__ T* end() {
             return vec + D;
         }
-        __inline__ __host__ __device__ const T* end() const {
+        __inline__ const T* end() const {
             return vec + D;
         }
 
@@ -1024,56 +1044,56 @@ namespace Gadgetron{
   // Arithmetic operators
   //
 
-  template< class T,class R,  unsigned int D > __inline__ __host__ __device__
+  template< class T,class R,  unsigned int D > __inline__ 
   void operator+= ( vector_td<T,D> &v1, const vector_td<R,D> &v2 )
   { 
     for(unsigned int i=0; i<D; i++ ) v1.vec[i] += v2.vec[i];
   }
 
-  template< class T,class R,  unsigned int D > __inline__ __host__ __device__
+  template< class T,class R,  unsigned int D > __inline__ 
   void operator+= ( vector_td<T,D> &v1, const R &v2 )
   {
     for(unsigned int i=0; i<D; i++ ) v1.vec[i] += v2;
   }
 
-  template< class T,class R,  unsigned int D > __inline__ __host__ __device__
+  template< class T,class R,  unsigned int D > __inline__ 
   void operator-= ( vector_td<T,D> &v1, const vector_td<R,D> &v2 )
   { 
     for(unsigned int i=0; i<D; i++ ) v1.vec[i] -= v2.vec[i];
   }
 
 
-  template< class T, class R, unsigned int D > __inline__ __host__ __device__
+  template< class T, class R, unsigned int D > __inline__ 
   void operator*= ( vector_td<T,D> &v1, const R &v2 )
   { 
     for(unsigned int i=0; i<D; i++ ) v1.vec[i] *= v2;
   }
 
-  template< class T,class R,  unsigned int D > __inline__ __host__ __device__
+  template< class T,class R,  unsigned int D > __inline__ 
   void operator *=  ( vector_td<T,D> &v1, const vector_td<R,D> &v2 )
 	{
     for(unsigned int i=0; i<D; i++ ) v1.vec[i] *= v2.vec[i];
   }
 
-  template< class T,class R,  unsigned int D > __inline__ __host__ __device__
+  template< class T,class R,  unsigned int D > __inline__ 
   void operator /= ( vector_td<T,D> &v1, const R &v2 )
   {
     for(unsigned int i=0; i<D; i++ ) v1.vec[i] /= v2;
   }
 
-  template< class T,class R,  unsigned int D > __inline__ __host__ __device__
+  template< class T,class R,  unsigned int D > __inline__ 
   void operator /=  ( vector_td<T,D> &v1, const vector_td<R,D> &v2 )
   {
     for(unsigned int i=0; i<D; i++ ) v1.vec[i] /= v2.vec[i];
   }
 
-  template< class T,class R,  unsigned int D > __inline__ __host__ __device__
+  template< class T,class R,  unsigned int D > __inline__ 
   void component_wise_div_eq ( vector_td<T,D> &v1, const vector_td<R,D> &v2 )
   { 
     for(unsigned int i=0; i<D; i++ ) v1.vec[i] /= v2.vec[i];
   }
 
-  template< class T, class R, unsigned int D > __inline__ __host__ __device__
+  template< class T, class R, unsigned int D > __inline__ 
   vector_td<typename vectorTDReturnType<T,R>::type,D> operator+ ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )
   { 
     vector_td<typename vectorTDReturnType<T,R>::type,D> res;
@@ -1081,7 +1101,7 @@ namespace Gadgetron{
     return res;
   }
 
-  template< class T,class R, unsigned int D > __inline__ __host__ __device__
+  template< class T,class R, unsigned int D > __inline__ 
   vector_td<typename vectorTDReturnType<T,R>::type,D> operator+ ( const vector_td<T,D> &v1, const R &v2 )
   {
     vector_td<typename vectorTDReturnType<T,R>::type,D> res;
@@ -1089,7 +1109,7 @@ namespace Gadgetron{
     return res;
   }
 
-  template< class T,class R, unsigned int D > __inline__ __host__ __device__
+  template< class T,class R, unsigned int D > __inline__ 
   vector_td<typename vectorTDReturnType<T,R>::type,D> operator- ( const vector_td<T,D> &v1, const R &v2 )
   {
     vector_td<typename vectorTDReturnType<T,R>::type,D> res;
@@ -1097,13 +1117,13 @@ namespace Gadgetron{
     return res;
   }
 
-  template< class T, class R, unsigned int D > __inline__ __host__ __device__
+  template< class T, class R, unsigned int D > __inline__ 
   vector_td<typename vectorTDReturnType<T,R>::type,D> operator+ (const R &v2, const vector_td<T,D> &v1 )
   {
     return v1+v2;
   }
 
-  template< class T, class R, unsigned int D > __inline__ __host__ __device__
+  template< class T, class R, unsigned int D > __inline__ 
   vector_td<typename vectorTDReturnType<T,R>::type,D> operator- ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )
   { 
     vector_td<typename vectorTDReturnType<T,R>::type,D> res;
@@ -1111,7 +1131,7 @@ namespace Gadgetron{
     return res;
   }
 
-  template< class T, unsigned int D > __inline__ __host__ __device__
+  template< class T, unsigned int D > __inline__ 
   vector_td<T,D> operator- ( const vector_td<T,D> &v1)
   {
     vector_td<T,D> res;
@@ -1119,7 +1139,7 @@ namespace Gadgetron{
     return res;
   }
 
-  template< class T, class R, unsigned int D > __inline__ __host__ __device__
+  template< class T, class R, unsigned int D > __inline__ 
   vector_td<typename vectorTDReturnType<T,R>::type,D> component_wise_mul ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )
   { 
     vector_td<typename vectorTDReturnType<T,R>::type,D> res;
@@ -1127,7 +1147,7 @@ namespace Gadgetron{
     return res;
   }
 
-  template< class T, unsigned int D > __inline__ __host__ __device__
+  template< class T, unsigned int D > __inline__ 
   vector_td<T,D> component_wise_mul ( const vector_td<T,D> &v1, const vector_td<T,D> &v2 )
   {
     vector_td<T,D> res;
@@ -1135,7 +1155,7 @@ namespace Gadgetron{
     return res;
   }
 
-  template< class T, class R, unsigned int D > __inline__ __host__ __device__
+  template< class T, class R, unsigned int D > __inline__ 
   vector_td<typename vectorTDReturnType<T,R>::type,D> operator* ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )
   {
     vector_td<typename vectorTDReturnType<T,R>::type,D> res;
@@ -1143,7 +1163,7 @@ namespace Gadgetron{
     return res;
   }
 
-  template< class T, class R, unsigned int D > __inline__ __host__ __device__
+  template< class T, class R, unsigned int D > __inline__ 
   vector_td<typename vectorTDReturnType<T,R>::type,D> operator* ( const vector_td<T,D> &v1, const R &v2 )
   { 
     vector_td<typename vectorTDReturnType<T,R>::type,D> res;
@@ -1151,13 +1171,13 @@ namespace Gadgetron{
     return res;
   }
 
-  template< class T, class R, unsigned int D > __inline__ __host__ __device__
+  template< class T, class R, unsigned int D > __inline__ 
   vector_td<typename vectorTDReturnType<T,R>::type,D> operator* ( const R &v1, const vector_td<T,D> &v2 )
   { 
     return v2*v1;
   }
 
-  template< class T, class R, unsigned int D > __inline__ __host__ __device__
+  template< class T, class R, unsigned int D > __inline__ 
   vector_td<typename vectorTDReturnType<T,R>::type,D> operator/ ( const vector_td<T,D> &v1, const R &v2 )
   {
     vector_td<typename vectorTDReturnType<T,R>::type,D> res;
@@ -1165,7 +1185,7 @@ namespace Gadgetron{
     return res;
   }
 
-  template< class T, class R, unsigned int D > __inline__ __host__ __device__
+  template< class T, class R, unsigned int D > __inline__ 
   vector_td<typename vectorTDReturnType<T,R>::type,D> operator/ ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )
   {
     vector_td<typename vectorTDReturnType<T,R>::type,D> res = v1;
@@ -1173,7 +1193,7 @@ namespace Gadgetron{
     return res;
   }
 
-  template< class T, class R, unsigned int D > __inline__ __host__ __device__
+  template< class T, class R, unsigned int D > __inline__ 
   vector_td<typename vectorTDReturnType<T,R>::type,D> component_wise_div ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )
   { 
     return v1/v2;
@@ -1183,56 +1203,56 @@ namespace Gadgetron{
   // "Strong" comparison operators
   //
 
-  template< class T, unsigned int D > __inline__ __host__ __device__
+  template< class T, unsigned int D > __inline__ 
   bool operator== ( const vector_td<T,D> &v1, const vector_td<T,D> &v2 ) 
   { 
     for(unsigned int i=0; i<D; i++ ) if(!(v1.vec[i] == v2.vec[i])) return false;
     return true;
   }
 
-  template< class T, unsigned int D > __inline__ __host__ __device__
+  template< class T, unsigned int D > __inline__ 
   bool operator!= ( const vector_td<T,D> &v1, const vector_td<T,D> &v2 ) 
   { 
     for(unsigned int i=0; i<D; i++ ) if((v1.vec[i] != v2.vec[i])) return true;
     return false;
   }
 
-  template< class T, unsigned int D > __inline__ __host__ __device__
+  template< class T, unsigned int D > __inline__ 
   bool operator&& ( const vector_td<T,D> &v1, const vector_td<T,D> &v2 ) 
   { 
     for(unsigned int i=0; i<D; i++ ) if(!(v1.vec[i] && v2.vec[i])) return false;
     return true;
   }
 
-  template< class T, unsigned int D > __inline__ __host__ __device__
+  template< class T, unsigned int D > __inline__ 
   bool operator|| ( const vector_td<T,D> &v1, const vector_td<T,D> &v2 ) 
   { 
     for(unsigned int i=0; i<D; i++ ) if(!(v1.vec[i] || v2.vec[i])) return false;
     return true;
   }
 
-  template< class T,class R, unsigned int D > __inline__ __host__ __device__
+  template< class T,class R, unsigned int D > __inline__ 
   bool operator< ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )
   { 
     for(unsigned int i=0; i<D; i++ ) if(!(v1.vec[i] < v2.vec[i])) return false;
     return true;
   }
 
-  template< class T,class R, unsigned int D > __inline__ __host__ __device__
+  template< class T,class R, unsigned int D > __inline__ 
   bool operator<= ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )
   { 
     for(unsigned int i=0; i<D; i++ ) if(!(v1.vec[i] <= v2.vec[i])) return false;
     return true;
   }
 
-  template< class T, class R, unsigned int D > __inline__ __host__ __device__
+  template< class T, class R, unsigned int D > __inline__ 
   bool operator> ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )
   { 
     for(unsigned int i=0; i<D; i++ ) if(!(v1.vec[i] > v2.vec[i])) return false;
     return true;
   }
 
-  template< class T, class R, unsigned int D > __inline__ __host__ __device__
+  template< class T, class R, unsigned int D > __inline__ 
   bool operator>= ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )
   { 
     for(unsigned int i=0; i<D; i++ ) if(!(v1.vec[i] >= v2.vec[i])) return false;
@@ -1243,56 +1263,56 @@ namespace Gadgetron{
   // "Weak" comparison "operators"
   //
 
-  template< class T, class R, unsigned int D > __inline__ __host__ __device__
+  template< class T, class R, unsigned int D > __inline__ 
   bool weak_equal ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )
   { 
     for(unsigned int i=0; i<D; i++ ) if(v1.vec[i] == v2.vec[i]) return true;
     return false;
   }
 
-  template< class T, class R, unsigned int D > __inline__ __host__ __device__
+  template< class T, class R, unsigned int D > __inline__ 
   bool weak_not_equal ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )
   { 
     for(unsigned int i=0; i<D; i++ ) if(v1.vec[i] != v2.vec[i]) return true;
     return false;
   }
 
-  template< class T, class R, unsigned int D > __inline__ __host__ __device__
+  template< class T, class R, unsigned int D > __inline__ 
   bool weak_and ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )
   { 
     for(unsigned int i=0; i<D; i++ ) if(v1.vec[i] && v2.vec[i]) return true;
     return false;
   }
 
-  template< class T, class R, unsigned int D > __inline__ __host__ __device__
+  template< class T, class R, unsigned int D > __inline__ 
   bool weak_or ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )
   { 
     for(unsigned int i=0; i<D; i++ ) if(v1.vec[i] || v2.vec[i]) return true;
     return false;
   }
 
-  template< class T, class R, unsigned int D > __inline__ __host__ __device__
+  template< class T, class R, unsigned int D > __inline__ 
   bool weak_less ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )
   { 
     for(unsigned int i=0; i<D; i++ ) if(v1.vec[i] < v2.vec[i]) return true;
     return false;
   }
 
-  template< class T, class R, unsigned int D > __inline__ __host__ __device__
+  template< class T, class R, unsigned int D > __inline__ 
   bool weak_less_equal ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )
   { 
     for(unsigned int i=0; i<D; i++ ) if(v1.vec[i] <= v2.vec[i]) return true;
     return false;
   }
 
-  template< class T, class R, unsigned int D > __inline__ __host__ __device__
+  template< class T, class R, unsigned int D > __inline__ 
   bool weak_greater ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )
   { 
     for(unsigned int i=0; i<D; i++ ) if(v1.vec[i] > v2.vec[i]) return true;
     return false;
   }
 
-  template< class T, class R, unsigned int D > __inline__ __host__ __device__
+  template< class T, class R, unsigned int D > __inline__ 
   bool weak_greater_equal ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )
   { 
     for(unsigned int i=0; i<D; i++ ) if(v1.vec[i] >= v2.vec[i]) return true;
@@ -1303,7 +1323,7 @@ namespace Gadgetron{
   // Vector comparison "operators"
   //
 
-  template< class T,class R, unsigned int D > __inline__ __host__ __device__
+  template< class T,class R, unsigned int D > __inline__ 
   vector_td<bool,D> vector_equal ( const vector_td<T,D> &v1, const vector_td<T,D> &v2 )
   { 
     vector_td<T,D> res;
@@ -1311,7 +1331,7 @@ namespace Gadgetron{
     return res;
   }
 
-  template< class T,class R, unsigned int D > __inline__ __host__ __device__
+  template< class T,class R, unsigned int D > __inline__ 
   vector_td<bool,D> vector_not_equal ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )
   { 
     vector_td<T,D> res;
@@ -1319,7 +1339,7 @@ namespace Gadgetron{
     return res;
   }
 
-  template< class T,class R, unsigned int D > __inline__ __host__ __device__
+  template< class T,class R, unsigned int D > __inline__ 
   vector_td<T,D> vector_and ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )
   { 
     vector_td<T,D> res;
@@ -1327,7 +1347,7 @@ namespace Gadgetron{
     return res;
   }
 
-  template< class T,class R, unsigned int D > __inline__ __host__ __device__
+  template< class T,class R, unsigned int D > __inline__ 
   vector_td<bool,D> vector_or ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )
   { 
   	vector_td<bool,D> res;
@@ -1335,7 +1355,7 @@ namespace Gadgetron{
     return res;
   }
 
-  template< class T,class R, unsigned int D > __inline__ __host__ __device__
+  template< class T,class R, unsigned int D > __inline__ 
   vector_td<bool,D> vector_less ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )
   { 
   	vector_td<bool,D> res;
@@ -1343,7 +1363,7 @@ namespace Gadgetron{
     return res;
   }
 
-  template< class T,class R, unsigned int D > __inline__ __host__ __device__
+  template< class T,class R, unsigned int D > __inline__ 
   vector_td<bool,D> vector_less_equal ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )
   { 
   	vector_td<bool,D> res;
@@ -1351,7 +1371,7 @@ namespace Gadgetron{
     return res;
   }
 
-  template< class T,class R, unsigned int D > __inline__ __host__ __device__
+  template< class T,class R, unsigned int D > __inline__ 
   vector_td<bool,D> vector_greater ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )
   {
     vector_td<bool,D> res;
@@ -1359,7 +1379,7 @@ namespace Gadgetron{
     return res;
   }
 
-  template< class T,class R, unsigned int D > __inline__ __host__ __device__
+  template< class T,class R, unsigned int D > __inline__ 
   vector_td<bool,D> vector_greater_equal ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )
   {  
   	vector_td<bool,D> res;
@@ -1371,19 +1391,19 @@ namespace Gadgetron{
   // Integer only operators
   //
 
-  template< class T, unsigned int D > __inline__ __host__ __device__
+  template< class T, unsigned int D > __inline__ 
   void operator<<= ( vector_td<T,D> &v1, size_t shifts ) 
   { 
     for(unsigned int i=0; i<D; i++ ) v1.vec[i] <<= shifts;
   }
 
-  template< class T, unsigned int D > __inline__ __host__ __device__
+  template< class T, unsigned int D > __inline__ 
   void operator>>= ( vector_td<T,D> &v1, size_t shifts ) 
   { 
     for(unsigned int i=0; i<D; i++ ) v1.vec[i] >>= shifts;
   }
 
-  template< class T, unsigned int D > __inline__ __host__ __device__
+  template< class T, unsigned int D > __inline__ 
   vector_td<T,D> operator<< ( const vector_td<T,D> &v1, size_t shifts ) 
   { 
     vector_td<T,D> res = v1;
@@ -1391,7 +1411,7 @@ namespace Gadgetron{
     return res;
   }
 
-  template< class T, unsigned int D > __inline__ __host__ __device__
+  template< class T, unsigned int D > __inline__ 
   vector_td<T,D> operator>> ( const vector_td<T,D> &v1, size_t shifts ) 
   { 
     vector_td<T,D> res = v1;
@@ -1399,13 +1419,13 @@ namespace Gadgetron{
     return res;
   }
 
-  template< class T, unsigned int D > __inline__ __host__ __device__
+  template< class T, unsigned int D > __inline__ 
   void operator%= ( vector_td<T,D> &v1, const vector_td<T,D> &v2 ) 
   { 
     for(unsigned int i=0; i<D; i++ ) v1.vec[i] %= v2.vec[i];
   }
 
-  template< class T, unsigned int D > __inline__ __host__ __device__
+  template< class T, unsigned int D > __inline__ 
   vector_td<T,D> operator% ( const vector_td<T,D> &v1, const vector_td<T,D> &v2 ) 
   { 
     vector_td<T,D> res = v1;
@@ -3598,12 +3618,12 @@ namespace Gadgetron{
         virtual void set_device(int device);
         int get_device();
 
-        thrust::device_ptr<T> get_device_ptr();
-        const thrust::device_ptr<T> get_device_ptr() const;
-        thrust::device_ptr<T> begin();
-        thrust::device_ptr<T> end();
-        const thrust::device_ptr<T> begin() const;
-        const thrust::device_ptr<T> end() const;
+        dpct::device_pointer<T> get_device_ptr();
+        const dpct::device_pointer<T> get_device_ptr() const;
+        dpct::device_pointer<T> begin();
+        dpct::device_pointer<T> end();
+        const dpct::device_pointer<T> begin() const;
+        const dpct::device_pointer<T> end() const;
 
         T at( size_t idx );
         T operator[]( size_t idx );
@@ -3619,26 +3639,43 @@ namespace Gadgetron{
 
     template <typename T> 
     cuNDArray<T>::cuNDArray() : Gadgetron::NDArray<T>::NDArray() 
-    { 
-        cudaGetDevice(&this->device_); 
+    {
+        this->device_ = dpct::get_current_device_id();
     }
 
     template <typename T> 
     cuNDArray<T>::cuNDArray(const cuNDArray<T> &a) : Gadgetron::NDArray<T>::NDArray() 
     {
-        cudaGetDevice(&this->device_);
+        this->device_ = dpct::get_current_device_id();
         this->data_ = 0;
         this->dimensions_ = a.dimensions_;
         allocate_memory();
         if (a.device_ == this->device_) {
-            CUDA_CALL(cudaMemcpy(this->data_, a.data_, this->elements_*sizeof(T), cudaMemcpyDeviceToDevice));
+            CUDA_CALL(
+                DPCT_CHECK_ERROR(dpct::get_in_order_queue().memcpy(this->data_, a.data_, this->elements_ * sizeof(T))));
         } else {
             //This memory is on a different device, we must move it.
-            cudaSetDevice(a.device_);
+            /*
+            DPCT1093:6: The "a.device_" device may be not the one intended for use. Adjust the selected device if
+            needed.
+            */
+            dpct::select_device(a.device_);
             std::shared_ptr< hoNDArray<T> > tmp = a.to_host();
-            cudaSetDevice(this->device_);
-            cudaError_t err = cudaMemcpy(this->data_, tmp->get_data_ptr(), this->elements_*sizeof(T), cudaMemcpyHostToDevice);
-            if (err !=cudaSuccess) {
+            /*
+            DPCT1093:7: The "this->device_" device may be not the one intended for use. Adjust the selected device if
+            needed.
+            */
+            dpct::select_device(this->device_);
+            dpct::err0 err = DPCT_CHECK_ERROR(dpct::get_in_order_queue()
+                                                  .memcpy(this->data_, tmp->get_data_ptr(), this->elements_ * sizeof(T))
+                                                  .wait());
+            /*
+            DPCT1000:9: Error handling if-stmt was detected but could not be rewritten.
+            */
+            if (err != 0) {
+                /*
+                DPCT1001:8: The statement could not be removed.
+                */
                 deallocate_memory();
                 this->data_ = 0;
                 this->dimensions_.clear();
@@ -3662,10 +3699,12 @@ namespace Gadgetron{
     template <typename T> 
     cuNDArray<T>::cuNDArray(const hoNDArray<T> &a) : Gadgetron::NDArray<T>::NDArray() 
     {
-        cudaGetDevice(&this->device_);
+        this->device_ = dpct::get_current_device_id();
         a.get_dimensions(this->dimensions_);
         allocate_memory();
-        if (cudaMemcpy(this->data_, a.get_data_ptr(), this->elements_*sizeof(T), cudaMemcpyHostToDevice) != cudaSuccess) {
+        if (DPCT_CHECK_ERROR(
+                dpct::get_in_order_queue().memcpy(this->data_, a.get_data_ptr(), this->elements_ * sizeof(T)).wait()) !=
+            0) {
             deallocate_memory();
             this->data_ = 0;
             this->dimensions_.clear();
@@ -3675,21 +3714,21 @@ namespace Gadgetron{
     template <typename T> 
     cuNDArray<T>::cuNDArray(const std::vector<size_t> &dimensions) : Gadgetron::NDArray<T>::NDArray()
     {
-        cudaGetDevice(&this->device_);
+        this->device_ = dpct::get_current_device_id();
         create(dimensions);
     }
 
     template <typename T> 
     cuNDArray<T>::cuNDArray(const std::vector<size_t> &dimensions, int device_no) : Gadgetron::NDArray<T>::NDArray()
     {
-        cudaGetDevice(&this->device_);
+        this->device_ = dpct::get_current_device_id();
         create(dimensions,device_no);
     }
 
     template <typename T> 
     cuNDArray<T>::cuNDArray(const std::vector<size_t> &dimensions, T* data, bool delete_data_on_destruct) : Gadgetron::NDArray<T>::NDArray()
     {
-        cudaGetDevice(&this->device_);
+        this->device_ = dpct::get_current_device_id();
         create(dimensions,data,delete_data_on_destruct);
     }
 
@@ -3698,7 +3737,7 @@ namespace Gadgetron{
     {
         std::vector<size_t> dim(1);
         dim[0] = len;
-        cudaGetDevice(&this->device_);
+        this->device_ = dpct::get_current_device_id();
         create(dim);
     }
 
@@ -3708,7 +3747,7 @@ namespace Gadgetron{
         std::vector<size_t> dim(2);
         dim[0] = sx;
         dim[1] = sy;
-        cudaGetDevice(&this->device_);
+        this->device_ = dpct::get_current_device_id();
         create(dim);
     }
 
@@ -3719,7 +3758,7 @@ namespace Gadgetron{
         dim[0] = sx;
         dim[1] = sy;
         dim[2] = sz;
-        cudaGetDevice(&this->device_);
+        this->device_ = dpct::get_current_device_id();
         create(dim);
     }
 
@@ -3731,7 +3770,7 @@ namespace Gadgetron{
         dim[1] = sy;
         dim[2] = sz;
         dim[3] = st;
-        cudaGetDevice(&this->device_);
+        this->device_ = dpct::get_current_device_id();
         create(dim);
     }
 
@@ -3744,7 +3783,7 @@ namespace Gadgetron{
         dim[2] = sz;
         dim[3] = st;
         dim[4] = sp;
-        cudaGetDevice(&this->device_);
+        this->device_ = dpct::get_current_device_id();
         create(dim);
     }
 
@@ -3758,7 +3797,7 @@ namespace Gadgetron{
         dim[3] = st;
         dim[4] = sp;
         dim[5] = sq;
-        cudaGetDevice(&this->device_);
+        this->device_ = dpct::get_current_device_id();
         create(dim);
     }
 
@@ -3773,7 +3812,7 @@ namespace Gadgetron{
         dim[4] = sp;
         dim[5] = sq;
         dim[6] = sr;
-        cudaGetDevice(&this->device_);
+        this->device_ = dpct::get_current_device_id();
         create(dim);
     }
 
@@ -3789,7 +3828,7 @@ namespace Gadgetron{
         dim[5] = sq;
         dim[6] = sr;
         dim[7] = ss;
-        cudaGetDevice(&this->device_);
+        this->device_ = dpct::get_current_device_id();
         create(dim);
     }
 
@@ -3816,17 +3855,20 @@ namespace Gadgetron{
     }
 #endif
 
-    template <typename T> 
-    cuNDArray<T>& cuNDArray<T>::operator=(const cuNDArray<T>& rhs)
-    {
-        int cur_device; 
-        CUDA_CALL(cudaGetDevice(&cur_device));
+    template <typename T> cuNDArray<T>& cuNDArray<T>::operator=(const cuNDArray<T>& rhs) try {
+        int cur_device;
+        CUDA_CALL(DPCT_CHECK_ERROR(cur_device = dpct::get_current_device_id()));
         bool dimensions_match = this->dimensions_equal(rhs);
         if (dimensions_match && (rhs.device_ == cur_device) && (cur_device == this->device_)) {
-            CUDA_CALL(cudaMemcpy(this->data_, rhs.data_, this->elements_*sizeof(T), cudaMemcpyDeviceToDevice));
+            CUDA_CALL(DPCT_CHECK_ERROR(
+                dpct::get_in_order_queue().memcpy(this->data_, rhs.data_, this->elements_ * sizeof(T))));
         }
         else {
-            CUDA_CALL(cudaSetDevice(this->device_));
+            /*
+            DPCT1093:10: The "this->device_" device may be not the one intended for use. Adjust the selected device if
+            needed.
+            */
+            CUDA_CALL(DPCT_CHECK_ERROR(dpct::select_device(this->device_)));
             if( !dimensions_match ){
                 deallocate_memory();
                 this->elements_ = rhs.elements_;
@@ -3834,59 +3876,113 @@ namespace Gadgetron{
                 allocate_memory();
             }
             if (this->device_ == rhs.device_) {
-                if (cudaMemcpy(this->data_, rhs.data_, this->elements_*sizeof(T), cudaMemcpyDeviceToDevice) !=cudaSuccess) {	    
-                    cudaSetDevice(cur_device);
+                if (DPCT_CHECK_ERROR(
+                        dpct::get_in_order_queue().memcpy(this->data_, rhs.data_, this->elements_ * sizeof(T))) != 0) {
+                    /*
+                    DPCT1093:11: The "cur_device" device may be not the one intended for use. Adjust the selected device
+                    if needed.
+                    */
+                    dpct::select_device(cur_device);
                     throw cuda_error("cuNDArray::operator=: failed to copy data (2)");
                 }
             } else {
-                if( cudaSetDevice(rhs.device_) != cudaSuccess) {
-                    cudaSetDevice(cur_device);
+                /*
+                DPCT1093:12: The "rhs.device_" device may be not the one intended for use. Adjust the selected device if
+                needed.
+                */
+                if (DPCT_CHECK_ERROR(dpct::select_device(rhs.device_)) != 0) {
+                    /*
+                    DPCT1093:13: The "cur_device" device may be not the one intended for use. Adjust the selected device
+                    if needed.
+                    */
+                    dpct::select_device(cur_device);
                     throw cuda_error("cuNDArray::operator=: unable to set device no (2)");
                 }
                 std::shared_ptr< hoNDArray<T> > tmp = rhs.to_host();
-                if( cudaSetDevice(this->device_) != cudaSuccess) {
-                    cudaSetDevice(cur_device);
+                /*
+                DPCT1093:14: The "this->device_" device may be not the one intended for use. Adjust the selected device
+                if needed.
+                */
+                if (DPCT_CHECK_ERROR(dpct::select_device(this->device_)) != 0) {
+                    /*
+                    DPCT1093:15: The "cur_device" device may be not the one intended for use. Adjust the selected device
+                    if needed.
+                    */
+                    dpct::select_device(cur_device);
                     throw cuda_error("cuNDArray::operator=: unable to set device no (3)");
                 }
-                if (cudaMemcpy(this->data_, tmp->get_data_ptr(), this->elements_*sizeof(T), cudaMemcpyHostToDevice) != cudaSuccess) {
-                    cudaSetDevice(cur_device);
+                if (DPCT_CHECK_ERROR(dpct::get_in_order_queue()
+                                         .memcpy(this->data_, tmp->get_data_ptr(), this->elements_ * sizeof(T))
+                                         .wait()) != 0) {
+                    /*
+                    DPCT1093:16: The "cur_device" device may be not the one intended for use. Adjust the selected device
+                    if needed.
+                    */
+                    dpct::select_device(cur_device);
                     throw cuda_error("cuNDArray::operator=: failed to copy data (3)");
                 }
             }
-            if( cudaSetDevice(cur_device) != cudaSuccess) {
+            /*
+            DPCT1093:17: The "cur_device" device may be not the one intended for use. Adjust the selected device if
+            needed.
+            */
+            if (DPCT_CHECK_ERROR(dpct::select_device(cur_device)) != 0) {
                 throw cuda_error("cuNDArray::operator=: unable to restore to current device");
             }
         }
         return *this;
     }
+    catch (sycl::exception const& exc) {
+      std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
+      std::exit(1);
+    }
 
-    template <typename T> 
-    cuNDArray<T>& cuNDArray<T>::operator=(const hoNDArray<T>& rhs)
-    {
-        int cur_device; 
-        CUDA_CALL(cudaGetDevice(&cur_device));
+    template <typename T> cuNDArray<T>& cuNDArray<T>::operator=(const hoNDArray<T>& rhs) try {
+        int cur_device;
+        CUDA_CALL(DPCT_CHECK_ERROR(cur_device = dpct::get_current_device_id()));
         bool dimensions_match = this->dimensions_equal(rhs);
         if (dimensions_match && (cur_device == this->device_)) {
-            CUDA_CALL(cudaMemcpy(this->get_data_ptr(), rhs.get_data_ptr(), this->get_number_of_elements()*sizeof(T), cudaMemcpyHostToDevice));
+            CUDA_CALL(DPCT_CHECK_ERROR(
+                dpct::get_in_order_queue()
+                    .memcpy(this->get_data_ptr(), rhs.get_data_ptr(), this->get_number_of_elements() * sizeof(T))
+                    .wait()));
         }
         else {
-            CUDA_CALL(cudaSetDevice(this->device_));
+            /*
+            DPCT1093:18: The "this->device_" device may be not the one intended for use. Adjust the selected device if
+            needed.
+            */
+            CUDA_CALL(DPCT_CHECK_ERROR(dpct::select_device(this->device_)));
             if( !dimensions_match ){
                 deallocate_memory();
                 this->elements_ = rhs.get_number_of_elements();
                 rhs.get_dimensions(this->dimensions_);
                 allocate_memory();
             }
-            if (cudaMemcpy(this->get_data_ptr(), rhs.get_data_ptr(), this->get_number_of_elements()*sizeof(T),
-                cudaMemcpyHostToDevice) !=cudaSuccess) {
-                    cudaSetDevice(cur_device);
+            if (DPCT_CHECK_ERROR(
+                    dpct::get_in_order_queue()
+                        .memcpy(this->get_data_ptr(), rhs.get_data_ptr(), this->get_number_of_elements() * sizeof(T))
+                        .wait()) != 0) {
+                    /*
+                    DPCT1093:19: The "cur_device" device may be not the one intended for use. Adjust the selected device
+                    if needed.
+                    */
+                    dpct::select_device(cur_device);
                     throw cuda_error("cuNDArray::operator=: failed to copy data (1)");
             }
-            if( cudaSetDevice(cur_device) != cudaSuccess) {
+            /*
+            DPCT1093:20: The "cur_device" device may be not the one intended for use. Adjust the selected device if
+            needed.
+            */
+            if (DPCT_CHECK_ERROR(dpct::select_device(cur_device)) != 0) {
                 throw cuda_error("cuNDArray::operator=: unable to restore to current device");
             }
         }
         return *this;
+    }
+    catch (sycl::exception const& exc) {
+      std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
+      std::exit(1);
     }
 
     template <typename T> 
@@ -3916,35 +4012,38 @@ namespace Gadgetron{
         Gadgetron::NDArray<T>::create(dimensions);
     }
 
-    template <typename T> 
-    inline void cuNDArray<T>::create(const std::vector<size_t> &dimensions, T* data, bool delete_data_on_destruct)
-    {
+    template <typename T>
+    inline void cuNDArray<T>::create(const std::vector<size_t>& dimensions, T* data, bool delete_data_on_destruct) try {
         if (!data) {
             throw std::runtime_error("cuNDArray::create: 0x0 pointer provided");
         }
 
-        int tmp_device; 
-        if( cudaGetDevice(&tmp_device) != cudaSuccess) {
+        int tmp_device;
+        if (DPCT_CHECK_ERROR(tmp_device = dpct::get_current_device_id()) != 0) {
             throw cuda_error("cuNDArray::create: Unable to query for device");
         }
 
-        cudaDeviceProp deviceProp;
-        if( cudaGetDeviceProperties( &deviceProp, tmp_device) != cudaSuccess) {
+        dpct::device_info deviceProp;
+        if (DPCT_CHECK_ERROR(dpct::get_device(tmp_device).get_device_info(deviceProp)) != 0) {
             throw cuda_error("cuNDArray::create: Unable to query device properties");
         }
 
-        if (deviceProp.unifiedAddressing) {
-            cudaPointerAttributes attrib;
-            if (cudaPointerGetAttributes(&attrib, data) != cudaSuccess) {
+        if (deviceProp.get_host_unified_memory()) {
+            dpct::pointer_attributes attrib;
+            if (cudaPointerGetAttributes(&attrib, data) != 0) {
                 CHECK_FOR_CUDA_ERROR();
                 throw cuda_error("cuNDArray::create: Unable to determine attributes of pointer");
             }
-            this->device_ = attrib.device;
+            this->device_ = attrib.get_device_id();
         } else {
             this->device_ = tmp_device;
         }
 
         Gadgetron::NDArray<T>::create(dimensions, data, delete_data_on_destruct);
+    }
+    catch (sycl::exception const& exc) {
+      std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
+      std::exit(1);
     }
 
     template <typename T> 
@@ -4058,82 +4157,99 @@ namespace Gadgetron{
             out->create(this->get_dimensions());
         }
 
-        if( cudaMemcpy( out->get_data_ptr(), this->data_, this->elements_*sizeof(T), cudaMemcpyDeviceToHost) != cudaSuccess) {
+        if (DPCT_CHECK_ERROR(dpct::get_in_order_queue()
+                                 .memcpy(out->get_data_ptr(), this->data_, this->elements_ * sizeof(T))
+                                 .wait()) != 0) {
             throw cuda_error("cuNDArray::to_host(): failed to copy memory from device");
         }
     }
 
-    template <typename T> 
-    inline void cuNDArray<T>::set_device(int device)
-    {
+    template <typename T> inline void cuNDArray<T>::set_device(int device) try {
         if( device_ == device )
             return;
 
         int cur_device;
-        if( cudaGetDevice(&cur_device) != cudaSuccess) {
+        if (DPCT_CHECK_ERROR(cur_device = dpct::get_current_device_id()) != 0) {
             throw cuda_error("cuNDArray::set_device: unable to get device no");
         }
 
-        if( cur_device != device_ && cudaSetDevice(device_) != cudaSuccess) {
+        /*
+        DPCT1093:21: The "device_" device may be not the one intended for use. Adjust the selected device if needed.
+        */
+        if (cur_device != device_ && DPCT_CHECK_ERROR(dpct::select_device(device_)) != 0) {
             throw cuda_error("cuNDArray::set_device: unable to set device no");
         }
 
         std::shared_ptr< hoNDArray<T> > tmp = to_host();
         deallocate_memory();
-        if( cudaSetDevice(device) != cudaSuccess) {
-            cudaSetDevice(cur_device);
+        /*
+        DPCT1093:22: The "device" device may be not the one intended for use. Adjust the selected device if needed.
+        */
+        if (DPCT_CHECK_ERROR(dpct::select_device(device)) != 0) {
+            /*
+            DPCT1093:23: The "cur_device" device may be not the one intended for use. Adjust the selected device if
+            needed.
+            */
+            dpct::select_device(cur_device);
             throw cuda_error("cuNDArray::set_device: unable to set device no (2)");
         }
 
         device_ = device;
         allocate_memory();
-        if (cudaMemcpy(this->data_, tmp->get_data_ptr(), this->elements_*sizeof(T), cudaMemcpyHostToDevice) != cudaSuccess) {
-            cudaSetDevice(cur_device);
+        if (DPCT_CHECK_ERROR(dpct::get_in_order_queue()
+                                 .memcpy(this->data_, tmp->get_data_ptr(), this->elements_ * sizeof(T))
+                                 .wait()) != 0) {
+            /*
+            DPCT1093:24: The "cur_device" device may be not the one intended for use. Adjust the selected device if
+            needed.
+            */
+            dpct::select_device(cur_device);
             throw cuda_error("cuNDArray::set_device: failed to copy data");
         }
 
-        if( cudaSetDevice(cur_device) != cudaSuccess) {
+        /*
+        DPCT1093:25: The "cur_device" device may be not the one intended for use. Adjust the selected device if needed.
+        */
+        if (DPCT_CHECK_ERROR(dpct::select_device(cur_device)) != 0) {
             throw cuda_error("cuNDArray::set_device: unable to restore device to current device");
         }
+    }
+    catch (sycl::exception const& exc) {
+      std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
+      std::exit(1);
     }
 
     template <typename T> 
     inline int cuNDArray<T>::get_device() { return device_; }
 
-    template <typename T> 
-    inline thrust::device_ptr<T> cuNDArray<T>::get_device_ptr()
+    template <typename T> inline dpct::device_pointer<T> cuNDArray<T>::get_device_ptr()
     {
-        return thrust::device_ptr<T>(this->data_);
+        return dpct::device_pointer<T>(this->data_);
     }
 
-    template <typename T>
-    inline const thrust::device_ptr<T> cuNDArray<T>::get_device_ptr() const
+    template <typename T> inline const dpct::device_pointer<T> cuNDArray<T>::get_device_ptr() const
     {
-        return thrust::device_ptr<T>(this->data_);
+        return dpct::device_pointer<T>(this->data_);
     }
 
-    template <typename T> 
-    inline thrust::device_ptr<T> cuNDArray<T>::begin()
+    template <typename T> inline dpct::device_pointer<T> cuNDArray<T>::begin()
     {
-        return thrust::device_ptr<T>(this->data_);
+        return dpct::device_pointer<T>(this->data_);
     }
 
-    template <typename T> 
-    inline thrust::device_ptr<T> cuNDArray<T>::end()
+    template <typename T> inline dpct::device_pointer<T> cuNDArray<T>::end()
     {
-        return thrust::device_ptr<T>(this->data_)+this->get_number_of_elements();
+        return dpct::device_pointer<T>(this->data_) + this->get_number_of_elements();
     }
 
-    template <typename T> 
-    inline const thrust::device_ptr<T> cuNDArray<T>::begin() const
+    template <typename T> inline const dpct::device_pointer<T> cuNDArray<T>::begin() const
     {
-        return thrust::device_ptr<T>(this->data_);
+        return dpct::device_pointer<T>(this->data_);
     }
 
-    template <typename T>
-    inline const thrust::device_ptr<T> cuNDArray<T>::end() const
+    template <typename T> inline const dpct::device_pointer<T> cuNDArray<T>::end() const
     {
-        return thrust::device_ptr<T>(this->data_)+this->get_number_of_elements();
+        return dpct::device_pointer<T>(this->data_) + this->get_number_of_elements();
     }
 
     template <typename T>
@@ -4143,7 +4259,7 @@ namespace Gadgetron{
             throw std::runtime_error("cuNDArray::at(): index out of range.");
         }
         T res;
-        CUDA_CALL(cudaMemcpy(&res, &this->get_data_ptr()[idx], sizeof(T), cudaMemcpyDeviceToHost));
+        CUDA_CALL(DPCT_CHECK_ERROR(dpct::get_in_order_queue().memcpy(&res, &this->get_data_ptr()[idx], sizeof(T)).wait()));
         return res;
     }
 
@@ -4154,13 +4270,11 @@ namespace Gadgetron{
             throw std::runtime_error("cuNDArray::operator[]: index out of range.");
         }
         T res;
-        CUDA_CALL(cudaMemcpy(&res, &this->get_data_ptr()[idx], sizeof(T), cudaMemcpyDeviceToHost));
+        CUDA_CALL(DPCT_CHECK_ERROR(dpct::get_in_order_queue().memcpy(&res, &this->get_data_ptr()[idx], sizeof(T)).wait()));
         return res;
     }
 
-    template <typename T> 
-    void cuNDArray<T>::allocate_memory()
-    {
+    template <typename T> void cuNDArray<T>::allocate_memory() try {
         deallocate_memory();
 
         this->elements_ = 1;
@@ -4173,19 +4287,27 @@ namespace Gadgetron{
         size_t size = this->elements_ * sizeof(T);
 
         int device_no_old;
-        if (cudaGetDevice(&device_no_old) != cudaSuccess) {
+        if (DPCT_CHECK_ERROR(device_no_old = dpct::get_current_device_id()) != 0) {
             throw cuda_error("cuNDArray::allocate_memory: unable to get device no");
         }
 
         if (device_ != device_no_old) {
-            if (cudaSetDevice(device_) != cudaSuccess) {
+            /*
+            DPCT1093:26: The "device_" device may be not the one intended for use. Adjust the selected device if needed.
+            */
+            if (DPCT_CHECK_ERROR(dpct::select_device(device_)) != 0) {
                 throw cuda_error("cuNDArray::allocate_memory: unable to set device no");
             }
         }
 
-        if (cudaMalloc((void**) &this->data_,size) != cudaSuccess) {
+        if (DPCT_CHECK_ERROR((this->data_) = (typename std::remove_reference<decltype(this->data_)>::type)
+                                 sycl::malloc_device(size, dpct::get_in_order_queue())) != 0) {
             size_t free = 0, total = 0;
-            cudaMemGetInfo(&free, &total);
+            /*
+            DPCT1106:27: 'cudaMemGetInfo' was migrated with the Intel extensions for device information which may not be
+            supported by all compilers or runtimes. You may need to adjust the code.
+            */
+            dpct::get_current_device().get_memory_info(free, total);
             std::stringstream err("cuNDArray::allocate_memory() : Error allocating CUDA memory");
             err << "CUDA Memory: " << free << " (" << total << ")";
 
@@ -4199,29 +4321,47 @@ namespace Gadgetron{
         }
 
         if (device_ != device_no_old) {
-            if (cudaSetDevice(device_no_old) != cudaSuccess) {
+            /*
+            DPCT1093:28: The "device_no_old" device may be not the one intended for use. Adjust the selected device if
+            needed.
+            */
+            if (DPCT_CHECK_ERROR(dpct::select_device(device_no_old)) != 0) {
                 throw cuda_error("cuNDArray::allocate_memory: unable to restore device no");
             }
         }
     }
+    catch (sycl::exception const& exc) {
+      std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
+      std::exit(1);
+    }
 
-    template <typename T> 
-    void cuNDArray<T>::deallocate_memory()
-    {
+    template <typename T> void cuNDArray<T>::deallocate_memory() try {
         if (this->data_) {
 
             int device_no_old;
-            CUDA_CALL(cudaGetDevice(&device_no_old));
+            CUDA_CALL(DPCT_CHECK_ERROR(device_no_old = dpct::get_current_device_id()));
             if (device_ != device_no_old) {
-                CUDA_CALL(cudaSetDevice(device_));
+                /*
+                DPCT1093:29: The "device_" device may be not the one intended for use. Adjust the selected device if
+                needed.
+                */
+                CUDA_CALL(DPCT_CHECK_ERROR(dpct::select_device(device_)));
             }
 
-            CUDA_CALL(cudaFree(this->data_));
+            CUDA_CALL(DPCT_CHECK_ERROR(dpct::dpct_free(this->data_, dpct::get_in_order_queue())));
             if (device_ != device_no_old) {
-                CUDA_CALL(cudaSetDevice(device_no_old));
+                /*
+                DPCT1093:30: The "device_no_old" device may be not the one intended for use. Adjust the selected device
+                if needed.
+                */
+                CUDA_CALL(DPCT_CHECK_ERROR(dpct::select_device(device_no_old)));
             }
             this->data_ = 0;
         }
+    }
+    catch (sycl::exception const& exc) {
+      std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
+      std::exit(1);
     }
 }
 
