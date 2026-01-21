@@ -152,6 +152,13 @@ RUN mkdir -p /downloads \
     && echo "source /opt/intel/oneapi/setvars.sh --include-intel-llvm"                  >> /etc/bash.bashrc
 
 COPY docker/install_mkl.sh /tmp/install_mkl.sh
+RUN chmod +x /tmp/install_mkl.sh \
+    # && /tmp/install_mkl.sh \
+    && echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/install/lib"                     >> /etc/bash.bashrc     \
+    && echo "export LD_LIBRARY_PATH=/oneMKLwithCublas/lib:\$LD_LIBRARY_PATH"            >> /etc/bash.bashrc     \
+    && echo "export LIBRARY_PATH=/oneMKLwithCublas/lib:\$LIBRARY_PATH"                  >> /etc/bash.bashrc     \
+    && echo "export CPLUS_INCLUDE_DIR=/oneMKLwithCublas/include:\$CPLUS_INCLUDE_DIR"    >> /etc/bash.bashrc     \
+    && echo "export CPLUS_INCLUDE_DIR=/include:\$CPLUS_INCLUDE_DIR"                     >> /etc/bash.bashrc
 
 
 # RUN mkdir -p /downloads                                         \

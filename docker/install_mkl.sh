@@ -10,7 +10,7 @@ tar xzf /downloads/oneMath-v0.8.tar.gz -C /downloads
 mv /downloads/oneMath-0.8 /downloads/oneMKL
 mkdir -p /oneMKLwithCublas
 
-source /opt/intel/oneapi/setvars.sh  --include-intel-llvm
+source /opt/intel/oneapi/setvars.sh  --include-intel-llvm --force
 cmake -S /downloads/oneMKL -B /oneMKLwithCublas     \
         -DCMAKE_CXX_COMPILER=icpx                   \
         -DCMAKE_C_COMPILER=icx                      \
@@ -20,5 +20,5 @@ cmake -S /downloads/oneMKL -B /oneMKLwithCublas     \
         -DTARGET_DOMAINS=blas
 
 cd /oneMKLwithCublas
-make     -j 8  
+make     -j 12  
 rm -rf /downloads

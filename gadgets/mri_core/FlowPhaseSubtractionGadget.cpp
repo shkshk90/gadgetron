@@ -24,16 +24,28 @@ void FlowPhaseSubtractionGadget::process(Core::InputChannel<Core::Image<std::com
 
     std::map<int, std::queue<Core::Image<std::complex<float>>>> queues;
 
-    for (auto [header, data, meta] : in) {
+    for (auto hdm /*[header, data, meta]*/ : in) {
+        auto header = std::move(std::get<0>(hdm));
+        auto data = std::move(std::get<1>(hdm));
+        auto meta = std::move(std::get<2>(hdm));
+
         queues[header.set].emplace(header, std::move(data), std::move(meta));
 
         if (queues[0].empty() || queues[1].empty())
             continue;
 
-        auto [header1, data1, meta1] = std::move(queues[0].front());
-        auto [header2, data2, meta2] = std::move(queues[1].front());
+        auto hdm1 = std::move(queues[0].front());
+        auto hdm2 = std::move(queues[1].front());
         queues[0].pop();
         queues[1].pop();
+
+        auto header1 = std::move(std::get<0>(hdm1));
+        auto data1 = std::move(std::get<1>(hdm1));
+        auto meta1 = std::move(std::get<2>(hdm1));
+
+        auto header2 = std::move(std::get<0>(hdm2));
+        auto data2 = std::move(std::get<1>(hdm2));
+        auto meta2 = std::move(std::get<2>(hdm2));
 
         if (header1.image_index != header2.image_index)
             throw std::runtime_error("Mismatch in input indices detected");

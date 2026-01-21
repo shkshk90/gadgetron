@@ -120,6 +120,9 @@ namespace Gadgetron::Core::IO {
 
     template<class T = uint64_t>
     void write_string_to_stream(std::ostream &stream, const std::string &str);
+
+    template<class T>
+    std::enable_if_t<std::is_base_of_v<SfndamSerializable<T>, T>> write(std::ostream &stream, const T &t);
 }
 
 #include "primitives.hpp"

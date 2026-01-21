@@ -14,8 +14,7 @@ services:
         reservations:
           devices:
             - driver: nvidia
-              count: 1
-              capabilities: [gpu]
+              capabilities: ["gpu"]
     volumes:
       - .:/gadgetron:ro
       - ./docker/cmake.config.sh:/config.sh:ro
