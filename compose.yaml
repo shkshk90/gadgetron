@@ -16,10 +16,12 @@ services:
             - driver: nvidia
               count: 1
               capabilities: [gpu]
-    # volumes:
-    #   - ./gadgetron:/gadgetron:ro
-    #   - ./cmake:/build:rw
-    #   - ./to-be-mounted/intel-dpcpp-cpp-compiler-2025.2.1.7_offline.sh:/dpcpp.sh:ro
-    #   - ./to-be-mounted/oneapi-for-nvidia-gpus-2025.2.0-linux.sh:/oanv.sh:ro
-    #   - ./etc/cuda-samples:/cuda-samples:ro
-    #   - ./etc/helpers:/helpers:rw
+    volumes:
+      - .:/gadgetron:ro
+      - ./docker/cmake.config.sh:/config.sh:ro
+      - ./bin:/install:rw
+      - ./build:/build:rw
+      # - ./to-be-mounted/intel-dpcpp-cpp-compiler-2025.2.1.7_offline.sh:/dpcpp.sh:ro
+      # - ./to-be-mounted/oneapi-for-nvidia-gpus-2025.2.0-linux.sh:/oanv.sh:ro
+      # - ./etc/cuda-samples:/cuda-samples:ro
+      # - ./etc/helpers:/helpers:rw

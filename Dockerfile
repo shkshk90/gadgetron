@@ -8,10 +8,10 @@ RUN mkdir -p /downloads \
         && go build                                                 
         # cp   /downloads/mrd/mrd-storage-server    /usr/local/bin
 
-FROM debian:trixie-slim AS deps
+FROM ubuntu:24.04 AS deps
 
 RUN echo 'precedence ::ffff:0:0/96 100' >> /etc/gai.conf
-RUN sed -i 's|http://deb.debian.org|http://ftp.de.debian.org|g' /etc/apt/sources.list.d/debian.sources \
+RUN sed -i 's|http://archive.ubuntu.com|http://de.archive.ubuntu.com|g' /etc/apt/sources.list.d/ubuntu.sources \
         && apt-get update \
         && apt-get -y install cmake wget curl g++ libpugixml-dev libhdf5-dev make \
         && apt-get autoremove -y && apt-get clean 
@@ -121,8 +121,8 @@ RUN mkdir -p /downloads \
     && mkdir -p /bart                                                                           \
     && make                                                                                     \
     && make shared-lib                                                                          \
-    && cp   /downloads/bart/libbart.so                /usr/lib//libbart.so                      \
-    && cp   /downloads/bart/src/bart_embed_api.h      /usr/include/bart/bart_embed_api.h        \
+    && cp   /downloads/bart/libbart.so                /bart/libbart.so                          \
+    && cp   /downloads/bart/src/bart_embed_api.h      /bart/bart_embed_api.h                    \
     && rm -rf /downloads
 
 

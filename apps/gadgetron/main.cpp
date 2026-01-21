@@ -21,6 +21,7 @@ using namespace Gadgetron::Server;
 
 using gadget_parameter = std::pair<std::string, std::string>;
 
+namespace std {
 std::istream& operator>>(std::istream& in, gadget_parameter& param) {
     std::string token;
     in >> token;
@@ -38,7 +39,7 @@ std::ostream& operator<<(std::ostream& out, const gadget_parameter& param) {
     out << param.first << "=" << param.second;
     return out;
 }
-
+}
 int main(int argc, char *argv[]) {
     options_description gadgetron_options("Allowed options:");
 
