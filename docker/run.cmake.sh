@@ -2,6 +2,17 @@
 
 set -euo pipefail
 
+# Check if dpct migration has been run (look for .dp.cpp files)
+if ! find /gadgetron/toolboxes -name "*.dp.cpp" -print -quit 2>/dev/null | grep -q .; then
+    echo "WARNING: No .dp.cpp files found. Running dpct migration first..."
+    if [ -x /gadgetron/docker/dpct_migrate.sh ]; then
+        /gadgetron/docker/dpct_migrate.sh
+    else
+        echo "ERROR: Migration script not found. Run /gadgetron/docker/dpct_migrate.sh first."
+        exit 1
+    fi
+fi
+
 if [ ! -d "/oneMKLwithCublas/lib" ]; then
     echo "Running install mkl"
     /tmp/install_mkl.sh

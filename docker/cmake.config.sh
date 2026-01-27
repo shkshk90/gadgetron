@@ -17,7 +17,6 @@ cmake                                                               \
   -DCMAKE_CXX_FLAGS=-I${HOME}/.local/include                        \
   -DCMAKE_C_COMPILER=icx                                            \
   -DCMAKE_CXX_COMPILER=icpx                                         \
-  -DCMAKE_CUDA_HOST_COMPILER=clang                                  \
   -DBoost_NO_BOOST_CMAKE=TRUE                                       \
   -DBoost_NO_SYSTEM_PATHS=TRUE                                      \
   -DBOOST_ROOT:PATHNAME=/boost                                      \
@@ -31,7 +30,7 @@ cmake                                                               \
   -DBUILD_PYTHON_SUPPORT=FALSE                                      \
   -DBART_ROOT:PATH=/bart                                            \
   -DUSE_MKL=ON                                                      \
-  -DUSE_CUDA=ON                                                     \
+  -DUSE_SYCL=ON                                                     \
   -DCMAKE_INSTALL_PREFIX=/install                                   \
   -DBUILD_SUPPRESS_WARNINGS=TRUE                                    \
   -Wno-dev
