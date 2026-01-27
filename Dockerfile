@@ -152,7 +152,8 @@ RUN mkdir -p /downloads \
     && echo "source /opt/intel/oneapi/setvars.sh --include-intel-llvm"                  >> /etc/bash.bashrc
 
 COPY docker/install_mkl.sh /tmp/install_mkl.sh
-RUN chmod +x /tmp/install_mkl.sh \
+COPY docker/migrate_to_sycl.sh /tmp/migrate_to_sycl.sh
+RUN chmod +x /tmp/install_mkl.sh /tmp/migrate_to_sycl.sh \
     # && /tmp/install_mkl.sh \
     && echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/install/lib"                     >> /etc/bash.bashrc     \
     && echo "export LD_LIBRARY_PATH=/oneMKLwithCublas/lib:\$LD_LIBRARY_PATH"            >> /etc/bash.bashrc     \

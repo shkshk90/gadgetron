@@ -16,9 +16,10 @@ services:
             - driver: nvidia
               capabilities: ["gpu"]
     volumes:
-      - .:/gadgetron:ro
+      - .:/gadgetron:rw
       - ./docker/cmake.config.sh:/config.sh:ro
       - ./docker/run.cmake.sh:/run.sh:ro
+      - ./docker/migrate_to_sycl.sh:/tmp/migrate.sh:ro
       - ./bin:/install:rw
       - ./build:/build:rw
       # - ./to-be-mounted/intel-dpcpp-cpp-compiler-2025.2.1.7_offline.sh:/dpcpp.sh:ro
