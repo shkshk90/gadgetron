@@ -7,12 +7,12 @@ if [ ! -d "/oneMKLwithCublas/lib" ]; then
     /tmp/install_mkl.sh
 fi
 
-cmake --build /build/icpx -j 12
-mkdir -p /install/new/icpx
-cmake --install /build/icpx --prefix /install/new/icpx
+cmake --build /build/clang -j 12
+mkdir -p /install/new/clang
+cmake --install /build/clang --prefix /install/new/clang
 
-echo "run ::    export LD_LIBRARY_PATH=/install/new/icpx/lib:\$LD_LIBRARY_PATH "
-echo "          /install/new/icpx/bin/test_all"
+echo "run :: "
+echo "       LD_LIBRARY_PATH=/install/new/clang/lib:\$LD_LIBRARY_PATH /install/new/clang/bin/test_all"
 
 # Failing tests:
 # /install/icpx/bin/test_all --gtest_filter=curveFitting_test/0.T2SE
