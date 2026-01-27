@@ -1,12 +1,16 @@
 
+#define DPCT_PROFILING_ENABLED
+#include <sycl/sycl.hpp>
+#include <dpct/dpct.hpp>
 #include "ConvolutionKernel.h"
 
 #include <cmath>
 
 namespace Gadgetron
 {
-    __inline__ __device__ __host__
-    double bessi0(double x)
+/* DPCT_ORIG     __inline__ __device__ __host__
+    double bessi0(double x)*/
+    __inline__ double bessi0(double x)
     {
         double denominator;
         double numerator;
@@ -36,8 +40,9 @@ namespace Gadgetron
         return -numerator / denominator;
     }
 
-    __inline__ __device__ __host__
-    float bessi0(float x)
+/* DPCT_ORIG     __inline__ __device__ __host__
+    float bessi0(float x)*/
+    __inline__ float bessi0(float x)
     {
         float denominator;
         float numerator;
@@ -70,59 +75,74 @@ namespace Gadgetron
 
     // Kaiser Bessel according to Beatty et. al. IEEE TMI 2005;24(6):799-808.
     // There is a slight difference wrt Jackson's formulation, IEEE TMI 1991;10(3):473-478.
-    __inline__ __device__ __host__
+/* DPCT_ORIG     __inline__ __device__ __host__
     double KaiserBessel(double u, double matrix_size_os,
-                        double one_over_W, double beta)
+                        double one_over_W, double beta)*/
+    __inline__ double KaiserBessel(double u, double matrix_size_os, double one_over_W, double beta)
     {
         double _tmp = 2.0 * u * one_over_W;
         double tmp = _tmp * _tmp;
-        double arg = beta * std::sqrt(1.0 - tmp);
+/* DPCT_ORIG         double arg = beta * std::sqrt(1.0 - tmp);*/
+        double arg = beta * sycl::sqrt(1.0 - tmp);
         double bessi = bessi0(arg);
         double ret = matrix_size_os * bessi * one_over_W;
         return ret;
     }
 
-    __inline__ __device__ __host__
+/* DPCT_ORIG     __inline__ __device__ __host__
     float KaiserBessel(float u, float matrix_size_os,
-                       float one_over_W, float beta) {
+                       float one_over_W, float beta) {*/
+    __inline__ float KaiserBessel(float u, float matrix_size_os, float one_over_W, float beta) {
         float _tmp = 2.0f * u * one_over_W;
         float tmp = _tmp * _tmp;
-        float arg = beta * std::sqrt(1.0f - tmp);
+/* DPCT_ORIG         float arg = beta * std::sqrt(1.0f - tmp);*/
+        float arg = beta * sycl::sqrt(1.0f - tmp);
         float bessi = bessi0(arg);
         float ret = matrix_size_os * bessi * one_over_W;
         return ret;
     }
 
-
-    template<class REAL> __inline__ __device__ __host__
+/* DPCT_ORIG     template<class REAL> __inline__ __device__ __host__
     REAL KaiserBessel(
         const Gadgetron::vector_td<REAL, 1> &u,
         const Gadgetron::vector_td<REAL, 1> &matrix_size_os,
         REAL one_over_W,
-        const vector_td<REAL, 1> &beta)
+        const vector_td<REAL, 1> &beta)*/
+    template <class REAL>
+    __inline__ REAL KaiserBessel(const Gadgetron::vector_td<REAL, 1>& u,
+                                 const Gadgetron::vector_td<REAL, 1>& matrix_size_os, REAL one_over_W,
+                                 const vector_td<REAL, 1>& beta)
     {
         REAL phi_x = KaiserBessel(u.vec[0], matrix_size_os.vec[0], one_over_W, beta[0]);
         return phi_x;
     }
 
-    template<class REAL> __inline__ __device__ __host__
+/* DPCT_ORIG     template<class REAL> __inline__ __device__ __host__
     REAL KaiserBessel(
         const Gadgetron::vector_td<REAL, 2> &u,
         const Gadgetron::vector_td<REAL, 2> &matrix_size_os,
         REAL one_over_W,
-        const vector_td<REAL, 2> &beta)
+        const vector_td<REAL, 2> &beta)*/
+    template <class REAL>
+    __inline__ REAL KaiserBessel(const Gadgetron::vector_td<REAL, 2>& u,
+                                 const Gadgetron::vector_td<REAL, 2>& matrix_size_os, REAL one_over_W,
+                                 const vector_td<REAL, 2>& beta)
     {
         REAL phi_x = KaiserBessel(u.vec[0], matrix_size_os.vec[0], one_over_W, beta[0]);
         REAL phi_y = KaiserBessel(u.vec[1], matrix_size_os.vec[1], one_over_W, beta[1]);
         return phi_x * phi_y;
     }
 
-    template<class REAL> __inline__ __device__ __host__
+/* DPCT_ORIG     template<class REAL> __inline__ __device__ __host__
     REAL KaiserBessel(
         const Gadgetron::vector_td<REAL, 3> &u,
         const Gadgetron::vector_td<REAL, 3> &matrix_size_os,
         REAL one_over_W,
-        const vector_td<REAL, 3> &beta)
+        const vector_td<REAL, 3> &beta)*/
+    template <class REAL>
+    __inline__ REAL KaiserBessel(const Gadgetron::vector_td<REAL, 3>& u,
+                                 const Gadgetron::vector_td<REAL, 3>& matrix_size_os, REAL one_over_W,
+                                 const vector_td<REAL, 3>& beta)
     {
         REAL phi_x = KaiserBessel(u.vec[0], matrix_size_os.vec[0], one_over_W, beta[0]);
         REAL phi_y = KaiserBessel(u.vec[1], matrix_size_os.vec[1], one_over_W, beta[1]);
@@ -130,12 +150,16 @@ namespace Gadgetron
         return phi_x * phi_y * phi_z;
     }
 
-    template<class REAL> __inline__ __device__ __host__
+/* DPCT_ORIG     template<class REAL> __inline__ __device__ __host__
     REAL KaiserBessel(
         const Gadgetron::vector_td<REAL, 4> &u,
         const Gadgetron::vector_td<REAL, 4> &matrix_size_os,
         REAL one_over_W,
-        const vector_td<REAL, 4> &beta)
+        const vector_td<REAL, 4> &beta)*/
+    template <class REAL>
+    __inline__ REAL KaiserBessel(const Gadgetron::vector_td<REAL, 4>& u,
+                                 const Gadgetron::vector_td<REAL, 4>& matrix_size_os, REAL one_over_W,
+                                 const vector_td<REAL, 4>& beta)
     {
         REAL phi_x = KaiserBessel(u.vec[0], matrix_size_os.vec[0], one_over_W, beta[0]);
         REAL phi_y = KaiserBessel(u.vec[1], matrix_size_os.vec[1], one_over_W, beta[1]);
@@ -144,24 +168,25 @@ namespace Gadgetron
         return phi_x * phi_y * phi_z * phi_w;
     }
 
-
-    template<class REAL, unsigned int D, template<class, unsigned int> class K> __device__ __host__
-    ConvolutionKernel<REAL, D, K>::ConvolutionKernel(REAL width)
-      : width_(width)
-      , radius_(width / REAL(2))
+/* DPCT_ORIG     template<class REAL, unsigned int D, template<class, unsigned int> class K> __device__ __host__
+    ConvolutionKernel<REAL, D, K>::ConvolutionKernel(REAL width)*/
+    template <class REAL, unsigned int D, template <class, unsigned int> class K>
+    ConvolutionKernel<REAL, D, K>::ConvolutionKernel(REAL width) : width_(width), radius_(width / REAL(2))
     {
 
     }
 
-
-    template<class REAL, unsigned int D, template<class, unsigned int> class K> __device__ __host__
+/* DPCT_ORIG     template<class REAL, unsigned int D, template<class, unsigned int> class K> __device__ __host__
+    ConvolutionKernel<REAL, D, K>::~ConvolutionKernel()*/
+    template <class REAL, unsigned int D, template <class, unsigned int> class K>
     ConvolutionKernel<REAL, D, K>::~ConvolutionKernel()
     {
 
-    }  
+    }
 
-
-    template<class REAL, unsigned int D, template<class, unsigned int> class K> __device__ __host__
+/* DPCT_ORIG     template<class REAL, unsigned int D, template<class, unsigned int> class K> __device__ __host__
+    inline REAL ConvolutionKernel<REAL, D, K>::get(const vector_td<REAL, D>& u) const*/
+    template <class REAL, unsigned int D, template <class, unsigned int> class K>
     inline REAL ConvolutionKernel<REAL, D, K>::get(const vector_td<REAL, D>& u) const
     {
         if (weak_greater(u, vector_td<REAL, D>(this->radius_)))
@@ -169,8 +194,9 @@ namespace Gadgetron
         return this->compute(u);
     }
 
-
-    template<class REAL, unsigned int D, template<class, unsigned int> class K> __device__ __host__
+/* DPCT_ORIG     template<class REAL, unsigned int D, template<class, unsigned int> class K> __device__ __host__
+    inline REAL ConvolutionKernel<REAL, D, K>::get(REAL r, size_t ax) const*/
+    template <class REAL, unsigned int D, template <class, unsigned int> class K>
     inline REAL ConvolutionKernel<REAL, D, K>::get(REAL r, size_t ax) const
     {
         r = abs(r);
@@ -179,55 +205,63 @@ namespace Gadgetron
         return this->compute(r, ax);
     }
 
-
-    template<class REAL, unsigned int D, template<class, unsigned int> class K> __device__ __host__
+/* DPCT_ORIG     template<class REAL, unsigned int D, template<class, unsigned int> class K> __device__ __host__
+    inline REAL ConvolutionKernel<REAL, D, K>::compute(const vector_td<REAL, D>& u) const*/
+    template <class REAL, unsigned int D, template <class, unsigned int> class K>
     inline REAL ConvolutionKernel<REAL, D, K>::compute(const vector_td<REAL, D>& u) const
     {
         return static_cast<const K<REAL, D>*>(this)->compute(u);
     }
 
-
-    template<class REAL, unsigned int D, template<class, unsigned int> class K> __device__ __host__
+/* DPCT_ORIG     template<class REAL, unsigned int D, template<class, unsigned int> class K> __device__ __host__
+    inline REAL ConvolutionKernel<REAL, D, K>::compute(REAL r, size_t ax) const*/
+    template <class REAL, unsigned int D, template <class, unsigned int> class K>
     inline REAL ConvolutionKernel<REAL, D, K>::compute(REAL r, size_t ax) const
     {
         return static_cast<const K<REAL, D>*>(this)->compute(r, ax);
     }
 
-
-    template<class REAL, unsigned int D, template<class, unsigned int> class K> __device__ __host__
+/* DPCT_ORIG     template<class REAL, unsigned int D, template<class, unsigned int> class K> __device__ __host__
+    inline REAL ConvolutionKernel<REAL, D, K>::lookup(const vector_td<REAL, D>& u) const*/
+    template <class REAL, unsigned int D, template <class, unsigned int> class K>
     inline REAL ConvolutionKernel<REAL, D, K>::lookup(const vector_td<REAL, D>& u) const
     {
         return static_cast<const K<REAL, D>*>(this)->lookup(u);
     }
 
-
-    template<class REAL, unsigned int D, template<class, unsigned int> class K> __device__ __host__
+/* DPCT_ORIG     template<class REAL, unsigned int D, template<class, unsigned int> class K> __device__ __host__
+    inline REAL ConvolutionKernel<REAL, D, K>::lookup(REAL r, size_t ax) const*/
+    template <class REAL, unsigned int D, template <class, unsigned int> class K>
     inline REAL ConvolutionKernel<REAL, D, K>::lookup(REAL r, size_t ax) const
     {
         return static_cast<const K<REAL, D>*>(this)->lookup(r, ax);
     }
 
-
-    template<class REAL, unsigned int D, template<class, unsigned int> class K> __device__ __host__
+/* DPCT_ORIG     template<class REAL, unsigned int D, template<class, unsigned int> class K> __device__ __host__
+    inline REAL ConvolutionKernel<REAL, D, K>::get_width() const*/
+    template <class REAL, unsigned int D, template <class, unsigned int> class K>
     inline REAL ConvolutionKernel<REAL, D, K>::get_width() const
     {
         return width_;
     }
 
-
-    template<class REAL, unsigned int D, template<class, unsigned int> class K> __device__ __host__
+/* DPCT_ORIG     template<class REAL, unsigned int D, template<class, unsigned int> class K> __device__ __host__
+    inline REAL ConvolutionKernel<REAL, D, K>::get_radius() const*/
+    template <class REAL, unsigned int D, template <class, unsigned int> class K>
     inline REAL ConvolutionKernel<REAL, D, K>::get_radius() const
     {
         return radius_;
     }
 
-
-    template<class REAL, unsigned int D> __device__ __host__
+/* DPCT_ORIG     template<class REAL, unsigned int D> __device__ __host__
     KaiserKernel<REAL, D>::KaiserKernel(
         const vector_td<unsigned int, D>& matrix_size,
         const vector_td<unsigned int, D>& matrix_size_os,
-        REAL width)
-      : ConvolutionKernel<REAL, D, KaiserKernel>(width)
+        REAL width)*/
+    template <class REAL, unsigned int D>
+    KaiserKernel<REAL, D>::KaiserKernel(const vector_td<unsigned int, D>& matrix_size,
+                                        const vector_td<unsigned int, D>& matrix_size_os, REAL width)
+        : ConvolutionKernel<REAL, D, KaiserKernel>(width)
     {
         this->matrix_size_ = matrix_size;
         this->matrix_size_os_ = matrix_size_os;
@@ -237,13 +271,14 @@ namespace Gadgetron
         this->beta_ = this->compute_beta();
     }
 
-
-    template<class REAL, unsigned int D> __device__ __host__
+/* DPCT_ORIG     template<class REAL, unsigned int D> __device__ __host__
     KaiserKernel<REAL, D>::KaiserKernel(
         const vector_td<unsigned int, D>& matrix_size,
         REAL os_factor,
-        REAL width)
-      : ConvolutionKernel<REAL, D, KaiserKernel>(width)
+        REAL width)*/
+    template <class REAL, unsigned int D>
+    KaiserKernel<REAL, D>::KaiserKernel(const vector_td<unsigned int, D>& matrix_size, REAL os_factor, REAL width)
+        : ConvolutionKernel<REAL, D, KaiserKernel>(width)
     {
         this->matrix_size_ = matrix_size;
         this->matrix_size_os_ = vector_td<unsigned int, D>(
@@ -253,9 +288,9 @@ namespace Gadgetron
         this->beta_ = this->compute_beta();
     }
 
-
-    template<class REAL, unsigned int D> __device__ __host__
-    inline REAL KaiserKernel<REAL, D>::compute(const vector_td<REAL, D>& u) const
+/* DPCT_ORIG     template<class REAL, unsigned int D> __device__ __host__
+    inline REAL KaiserKernel<REAL, D>::compute(const vector_td<REAL, D>& u) const*/
+    template <class REAL, unsigned int D> inline REAL KaiserKernel<REAL, D>::compute(const vector_td<REAL, D>& u) const
     {
         return KaiserBessel<REAL>(
             u,
@@ -264,9 +299,9 @@ namespace Gadgetron
             this->beta_);
     }
 
-
-    template<class REAL, unsigned int D> __device__ __host__
-    inline REAL KaiserKernel<REAL, D>::compute(REAL r, size_t ax) const
+/* DPCT_ORIG     template<class REAL, unsigned int D> __device__ __host__
+    inline REAL KaiserKernel<REAL, D>::compute(REAL r, size_t ax) const*/
+    template <class REAL, unsigned int D> inline REAL KaiserKernel<REAL, D>::compute(REAL r, size_t ax) const
     {
         return KaiserBessel(
             r,
@@ -275,16 +310,16 @@ namespace Gadgetron
             this->beta_[ax]);
     }
 
-
-    template<class REAL, unsigned int D> __device__ __host__
-    inline vector_td<REAL, D> KaiserKernel<REAL, D>::get_beta() const
+/* DPCT_ORIG     template<class REAL, unsigned int D> __device__ __host__
+    inline vector_td<REAL, D> KaiserKernel<REAL, D>::get_beta() const*/
+    template <class REAL, unsigned int D> inline vector_td<REAL, D> KaiserKernel<REAL, D>::get_beta() const
     {
         return this->beta_;
     }
 
-
-    template<class REAL, unsigned int D> __device__ __host__
-    vector_td<REAL, D> KaiserKernel<REAL, D>::compute_beta() const
+/* DPCT_ORIG     template<class REAL, unsigned int D> __device__ __host__
+    vector_td<REAL, D> KaiserKernel<REAL, D>::compute_beta() const*/
+    template <class REAL, unsigned int D> vector_td<REAL, D> KaiserKernel<REAL, D>::compute_beta() const
     {
         // Square utility.
         auto sqr = [](auto x) { return x * x; };
@@ -294,19 +329,22 @@ namespace Gadgetron
         vector_td<REAL, D> beta;
         for (unsigned int d = 0; d < D; d++)
         {
-            beta[d] = REAL(M_PI) * std::sqrt(
+/* DPCT_ORIG             beta[d] = REAL(M_PI) * std::sqrt(
                 sqr(this->width_) / sqr(this->os_factor_[d]) *
-                sqr(this->os_factor_[d] - REAL(0.5)) - REAL(0.8));
+                sqr(this->os_factor_[d] - REAL(0.5)) - REAL(0.8));*/
+            beta[d] = REAL(M_PI) *
+                      sycl::sqrt(sqr(this->width_) / sqr(this->os_factor_[d]) * sqr(this->os_factor_[d] - REAL(0.5)) -
+                                 REAL(0.8));
         }
 
         return beta;
     }
 
-
-    template<class REAL, unsigned int D> __device__ __host__
+/* DPCT_ORIG     template<class REAL, unsigned int D> __device__ __host__
     JincKernel<REAL, D>::JincKernel(
-        float kernelWidth)
-      : ConvolutionKernel<REAL, D, JincKernel>(0.0)
+        float kernelWidth)*/
+    template <class REAL, unsigned int D>
+    JincKernel<REAL, D>::JincKernel(float kernelWidth) : ConvolutionKernel<REAL, D, JincKernel>(0.0)
     {
         // this->matrix_size_ = matrix_size;
         // this->matrix_size_os_ = matrix_size_os;
@@ -344,9 +382,9 @@ namespace Gadgetron
     //     this->width_ = this->radius_ * REAL(2);
     // }
 
-
-    template<class REAL, unsigned int D> __device__ __host__
-    inline REAL JincKernel<REAL, D>::compute(const vector_td<REAL, D>& u) const
+/* DPCT_ORIG     template<class REAL, unsigned int D> __device__ __host__
+    inline REAL JincKernel<REAL, D>::compute(const vector_td<REAL, D>& u) const*/
+    template <class REAL, unsigned int D> inline REAL JincKernel<REAL, D>::compute(const vector_td<REAL, D>& u) const
     {
         // This kernel is implemented with circular symmetry, so get the radius
         // for specified coordinates, normalize it and compute based on that.
@@ -355,13 +393,14 @@ namespace Gadgetron
         {
             r += u[d] * u[d];
         }
-        r = sqrt(r);
+/* DPCT_ORIG         r = sqrt(r);*/
+        r = sycl::sqrt(r);
         return this->compute(r);
     }
 
-
-    template<class REAL, unsigned int D> __device__ __host__
-    inline REAL JincKernel<REAL, D>::compute(REAL r, size_t ax) const
+/* DPCT_ORIG     template<class REAL, unsigned int D> __device__ __host__
+    inline REAL JincKernel<REAL, D>::compute(REAL r, size_t ax) const*/
+    template <class REAL, unsigned int D> inline REAL JincKernel<REAL, D>::compute(REAL r, size_t ax) const
     {
         // Normalize radius.
         r /= this->radius_;
@@ -383,12 +422,17 @@ namespace Gadgetron
         // Compute kernel value using polynomial fit.
         // Unfortunately, we need to do it this way.
         REAL value = this->poly_coef_0 +
-                     this->poly_coef_1 * pow(r, REAL(1)) +
-                     this->poly_coef_2 * pow(r, REAL(2)) + 
-                     this->poly_coef_3 * pow(r, REAL(3)) +
-                     this->poly_coef_4 * pow(r, REAL(4)) +
-                     this->poly_coef_5 * pow(r, REAL(5));
-            
+                     /* DPCT_ORIG                      this->poly_coef_1 * pow(r, REAL(1)) +*/
+                     this->poly_coef_1 * dpct::pow(r, REAL(1)) +
+                     /* DPCT_ORIG                      this->poly_coef_2 * pow(r, REAL(2)) + */
+                     this->poly_coef_2 * r * r +
+                     /* DPCT_ORIG                      this->poly_coef_3 * pow(r, REAL(3)) +*/
+                     this->poly_coef_3 * dpct::pow(r, REAL(3)) +
+                     /* DPCT_ORIG                      this->poly_coef_4 * pow(r, REAL(4)) +*/
+                     this->poly_coef_4 * dpct::pow(r, REAL(4)) +
+                     /* DPCT_ORIG                      this->poly_coef_5 * pow(r, REAL(5));*/
+                     this->poly_coef_5 * dpct::pow(r, REAL(5));
+
         // Clip negative values. There shouldn't be any, but just in case.
         if (value < REAL(0))
             value = REAL(0);

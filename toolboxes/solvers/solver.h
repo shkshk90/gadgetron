@@ -8,6 +8,8 @@
 #include <string>
 #include <iostream>
 #include "log.h"
+#include <cmath>
+
 namespace Gadgetron
 {
 

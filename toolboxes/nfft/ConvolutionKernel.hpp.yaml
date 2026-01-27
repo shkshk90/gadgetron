@@ -1,0 +1,981 @@
+---
+MainSourceFile:  '/gadgetron_sycl_migrated/toolboxes/nfft/ConvolutionKernel.hpp'
+Replacements:
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          1
+    Length:          0
+    ReplacementText: "#define DPCT_PROFILING_ENABLED\n#include <sycl/sycl.hpp>\n#include <dpct/dpct.hpp>\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          73
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     __inline__ __device__ __host__\n    double bessi0(double x)*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          88
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          99
+    Length:          8
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          1662
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     __inline__ __device__ __host__\n    float bessi0(float x)*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          1677
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          1688
+    Length:          8
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          3437
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     __inline__ __device__ __host__\n    double KaiserBessel(double u, double matrix_size_os,\n                        double one_over_W, double beta)*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          3452
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          3463
+    Length:          8
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          3669
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         double arg = beta * std::sqrt(1.0 - tmp);*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          3697
+    Length:          20
+    ReplacementText: 'sycl::sqrt(1.0 - tmp)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          3840
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     __inline__ __device__ __host__\n    float KaiserBessel(float u, float matrix_size_os,\n                       float one_over_W, float beta) {*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          3855
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          3866
+    Length:          8
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          4061
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         float arg = beta * std::sqrt(1.0f - tmp);*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          4088
+    Length:          21
+    ReplacementText: 'sycl::sqrt(1.0f - tmp)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          4231
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     template<class REAL> __inline__ __device__ __host__\n    REAL KaiserBessel(\n        const Gadgetron::vector_td<REAL, 1> &u,\n        const Gadgetron::vector_td<REAL, 1> &matrix_size_os,\n        REAL one_over_W,\n        const vector_td<REAL, 1> &beta)*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          4267
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          4278
+    Length:          8
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          4608
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     template<class REAL> __inline__ __device__ __host__\n    REAL KaiserBessel(\n        const Gadgetron::vector_td<REAL, 2> &u,\n        const Gadgetron::vector_td<REAL, 2> &matrix_size_os,\n        REAL one_over_W,\n        const vector_td<REAL, 2> &beta)*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          4644
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          4655
+    Length:          8
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          5082
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     template<class REAL> __inline__ __device__ __host__\n    REAL KaiserBessel(\n        const Gadgetron::vector_td<REAL, 3> &u,\n        const Gadgetron::vector_td<REAL, 3> &matrix_size_os,\n        REAL one_over_W,\n        const vector_td<REAL, 3> &beta)*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          5118
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          5129
+    Length:          8
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          5653
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     template<class REAL> __inline__ __device__ __host__\n    REAL KaiserBessel(\n        const Gadgetron::vector_td<REAL, 4> &u,\n        const Gadgetron::vector_td<REAL, 4> &matrix_size_os,\n        REAL one_over_W,\n        const vector_td<REAL, 4> &beta)*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          5689
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          5700
+    Length:          8
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          6322
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     template<class REAL, unsigned int D, template<class, unsigned int> class K> __device__ __host__\n    ConvolutionKernel<REAL, D, K>::ConvolutionKernel(REAL width)*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          6402
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          6413
+    Length:          8
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          6557
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     template<class REAL, unsigned int D, template<class, unsigned int> class K> __device__ __host__\n    ConvolutionKernel<REAL, D, K>::~ConvolutionKernel()*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          6637
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          6648
+    Length:          8
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          6730
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     template<class REAL, unsigned int D, template<class, unsigned int> class K> __device__ __host__\n    inline REAL ConvolutionKernel<REAL, D, K>::get(const vector_td<REAL, D>& u) const*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          6810
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          6821
+    Length:          8
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          7055
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     template<class REAL, unsigned int D, template<class, unsigned int> class K> __device__ __host__\n    inline REAL ConvolutionKernel<REAL, D, K>::get(REAL r, size_t ax) const*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          7135
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          7146
+    Length:          8
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          7361
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     template<class REAL, unsigned int D, template<class, unsigned int> class K> __device__ __host__\n    inline REAL ConvolutionKernel<REAL, D, K>::compute(const vector_td<REAL, D>& u) const*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          7441
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          7452
+    Length:          8
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          7630
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     template<class REAL, unsigned int D, template<class, unsigned int> class K> __device__ __host__\n    inline REAL ConvolutionKernel<REAL, D, K>::compute(REAL r, size_t ax) const*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          7710
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          7721
+    Length:          8
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          7893
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     template<class REAL, unsigned int D, template<class, unsigned int> class K> __device__ __host__\n    inline REAL ConvolutionKernel<REAL, D, K>::lookup(const vector_td<REAL, D>& u) const*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          7973
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          7984
+    Length:          8
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          8160
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     template<class REAL, unsigned int D, template<class, unsigned int> class K> __device__ __host__\n    inline REAL ConvolutionKernel<REAL, D, K>::lookup(REAL r, size_t ax) const*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          8240
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          8251
+    Length:          8
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          8421
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     template<class REAL, unsigned int D, template<class, unsigned int> class K> __device__ __host__\n    inline REAL ConvolutionKernel<REAL, D, K>::get_width() const*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          8501
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          8512
+    Length:          8
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          8623
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     template<class REAL, unsigned int D, template<class, unsigned int> class K> __device__ __host__\n    inline REAL ConvolutionKernel<REAL, D, K>::get_radius() const*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          8703
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          8714
+    Length:          8
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          8827
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     template<class REAL, unsigned int D> __device__ __host__\n    KaiserKernel<REAL, D>::KaiserKernel(\n        const vector_td<unsigned int, D>& matrix_size,\n        const vector_td<unsigned int, D>& matrix_size_os,\n        REAL width)*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          8868
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          8879
+    Length:          8
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          9441
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     template<class REAL, unsigned int D> __device__ __host__\n    KaiserKernel<REAL, D>::KaiserKernel(\n        const vector_td<unsigned int, D>& matrix_size,\n        REAL os_factor,\n        REAL width)*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          9482
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          9493
+    Length:          8
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          10025
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     template<class REAL, unsigned int D> __device__ __host__\n    inline REAL KaiserKernel<REAL, D>::compute(const vector_td<REAL, D>& u) const*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          10066
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          10077
+    Length:          8
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          10343
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     template<class REAL, unsigned int D> __device__ __host__\n    inline REAL KaiserKernel<REAL, D>::compute(REAL r, size_t ax) const*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          10384
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          10395
+    Length:          8
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          10652
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     template<class REAL, unsigned int D> __device__ __host__\n    inline vector_td<REAL, D> KaiserKernel<REAL, D>::get_beta() const*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          10693
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          10704
+    Length:          8
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          10825
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     template<class REAL, unsigned int D> __device__ __host__\n    vector_td<REAL, D> KaiserKernel<REAL, D>::compute_beta() const*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          10866
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          10877
+    Length:          8
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          11240
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG             beta[d] = REAL(M_PI) * std::sqrt(\n                sqr(this->width_) / sqr(this->os_factor_[d]) *\n                sqr(this->os_factor_[d] - REAL(0.5)) - REAL(0.8));*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          11275
+    Length:          139
+    ReplacementText: "sycl::sqrt(sqr(this->width_) / sqr(this->os_factor_[d]) *\n                sqr(this->os_factor_[d] - REAL(0.5)) - REAL(0.8))"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          11456
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     template<class REAL, unsigned int D> __device__ __host__\n    JincKernel<REAL, D>::JincKernel(\n        float kernelWidth)*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          11497
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          11508
+    Length:          8
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          13300
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     template<class REAL, unsigned int D> __device__ __host__\n    inline REAL JincKernel<REAL, D>::compute(const vector_td<REAL, D>& u) const*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          13341
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          13352
+    Length:          8
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          13726
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         r = sqrt(r);*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          13738
+    Length:          7
+    ReplacementText: 'sycl::sqrt(r)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          13788
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     template<class REAL, unsigned int D> __device__ __host__\n    inline REAL JincKernel<REAL, D>::compute(REAL r, size_t ax) const*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          13829
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          13840
+    Length:          8
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          14636
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                      this->poly_coef_1 * pow(r, REAL(1)) +*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          14677
+    Length:          15
+    ReplacementText: 'dpct::pow(r, REAL(1))'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          14695
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                      this->poly_coef_2 * pow(r, REAL(2)) + */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          14736
+    Length:          15
+    ReplacementText: 'r * r'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          14755
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                      this->poly_coef_3 * pow(r, REAL(3)) +*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          14796
+    Length:          15
+    ReplacementText: 'dpct::pow(r, REAL(3))'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          14814
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                      this->poly_coef_4 * pow(r, REAL(4)) +*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          14855
+    Length:          15
+    ReplacementText: 'dpct::pow(r, REAL(4))'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          14873
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                      this->poly_coef_5 * pow(r, REAL(5));*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          14914
+    Length:          15
+    ReplacementText: 'dpct::pow(r, REAL(5))'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+MainSourceFilesDigest:
+  - MainSourceFile:  ''
+    Digest:          ''
+    HasCUDASyntax:   false
+DpctVersion:     2025.2.0
+SDKVersionMajor: '12'
+SDKVersionMinor: '8'
+MainHelperFileName: ''
+USMLevel:        ''
+FeatureMap:      {}
+CompileTargets:  {}
+OptionMap:
+  AnalysisScopePath:
+    Value:           ''
+    ValueVec:
+      - '/gadgetron'
+    Specified:       false
+  AsyncHandler:
+    Value:           'false'
+    Specified:       false
+  BuildScript:
+    Value:           '0'
+    Specified:       false
+  CodePinEnabled:
+    Value:           'false'
+    Specified:       false
+  CommentsEnabled:
+    Value:           'false'
+    Specified:       false
+  CompilationsDir:
+    Value:           ''
+    Specified:       false
+  CtadEnabled:
+    Value:           'false'
+    Specified:       false
+  EnablepProfiling:
+    Value:           'false'
+    Specified:       false
+  ExperimentalFlag:
+    Value:           '0'
+    Specified:       false
+  ExplicitNamespace:
+    Value:           '20'
+    Specified:       false
+  ExtensionDDFlag:
+    Value:           '0'
+    Specified:       false
+  ExtensionDEFlag:
+    Value:           '4294967295'
+    Specified:       false
+  HelperFuncPreferenceFlag:
+    Value:           '0'
+    Specified:       false
+  NDRangeDim:
+    Value:           '3'
+    Specified:       false
+  NoDRYPattern:
+    Value:           'false'
+    Specified:       false
+  OptimizeMigration:
+    Value:           'false'
+    Specified:       false
+  ProcessAll:
+    Value:           'true'
+    Specified:       true
+  RuleFile:
+    Value:           ''
+    Specified:       false
+  SyclNamedLambda:
+    Value:           'true'
+    Specified:       true
+  UseSYCLCompat:
+    Value:           'false'
+    Specified:       false
+  UsmLevel:
+    Value:           '1'
+    Specified:       false
+...

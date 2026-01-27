@@ -7,9 +7,14 @@
 
 #pragma once
 
+#define DPCT_PROFILING_ENABLED
+#include <sycl/sycl.hpp>
+#include <dpct/dpct.hpp>
 #include <iostream>
 #include <string>
-#include <cuda_runtime_api.h>
+#include <cmath>
+
+/* DPCT_ORIG #include <cuda_runtime_api.h>*/
 
 namespace Gadgetron{
 
@@ -44,27 +49,39 @@ namespace Gadgetron{
 
         virtual void start()
         {
-            cudaEventCreate(&start_event_);
-            cudaEventCreate(&stop_event_);
-            cudaEventRecord( start_event_, 0 );
+/* DPCT_ORIG             cudaEventCreate(&start_event_);*/
+            start_event_ = new sycl::event();
+/* DPCT_ORIG             cudaEventCreate(&stop_event_);*/
+            stop_event_ = new sycl::event();
+/* DPCT_ORIG             cudaEventRecord( start_event_, 0 );*/
+            dpct::sync_barrier(start_event_, &dpct::get_in_order_queue());
         }
 
         virtual void stop()
         {
             float time;
-            cudaEventRecord( stop_event_, 0 );
-            cudaEventSynchronize( stop_event_ );
-            cudaEventElapsedTime( &time, start_event_, stop_event_ );
-            cudaEventDestroy( start_event_ );
-            cudaEventDestroy( stop_event_ );
+/* DPCT_ORIG             cudaEventRecord( stop_event_, 0 );*/
+            dpct::sync_barrier(stop_event_, &dpct::get_in_order_queue());
+/* DPCT_ORIG             cudaEventSynchronize( stop_event_ );*/
+            stop_event_->wait_and_throw();
+/* DPCT_ORIG             cudaEventElapsedTime( &time, start_event_, stop_event_ );*/
+            time = (stop_event_->get_profiling_info<sycl::info::event_profiling::command_end>() -
+                    start_event_->get_profiling_info<sycl::info::event_profiling::command_start>()) /
+                   1000000.0f;
+/* DPCT_ORIG             cudaEventDestroy( start_event_ );*/
+            dpct::destroy_event(start_event_);
+/* DPCT_ORIG             cudaEventDestroy( stop_event_ );*/
+            dpct::destroy_event(stop_event_);
 
             GDEBUG_STREAM(name_ << ": " << time << " ms" << std::endl);
         }
 
         void set_timing_in_destruction(bool timing) { timing_in_destruction_ = timing; }
 
-        cudaEvent_t start_event_;
-        cudaEvent_t stop_event_;
+/* DPCT_ORIG         cudaEvent_t start_event_;*/
+        dpct::event_ptr start_event_;
+/* DPCT_ORIG         cudaEvent_t stop_event_;*/
+        dpct::event_ptr stop_event_;
 
         std::string name_;
         bool timing_in_destruction_;

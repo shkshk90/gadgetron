@@ -8,7 +8,7 @@
 #include "check_CUDA.h"
 #include "cudaDeviceManager.h"
 #include "setup_grid.h"
-#include "hoNDArray_fileio.h"
+#include "cpu/hoNDArray_fileio.h"
 #include "GPUTimer.h"
 
 #include "CUBLASContextProvider.h"

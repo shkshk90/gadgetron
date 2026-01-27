@@ -1,8 +1,11 @@
 #pragma once
+#if 0
+
 #include "cuNDFFT.h"
 #include <numeric>
 #include <cufft.h>
 #include <vector>
+#include <string>
 #include <type_traits>
 
 namespace Gadgetron::FFT_internal {
@@ -80,7 +83,7 @@ namespace Gadgetron::FFT_internal {
         }
 
         template<class ComplexType>
-        void timeswitch(cuNDArray<ComplexType> &in_out, int rank) {
+        void timeswitch(Gadgetron::cuNDArray<ComplexType> &in_out, int rank) {
 
             switch (rank) {
                 case 1:
@@ -128,7 +131,7 @@ Gadgetron::cuFFTPlan<ComplexType, ENABLER>::~cuFFTPlan() {
 }
 
 template<class ComplexType, class ENABLER>
-void Gadgetron::cuFFTPlan<ComplexType, ENABLER>::fft(cuNDArray<ComplexType> &in_out, bool scale) {
+void Gadgetron::cuFFTPlan<ComplexType, ENABLER>::fft(Gadgetron::cuNDArray<ComplexType> &in_out, bool scale) {
     if (!FFT_internal::compatible_dimensions(rank, in_out.dimensions(), dimensions))
         throw std::runtime_error("Dimensions do not match FFT plan");
     auto result = FFT_internal::executePlan(plan, in_out.data(), in_out.data(), CUFFT_FORWARD);
@@ -142,7 +145,7 @@ void Gadgetron::cuFFTPlan<ComplexType, ENABLER>::fft(cuNDArray<ComplexType> &in_
 }
 
 template<class ComplexType, class ENABLER>
-void Gadgetron::cuFFTPlan<ComplexType, ENABLER>::ifft(cuNDArray<ComplexType> &in_out, bool scale) {
+void Gadgetron::cuFFTPlan<ComplexType, ENABLER>::ifft(Gadgetron::cuNDArray<ComplexType> &in_out, bool scale) {
     if (!FFT_internal::compatible_dimensions(rank, in_out.dimensions(), dimensions))
         throw std::runtime_error("Dimensions do not match FFT plan");
     auto result = FFT_internal::executePlan(plan, in_out.data(), in_out.data(), CUFFT_INVERSE);
@@ -157,15 +160,17 @@ void Gadgetron::cuFFTPlan<ComplexType, ENABLER>::ifft(cuNDArray<ComplexType> &in
 
 
 template<class ComplexType, class ENABLER>
-void Gadgetron::cuFFTPlan<ComplexType, ENABLER>::fftc(cuNDArray<ComplexType> &in_out, bool scale) {
+void Gadgetron::cuFFTPlan<ComplexType, ENABLER>::fftc(Gadgetron::cuNDArray<ComplexType> &in_out, bool scale) {
     FFT_internal::timeswitch(in_out, rank);
     fft(in_out,scale);
     FFT_internal::timeswitch(in_out, rank);
 }
 
 template<class ComplexType, class ENABLER>
-void Gadgetron::cuFFTPlan<ComplexType, ENABLER>::ifftc(cuNDArray<ComplexType> &in_out, bool scale) {
+void Gadgetron::cuFFTPlan<ComplexType, ENABLER>::ifftc(Gadgetron::cuNDArray<ComplexType> &in_out, bool scale) {
     FFT_internal::timeswitch(in_out, rank);
     ifft(in_out,scale);
     FFT_internal::timeswitch(in_out, rank);
 }
+
+#endif

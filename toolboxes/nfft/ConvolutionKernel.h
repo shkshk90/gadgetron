@@ -1,6 +1,9 @@
 
 #pragma once
 
+#define DPCT_PROFILING_ENABLED
+#include <sycl/sycl.hpp>
+#include <dpct/dpct.hpp>
 #include "core_defines.h"
 #include "vector_td.h"
 
@@ -31,13 +34,17 @@ namespace Gadgetron
          * 
          * \param width Kernel width. 
          */
-        __host__ __device__
+/* DPCT_ORIG         __host__ __device__
+        ConvolutionKernel(REAL width);*/
+
         ConvolutionKernel(REAL width);
 
         /**
          * \brief Destructor.
          */
-        __host__ __device__
+/* DPCT_ORIG         __host__ __device__
+        ~ConvolutionKernel();*/
+
         ~ConvolutionKernel();
 
         /**
@@ -46,7 +53,9 @@ namespace Gadgetron
          * \param u Coordinates.
          * \return REAL Kernel value.
          */
-        __host__ __device__
+/* DPCT_ORIG         __host__ __device__
+        REAL get(const vector_td<REAL, D>& u) const;*/
+
         REAL get(const vector_td<REAL, D>& u) const;
 
         /**
@@ -56,19 +65,25 @@ namespace Gadgetron
          * \param ax Axis.
          * \return REAL Kernel value.
          */
-        __host__ __device__
+/* DPCT_ORIG         __host__ __device__
+        REAL get(REAL r, size_t ax = 0) const;*/
+
         REAL get(REAL r, size_t ax = 0) const;
 
         /**
          * \brief Get kernel width.
          */
-        __host__ __device__
+/* DPCT_ORIG         __host__ __device__
+        REAL get_width() const;*/
+
         REAL get_width() const;
 
         /**
          * \brief Get kernel radius.
          */
-        __host__ __device__
+/* DPCT_ORIG         __host__ __device__
+        REAL get_radius() const;*/
+
         REAL get_radius() const;
 
     protected:
@@ -81,7 +96,9 @@ namespace Gadgetron
          * \param u Coordinates.
          * \return REAL Kernel value. 
          */
-        __host__ __device__
+/* DPCT_ORIG         __host__ __device__
+        REAL compute(const vector_td<REAL, D>& u) const;*/
+
         REAL compute(const vector_td<REAL, D>& u) const;
 
         /**
@@ -93,7 +110,9 @@ namespace Gadgetron
          * \param ax Axis.
          * \return REAL Kernel value. 
          */
-        __host__ __device__
+/* DPCT_ORIG         __host__ __device__
+        REAL compute(REAL r, size_t ax = 0) const;*/
+
         REAL compute(REAL r, size_t ax = 0) const;
 
         /**
@@ -104,7 +123,9 @@ namespace Gadgetron
          * \param u Coordinates.
          * \return REAL Kernel value. 
          */
-        __host__ __device__
+/* DPCT_ORIG         __host__ __device__
+        REAL lookup(const vector_td<REAL, D>& u) const;*/
+
         REAL lookup(const vector_td<REAL, D>& u) const;
 
         /**
@@ -116,7 +137,9 @@ namespace Gadgetron
          * \param ax Axis.
          * \return REAL Kernel value. 
          */
-        __host__ __device__
+/* DPCT_ORIG         __host__ __device__
+        REAL lookup(REAL r, size_t ax = 0) const;*/
+
         REAL lookup(REAL r, size_t ax = 0) const;
 
         /**
@@ -153,7 +176,11 @@ namespace Gadgetron
          * \param matrix_size_os Matrix size with oversampling.
          * \param width Kernel width.
          */
-        __host__ __device__
+/* DPCT_ORIG         __host__ __device__
+        KaiserKernel(const vector_td<unsigned int, D>& matrix_size,
+                     const vector_td<unsigned int, D>& matrix_size_os,
+                     REAL width);*/
+
         KaiserKernel(const vector_td<unsigned int, D>& matrix_size,
                      const vector_td<unsigned int, D>& matrix_size_os,
                      REAL width);
@@ -165,7 +192,11 @@ namespace Gadgetron
          * \param os_factor Matrix size with oversampling.
          * \param width Kernel width.
          */
-        __host__ __device__
+/* DPCT_ORIG         __host__ __device__
+        KaiserKernel(const vector_td<unsigned int, D>& matrix_size,
+                     REAL os_factor,
+                     REAL width);*/
+
         KaiserKernel(const vector_td<unsigned int, D>& matrix_size,
                      REAL os_factor,
                      REAL width);
@@ -173,7 +204,9 @@ namespace Gadgetron
         /**
          * \brief Get the beta factor.
          */
-        __host__ __device__
+/* DPCT_ORIG         __host__ __device__
+        vector_td<REAL, D> get_beta() const;*/
+
         vector_td<REAL, D> get_beta() const;
 
     private:
@@ -184,7 +217,9 @@ namespace Gadgetron
          * \param u Coordinates.
          * \return REAL Kernel value. 
          */
-        __host__ __device__
+/* DPCT_ORIG         __host__ __device__
+        REAL compute(const vector_td<REAL, D>& u) const;*/
+
         REAL compute(const vector_td<REAL, D>& u) const;
 
         /**
@@ -194,7 +229,9 @@ namespace Gadgetron
          * \param ax Axis.
          * \return REAL Kernel value. 
          */
-        __host__ __device__
+/* DPCT_ORIG         __host__ __device__
+        REAL compute(REAL r, size_t ax = 0) const;*/
+
         REAL compute(REAL r, size_t ax = 0) const;
 
         /**
@@ -204,7 +241,9 @@ namespace Gadgetron
          * \return REAL Kernel value.
          * \warning Not implemented yet.
          */
-        __host__ __device__
+/* DPCT_ORIG         __host__ __device__
+        REAL lookup(const vector_td<REAL, D>& u) const;*/
+
         REAL lookup(const vector_td<REAL, D>& u) const;
 
         /**
@@ -215,7 +254,9 @@ namespace Gadgetron
          * \return REAL Kernel value.
          * \warning Not implemented yet.
          */
-        __host__ __device__
+/* DPCT_ORIG         __host__ __device__
+        REAL lookup(REAL r, size_t ax = 0) const;*/
+
         REAL lookup(REAL r, size_t ax = 0) const;
 
         /**
@@ -225,7 +266,9 @@ namespace Gadgetron
          *
          * \return vector_td<REAL, D> Beta factor. 
          */
-        __host__ __device__
+/* DPCT_ORIG         __host__ __device__
+        vector_td<REAL, D> compute_beta() const;*/
+
         vector_td<REAL, D> compute_beta() const;
 
         /**
@@ -277,7 +320,9 @@ namespace Gadgetron
          * 
          * \param kernelWidth Matrix size.
          */
-        __host__ __device__
+/* DPCT_ORIG         __host__ __device__
+        JincKernel(float kernelWidth);*/
+
         JincKernel(float kernelWidth);
 
     private:
@@ -288,7 +333,9 @@ namespace Gadgetron
          * \param u Coordinates.
          * \return REAL Kernel value. 
          */
-        __host__ __device__
+/* DPCT_ORIG         __host__ __device__
+        REAL compute(const vector_td<REAL, D>& u) const;*/
+
         REAL compute(const vector_td<REAL, D>& u) const;
 
         /**
@@ -301,7 +348,9 @@ namespace Gadgetron
          * \param ax Axis.
          * \return REAL Kernel value. 
          */
-        __host__ __device__
+/* DPCT_ORIG         __host__ __device__
+        REAL compute(REAL r, size_t ax = 0) const;*/
+
         REAL compute(REAL r, size_t ax = 0) const;
 
         /**
@@ -311,7 +360,9 @@ namespace Gadgetron
          * \return REAL Kernel value.
          * \warning Not implemented yet.
          */
-        __host__ __device__
+/* DPCT_ORIG         __host__ __device__
+        REAL lookup(const vector_td<REAL, D>& u) const;*/
+
         REAL lookup(const vector_td<REAL, D>& u) const;
 
         /**
@@ -322,7 +373,9 @@ namespace Gadgetron
          * \return REAL Kernel value.
          * \warning Not implemented yet.
          */
-        __host__ __device__
+/* DPCT_ORIG         __host__ __device__
+        REAL lookup(REAL r, size_t ax = 0) const;*/
+
         REAL lookup(REAL r, size_t ax = 0) const;
 
         /**

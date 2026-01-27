@@ -13,6 +13,9 @@
 
 #pragma once
 
+#define DPCT_PROFILING_ENABLED
+#include <sycl/sycl.hpp>
+#include <dpct/dpct.hpp>
 #include "core_defines.h"
 
 #include <algorithm>
@@ -29,16 +32,22 @@ namespace Gadgetron {
         T vec[D];
         __inline__ vector_td() = default;
 
-        template <typename... X, typename = std::enable_if_t<(sizeof...(X) > 1)>> constexpr __inline__ __host__ __device__ explicit vector_td(X... xs) : vec{ T(xs)... } {}
+/* DPCT_ORIG         template <typename... X, typename = std::enable_if_t<(sizeof...(X) > 1)>> constexpr __inline__
+ * __host__ __device__ explicit vector_td(X... xs) : vec{ T(xs)... } {}*/
+        template <typename... X, typename = std::enable_if_t<(sizeof...(X) > 1)>>
+        constexpr __inline__ explicit vector_td(X... xs) : vec{T(xs)...} {}
 
         __inline__ vector_td(const vector_td& other) = default;
 
-        template <class T2> __inline__ __host__ __device__ explicit vector_td(const vector_td<T2, D>& other) {
+/* DPCT_ORIG         template <class T2> __inline__ __host__ __device__ explicit vector_td(const vector_td<T2, D>&
+ * other) {*/
+        template <class T2> __inline__ explicit vector_td(const vector_td<T2, D>& other) {
             for (unsigned int i = 0; i < D; i++)
                 vec[i] = (T)other[i];
         }
 
-        __inline__ __host__ __device__ explicit vector_td(T x) {
+/* DPCT_ORIG         __inline__ __host__ __device__ explicit vector_td(T x) {*/
+        __inline__ explicit vector_td(T x) {
             for (unsigned int i = 0; i < D; i++)
                 vec[i] = x;
         }
@@ -53,24 +62,30 @@ namespace Gadgetron {
             std::copy(input,input+D,vec);
 
         }
-        __inline__ __host__ __device__ T& operator[](size_t i) {
+/* DPCT_ORIG         __inline__ __host__ __device__ T& operator[](size_t i) {*/
+        __inline__ T& operator[](size_t i) {
             return vec[i];
         }
 
-        __inline__ __host__ __device__ const T& operator[](size_t i) const {
+/* DPCT_ORIG         __inline__ __host__ __device__ const T& operator[](size_t i) const {*/
+        __inline__ const T& operator[](size_t i) const {
             return vec[i];
         }
 
-        __inline__ __host__ __device__ T* begin() {
+/* DPCT_ORIG         __inline__ __host__ __device__ T* begin() {*/
+        __inline__ T* begin() {
             return vec;
         }
-        __inline__ __host__ __device__ const T* begin() const {
+/* DPCT_ORIG         __inline__ __host__ __device__ const T* begin() const {*/
+        __inline__ const T* begin() const {
             return vec;
         }
-        __inline__ __host__ __device__ T* end() {
+/* DPCT_ORIG         __inline__ __host__ __device__ T* end() {*/
+        __inline__ T* end() {
             return vec + D;
         }
-        __inline__ __host__ __device__ const T* end() const {
+/* DPCT_ORIG         __inline__ __host__ __device__ const T* end() const {*/
+        __inline__ const T* end() const {
             return vec + D;
         }
 
@@ -138,6 +153,7 @@ namespace Gadgetron {
     typedef vector_td<double, 4> doubled4;
     typedef vector_td<double, 5> doubled5;
 }
+template <class T, unsigned int D> struct sycl::is_device_copyable<Gadgetron::vector_td<T, D>> : std::true_type {};
 
 template <class T, unsigned int N> class std::tuple_size<Gadgetron::vector_td<T, N>> : public std::integral_constant<size_t, N> {};
 

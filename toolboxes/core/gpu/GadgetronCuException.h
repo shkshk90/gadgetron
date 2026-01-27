@@ -1,6 +1,9 @@
 #pragma once
 
-#include <cuda_runtime_api.h>
+/* DPCT_ORIG #include <cuda_runtime_api.h>*/
+#define DPCT_PROFILING_ENABLED
+#include <sycl/sycl.hpp>
+#include <dpct/dpct.hpp>
 #include <stdexcept>
 
 namespace Gadgetron{
@@ -9,7 +12,12 @@ namespace Gadgetron{
   {
   public:
     cuda_error(std::string msg) : std::runtime_error(msg) {}
-    cuda_error(cudaError_t errN) : std::runtime_error(cudaGetErrorString(errN)) {
+/* DPCT_ORIG     cuda_error(cudaError_t errN) : std::runtime_error(cudaGetErrorString(errN)) {*/
+    /*
+    DPCT1009:118: SYCL reports errors using exceptions and does not use error codes. Please replace the
+    "get_error_string_dummy(...)" with a real error-handling function.
+    */
+    cuda_error(dpct::err0 errN) : std::runtime_error(dpct::get_error_string_dummy(errN)) {
     }
   };
 }

@@ -1,0 +1,387 @@
+---
+MainSourceFile:  '/gadgetron_sycl_migrated/toolboxes/core/gpu/cudaDeviceManager.h'
+Replacements:
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cudaDeviceManager.h'
+    Offset:          16
+    Length:          0
+    ReplacementText: "#define DPCT_PROFILING_ENABLED\n#include <sycl/sycl.hpp>\n#include <dpct/dpct.hpp>\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cudaDeviceManager.h'
+    Offset:          33
+    Length:          0
+    ReplacementText: "\n#include <dpct/blas_utils.hpp>\n\n#include <dpct/sparse_utils.hpp>\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cudaDeviceManager.h'
+    Offset:          34
+    Length:          23
+    ReplacementText: "/* DPCT_ORIG #include <cublas_v2.h>*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cudaDeviceManager.h'
+    Offset:          57
+    Length:          22
+    ReplacementText: "/* DPCT_ORIG #include <cusparse.h>*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cudaDeviceManager.h'
+    Offset:          80
+    Length:          27
+    ReplacementText: "/* DPCT_ORIG #include <library_types.h>*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cudaDeviceManager.h'
+    Offset:          128
+    Length:          0
+    ReplacementText: "\n#include <dpct/lib_common_utils.hpp>\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cudaDeviceManager.h'
+    Offset:          1510
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     cublasHandle_t lockHandle();*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cudaDeviceManager.h'
+    Offset:          1514
+    Length:          14
+    ReplacementText: 'dpct::blas::descriptor_ptr'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cudaDeviceManager.h'
+    Offset:          1543
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     cublasHandle_t lockHandle(int device);*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cudaDeviceManager.h'
+    Offset:          1547
+    Length:          14
+    ReplacementText: 'dpct::blas::descriptor_ptr'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cudaDeviceManager.h'
+    Offset:          1648
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     cusparseHandle_t lockSparseHandle();*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cudaDeviceManager.h'
+    Offset:          1652
+    Length:          16
+    ReplacementText: 'dpct::sparse::descriptor_ptr'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cudaDeviceManager.h'
+    Offset:          1689
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     cusparseHandle_t lockSparseHandle(int device);*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cudaDeviceManager.h'
+    Offset:          1693
+    Length:          16
+    ReplacementText: 'dpct::sparse::descriptor_ptr'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cudaDeviceManager.h'
+    Offset:          2274
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     std::vector<cublasHandle_t> _handle;*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cudaDeviceManager.h'
+    Offset:          2290
+    Length:          14
+    ReplacementText: 'dpct::blas::descriptor_ptr'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cudaDeviceManager.h'
+    Offset:          2315
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     std::vector<cusparseHandle_t> _sparse_handle;*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cudaDeviceManager.h'
+    Offset:          2331
+    Length:          16
+    ReplacementText: 'dpct::sparse::descriptor_ptr'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cudaDeviceManager.h'
+    Offset:          2506
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     static constexpr cudaDataType_t value = CUDA_R_32F;*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cudaDeviceManager.h'
+    Offset:          2527
+    Length:          14
+    ReplacementText: 'dpct::library_data_t'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cudaDeviceManager.h'
+    Offset:          2550
+    Length:          10
+    ReplacementText: 'dpct::library_data_t::real_float'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cudaDeviceManager.h'
+    Offset:          2612
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     static constexpr cudaDataType_t value = CUDA_R_64F;*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cudaDeviceManager.h'
+    Offset:          2633
+    Length:          14
+    ReplacementText: 'dpct::library_data_t'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cudaDeviceManager.h'
+    Offset:          2656
+    Length:          10
+    ReplacementText: 'dpct::library_data_t::real_double'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cudaDeviceManager.h'
+    Offset:          2727
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     static constexpr cudaDataType_t value = CUDA_C_32F;*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cudaDeviceManager.h'
+    Offset:          2748
+    Length:          14
+    ReplacementText: 'dpct::library_data_t'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cudaDeviceManager.h'
+    Offset:          2771
+    Length:          10
+    ReplacementText: 'dpct::library_data_t::complex_float'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cudaDeviceManager.h'
+    Offset:          2843
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     static constexpr cudaDataType_t value = CUDA_C_64F;*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cudaDeviceManager.h'
+    Offset:          2864
+    Length:          14
+    ReplacementText: 'dpct::library_data_t'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cudaDeviceManager.h'
+    Offset:          2887
+    Length:          10
+    ReplacementText: 'dpct::library_data_t::complex_double'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cudaDeviceManager.h'
+    Offset:          2906
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template<class T>\n  constexpr cudaDataType_t cuda_datatype(){return cudaDataType<T>::value;}*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cudaDeviceManager.h'
+    Offset:          2938
+    Length:          14
+    ReplacementText: 'dpct::library_data_t'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cudaDeviceManager.h'
+    Offset:          3002
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG \tstd::string gadgetron_getCusparseErrorString(cusparseStatus_t err);*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cudaDeviceManager.h'
+    Offset:          3048
+    Length:          16
+    ReplacementText: int
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+MainSourceFilesDigest:
+  - MainSourceFile:  ''
+    Digest:          ''
+    HasCUDASyntax:   false
+DpctVersion:     2025.2.0
+SDKVersionMajor: '12'
+SDKVersionMinor: '8'
+MainHelperFileName: ''
+USMLevel:        ''
+FeatureMap:      {}
+CompileTargets:  {}
+OptionMap:
+  AnalysisScopePath:
+    Value:           ''
+    ValueVec:
+      - '/gadgetron'
+    Specified:       false
+  AsyncHandler:
+    Value:           'false'
+    Specified:       false
+  BuildScript:
+    Value:           '0'
+    Specified:       false
+  CodePinEnabled:
+    Value:           'false'
+    Specified:       false
+  CommentsEnabled:
+    Value:           'false'
+    Specified:       false
+  CompilationsDir:
+    Value:           ''
+    Specified:       false
+  CtadEnabled:
+    Value:           'false'
+    Specified:       false
+  EnablepProfiling:
+    Value:           'false'
+    Specified:       false
+  ExperimentalFlag:
+    Value:           '0'
+    Specified:       false
+  ExplicitNamespace:
+    Value:           '20'
+    Specified:       false
+  ExtensionDDFlag:
+    Value:           '0'
+    Specified:       false
+  ExtensionDEFlag:
+    Value:           '4294967295'
+    Specified:       false
+  HelperFuncPreferenceFlag:
+    Value:           '0'
+    Specified:       false
+  NDRangeDim:
+    Value:           '3'
+    Specified:       false
+  NoDRYPattern:
+    Value:           'false'
+    Specified:       false
+  OptimizeMigration:
+    Value:           'false'
+    Specified:       false
+  ProcessAll:
+    Value:           'true'
+    Specified:       true
+  RuleFile:
+    Value:           ''
+    Specified:       false
+  SyclNamedLambda:
+    Value:           'true'
+    Specified:       true
+  UseSYCLCompat:
+    Value:           'false'
+    Specified:       false
+  UsmLevel:
+    Value:           '1'
+    Specified:       false
+...

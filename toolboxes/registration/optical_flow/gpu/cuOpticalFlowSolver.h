@@ -8,6 +8,9 @@
 
 #pragma once
 
+#define DPCT_PROFILING_ENABLED
+#include <sycl/sycl.hpp>
+#include <dpct/dpct.hpp>
 #include "cuNDArray.h"
 #include "cuNDArray_operators.h"
 #include "cuNDArray_elemwise.h"
@@ -31,9 +34,10 @@ namespace Gadgetron{
     // General tool to set up the block/grid dimensions
     //
 
-    void setup_grid( dim3 *blockDim, dim3* gridDim, unsigned int number_of_elements, 
-                     unsigned int num_batches = 1, bool use_2d_blocks = false, unsigned int num_unknowns = D);  
- 
+/* DPCT_ORIG     void setup_grid( dim3 *blockDim, dim3* gridDim, unsigned int number_of_elements, */
+    void setup_grid(dpct::dim3* blockDim, dpct::dim3* gridDim, unsigned int number_of_elements,
+                    unsigned int num_batches = 1, bool use_2d_blocks = false, unsigned int num_unknowns = D);
+
     // GPU-based computation of the spatial and temporal image gradient
     //
     

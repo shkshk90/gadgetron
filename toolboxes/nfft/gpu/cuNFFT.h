@@ -14,8 +14,15 @@
 
 #pragma once
 
+#include <oneapi/dpl/execution>
+#include <oneapi/dpl/algorithm>
+#define DPCT_PROFILING_ENABLED
+#include <sycl/sycl.hpp>
+#include <dpct/dpct.hpp>
 #include <boost/shared_ptr.hpp>
-#include <thrust/device_vector.h>
+#include <dpct/dpl_utils.hpp>
+
+/* DPCT_ORIG #include <thrust/device_vector.h>*/
 
 #include "cuNDArray.h"
 #include "vector_td.h"

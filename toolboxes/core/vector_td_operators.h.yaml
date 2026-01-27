@@ -1,0 +1,1494 @@
+---
+MainSourceFile:  '/gadgetron_sycl_migrated/toolboxes/core/vector_td_operators.h'
+Replacements:
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          102
+    Length:          0
+    ReplacementText: "#define DPCT_PROFILING_ENABLED\n#include <sycl/sycl.hpp>\n#include <dpct/dpct.hpp>\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          1992
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T,class R,  unsigned int D > __inline__ __host__ __device__\n  void operator+= ( vector_td<T,D> &v1, const vector_td<R,D> &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          2050
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          2059
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          2208
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T,class R,  unsigned int D > __inline__ __host__ __device__\n  void operator+= ( vector_td<T,D> &v1, const R &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          2266
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          2275
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          2403
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T,class R,  unsigned int D > __inline__ __host__ __device__\n  void operator-= ( vector_td<T,D> &v1, const vector_td<R,D> &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          2461
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          2470
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          2620
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T, class R, unsigned int D > __inline__ __host__ __device__\n  void operator*= ( vector_td<T,D> &v1, const R &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          2678
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          2687
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          2816
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T,class R,  unsigned int D > __inline__ __host__ __device__\n  void operator *=  ( vector_td<T,D> &v1, const vector_td<R,D> &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          2874
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          2883
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          3032
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T,class R,  unsigned int D > __inline__ __host__ __device__\n  void operator /= ( vector_td<T,D> &v1, const R &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          3090
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          3099
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          3228
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T,class R,  unsigned int D > __inline__ __host__ __device__\n  void operator /=  ( vector_td<T,D> &v1, const vector_td<R,D> &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          3286
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          3295
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          3445
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T,class R,  unsigned int D > __inline__ __host__ __device__\n  void component_wise_div_eq ( vector_td<T,D> &v1, const vector_td<R,D> &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          3503
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          3512
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          3672
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T, class R, unsigned int D > __inline__ __host__ __device__\n  vector_td<typename vectorTDReturnType<T,R>::type,D> operator+ ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          3730
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          3739
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          4027
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T,class R, unsigned int D > __inline__ __host__ __device__\n  vector_td<typename vectorTDReturnType<T,R>::type,D> operator+ ( const vector_td<T,D> &v1, const R &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          4084
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          4093
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          4360
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T,class R, unsigned int D > __inline__ __host__ __device__\n  vector_td<typename vectorTDReturnType<T,R>::type,D> operator- ( const vector_td<T,D> &v1, const R &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          4417
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          4426
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          4693
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T, class R, unsigned int D > __inline__ __host__ __device__\n  vector_td<typename vectorTDReturnType<T,R>::type,D> operator+ (const R &v2, const vector_td<T,D> &v1 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          4751
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          4760
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          4903
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T, class R, unsigned int D > __inline__ __host__ __device__\n  vector_td<typename vectorTDReturnType<T,R>::type,D> operator- ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          4961
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          4970
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          5258
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T, unsigned int D > __inline__ __host__ __device__\n  vector_td<T,D> operator- ( const vector_td<T,D> &v1)*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          5307
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          5316
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          5493
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T, class R, unsigned int D > __inline__ __host__ __device__\n  vector_td<typename vectorTDReturnType<T,R>::type,D> component_wise_mul ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          5551
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          5560
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          5857
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T, unsigned int D > __inline__ __host__ __device__\n  vector_td<T,D> component_wise_mul ( const vector_td<T,D> &v1, const vector_td<T,D> &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          5906
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          5915
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          6137
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T, class R, unsigned int D > __inline__ __host__ __device__\n  vector_td<typename vectorTDReturnType<T,R>::type,D> operator* ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          6195
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          6204
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          6492
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T, class R, unsigned int D > __inline__ __host__ __device__\n  vector_td<typename vectorTDReturnType<T,R>::type,D> operator* ( const vector_td<T,D> &v1, const R &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          6550
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          6559
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          6827
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T, class R, unsigned int D > __inline__ __host__ __device__\n  vector_td<typename vectorTDReturnType<T,R>::type,D> operator* ( const R &v1, const vector_td<T,D> &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          6885
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          6894
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          7039
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T, class R, unsigned int D > __inline__ __host__ __device__\n  vector_td<typename vectorTDReturnType<T,R>::type,D> operator/ ( const vector_td<T,D> &v1, const R &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          7097
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          7106
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          7373
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T, class R, unsigned int D > __inline__ __host__ __device__\n  vector_td<typename vectorTDReturnType<T,R>::type,D> operator/ ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          7431
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          7440
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          7715
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T, class R, unsigned int D > __inline__ __host__ __device__\n  vector_td<typename vectorTDReturnType<T,R>::type,D> component_wise_div ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          7773
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          7782
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          7996
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T, unsigned int D > __inline__ __host__ __device__\n  bool operator== ( const vector_td<T,D> &v1, const vector_td<T,D> &v2 ) */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          8045
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          8054
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          8247
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T, unsigned int D > __inline__ __host__ __device__\n  bool operator!= ( const vector_td<T,D> &v1, const vector_td<T,D> &v2 ) */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          8296
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          8305
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          8497
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T, unsigned int D > __inline__ __host__ __device__\n  bool operator&& ( const vector_td<T,D> &v1, const vector_td<T,D> &v2 ) */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          8546
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          8555
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          8748
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T, unsigned int D > __inline__ __host__ __device__\n  bool operator|| ( const vector_td<T,D> &v1, const vector_td<T,D> &v2 ) */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          8797
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          8806
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          8999
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T,class R, unsigned int D > __inline__ __host__ __device__\n  bool operator< ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          9056
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          9065
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          9255
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T,class R, unsigned int D > __inline__ __host__ __device__\n  bool operator<= ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          9312
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          9321
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          9513
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T, class R, unsigned int D > __inline__ __host__ __device__\n  bool operator> ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          9571
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          9580
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          9770
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T, class R, unsigned int D > __inline__ __host__ __device__\n  bool operator>= ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          9828
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          9837
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          10075
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T, class R, unsigned int D > __inline__ __host__ __device__\n  bool weak_equal ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          10133
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          10142
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          10331
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T, class R, unsigned int D > __inline__ __host__ __device__\n  bool weak_not_equal ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          10389
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          10398
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          10591
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T, class R, unsigned int D > __inline__ __host__ __device__\n  bool weak_and ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          10649
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          10658
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          10845
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T, class R, unsigned int D > __inline__ __host__ __device__\n  bool weak_or ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          10903
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          10912
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          11098
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T, class R, unsigned int D > __inline__ __host__ __device__\n  bool weak_less ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          11156
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          11165
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          11352
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T, class R, unsigned int D > __inline__ __host__ __device__\n  bool weak_less_equal ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          11410
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          11419
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          11613
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T, class R, unsigned int D > __inline__ __host__ __device__\n  bool weak_greater ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          11671
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          11680
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          11870
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T, class R, unsigned int D > __inline__ __host__ __device__\n  bool weak_greater_equal ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          11928
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          11937
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          12180
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T,class R, unsigned int D > __inline__ __host__ __device__\n  vector_td<bool,D> vector_equal ( const vector_td<T,D> &v1, const vector_td<T,D> &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          12237
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          12246
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          12471
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T,class R, unsigned int D > __inline__ __host__ __device__\n  vector_td<bool,D> vector_not_equal ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          12528
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          12537
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          12766
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T,class R, unsigned int D > __inline__ __host__ __device__\n  vector_td<T,D> vector_and ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          12823
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          12832
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          13052
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T,class R, unsigned int D > __inline__ __host__ __device__\n  vector_td<bool,D> vector_or ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          13109
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          13118
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          13342
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T,class R, unsigned int D > __inline__ __host__ __device__\n  vector_td<bool,D> vector_less ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          13399
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          13408
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          13633
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T,class R, unsigned int D > __inline__ __host__ __device__\n  vector_td<bool,D> vector_less_equal ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          13690
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          13699
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          13931
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T,class R, unsigned int D > __inline__ __host__ __device__\n  vector_td<bool,D> vector_greater ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          13988
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          13997
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          14225
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T,class R, unsigned int D > __inline__ __host__ __device__\n  vector_td<bool,D> vector_greater_equal ( const vector_td<T,D> &v1, const vector_td<R,D> &v2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          14282
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          14291
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          14566
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T, unsigned int D > __inline__ __host__ __device__\n  void operator<<= ( vector_td<T,D> &v1, size_t shifts ) */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          14615
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          14624
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          14762
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T, unsigned int D > __inline__ __host__ __device__\n  void operator>>= ( vector_td<T,D> &v1, size_t shifts ) */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          14811
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          14820
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          14958
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T, unsigned int D > __inline__ __host__ __device__\n  vector_td<T,D> operator<< ( const vector_td<T,D> &v1, size_t shifts ) */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          15007
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          15016
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          15175
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T, unsigned int D > __inline__ __host__ __device__\n  vector_td<T,D> operator>> ( const vector_td<T,D> &v1, size_t shifts ) */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          15224
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          15233
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          15392
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T, unsigned int D > __inline__ __host__ __device__\n  void operator%= ( vector_td<T,D> &v1, const vector_td<T,D> &v2 ) */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          15441
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          15450
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          15600
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template< class T, unsigned int D > __inline__ __host__ __device__\n  vector_td<T,D> operator% ( const vector_td<T,D> &v1, const vector_td<T,D> &v2 ) */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          15649
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_operators.h'
+    Offset:          15658
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+MainSourceFilesDigest:
+  - MainSourceFile:  ''
+    Digest:          ''
+    HasCUDASyntax:   false
+DpctVersion:     2025.2.0
+SDKVersionMajor: '12'
+SDKVersionMinor: '8'
+MainHelperFileName: ''
+USMLevel:        ''
+FeatureMap:      {}
+CompileTargets:  {}
+OptionMap:
+  AnalysisScopePath:
+    Value:           ''
+    ValueVec:
+      - '/gadgetron'
+    Specified:       false
+  AsyncHandler:
+    Value:           'false'
+    Specified:       false
+  BuildScript:
+    Value:           '0'
+    Specified:       false
+  CodePinEnabled:
+    Value:           'false'
+    Specified:       false
+  CommentsEnabled:
+    Value:           'false'
+    Specified:       false
+  CompilationsDir:
+    Value:           ''
+    Specified:       false
+  CtadEnabled:
+    Value:           'false'
+    Specified:       false
+  EnablepProfiling:
+    Value:           'false'
+    Specified:       false
+  ExperimentalFlag:
+    Value:           '0'
+    Specified:       false
+  ExplicitNamespace:
+    Value:           '20'
+    Specified:       false
+  ExtensionDDFlag:
+    Value:           '0'
+    Specified:       false
+  ExtensionDEFlag:
+    Value:           '4294967295'
+    Specified:       false
+  HelperFuncPreferenceFlag:
+    Value:           '0'
+    Specified:       false
+  NDRangeDim:
+    Value:           '3'
+    Specified:       false
+  NoDRYPattern:
+    Value:           'false'
+    Specified:       false
+  OptimizeMigration:
+    Value:           'false'
+    Specified:       false
+  ProcessAll:
+    Value:           'true'
+    Specified:       true
+  RuleFile:
+    Value:           ''
+    Specified:       false
+  SyclNamedLambda:
+    Value:           'true'
+    Specified:       true
+  UseSYCLCompat:
+    Value:           'false'
+    Specified:       false
+  UsmLevel:
+    Value:           '1'
+    Specified:       false
+...

@@ -1,0 +1,225 @@
+---
+MainSourceFile:  '/gadgetron_sycl_migrated/toolboxes/core/gpu/cuSparseMatrix.h'
+Replacements:
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuSparseMatrix.h'
+    Offset:          91
+    Length:          22
+    ReplacementText: "/* DPCT_ORIG #include \"cusparse.h\"*/\n#include <oneapi/dpl/execution>\n#include <oneapi/dpl/algorithm>\n#define DPCT_PROFILING_ENABLED\n#include <sycl/sycl.hpp>\n#include <dpct/dpct.hpp>\n#include <dpct/sparse_utils.hpp>\n#include <dpct/dpl_utils.hpp>\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuSparseMatrix.h'
+    Offset:          113
+    Length:          34
+    ReplacementText: "/* DPCT_ORIG #include <thrust/device_vector.h>*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuSparseMatrix.h'
+    Offset:          270
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG \t\tcuCsrMatrix(size_t rows, size_t cols, thrust::device_vector<int> csrRow, thrust::device_vector<int> csrColdnd, thrust::device_vector<T> data) : csrRow{std::move(csrRow)}, csrColdnd{std::move(csrColdnd)}, data{std::move(data)}, rows{rows}, cols{cols}*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuSparseMatrix.h'
+    Offset:          310
+    Length:          21
+    ReplacementText: 'dpct::device_vector'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuSparseMatrix.h'
+    Offset:          345
+    Length:          21
+    ReplacementText: 'dpct::device_vector'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuSparseMatrix.h'
+    Offset:          383
+    Length:          21
+    ReplacementText: 'dpct::device_vector'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuSparseMatrix.h'
+    Offset:          526
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG \t\t\tcusparseCreateCsr(&descr, rows, cols, this->data.size(), \n\t\t\t\tthrust::raw_pointer_cast(this->csrRow.data()), thrust::raw_pointer_cast(this->csrColdnd.data()), thrust::raw_pointer_cast(this->data.data()), \n\t\t\t\tCUSPARSE_INDEX_32I, CUSPARSE_INDEX_32I, CUSPARSE_INDEX_BASE_ZERO, Gadgetron::cuda_datatype<T>());*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuSparseMatrix.h'
+    Offset:          529
+    Length:          305
+    ReplacementText: 'descr = std::make_shared<dpct::sparse::sparse_matrix_desc>(rows, cols, this->data.size(), dpct::get_raw_pointer(this->csrRow.data()), dpct::get_raw_pointer(this->csrColdnd.data()), dpct::get_raw_pointer(this->data.data()), dpct::library_data_t::real_int32, dpct::library_data_t::real_int32, oneapi::mkl::index_base::zero, Gadgetron::cuda_datatype<T>(), dpct::sparse::matrix_format::csr)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuSparseMatrix.h'
+    Offset:          882
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG \t\t\t\tcusparseDestroySpMat(this->descr);*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuSparseMatrix.h'
+    Offset:          886
+    Length:          33
+    ReplacementText: '(this->descr).reset()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuSparseMatrix.h'
+    Offset:          1279
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG \t\tthrust::device_vector<int> csrRow, csrColdnd;*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuSparseMatrix.h'
+    Offset:          1281
+    Length:          21
+    ReplacementText: 'dpct::device_vector'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuSparseMatrix.h'
+    Offset:          1327
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG \t\tthrust::device_vector<T> data;*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuSparseMatrix.h'
+    Offset:          1329
+    Length:          21
+    ReplacementText: 'dpct::device_vector'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuSparseMatrix.h'
+    Offset:          1360
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG \t\tcusparseSpMatDescr_t descr;*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuSparseMatrix.h'
+    Offset:          1362
+    Length:          20
+    ReplacementText: 'dpct::sparse::sparse_matrix_desc_t'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+MainSourceFilesDigest:
+  - MainSourceFile:  ''
+    Digest:          ''
+    HasCUDASyntax:   false
+DpctVersion:     2025.2.0
+SDKVersionMajor: '12'
+SDKVersionMinor: '8'
+MainHelperFileName: ''
+USMLevel:        ''
+FeatureMap:      {}
+CompileTargets:  {}
+OptionMap:
+  AnalysisScopePath:
+    Value:           ''
+    ValueVec:
+      - '/gadgetron'
+    Specified:       false
+  AsyncHandler:
+    Value:           'false'
+    Specified:       false
+  BuildScript:
+    Value:           '0'
+    Specified:       false
+  CodePinEnabled:
+    Value:           'false'
+    Specified:       false
+  CommentsEnabled:
+    Value:           'false'
+    Specified:       false
+  CompilationsDir:
+    Value:           ''
+    Specified:       false
+  CtadEnabled:
+    Value:           'false'
+    Specified:       false
+  EnablepProfiling:
+    Value:           'false'
+    Specified:       false
+  ExperimentalFlag:
+    Value:           '0'
+    Specified:       false
+  ExplicitNamespace:
+    Value:           '20'
+    Specified:       false
+  ExtensionDDFlag:
+    Value:           '0'
+    Specified:       false
+  ExtensionDEFlag:
+    Value:           '4294967295'
+    Specified:       false
+  HelperFuncPreferenceFlag:
+    Value:           '0'
+    Specified:       false
+  NDRangeDim:
+    Value:           '3'
+    Specified:       false
+  NoDRYPattern:
+    Value:           'false'
+    Specified:       false
+  OptimizeMigration:
+    Value:           'false'
+    Specified:       false
+  ProcessAll:
+    Value:           'true'
+    Specified:       true
+  RuleFile:
+    Value:           ''
+    Specified:       false
+  SyclNamedLambda:
+    Value:           'true'
+    Specified:       true
+  UseSYCLCompat:
+    Value:           'false'
+    Specified:       false
+  UsmLevel:
+    Value:           '1'
+    Specified:       false
+...

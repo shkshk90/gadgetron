@@ -1,3 +1,4 @@
+#include <cmath>
 /** \file       hoNDImage.hxx
     \brief      Implementation of N-dimensional image class for gadgetron
     \author     Hui Xue

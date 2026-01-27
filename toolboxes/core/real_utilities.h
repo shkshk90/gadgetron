@@ -4,6 +4,9 @@
 
 #pragma once
 
+#define DPCT_PROFILING_ENABLED
+#include <sycl/sycl.hpp>
+#include <dpct/dpct.hpp>
 #include "core_defines.h"
 
 #ifdef _USE_MATH_DEFINES
@@ -20,50 +23,61 @@
 // Get scalar limits of operation
 //
 
-template<class T> __inline__ __host__ __device__ T get_min();
-template<class T> __inline__ __host__ __device__ T get_max();
-template<class T> __inline__ __host__ __device__ T get_epsilon();
+/* DPCT_ORIG template<class T> __inline__ __host__ __device__ T get_min();*/
+template <class T> __inline__ T get_min();
+/* DPCT_ORIG template<class T> __inline__ __host__ __device__ T get_max();*/
+template <class T> __inline__ T get_max();
+/* DPCT_ORIG template<class T> __inline__ __host__ __device__ T get_epsilon();*/
+template <class T> __inline__ T get_epsilon();
 
 //
 // Math prototypes
 //
 
-template<class REAL> __inline__ __host__ __device__ REAL get_pi();
+/* DPCT_ORIG template<class REAL> __inline__ __host__ __device__ REAL get_pi();*/
+template <class REAL> __inline__ REAL get_pi();
 
 //
 // Implementation
 //
 
-template<> __inline__ __host__ __device__ float get_min<float>()
+/* DPCT_ORIG template<> __inline__ __host__ __device__ float get_min<float>()*/
+template <> __inline__ float get_min<float>()
 {
   return FLT_MIN;
 }
 
-template<> __inline__ __host__ __device__ double get_min<double>()
+/* DPCT_ORIG template<> __inline__ __host__ __device__ double get_min<double>()*/
+template <> __inline__ double get_min<double>()
 {
   return DBL_MIN;
 }
 
-template<> __inline__ __host__ __device__ float get_max<float>()
+/* DPCT_ORIG template<> __inline__ __host__ __device__ float get_max<float>()*/
+template <> __inline__ float get_max<float>()
 {
   return FLT_MAX;
 }
 
-template<> __inline__ __host__ __device__ double get_max<double>()
+/* DPCT_ORIG template<> __inline__ __host__ __device__ double get_max<double>()*/
+template <> __inline__ double get_max<double>()
 {
   return DBL_MAX;
 }
 
-template<> __inline__ __host__ __device__ float get_epsilon<float>()
+/* DPCT_ORIG template<> __inline__ __host__ __device__ float get_epsilon<float>()*/
+template <> __inline__ float get_epsilon<float>()
 {
   return FLT_EPSILON;
 }
 
-template<> __inline__ __host__ __device__ double get_epsilon<double>()
+/* DPCT_ORIG template<> __inline__ __host__ __device__ double get_epsilon<double>()*/
+template <> __inline__ double get_epsilon<double>()
 {
   return DBL_EPSILON;
 }
 
-template<> __inline__ __host__ __device__ float get_pi(){ return (float)M_PI; }
-template<> __inline__ __host__ __device__ double get_pi(){ return M_PI; }
-
+/* DPCT_ORIG template<> __inline__ __host__ __device__ float get_pi(){ return (float)M_PI; }*/
+template <> __inline__ float get_pi() { return (float)M_PI; }
+/* DPCT_ORIG template<> __inline__ __host__ __device__ double get_pi(){ return M_PI; }*/
+template <> __inline__ double get_pi() { return M_PI; }

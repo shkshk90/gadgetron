@@ -10,6 +10,9 @@
 
 #pragma once
 
+#define DPCT_PROFILING_ENABLED
+#include <sycl/sycl.hpp>
+#include <dpct/dpct.hpp>
 #include "vector_td.h"
 #include "vector_td_operators.h"
 #include "real_utilities.h"
@@ -30,7 +33,8 @@
 #undef min
 #endif
 
-#ifndef __CUDA_ARCH__ // workaround for nvcc
+/* DPCT_ORIG #ifndef __CUDA_ARCH__ */
+#ifndef DPCT_COMPATIBILITY_TEMP // workaround for nvcc
 using std::ceil;  
 using std::floor; 
 using std::abs;   
@@ -42,10 +46,12 @@ namespace Gadgetron{
   // Windows/Cuda has some issues when using min and max.
   // For now we define our own implementation
 
-  template <class T> __inline__ __host__ __device__ const T& _vector_td_min (const T& a, const T& b) {
+/* DPCT_ORIG   template <class T> __inline__ __host__ __device__ const T& _vector_td_min (const T& a, const T& b) {*/
+  template <class T> __inline__ const T& _vector_td_min(const T& a, const T& b) {
     return (a>b)?b:a;
   }
-  template <class T> __inline__ __host__ __device__ const T& _vector_td_max (const T& a, const T& b) {
+/* DPCT_ORIG   template <class T> __inline__ __host__ __device__ const T& _vector_td_max (const T& a, const T& b) {*/
+  template <class T> __inline__ const T& _vector_td_max(const T& a, const T& b) {
     return (a<b)?b:a;
   }
 
@@ -53,8 +59,9 @@ namespace Gadgetron{
   // In-place operations
   //
 
-  template<class T, unsigned int D> __inline__ __host__ __device__
-  void clear( vector_td<T,D> &vec, const T &val = T(0) )
+/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__
+  void clear( vector_td<T,D> &vec, const T &val = T(0) )*/
+  template <class T, unsigned int D> __inline__ void clear(vector_td<T, D>& vec, const T& val = T(0))
   {
     for (unsigned int i=0; i<D; i++) {
       vec[i] = val;
@@ -65,18 +72,21 @@ namespace Gadgetron{
   // Component-wise math operations
   //
 
-  template<class T, unsigned int D> __inline__ __host__ __device__
-  vector_td<T,D> abs( const vector_td<T,D>& vec )
+/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__
+  vector_td<T,D> abs( const vector_td<T,D>& vec )*/
+  template <class T, unsigned int D> __inline__ vector_td<T, D> abs(const vector_td<T, D>& vec)
   {
     vector_td<T,D> res;
     for (unsigned int i=0; i<D; i++) {
-      res[i] = ::abs(vec[i]);
+/* DPCT_ORIG       res[i] = ::abs(vec[i]);*/
+      res[i] = abs(vec[i]);
     }
     return res;
   }
 
-  template<class T, unsigned int D> __inline__ __host__ __device__
-  vector_td<int,D> sgn( const vector_td<T,D>& vec )
+/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__
+  vector_td<int,D> sgn( const vector_td<T,D>& vec )*/
+  template <class T, unsigned int D> __inline__ vector_td<int, D> sgn(const vector_td<T, D>& vec)
   {
     vector_td<int,D> res;
     for (unsigned int i=0; i<D; i++) {
@@ -85,22 +95,30 @@ namespace Gadgetron{
     return res;
   }
 
-  template<class REAL, unsigned int D> __inline__ __host__ __device__
-  vector_td<REAL,D> ceil( const vector_td<REAL,D>& vec )
+/* DPCT_ORIG   template<class REAL, unsigned int D> __inline__ __host__ __device__
+  vector_td<REAL,D> ceil( const vector_td<REAL,D>& vec )*/
+  template <class REAL, unsigned int D> __inline__ vector_td<REAL, D> ceil(const vector_td<REAL, D>& vec)
   {
     vector_td<REAL,D> res;
     for (unsigned int i=0; i<D; i++) {
-      res[i] = ::ceil(vec[i]);
+/* DPCT_ORIG       res[i] = ::ceil(vec[i]);*/
+      res[i] = ceil(vec[i]);
     }
     return res;
   }
 
-  template<class REAL, unsigned int D> __inline__ __host__ __device__
-  vector_td<REAL,D> floor( const vector_td<REAL,D>& vec )
+/* DPCT_ORIG   template<class REAL, unsigned int D> __inline__ __host__ __device__
+  vector_td<REAL,D> floor( const vector_td<REAL,D>& vec )*/
+  template <class REAL, unsigned int D> __inline__ vector_td<REAL, D> floor(const vector_td<REAL, D>& vec)
   {
     vector_td<REAL,D> res;
     for (unsigned int i=0; i<D; i++) {
-      res[i] = ::floor(vec[i]);
+/* DPCT_ORIG       res[i] = ::floor(vec[i]);*/
+      /*
+      DPCT1064:246: Migrated floor call is used in a macro/template definition and may not be valid for all
+      macro/template uses. Adjust the code.
+      */
+      res[i] = sycl::floor((double)(vec[i]));
     }
     return res;
   }
@@ -110,8 +128,9 @@ namespace Gadgetron{
   // Grid <-> index transformations
   //
 
-  template<class T, unsigned int D> __inline__ __host__ __device__
-  vector_td<T,D> idx_to_co( T idx, const vector_td<T,D> dims )
+/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__
+  vector_td<T,D> idx_to_co( T idx, const vector_td<T,D> dims )*/
+  template <class T, unsigned int D> __inline__ vector_td<T, D> idx_to_co(T idx, const vector_td<T, D> dims)
   {
     vector_td<T,D> co;
     auto idx_tmp = idx;
@@ -121,11 +140,11 @@ namespace Gadgetron{
       idx_tmp /= dims[i];
     }
     return co;
-  } 
+  }
 
-
-  template<class T, unsigned int D> __inline__ __host__ __device__
-  T co_to_idx( const vector_td<T,D> co, const vector_td<T,D> dims )
+/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__
+  T co_to_idx( const vector_td<T,D> co, const vector_td<T,D> dims )*/
+  template <class T, unsigned int D> __inline__ T co_to_idx(const vector_td<T, D> co, const vector_td<T, D> dims)
   {
     T idx = 0;
     T block_size = 1;
@@ -136,11 +155,13 @@ namespace Gadgetron{
     return idx;
   }
 
-  
-  template<unsigned int D> __inline__ __host__ __device__
-  unsigned int co_to_idx( const vector_td<unsigned int,D> co, 
-                          const vector_td<unsigned int,D> dims, 
-                          const vector_td<unsigned int,D> order )
+/* DPCT_ORIG   template<unsigned int D> __inline__ __host__ __device__
+  unsigned int co_to_idx( const vector_td<unsigned int,D> co,
+                          const vector_td<unsigned int,D> dims,
+                          const vector_td<unsigned int,D> order )*/
+  template <unsigned int D>
+  __inline__ unsigned int co_to_idx(const vector_td<unsigned int, D> co, const vector_td<unsigned int, D> dims,
+                                    const vector_td<unsigned int, D> order)
   {
     unsigned int idx = 0;
     unsigned int block_size = 1;
@@ -149,12 +170,15 @@ namespace Gadgetron{
       block_size *= dims.d[order[i]];
     }
     return idx;
-  } 
+  }
 
-  template<unsigned int D> __inline__ __host__ __device__
-  size_t co_to_idx( const vector_td<size_t,D> co, 
-                    const vector_td<size_t,D> dims, 
-                    const vector_td<unsigned int,D> order )
+/* DPCT_ORIG   template<unsigned int D> __inline__ __host__ __device__
+  size_t co_to_idx( const vector_td<size_t,D> co,
+                    const vector_td<size_t,D> dims,
+                    const vector_td<unsigned int,D> order )*/
+  template <unsigned int D>
+  __inline__ size_t co_to_idx(const vector_td<size_t, D> co, const vector_td<size_t, D> dims,
+                              const vector_td<unsigned int, D> order)
   {
     size_t idx = 0;
     size_t block_size = 1;
@@ -163,12 +187,15 @@ namespace Gadgetron{
       block_size *= dims.d[order[i]];
     }
     return idx;
-  } 
+  }
 
-  template<int D> __inline__ __host__ __device__ 
-  int co_to_idx( const vector_td<int,D> co, 
-                 const vector_td<int,D> dims, 
-                 const vector_td<unsigned int,D> order )
+/* DPCT_ORIG   template<int D> __inline__ __host__ __device__
+  int co_to_idx( const vector_td<int,D> co,
+                 const vector_td<int,D> dims,
+                 const vector_td<unsigned int,D> order )*/
+  template <int D>
+  __inline__ int co_to_idx(const vector_td<int, D> co, const vector_td<int, D> dims,
+                           const vector_td<unsigned int, D> order)
   {
     int idx = 0;
     int block_size = 1;
@@ -177,12 +204,15 @@ namespace Gadgetron{
       block_size *= dims.d[order[i]];
     }
     return idx;
-  } 
+  }
 
-  template<unsigned int D> __inline__ __host__ __device__
-  long long co_to_idx( const vector_td<long long,D> co, 
-                       const vector_td<long long,D> dims, 
-                       const vector_td<unsigned int,D> order )
+/* DPCT_ORIG   template<unsigned int D> __inline__ __host__ __device__
+  long long co_to_idx( const vector_td<long long,D> co,
+                       const vector_td<long long,D> dims,
+                       const vector_td<unsigned int,D> order )*/
+  template <unsigned int D>
+  __inline__ long long co_to_idx(const vector_td<long long, D> co, const vector_td<long long, D> dims,
+                                 const vector_td<unsigned int, D> order)
   {
     long long idx = 0;
     long long block_size = 1;
@@ -191,10 +221,11 @@ namespace Gadgetron{
       block_size *= dims.d[order[i]];
     }
     return idx;
-  } 
+  }
 
-  template<class T, unsigned int D> __inline__ __host__ __device__
-  vector_td<T,D> counting_vec()
+/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__
+  vector_td<T,D> counting_vec()*/
+  template <class T, unsigned int D> __inline__ vector_td<T, D> counting_vec()
   {
     vector_td<T,D> res;
     for(unsigned int i=0; i<D; i++) {
@@ -233,8 +264,9 @@ namespace Gadgetron{
   // Reductions on vector_td<T,D>
   //
 
-  template<class T, unsigned int D> __inline__ __host__ __device__
-  T prod( const vector_td<T,D>& vec )
+/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__
+  T prod( const vector_td<T,D>& vec )*/
+  template <class T, unsigned int D> __inline__ T prod(const vector_td<T, D>& vec)
   {
     T res = vec[0];
     for (unsigned int i=1; i<D; i++){
@@ -243,8 +275,9 @@ namespace Gadgetron{
     return res;
   }
 
-  template<class T, unsigned int D> __inline__ __host__ __device__
-  T sum( const vector_td<T,D>& vec )
+/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__
+  T sum( const vector_td<T,D>& vec )*/
+  template <class T, unsigned int D> __inline__ T sum(const vector_td<T, D>& vec)
   {
     T res = vec[0];
     for (unsigned int i=1; i<D; i++){
@@ -253,8 +286,9 @@ namespace Gadgetron{
     return res;
   }
 
-  template<class T, unsigned int D> __inline__ __host__ __device__
-  T dot( const vector_td<T,D>& vec1, const vector_td<T,D>& vec2 )
+/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__
+  T dot( const vector_td<T,D>& vec1, const vector_td<T,D>& vec2 )*/
+  template <class T, unsigned int D> __inline__ T dot(const vector_td<T, D>& vec1, const vector_td<T, D>& vec2)
   {
     T res = (vec1[0]*vec2[0]);
     for (unsigned int i=1; i<D; i++){
@@ -263,8 +297,10 @@ namespace Gadgetron{
     return res;
   }
 
-  template<class REAL, unsigned int D> __inline__ __host__ __device__
-  complext<REAL> dot(const vector_td<complext<REAL>, D>& vec1, const vector_td<REAL, D>& vec2)
+/* DPCT_ORIG   template<class REAL, unsigned int D> __inline__ __host__ __device__
+  complext<REAL> dot(const vector_td<complext<REAL>, D>& vec1, const vector_td<REAL, D>& vec2)*/
+  template <class REAL, unsigned int D>
+  __inline__ complext<REAL> dot(const vector_td<complext<REAL>, D>& vec1, const vector_td<REAL, D>& vec2)
   {
 	  complext<REAL> res = (vec1[0] * vec2[0]);
 	  for (unsigned int i = 1; i<D; i++){
@@ -274,8 +310,10 @@ namespace Gadgetron{
 
   }
 
-  template<class REAL, unsigned int D> __inline__ __host__ __device__
-  complext<REAL> dot(const vector_td<REAL, D>& vec1, const vector_td<complext<REAL>, D>& vec2)
+/* DPCT_ORIG   template<class REAL, unsigned int D> __inline__ __host__ __device__
+  complext<REAL> dot(const vector_td<REAL, D>& vec1, const vector_td<complext<REAL>, D>& vec2)*/
+  template <class REAL, unsigned int D>
+  __inline__ complext<REAL> dot(const vector_td<REAL, D>& vec1, const vector_td<complext<REAL>, D>& vec2)
   {
 	  complext<REAL> res = (vec1[0] * vec2[0]);
 	  for (unsigned int i = 1; i<D; i++){
@@ -284,8 +322,9 @@ namespace Gadgetron{
 	  return res;
 
   }
-  template<class T, unsigned int D> __inline__ __host__ __device__
-  T max( const vector_td<T,D>& vec )
+/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__
+  T max( const vector_td<T,D>& vec )*/
+  template <class T, unsigned int D> __inline__ T max(const vector_td<T, D>& vec)
   {
     T res = vec[0];
     for (unsigned int i=1; i<D; i++){
@@ -293,9 +332,10 @@ namespace Gadgetron{
     }
     return res;
   }
-  
-  template<class T, unsigned int D> __inline__ __host__ __device__
-  T min( const vector_td<T,D>& vec )
+
+/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__
+  T min( const vector_td<T,D>& vec )*/
+  template <class T, unsigned int D> __inline__ T min(const vector_td<T, D>& vec)
   {
     T res = vec[0];
     for (unsigned int i=1; i<D; i++){
@@ -304,8 +344,10 @@ namespace Gadgetron{
     return res;
   }
 
-  template<class T, unsigned int D> __inline__ __host__ __device__
-  vector_td<T,D> amin( const vector_td<T,D>& vec1, const vector_td<T,D>& vec2)
+/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__
+  vector_td<T,D> amin( const vector_td<T,D>& vec1, const vector_td<T,D>& vec2)*/
+  template <class T, unsigned int D>
+  __inline__ vector_td<T, D> amin(const vector_td<T, D>& vec1, const vector_td<T, D>& vec2)
   {
     vector_td<T,D> res;
     for (unsigned int i=0; i<D; i++){
@@ -314,8 +356,10 @@ namespace Gadgetron{
     return res;
   }
 
-  template<class T, unsigned int D> __inline__ __host__ __device__
-  vector_td<T,D> amax( const vector_td<T,D>& vec1, const vector_td<T,D>& vec2)
+/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__
+  vector_td<T,D> amax( const vector_td<T,D>& vec1, const vector_td<T,D>& vec2)*/
+  template <class T, unsigned int D>
+  __inline__ vector_td<T, D> amax(const vector_td<T, D>& vec1, const vector_td<T, D>& vec2)
   {
     vector_td<T,D> res;
     for (unsigned int i=0; i<D; i++){
@@ -324,8 +368,9 @@ namespace Gadgetron{
     return res;
   }
 
-  template<class T, unsigned int D> __inline__ __host__ __device__
-  vector_td<T,D> amin( const vector_td<T,D>& vec1, T val)
+/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__
+  vector_td<T,D> amin( const vector_td<T,D>& vec1, T val)*/
+  template <class T, unsigned int D> __inline__ vector_td<T, D> amin(const vector_td<T, D>& vec1, T val)
   {
     vector_td<T,D> res;
     for (unsigned int i=0; i<D; i++){
@@ -334,8 +379,9 @@ namespace Gadgetron{
     return res;
   }
 
-  template<class T, unsigned int D> __inline__ __host__ __device__
-  vector_td<T,D> amax( const vector_td<T,D>& vec1, T val )
+/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__
+  vector_td<T,D> amax( const vector_td<T,D>& vec1, T val )*/
+  template <class T, unsigned int D> __inline__ vector_td<T, D> amax(const vector_td<T, D>& vec1, T val)
   {
     vector_td<T,D> res;
     for (unsigned int i=0; i<D; i++){
@@ -344,8 +390,9 @@ namespace Gadgetron{
     return res;
   }
 
-  template<class T, unsigned int D> __inline__ __host__ __device__
-  T max_not_nan( const vector_td<T,D>& vec )
+/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__
+  T max_not_nan( const vector_td<T,D>& vec )*/
+  template <class T, unsigned int D> __inline__ T max_not_nan(const vector_td<T, D>& vec)
   {
     unsigned int i=0;
     while (isnan(vec[i])) i++;
@@ -357,8 +404,9 @@ namespace Gadgetron{
     return res;
   }
 
-  template<class T, unsigned int D> __inline__ __host__ __device__
-  T min_not_nan( const vector_td<T,D>& vec )
+/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__
+  T min_not_nan( const vector_td<T,D>& vec )*/
+  template <class T, unsigned int D> __inline__ T min_not_nan(const vector_td<T, D>& vec)
   {
     unsigned int i=0;
     while (isnan(vec[i])) i++;
@@ -369,8 +417,9 @@ namespace Gadgetron{
     return res;
   }
 
-  template<class T, unsigned int D> __inline__ __host__ __device__
-  unsigned int argmin( const vector_td<T,D>& vec )
+/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__
+  unsigned int argmin( const vector_td<T,D>& vec )*/
+  template <class T, unsigned int D> __inline__ unsigned int argmin(const vector_td<T, D>& vec)
   {
     unsigned int res= 0;
     for (unsigned int i=1; i<D; i++){
@@ -379,8 +428,9 @@ namespace Gadgetron{
     return res;
   }
 
-  template<class T, unsigned int D> __inline__ __host__ __device__
-  unsigned int argmin_not_nan( const vector_td<T,D>& vec )
+/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__
+  unsigned int argmin_not_nan( const vector_td<T,D>& vec )*/
+  template <class T, unsigned int D> __inline__ unsigned int argmin_not_nan(const vector_td<T, D>& vec)
   {
     unsigned int res= 0;
     for (unsigned int i=1; i<D; i++){
@@ -389,8 +439,9 @@ namespace Gadgetron{
     return res;
   }
 
-  template<class T, unsigned int D> __inline__ __host__ __device__
-  unsigned int argmax( const vector_td<T,D>& vec )
+/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__
+  unsigned int argmax( const vector_td<T,D>& vec )*/
+  template <class T, unsigned int D> __inline__ unsigned int argmax(const vector_td<T, D>& vec)
   {
     unsigned int res= 0;
     for (unsigned int i=1; i<D; i++){
@@ -403,8 +454,10 @@ namespace Gadgetron{
   // Reductions on reald<REAL,D>
   //
 
-  template<class REAL, unsigned int D> __inline__ __host__ __device__
-  typename realType<REAL>::Type norm_squared( const vector_td<REAL,D> vec )
+/* DPCT_ORIG   template<class REAL, unsigned int D> __inline__ __host__ __device__
+  typename realType<REAL>::Type norm_squared( const vector_td<REAL,D> vec )*/
+  template <class REAL, unsigned int D>
+  __inline__ typename realType<REAL>::Type norm_squared(const vector_td<REAL, D> vec)
   {
     typename realType<REAL>::Type res(0);
     for (unsigned int i=0; i<D; i++){
@@ -413,10 +466,12 @@ namespace Gadgetron{
     return res;
   }
 
-  template<class REAL, unsigned int D> __inline__ __host__ __device__
-  typename realType<REAL>::Type norm( const vector_td<REAL,D> vec )
+/* DPCT_ORIG   template<class REAL, unsigned int D> __inline__ __host__ __device__
+  typename realType<REAL>::Type norm( const vector_td<REAL,D> vec )*/
+  template <class REAL, unsigned int D> __inline__ typename realType<REAL>::Type norm(const vector_td<REAL, D> vec)
   {
-    return ::sqrt(norm_squared<REAL,D>(vec));
+/* DPCT_ORIG     return ::sqrt(norm_squared<REAL,D>(vec));*/
+    return sycl::sqrt(norm_squared<REAL, D>(vec));
   }
 
 }

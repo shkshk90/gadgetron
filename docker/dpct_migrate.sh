@@ -115,6 +115,12 @@ TEST_CUDA_FILES=(
     "${GADGETRON_SRC}/toolboxes/core/gpu/CUBLASContextProvider.cpp"
     "${GADGETRON_SRC}/toolboxes/core/gpu/cudaDeviceManager.cpp"
     "${GADGETRON_SRC}/toolboxes/core/gpu/cudaDeviceManager.h"
+    "${GADGETRON_SRC}/toolboxes/fft/gpu/cuFFTCachedPlan.h"
+    "${GADGETRON_SRC}/toolboxes/fft/gpu/cuFFTCachedPlan.hpp"
+    "${GADGETRON_SRC}/toolboxes/fft/gpu/cuFFTPlan.h"
+    "${GADGETRON_SRC}/toolboxes/fft/gpu/cuFFTPlan.hpp"
+    "${GADGETRON_SRC}/toolboxes/fft/gpu/cuNDFFT.cpp"
+    "${GADGETRON_SRC}/toolboxes/fft/gpu/cuNDFFT.h"
 )
 
 for f in "${TEST_CUDA_FILES[@]}"; do

@@ -1,0 +1,1233 @@
+---
+MainSourceFile:  '/gadgetron_sycl_migrated/toolboxes/nfft/gpu/ConvolverNC2C_standard.dp.hpp'
+Replacements:
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          536
+    Length:          0
+    ReplacementText: "#define DPCT_PROFILING_ENABLED\n#include <sycl/sycl.hpp>\n#include <dpct/dpct.hpp>\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          566
+    Length:          0
+    ReplacementText: "\n#include <cmath>\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          980
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     __host__ __device__\r\n    typename reald<REAL,D>::Type operator()(const typename reald<REAL,D>::Type &in) const { */\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          984
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          993
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          1250
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     __host__ __device__\r\n    compute_num_cells_per_sample(REAL _half_W) : half_W(_half_W) {}*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          1254
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          1263
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          1350
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     __host__ __device__\r\n    unsigned int operator()(typename reald<REAL,D>::Type p) const*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          1354
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          1363
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          1536
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG             unsigned int upper_limit = (unsigned int)floor((((float*)&p)[dim])+half_W);*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          1589
+    Length:          33
+    ReplacementText: 'sycl::floor((((float*)&p)[dim])+half_W)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          1841
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG template<class REAL> __inline__ __device__ void\r\noutput_pairs( unsigned int sample_idx, unsigned int frame, \r\n\t      typename reald<REAL,1>::Type &p, typename uintd<1>::Type &matrix_size_os, typename uintd<1>::Type &matrix_size_wrap, \r\n\t      REAL half_W, const unsigned int * __restrict__ write_offsets, unsigned int * __restrict__ tuples_first, unsigned int * __restrict__ tuples_last )*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          1873
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          2234
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     unsigned int lower_limit_x = (unsigned int)ceil(p.vec[0]-half_W);*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          2281
+    Length:          21
+    ReplacementText: 'sycl::ceil(p.vec[0]-half_W)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          2305
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     unsigned int upper_limit_x = (unsigned int)floor(p.vec[0]+half_W);*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          2352
+    Length:          22
+    ReplacementText: 'sycl::floor(p.vec[0]+half_W)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          2889
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG template<class REAL> __inline__ __device__ void\r\noutput_pairs( unsigned int sample_idx, unsigned int frame, \r\n\t      typename reald<REAL,2>::Type &p, typename uintd<2>::Type &matrix_size_os, typename uintd<2>::Type &matrix_size_wrap, \r\n\t      REAL half_W, const unsigned int * __restrict__ write_offsets, unsigned int * __restrict__ tuples_first, unsigned int * __restrict__ tuples_last )*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          2921
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          3282
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     unsigned int lower_limit_x = (unsigned int)ceil(p.vec[0]-half_W);*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          3329
+    Length:          21
+    ReplacementText: 'sycl::ceil(p.vec[0]-half_W)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          3353
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     unsigned int lower_limit_y = (unsigned int)ceil(p.vec[1]-half_W);*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          3400
+    Length:          21
+    ReplacementText: 'sycl::ceil(p.vec[1]-half_W)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          3424
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     unsigned int upper_limit_x = (unsigned int)floor(p.vec[0]+half_W);*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          3471
+    Length:          22
+    ReplacementText: 'sycl::floor(p.vec[0]+half_W)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          3496
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     unsigned int upper_limit_y = (unsigned int)floor(p.vec[1]+half_W);*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          3543
+    Length:          22
+    ReplacementText: 'sycl::floor(p.vec[1]+half_W)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          4191
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG template <class REAL> __inline__ __device__ void\r\noutput_pairs( unsigned int sample_idx, unsigned int frame, \r\n\t      typename reald<REAL,3>::Type &p, typename uintd<3>::Type &matrix_size_os, typename uintd<3>::Type &matrix_size_wrap, \r\n\t      REAL half_W, const unsigned int * __restrict__ write_offsets, unsigned int * __restrict__ tuples_first, unsigned int * __restrict__ tuples_last )*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          4224
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          4585
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     unsigned int lower_limit_x = (unsigned int)ceil(p.vec[0]-half_W);*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          4632
+    Length:          21
+    ReplacementText: 'sycl::ceil(p.vec[0]-half_W)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          4656
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     unsigned int lower_limit_y = (unsigned int)ceil(p.vec[1]-half_W);*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          4703
+    Length:          21
+    ReplacementText: 'sycl::ceil(p.vec[1]-half_W)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          4727
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     unsigned int lower_limit_z = (unsigned int)ceil(p.vec[2]-half_W);*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          4774
+    Length:          21
+    ReplacementText: 'sycl::ceil(p.vec[2]-half_W)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          4798
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     unsigned int upper_limit_x = (unsigned int)floor(p.vec[0]+half_W);*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          4845
+    Length:          22
+    ReplacementText: 'sycl::floor(p.vec[0]+half_W)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          4870
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     unsigned int upper_limit_y = (unsigned int)floor(p.vec[1]+half_W);*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          4917
+    Length:          22
+    ReplacementText: 'sycl::floor(p.vec[1]+half_W)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          4942
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     unsigned int upper_limit_z = (unsigned int)floor(p.vec[2]+half_W);*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          4989
+    Length:          22
+    ReplacementText: 'sycl::floor(p.vec[2]+half_W)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          5756
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG template <class REAL> __inline__ __device__ void\r\noutput_pairs( unsigned int sample_idx, unsigned int frame, \r\n\t      typename reald<REAL,4>::Type &p, typename uintd<4>::Type &matrix_size_os, typename uintd<4>::Type &matrix_size_wrap, \r\n\t      REAL half_W, const unsigned int * __restrict__ write_offsets, unsigned int * __restrict__ tuples_first, unsigned int * __restrict__ tuples_last )*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          5789
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          6150
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     unsigned int lower_limit_x = (unsigned int)ceil(p.vec[0]-half_W);*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          6197
+    Length:          21
+    ReplacementText: 'sycl::ceil(p.vec[0]-half_W)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          6221
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     unsigned int lower_limit_y = (unsigned int)ceil(p.vec[1]-half_W);*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          6268
+    Length:          21
+    ReplacementText: 'sycl::ceil(p.vec[1]-half_W)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          6292
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     unsigned int lower_limit_z = (unsigned int)ceil(p.vec[2]-half_W);*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          6339
+    Length:          21
+    ReplacementText: 'sycl::ceil(p.vec[2]-half_W)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          6363
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     unsigned int lower_limit_w = (unsigned int)ceil(p.vec[3]-half_W);*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          6410
+    Length:          21
+    ReplacementText: 'sycl::ceil(p.vec[3]-half_W)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          6434
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     unsigned int upper_limit_x = (unsigned int)floor(p.vec[0]+half_W);*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          6481
+    Length:          22
+    ReplacementText: 'sycl::floor(p.vec[0]+half_W)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          6506
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     unsigned int upper_limit_y = (unsigned int)floor(p.vec[1]+half_W);*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          6553
+    Length:          22
+    ReplacementText: 'sycl::floor(p.vec[1]+half_W)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          6578
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     unsigned int upper_limit_z = (unsigned int)floor(p.vec[2]+half_W);*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          6625
+    Length:          22
+    ReplacementText: 'sycl::floor(p.vec[2]+half_W)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          6650
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     unsigned int upper_limit_w = (unsigned int)floor(p.vec[3]+half_W);*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          6697
+    Length:          22
+    ReplacementText: 'sycl::floor(p.vec[3]+half_W)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          7585
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG template<class REAL, unsigned int D> __global__ void\r\nwrite_pairs_kernel( typename uintd<D>::Type matrix_size_os, typename uintd<D>::Type matrix_size_wrap, unsigned int num_samples_per_frame, REAL half_W, \r\n\t\t   const typename reald<REAL,D>::Type * __restrict__ traj_positions, unsigned int * __restrict__ write_offsets, unsigned int * __restrict__ tuples_first, unsigned int * __restrict__ tuples_last )*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          7622
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          8017
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     unsigned int sample_idx = blockIdx.x*blockDim.x + threadIdx.x;*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          8021
+    Length:          0
+    ReplacementText: "auto item_ct1 = sycl::ext::oneapi::this_work_item::get_nd_item<3>();\n    "
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          8047
+    Length:          10
+    ReplacementText: 'item_ct1.get_group(2)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          8058
+    Length:          10
+    ReplacementText: 'item_ct1.get_local_range(2)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          8071
+    Length:          11
+    ReplacementText: 'item_ct1.get_local_id(2)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          8085
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     unsigned int frame = blockIdx.y;*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          8110
+    Length:          10
+    ReplacementText: 'item_ct1.get_group(1)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          8860
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     dim3 blockDim(256);*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          8864
+    Length:          4
+    ReplacementText: 'dpct::dim3'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          8885
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     dim3 gridDim((int)ceil((double)num_samples_per_frame/(double)blockDim.x), num_frames);*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          8889
+    Length:          4
+    ReplacementText: 'dpct::dim3'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          9011
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     write_pairs_kernel<REAL,D><<< gridDim, blockDim >>>\r\n        ( matrix_size_os, matrix_size_wrap, num_samples_per_frame, half_W, traj_positions, write_offsets, tuples_first, tuples_last );*/\r\n    /*\n    DPCT1049:71: The work-group size passed to the SYCL kernel may exceed the limit. To get the device limit, query info::device::max_work_group_size. Adjust the work-group size if needed.\n    */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          9015
+    Length:          186
+    ReplacementText: "{\n      dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});\n\n      dpct::get_in_order_queue().parallel_for<dpct_kernel_name<class write_pairs_kernel_d8cd2f, REAL, dpct_kernel_scalar<D>>>(\n        sycl::nd_range<3>(gridDim * blockDim, blockDim), \n        [=](sycl::nd_item<3> item_ct1) {\n          write_pairs_kernel<REAL, D>(matrix_size_os, matrix_size_wrap, num_samples_per_frame, half_W, traj_positions, write_offsets, tuples_first, tuples_last);\n        });\n    }"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: true
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          9201
+    Length:          1
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          9443
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG template<class T>\r\n__inline__ __device__\r\nvoid NFFT_H_output(unsigned int number_of_batches, T* __restrict__ image,\r\n\t       unsigned int warp_size_power, unsigned int number_of_domains, \r\n\t       unsigned int globalThreadId, unsigned int sharedMemFirstCellIdx)*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          9473
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          9703
+    Length:          0
+    ReplacementText: ', char *_shared_mem'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          9713
+    Length:          0
+    ReplacementText: "auto item_ct1 = sycl::ext::oneapi::this_work_item::get_nd_item<3>();\n    "
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          10097
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                 shared_mem[sharedMemFirstCellIdx + (batch << warp_size_power) + warpSize];*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          10177
+    Length:          8
+    ReplacementText: 'sycl::ext::oneapi::this_work_item::get_sub_group().get_local_range().get(0)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          10332
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         image[(batch*gridDim.y+blockIdx.y) * number_of_domains + globalThreadId] =*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          10353
+    Length:          9
+    ReplacementText: 'item_ct1.get_group_range(1)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          10363
+    Length:          10
+    ReplacementText: 'item_ct1.get_group(1)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          10461
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG template<class T, unsigned int D, template<class, unsigned int> class K>\r\n__inline__ __device__\r\nvoid NFFT_H_convolve(\r\n    unsigned int number_of_samples, unsigned int number_of_batches,\r\n    unsigned int number_of_domains,\r\n    const vector_td<realType_t<T>,D> * __restrict__ traj_positions, const  T* __restrict__ samples, const unsigned int * __restrict__ tuples_last,\r\n    const unsigned int * __restrict__ bucket_begin, const unsigned int * __restrict__ bucket_end,\r\n    unsigned int warp_size_power,\r\n    unsigned int globalThreadId, vector_td<unsigned int,D> domainPos,\r\n    unsigned int sharedMemFirstCellIdx,\r\n    const ConvolutionKernel<realType_t<T>, D, K>* kernel)*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          10535
+    Length:          0
+    ReplacementText: "/*\nDPCT1110:72: The total declared local variable size in device function NFFT_H_convolve exceeds 128 bytes and may cause high register pressure. Consult with your hardware vendor to find the total register size available and adjust the code, or use smaller sub-group size to avoid high register pressure.\n*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          10546
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          11137
+    Length:          0
+    ReplacementText: ', char *_shared_mem'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          11427
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     const unsigned int frame_offset = blockIdx.y*number_of_domains;*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          11465
+    Length:          10
+    ReplacementText: 'sycl::ext::oneapi::this_work_item::get_nd_item<3>().get_group(1)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          12127
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         if (!isfinite(weight))*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          12140
+    Length:          16
+    ReplacementText: 'sycl::isfinite(weight)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          12443
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG             T sample_val  = cub::ThreadLoad<cub::LOAD_CS>(samples + idx);*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          12471
+    Length:          44
+    ReplacementText: '*(samples + idx)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          12727
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                 shared_mem[sharedMemFirstCellIdx + (batch << warp_size_power) + warpSize] +=*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          12807
+    Length:          8
+    ReplacementText: 'sycl::ext::oneapi::this_work_item::get_sub_group().get_local_range().get(0)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          13110
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG template<class T, unsigned int D, template<class, unsigned int> class K>\r\n__global__\r\nvoid NFFT_H_convolve_kernel(vector_td<unsigned int,D> domain_count_grid,\r\n    unsigned int number_of_samples, unsigned int number_of_batches,\r\n    const vector_td<realType_t<T>,D> * __restrict__ traj_positions,\r\n    T* __restrict__ image, const T* __restrict__ samples,\r\n    const unsigned int * __restrict__ tuples_last,\r\n    const unsigned int * __restrict__ bucket_begin,\r\n    const unsigned int * __restrict__ bucket_end,\r\n    unsigned int warp_size_power,\r\n    const ConvolutionKernel<realType_t<T>, D, K>* kernel)*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          13184
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          13714
+    Length:          0
+    ReplacementText: ', char *_shared_mem'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          13753
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     const unsigned int index = blockIdx.x*blockDim.x + threadIdx.x;*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          13757
+    Length:          0
+    ReplacementText: "auto item_ct1 = sycl::ext::oneapi::this_work_item::get_nd_item<3>();\n    "
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          13784
+    Length:          10
+    ReplacementText: 'item_ct1.get_group(2)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          13795
+    Length:          10
+    ReplacementText: 'item_ct1.get_local_range(2)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          13808
+    Length:          11
+    ReplacementText: 'item_ct1.get_local_id(2)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          14707
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     const unsigned int scatterSharedMemStart = (threadIdx.x/warpSize)*warpSize;*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          14755
+    Length:          11
+    ReplacementText: 'item_ct1.get_local_id(2)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          14767
+    Length:          8
+    ReplacementText: 'sycl::ext::oneapi::this_work_item::get_sub_group().get_local_range().get(0)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          14777
+    Length:          8
+    ReplacementText: 'sycl::ext::oneapi::this_work_item::get_sub_group().get_local_range().get(0)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          14788
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     const unsigned int scatterSharedMemStartOffset = threadIdx.x&(warpSize-1); */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          14841
+    Length:          11
+    ReplacementText: 'item_ct1.get_local_id(2)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          14854
+    Length:          8
+    ReplacementText: 'sycl::ext::oneapi::this_work_item::get_sub_group().get_local_range().get(0)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          15179
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         shared_mem[sharedMemFirstCellIdx+warpSize*i] = realType_t<T>(0);*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          15220
+    Length:          8
+    ReplacementText: 'sycl::ext::oneapi::this_work_item::get_sub_group().get_local_range().get(0)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          15563
+    Length:          0
+    ReplacementText: ', _shared_mem'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          15732
+    Length:          0
+    ReplacementText: ', _shared_mem'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          15744
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG template<class T, unsigned int D>\r\n__global__\r\nvoid wrap_image_kernel(const T* __restrict__ in,\r\n                        T* __restrict__ out,\r\n                        vector_td<unsigned int, D> matrix_size_os,\r\n                        vector_td<unsigned int, D> matrix_padding,\r\n                        bool accumulate)*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          15779
+    Length:          11
+    ReplacementText: "/*\nDPCT1110:73: The total declared local variable size in device function wrap_image_kernel exceeds 128 bytes and may cause high register pressure. Consult with your hardware vendor to find the total register size available and adjust the code, or use smaller sub-group size to avoid high register pressure.\n*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          16068
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     unsigned int idx = blockIdx.x * blockDim.x + threadIdx.x;*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          16072
+    Length:          0
+    ReplacementText: "auto item_ct1 = sycl::ext::oneapi::this_work_item::get_nd_item<3>();\n    "
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          16091
+    Length:          10
+    ReplacementText: 'item_ct1.get_group(2)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          16104
+    Length:          10
+    ReplacementText: 'item_ct1.get_local_range(2)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          16117
+    Length:          11
+    ReplacementText: 'item_ct1.get_local_id(2)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          16223
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     const unsigned int image_offset_src = blockIdx.y * num_elements_per_image_src;*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          16265
+    Length:          10
+    ReplacementText: 'item_ct1.get_group(1)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          20785
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     const unsigned int image_offset_tgt = blockIdx.y * prod(matrix_size_os);*/\r\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          20827
+    Length:          10
+    ReplacementText: 'item_ct1.get_group(1)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+MainSourceFilesDigest:
+  - MainSourceFile:  ''
+    Digest:          ''
+    HasCUDASyntax:   false
+DpctVersion:     2025.2.0
+SDKVersionMajor: '12'
+SDKVersionMinor: '8'
+MainHelperFileName: ''
+USMLevel:        ''
+FeatureMap:      {}
+CompileTargets:  {}
+OptionMap:
+  AnalysisScopePath:
+    Value:           ''
+    ValueVec:
+      - '/gadgetron'
+    Specified:       false
+  AsyncHandler:
+    Value:           'false'
+    Specified:       false
+  BuildScript:
+    Value:           '0'
+    Specified:       false
+  CodePinEnabled:
+    Value:           'false'
+    Specified:       false
+  CommentsEnabled:
+    Value:           'false'
+    Specified:       false
+  CompilationsDir:
+    Value:           ''
+    Specified:       false
+  CtadEnabled:
+    Value:           'false'
+    Specified:       false
+  EnablepProfiling:
+    Value:           'false'
+    Specified:       false
+  ExperimentalFlag:
+    Value:           '0'
+    Specified:       false
+  ExplicitNamespace:
+    Value:           '20'
+    Specified:       false
+  ExtensionDDFlag:
+    Value:           '0'
+    Specified:       false
+  ExtensionDEFlag:
+    Value:           '4294967295'
+    Specified:       false
+  HelperFuncPreferenceFlag:
+    Value:           '0'
+    Specified:       false
+  NDRangeDim:
+    Value:           '3'
+    Specified:       false
+  NoDRYPattern:
+    Value:           'false'
+    Specified:       false
+  OptimizeMigration:
+    Value:           'false'
+    Specified:       false
+  ProcessAll:
+    Value:           'true'
+    Specified:       true
+  RuleFile:
+    Value:           ''
+    Specified:       false
+  SyclNamedLambda:
+    Value:           'true'
+    Specified:       true
+  UseSYCLCompat:
+    Value:           'false'
+    Specified:       false
+  UsmLevel:
+    Value:           '1'
+    Specified:       false
+...

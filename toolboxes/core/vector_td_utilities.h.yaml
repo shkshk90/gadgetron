@@ -1,0 +1,1044 @@
+---
+MainSourceFile:  '/gadgetron_sycl_migrated/toolboxes/core/vector_td_utilities.h'
+Replacements:
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          518
+    Length:          0
+    ReplacementText: "#define DPCT_PROFILING_ENABLED\n#include <sycl/sycl.hpp>\n#include <dpct/dpct.hpp>\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          807
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG #ifndef __CUDA_ARCH__ */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          815
+    Length:          13
+    ReplacementText: DPCT_COMPATIBILITY_TEMP
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          1061
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template <class T> __inline__ __host__ __device__ const T& _vector_td_min (const T& a, const T& b) {*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          1093
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          1102
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          1190
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template <class T> __inline__ __host__ __device__ const T& _vector_td_max (const T& a, const T& b) {*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          1222
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          1231
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          1356
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__\n  void clear( vector_td<T,D> &vec, const T &val = T(0) )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          1403
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          1412
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          1603
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__\n  vector_td<T,D> abs( const vector_td<T,D>& vec )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          1650
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          1659
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          1787
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG       res[i] = ::abs(vec[i]);*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          1802
+    Length:          13
+    ReplacementText: 'abs(vec[i])'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          1844
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__\n  vector_td<int,D> sgn( const vector_td<T,D>& vec )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          1891
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          1900
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          2087
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template<class REAL, unsigned int D> __inline__ __host__ __device__\n  vector_td<REAL,D> ceil( const vector_td<REAL,D>& vec )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          2137
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          2146
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          2284
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG       res[i] = ::ceil(vec[i]);*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          2299
+    Length:          14
+    ReplacementText: 'ceil(vec[i])'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          2342
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template<class REAL, unsigned int D> __inline__ __host__ __device__\n  vector_td<REAL,D> floor( const vector_td<REAL,D>& vec )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          2392
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          2401
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          2540
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG       res[i] = ::floor(vec[i]);*/\n      /*\n      DPCT1064:246: Migrated floor call is used in a macro/template definition and may not be valid for all macro/template uses. Adjust the code.\n      */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          2555
+    Length:          15
+    ReplacementText: 'sycl::floor((double)(vec[i]))'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          2647
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__\n  vector_td<T,D> idx_to_co( T idx, const vector_td<T,D> dims )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          2694
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          2703
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          2967
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__\n  T co_to_idx( const vector_td<T,D> co, const vector_td<T,D> dims )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          3014
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          3023
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          3265
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template<unsigned int D> __inline__ __host__ __device__\n  unsigned int co_to_idx( const vector_td<unsigned int,D> co, \n                          const vector_td<unsigned int,D> dims, \n                          const vector_td<unsigned int,D> order )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          3303
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          3312
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          3726
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template<unsigned int D> __inline__ __host__ __device__\n  size_t co_to_idx( const vector_td<size_t,D> co, \n                    const vector_td<size_t,D> dims, \n                    const vector_td<unsigned int,D> order )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          3764
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          3773
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          4145
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template<int D> __inline__ __host__ __device__ \n  int co_to_idx( const vector_td<int,D> co, \n                 const vector_td<int,D> dims, \n                 const vector_td<unsigned int,D> order )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          4174
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          4183
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          4535
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template<unsigned int D> __inline__ __host__ __device__\n  long long co_to_idx( const vector_td<long long,D> co, \n                       const vector_td<long long,D> dims, \n                       const vector_td<unsigned int,D> order )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          4573
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          4582
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          4975
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__\n  vector_td<T,D> counting_vec()*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          5022
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          5031
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          5800
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__\n  T prod( const vector_td<T,D>& vec )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          5847
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          5856
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          6015
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__\n  T sum( const vector_td<T,D>& vec )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          6062
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          6071
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          6229
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__\n  T dot( const vector_td<T,D>& vec1, const vector_td<T,D>& vec2 )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          6276
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          6285
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          6494
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template<class REAL, unsigned int D> __inline__ __host__ __device__\n  complext<REAL> dot(const vector_td<complext<REAL>, D>& vec1, const vector_td<REAL, D>& vec2)*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          6544
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          6553
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          6805
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template<class REAL, unsigned int D> __inline__ __host__ __device__\n  complext<REAL> dot(const vector_td<REAL, D>& vec1, const vector_td<complext<REAL>, D>& vec2)*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          6855
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          6864
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          7115
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__\n  T max( const vector_td<T,D>& vec )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          7162
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          7171
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          7350
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__\n  T min( const vector_td<T,D>& vec )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          7397
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          7406
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          7583
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__\n  vector_td<T,D> amin( const vector_td<T,D>& vec1, const vector_td<T,D>& vec2)*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          7630
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          7639
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          7870
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__\n  vector_td<T,D> amax( const vector_td<T,D>& vec1, const vector_td<T,D>& vec2)*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          7917
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          7926
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          8157
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__\n  vector_td<T,D> amin( const vector_td<T,D>& vec1, T val)*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          8204
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          8213
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          8419
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__\n  vector_td<T,D> amax( const vector_td<T,D>& vec1, T val )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          8466
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          8475
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          8682
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__\n  T max_not_nan( const vector_td<T,D>& vec )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          8729
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          8738
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          9009
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__\n  T min_not_nan( const vector_td<T,D>& vec )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          9056
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          9065
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          9310
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__\n  unsigned int argmin( const vector_td<T,D>& vec )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          9357
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          9366
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          9561
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__\n  unsigned int argmin_not_nan( const vector_td<T,D>& vec )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          9608
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          9617
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          9837
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template<class T, unsigned int D> __inline__ __host__ __device__\n  unsigned int argmax( const vector_td<T,D>& vec )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          9884
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          9893
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          10132
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template<class REAL, unsigned int D> __inline__ __host__ __device__\n  typename realType<REAL>::Type norm_squared( const vector_td<REAL,D> vec )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          10182
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          10191
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          10416
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template<class REAL, unsigned int D> __inline__ __host__ __device__\n  typename realType<REAL>::Type norm( const vector_td<REAL,D> vec )*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          10466
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          10475
+    Length:          10
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          10558
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     return ::sqrt(norm_squared<REAL,D>(vec));*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/vector_td_utilities.h'
+    Offset:          10569
+    Length:          33
+    ReplacementText: 'sycl::sqrt(norm_squared<REAL,D>(vec))'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+MainSourceFilesDigest:
+  - MainSourceFile:  ''
+    Digest:          ''
+    HasCUDASyntax:   false
+DpctVersion:     2025.2.0
+SDKVersionMajor: '12'
+SDKVersionMinor: '8'
+MainHelperFileName: ''
+USMLevel:        ''
+FeatureMap:      {}
+CompileTargets:  {}
+OptionMap:
+  AnalysisScopePath:
+    Value:           ''
+    ValueVec:
+      - '/gadgetron'
+    Specified:       false
+  AsyncHandler:
+    Value:           'false'
+    Specified:       false
+  BuildScript:
+    Value:           '0'
+    Specified:       false
+  CodePinEnabled:
+    Value:           'false'
+    Specified:       false
+  CommentsEnabled:
+    Value:           'false'
+    Specified:       false
+  CompilationsDir:
+    Value:           ''
+    Specified:       false
+  CtadEnabled:
+    Value:           'false'
+    Specified:       false
+  EnablepProfiling:
+    Value:           'false'
+    Specified:       false
+  ExperimentalFlag:
+    Value:           '0'
+    Specified:       false
+  ExplicitNamespace:
+    Value:           '20'
+    Specified:       false
+  ExtensionDDFlag:
+    Value:           '0'
+    Specified:       false
+  ExtensionDEFlag:
+    Value:           '4294967295'
+    Specified:       false
+  HelperFuncPreferenceFlag:
+    Value:           '0'
+    Specified:       false
+  NDRangeDim:
+    Value:           '3'
+    Specified:       false
+  NoDRYPattern:
+    Value:           'false'
+    Specified:       false
+  OptimizeMigration:
+    Value:           'false'
+    Specified:       false
+  ProcessAll:
+    Value:           'true'
+    Specified:       true
+  RuleFile:
+    Value:           ''
+    Specified:       false
+  SyclNamedLambda:
+    Value:           'true'
+    Specified:       true
+  UseSYCLCompat:
+    Value:           'false'
+    Specified:       false
+  UsmLevel:
+    Value:           '1'
+    Specified:       false
+...

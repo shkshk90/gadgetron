@@ -1,0 +1,675 @@
+---
+MainSourceFile:  '/gadgetron_sycl_migrated/toolboxes/fft/gpu/cuFFTPlan.h'
+Replacements:
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          13
+    Length:          19
+    ReplacementText: "/* DPCT_ORIG #include <cufft.h>*/\n#include <oneapi/dpl/execution>\n#include <oneapi/dpl/algorithm>\n#define DPCT_PROFILING_ENABLED\n#include <sycl/sycl.hpp>\n#include <dpct/dpct.hpp>\n#include <dpct/fft_utils.hpp>\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          1887
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     cufftHandle plan;*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          1891
+    Length:          11
+    ReplacementText: 'dpct::fft::fft_engine_ptr'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          2129
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         template<class T>\n        constexpr cufftType_t transform_type() {*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          2173
+    Length:          11
+    ReplacementText: 'dpct::fft::fft_type'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          2279
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                 return CUFFT_C2C;*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          2302
+    Length:          9
+    ReplacementText: 'dpct::fft::fft_type::complex_float_to_complex_float'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          2389
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                 return CUFFT_Z2Z;*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          2412
+    Length:          9
+    ReplacementText: 'dpct::fft::fft_type::complex_double_to_complex_double'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          2872
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         std::string CUFFT_error_string(cufftResult error) {*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          2911
+    Length:          11
+    ReplacementText: int
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          2961
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                 case CUFFT_SUCCESS:*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          2982
+    Length:          13
+    ReplacementText: '0'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          3041
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                 case CUFFT_INVALID_PLAN:*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          3062
+    Length:          18
+    ReplacementText: '1'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          3131
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                 case CUFFT_ALLOC_FAILED:*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          3152
+    Length:          18
+    ReplacementText: '2'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          3221
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                 case CUFFT_INVALID_TYPE:*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          3242
+    Length:          18
+    ReplacementText: '3'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          3311
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                 case CUFFT_INVALID_VALUE:*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          3332
+    Length:          19
+    ReplacementText: '4'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          3403
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                 case CUFFT_INTERNAL_ERROR:*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          3424
+    Length:          20
+    ReplacementText: '5'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          3497
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                 case CUFFT_EXEC_FAILED:*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          3518
+    Length:          17
+    ReplacementText: '6'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          3585
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                 case CUFFT_SETUP_FAILED:*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          3606
+    Length:          18
+    ReplacementText: '7'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          3675
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                 case CUFFT_INVALID_SIZE:*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          3696
+    Length:          18
+    ReplacementText: '8'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          3765
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                 case CUFFT_UNALIGNED_DATA:*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          3786
+    Length:          20
+    ReplacementText: '9'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          3859
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                 case CUFFT_INCOMPLETE_PARAMETER_LIST:*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          3880
+    Length:          31
+    ReplacementText: '10'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          3975
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                 case CUFFT_INVALID_DEVICE:*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          3996
+    Length:          20
+    ReplacementText: '11'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          4069
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                 case CUFFT_PARSE_ERROR:*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          4090
+    Length:          17
+    ReplacementText: '12'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          4157
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                 case CUFFT_NO_WORKSPACE:*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          4178
+    Length:          18
+    ReplacementText: '13'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          4247
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                 case CUFFT_NOT_IMPLEMENTED:*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          4268
+    Length:          21
+    ReplacementText: '14'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          4343
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                 case CUFFT_LICENSE_ERROR:*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          4364
+    Length:          19
+    ReplacementText: '15'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          4435
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                 case CUFFT_NOT_SUPPORTED:*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          4456
+    Length:          19
+    ReplacementText: '16'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          4621
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         cufftResult_t executePlan(cufftHandle handle, const ComplexType *idata, ComplexType *odata, int direction) {*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          4629
+    Length:          13
+    ReplacementText: int
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          4655
+    Length:          11
+    ReplacementText: 'dpct::fft::fft_engine_ptr'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          4825
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                 return cufftExecC2C(handle, (cufftComplex *) idata, (cufftComplex *) odata, direction);*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          4848
+    Length:          79
+    ReplacementText: 'DPCT_CHECK_ERROR((handle->compute<sycl::float2, sycl::float2>((sycl::float2 *) idata, (sycl::float2 *) odata, direction == 1 ? dpct::fft::fft_direction::backward : dpct::fft::fft_direction::forward)))'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          5031
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                 return cufftExecZ2Z(handle, (cufftDoubleComplex *) idata, (cufftDoubleComplex *) odata, direction);*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          5054
+    Length:          91
+    ReplacementText: 'DPCT_CHECK_ERROR((handle->compute<sycl::double2, sycl::double2>((sycl::double2 *) idata, (sycl::double2 *) odata, direction == 1 ? dpct::fft::fft_direction::backward : dpct::fft::fft_direction::forward)))'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          5161
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG             return cufftResult::CUFFT_NOT_SUPPORTED;*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          5180
+    Length:          32
+    ReplacementText: '16'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          6996
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     if (result != cufftResult::CUFFT_SUCCESS) {*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          7014
+    Length:          26
+    ReplacementText: '0'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          7263
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     cufftDestroy(plan);*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          7267
+    Length:          18
+    ReplacementText: 'dpct::fft::fft_engine::destroy(plan)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          7598
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     auto result = FFT_internal::executePlan(plan, in_out.data(), in_out.data(), CUFFT_FORWARD);*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          7678
+    Length:          13
+    ReplacementText: '-1'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          7694
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     if (result != cufftResult::CUFFT_SUCCESS) {*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          7712
+    Length:          26
+    ReplacementText: '0'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          8461
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     auto result = FFT_internal::executePlan(plan, in_out.data(), in_out.data(), CUFFT_INVERSE);*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          8541
+    Length:          13
+    ReplacementText: '1'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          8557
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     if (result != cufftResult::CUFFT_SUCCESS) {*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/fft/gpu/cuFFTPlan.h'
+    Offset:          8575
+    Length:          26
+    ReplacementText: '0'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+MainSourceFilesDigest:
+  - MainSourceFile:  ''
+    Digest:          ''
+    HasCUDASyntax:   false
+DpctVersion:     2025.2.0
+SDKVersionMajor: '12'
+SDKVersionMinor: '8'
+MainHelperFileName: ''
+USMLevel:        ''
+FeatureMap:      {}
+CompileTargets:  {}
+OptionMap:
+  AnalysisScopePath:
+    Value:           ''
+    ValueVec:
+      - '/gadgetron'
+    Specified:       false
+  AsyncHandler:
+    Value:           'false'
+    Specified:       false
+  BuildScript:
+    Value:           '0'
+    Specified:       false
+  CodePinEnabled:
+    Value:           'false'
+    Specified:       false
+  CommentsEnabled:
+    Value:           'false'
+    Specified:       false
+  CompilationsDir:
+    Value:           ''
+    Specified:       false
+  CtadEnabled:
+    Value:           'false'
+    Specified:       false
+  EnablepProfiling:
+    Value:           'false'
+    Specified:       false
+  ExperimentalFlag:
+    Value:           '0'
+    Specified:       false
+  ExplicitNamespace:
+    Value:           '20'
+    Specified:       false
+  ExtensionDDFlag:
+    Value:           '0'
+    Specified:       false
+  ExtensionDEFlag:
+    Value:           '4294967295'
+    Specified:       false
+  HelperFuncPreferenceFlag:
+    Value:           '0'
+    Specified:       false
+  NDRangeDim:
+    Value:           '3'
+    Specified:       false
+  NoDRYPattern:
+    Value:           'false'
+    Specified:       false
+  OptimizeMigration:
+    Value:           'false'
+    Specified:       false
+  ProcessAll:
+    Value:           'true'
+    Specified:       true
+  RuleFile:
+    Value:           ''
+    Specified:       false
+  SyclNamedLambda:
+    Value:           'true'
+    Specified:       true
+  UseSYCLCompat:
+    Value:           'false'
+    Specified:       false
+  UsmLevel:
+    Value:           '1'
+    Specified:       false
+...

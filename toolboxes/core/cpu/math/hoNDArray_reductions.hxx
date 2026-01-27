@@ -3,6 +3,7 @@
 #include "cpp_blas.h"
 #include "hoNDArray.h"
 #include <complex>
+#include <cmath>
 
 namespace Gadgetron {
     template<class T>

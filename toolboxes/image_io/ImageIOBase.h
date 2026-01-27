@@ -18,6 +18,7 @@
 #include "hoNDImage.h"
 
 #include "hoNDArray_fileio.h"
+#include <cmath>
 
 namespace Gadgetron { 
 

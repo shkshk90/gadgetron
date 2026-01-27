@@ -1,0 +1,2088 @@
+---
+MainSourceFile:  '/gadgetron_sycl_migrated/toolboxes/core/gpu/cuNDArray.h'
+Replacements:
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          93
+    Length:          0
+    ReplacementText: "#include <oneapi/dpl/execution>\n#include <oneapi/dpl/algorithm>\n#define DPCT_PROFILING_ENABLED\n#include <sycl/sycl.hpp>\n#include <dpct/dpct.hpp>\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          307
+    Length:          0
+    ReplacementText: "\n#include <dpct/dpl_utils.hpp>\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          309
+    Length:          18
+    ReplacementText: "/* DPCT_ORIG #include <cuda.h>*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          327
+    Length:          30
+    ReplacementText: "/* DPCT_ORIG #include <cuda_runtime_api.h>*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          357
+    Length:          34
+    ReplacementText: "/* DPCT_ORIG #include <thrust/device_vector.h>*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          2932
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         thrust::device_ptr<T> get_device_ptr();*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          2940
+    Length:          18
+    ReplacementText: 'dpct::device_pointer'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          2980
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         const thrust::device_ptr<T> get_device_ptr() const;*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          2994
+    Length:          18
+    ReplacementText: 'dpct::device_pointer'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          3040
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         thrust::device_ptr<T> begin();*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          3048
+    Length:          18
+    ReplacementText: 'dpct::device_pointer'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          3079
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         thrust::device_ptr<T> end();*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          3087
+    Length:          18
+    ReplacementText: 'dpct::device_pointer'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          3116
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         const thrust::device_ptr<T> begin() const;*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          3130
+    Length:          18
+    ReplacementText: 'dpct::device_pointer'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          3167
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         const thrust::device_ptr<T> end() const;*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          3181
+    Length:          18
+    ReplacementText: 'dpct::device_pointer'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          3512
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         cudaGetDevice(&this->device_); */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          3520
+    Length:          29
+    ReplacementText: 'this->device_ = dpct::get_current_device_id()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          3637
+    Length:          0
+    ReplacementText: ' try '
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          3679
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         cudaGetDevice(&this->device_);*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          3687
+    Length:          29
+    ReplacementText: 'this->device_ = dpct::get_current_device_id()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          3855
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG             CUDA_CALL(cudaMemcpy(this->data_, a.data_, this->elements_*sizeof(T), cudaMemcpyDeviceToDevice));*/\n            /*\n            DPCT1064:178: Migrated cudaMemcpy call is used in a macro/template definition and may not be valid for all macro/template uses. Adjust the code.\n            */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          3877
+    Length:          85
+    ReplacementText: 'DPCT_CHECK_ERROR(dpct::get_in_order_queue().memcpy(this->data_, a.data_, this->elements_*sizeof(T)))'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          4051
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG             cudaSetDevice(a.device_);*/\n            /*\n            DPCT1093:133: The \"a.device_\" device may be not the one intended for use. Adjust the selected device if needed.\n            */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          4063
+    Length:          13
+    ReplacementText: 'dpct::select_device'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          4154
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG             cudaSetDevice(this->device_);*/\n            /*\n            DPCT1093:134: The \"this->device_\" device may be not the one intended for use. Adjust the selected device if needed.\n            */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          4166
+    Length:          13
+    ReplacementText: 'dpct::select_device'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          4196
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG             cudaError_t err = cudaMemcpy(this->data_, tmp->get_data_ptr(), this->elements_*sizeof(T), cudaMemcpyHostToDevice);*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          4208
+    Length:          11
+    ReplacementText: 'dpct::err0'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          4226
+    Length:          95
+    ReplacementText: 'DPCT_CHECK_ERROR(dpct::get_in_order_queue().memcpy(this->data_, tmp->get_data_ptr(), this->elements_*sizeof(T)).wait())'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          4323
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG             if (err !=cudaSuccess) {*/\n            /*\n            DPCT1000:136: Error handling if-stmt was detected but could not be rewritten.\n            */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          4345
+    Length:          11
+    ReplacementText: '0'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          4360
+    Length:          0
+    ReplacementText: "                /*\n                DPCT1001:135: The statement could not be removed.\n                */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          4541
+    Length:          0
+    ReplacementText: "\n    catch (sycl::exception const &exc) {\n      std::cerr << exc.what() << \"Exception caught at file:\" << __FILE__ << \", line:\" << __LINE__ << std::endl;\n      std::exit(1);\n    }"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          5009
+    Length:          0
+    ReplacementText: ' try '
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          5051
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         cudaGetDevice(&this->device_);*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          5059
+    Length:          29
+    ReplacementText: 'this->device_ = dpct::get_current_device_id()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          5162
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         if (cudaMemcpy(this->data_, a.get_data_ptr(), this->elements_*sizeof(T), cudaMemcpyHostToDevice) != cudaSuccess) {*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          5174
+    Length:          92
+    ReplacementText: 'DPCT_CHECK_ERROR(dpct::get_in_order_queue().memcpy(this->data_, a.get_data_ptr(), this->elements_*sizeof(T)).wait())'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          5270
+    Length:          11
+    ReplacementText: '0'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          5401
+    Length:          0
+    ReplacementText: "\n    catch (sycl::exception const &exc) {\n      std::cerr << exc.what() << \"Exception caught at file:\" << __FILE__ << \", line:\" << __LINE__ << std::endl;\n      std::exit(1);\n    }"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          5538
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         cudaGetDevice(&this->device_);*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          5546
+    Length:          29
+    ReplacementText: 'this->device_ = dpct::get_current_device_id()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          5762
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         cudaGetDevice(&this->device_);*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          5770
+    Length:          29
+    ReplacementText: 'this->device_ = dpct::get_current_device_id()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          6020
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         cudaGetDevice(&this->device_);*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          6028
+    Length:          29
+    ReplacementText: 'this->device_ = dpct::get_current_device_id()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          6254
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         cudaGetDevice(&this->device_);*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          6262
+    Length:          29
+    ReplacementText: 'this->device_ = dpct::get_current_device_id()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          6482
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         cudaGetDevice(&this->device_);*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          6490
+    Length:          29
+    ReplacementText: 'this->device_ = dpct::get_current_device_id()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          6742
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         cudaGetDevice(&this->device_);*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          6750
+    Length:          29
+    ReplacementText: 'this->device_ = dpct::get_current_device_id()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          7034
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         cudaGetDevice(&this->device_);*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          7042
+    Length:          29
+    ReplacementText: 'this->device_ = dpct::get_current_device_id()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          7358
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         cudaGetDevice(&this->device_);*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          7366
+    Length:          29
+    ReplacementText: 'this->device_ = dpct::get_current_device_id()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          7714
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         cudaGetDevice(&this->device_);*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          7722
+    Length:          29
+    ReplacementText: 'this->device_ = dpct::get_current_device_id()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          8102
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         cudaGetDevice(&this->device_);*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          8110
+    Length:          29
+    ReplacementText: 'this->device_ = dpct::get_current_device_id()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          8522
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         cudaGetDevice(&this->device_);*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          8530
+    Length:          29
+    ReplacementText: 'this->device_ = dpct::get_current_device_id()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          9305
+    Length:          0
+    ReplacementText: ' try '
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          9332
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         CUDA_CALL(cudaGetDevice(&cur_device));*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          9350
+    Length:          26
+    ReplacementText: 'DPCT_CHECK_ERROR(cur_device = dpct::get_current_device_id())'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          9536
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG             CUDA_CALL(cudaMemcpy(this->data_, rhs.data_, this->elements_*sizeof(T), cudaMemcpyDeviceToDevice));*/\n            /*\n            DPCT1064:179: Migrated cudaMemcpy call is used in a macro/template definition and may not be valid for all macro/template uses. Adjust the code.\n            */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          9558
+    Length:          87
+    ReplacementText: 'DPCT_CHECK_ERROR(dpct::get_in_order_queue().memcpy(this->data_, rhs.data_, this->elements_*sizeof(T)))'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          9673
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG             CUDA_CALL(cudaSetDevice(this->device_));*/\n            /*\n            DPCT1093:137: The \"this->device_\" device may be not the one intended for use. Adjust the selected device if needed.\n            */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          9695
+    Length:          13
+    ReplacementText: 'DPCT_CHECK_ERROR(dpct::select_device'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          9723
+    Length:          0
+    ReplacementText: ')'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          9999
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                 if (cudaMemcpy(this->data_, rhs.data_, this->elements_*sizeof(T), cudaMemcpyDeviceToDevice) !=cudaSuccess) {\t    */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          10019
+    Length:          87
+    ReplacementText: 'DPCT_CHECK_ERROR(dpct::get_in_order_queue().memcpy(this->data_, rhs.data_, this->elements_*sizeof(T)))'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          10109
+    Length:          11
+    ReplacementText: '0'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          10129
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                     cudaSetDevice(cur_device);*/\n                    /*\n                    DPCT1093:138: The \"cur_device\" device may be not the one intended for use. Adjust the selected device if needed.\n                    */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          10149
+    Length:          13
+    ReplacementText: 'dpct::select_device'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          10302
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                 if( cudaSetDevice(rhs.device_) != cudaSuccess) {*/\n                /*\n                DPCT1093:139: The \"rhs.device_\" device may be not the one intended for use. Adjust the selected device if needed.\n                */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          10322
+    Length:          13
+    ReplacementText: 'DPCT_CHECK_ERROR(dpct::select_device'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          10348
+    Length:          0
+    ReplacementText: ')'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          10352
+    Length:          11
+    ReplacementText: '0'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          10367
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                     cudaSetDevice(cur_device);*/\n                    /*\n                    DPCT1093:140: The \"cur_device\" device may be not the one intended for use. Adjust the selected device if needed.\n                    */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          10387
+    Length:          13
+    ReplacementText: 'dpct::select_device'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          10594
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                 if( cudaSetDevice(this->device_) != cudaSuccess) {*/\n                /*\n                DPCT1093:141: The \"this->device_\" device may be not the one intended for use. Adjust the selected device if needed.\n                */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          10614
+    Length:          13
+    ReplacementText: 'DPCT_CHECK_ERROR(dpct::select_device'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          10642
+    Length:          0
+    ReplacementText: ')'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          10646
+    Length:          11
+    ReplacementText: '0'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          10661
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                     cudaSetDevice(cur_device);*/\n                    /*\n                    DPCT1093:142: The \"cur_device\" device may be not the one intended for use. Adjust the selected device if needed.\n                    */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          10681
+    Length:          13
+    ReplacementText: 'dpct::select_device'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          10817
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                 if (cudaMemcpy(this->data_, tmp->get_data_ptr(), this->elements_*sizeof(T), cudaMemcpyHostToDevice) != cudaSuccess) {*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          10837
+    Length:          95
+    ReplacementText: 'DPCT_CHECK_ERROR(dpct::get_in_order_queue().memcpy(this->data_, tmp->get_data_ptr(), this->elements_*sizeof(T)).wait())'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          10936
+    Length:          11
+    ReplacementText: '0'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          10951
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                     cudaSetDevice(cur_device);*/\n                    /*\n                    DPCT1093:143: The \"cur_device\" device may be not the one intended for use. Adjust the selected device if needed.\n                    */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          10971
+    Length:          13
+    ReplacementText: 'dpct::select_device'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          11117
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG             if( cudaSetDevice(cur_device) != cudaSuccess) {*/\n            /*\n            DPCT1093:144: The \"cur_device\" device may be not the one intended for use. Adjust the selected device if needed.\n            */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          11133
+    Length:          13
+    ReplacementText: 'DPCT_CHECK_ERROR(dpct::select_device'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          11158
+    Length:          0
+    ReplacementText: ')'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          11162
+    Length:          11
+    ReplacementText: '0'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          11323
+    Length:          0
+    ReplacementText: "\n    catch (sycl::exception const &exc) {\n      std::cerr << exc.what() << \"Exception caught at file:\" << __FILE__ << \", line:\" << __LINE__ << std::endl;\n      std::exit(1);\n    }"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          11423
+    Length:          0
+    ReplacementText: ' try '
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          11450
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         CUDA_CALL(cudaGetDevice(&cur_device));*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          11468
+    Length:          26
+    ReplacementText: 'DPCT_CHECK_ERROR(cur_device = dpct::get_current_device_id())'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          11623
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG             CUDA_CALL(cudaMemcpy(this->get_data_ptr(), rhs.get_data_ptr(), this->get_number_of_elements()*sizeof(T), cudaMemcpyHostToDevice));*/\n            /*\n            DPCT1064:180: Migrated cudaMemcpy call is used in a macro/template definition and may not be valid for all macro/template uses. Adjust the code.\n            */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          11645
+    Length:          118
+    ReplacementText: 'DPCT_CHECK_ERROR(dpct::get_in_order_queue().memcpy(this->get_data_ptr(), rhs.get_data_ptr(), this->get_number_of_elements()*sizeof(T)).wait())'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          11791
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG             CUDA_CALL(cudaSetDevice(this->device_));*/\n            /*\n            DPCT1093:145: The \"this->device_\" device may be not the one intended for use. Adjust the selected device if needed.\n            */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          11813
+    Length:          13
+    ReplacementText: 'DPCT_CHECK_ERROR(dpct::select_device'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          11841
+    Length:          0
+    ReplacementText: ')'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          12086
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG             if (cudaMemcpy(this->get_data_ptr(), rhs.get_data_ptr(), this->get_number_of_elements()*sizeof(T),\n                cudaMemcpyHostToDevice) !=cudaSuccess) {*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          12102
+    Length:          134
+    ReplacementText: 'DPCT_CHECK_ERROR(dpct::get_in_order_queue().memcpy(this->get_data_ptr(), rhs.get_data_ptr(), this->get_number_of_elements()*sizeof(T)).wait())'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          12239
+    Length:          11
+    ReplacementText: '0'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          12254
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                     cudaSetDevice(cur_device);*/\n                    /*\n                    DPCT1093:146: The \"cur_device\" device may be not the one intended for use. Adjust the selected device if needed.\n                    */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          12274
+    Length:          13
+    ReplacementText: 'dpct::select_device'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          12402
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG             if( cudaSetDevice(cur_device) != cudaSuccess) {*/\n            /*\n            DPCT1093:147: The \"cur_device\" device may be not the one intended for use. Adjust the selected device if needed.\n            */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          12418
+    Length:          13
+    ReplacementText: 'DPCT_CHECK_ERROR(dpct::select_device'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          12443
+    Length:          0
+    ReplacementText: ')'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          12447
+    Length:          11
+    ReplacementText: '0'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          12608
+    Length:          0
+    ReplacementText: "\n    catch (sycl::exception const &exc) {\n      std::cerr << exc.what() << \"Exception caught at file:\" << __FILE__ << \", line:\" << __LINE__ << std::endl;\n      std::exit(1);\n    }"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          13467
+    Length:          0
+    ReplacementText: ' try '
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          13607
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         if( cudaGetDevice(&tmp_device) != cudaSuccess) {*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          13619
+    Length:          26
+    ReplacementText: 'DPCT_CHECK_ERROR(tmp_device = dpct::get_current_device_id())'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          13649
+    Length:          11
+    ReplacementText: '0'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          13754
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         cudaDeviceProp deviceProp;*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          13762
+    Length:          14
+    ReplacementText: 'dpct::device_info'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          13789
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         if( cudaGetDeviceProperties( &deviceProp, tmp_device) != cudaSuccess) {*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          13801
+    Length:          49
+    ReplacementText: 'DPCT_CHECK_ERROR(dpct::get_device(tmp_device).get_device_info(deviceProp))'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          13854
+    Length:          11
+    ReplacementText: '0'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          13966
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         if (deviceProp.unifiedAddressing) {*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          13989
+    Length:          17
+    ReplacementText: 'get_host_unified_memory()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          14010
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG             cudaPointerAttributes attrib;*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          14022
+    Length:          21
+    ReplacementText: 'dpct::pointer_attributes'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          14052
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG             if (cudaPointerGetAttributes(&attrib, data) != cudaSuccess) {*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          14068
+    Length:          39
+    ReplacementText: 'DPCT_CHECK_ERROR(attrib.init(data))'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          14111
+    Length:          11
+    ReplacementText: '0'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          14278
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG             this->device_ = attrib.device;*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          14306
+    Length:          13
+    ReplacementText: 'attrib.get_device_id()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          14476
+    Length:          0
+    ReplacementText: "\n    catch (sycl::exception const &exc) {\n      std::cerr << exc.what() << \"Exception caught at file:\" << __FILE__ << \", line:\" << __LINE__ << std::endl;\n      std::exit(1);\n    }"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          17079
+    Length:          0
+    ReplacementText: ' try '
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          17337
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         if( cudaMemcpy( out->get_data_ptr(), this->data_, this->elements_*sizeof(T), cudaMemcpyDeviceToHost) != cudaSuccess) {*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          17349
+    Length:          96
+    ReplacementText: 'DPCT_CHECK_ERROR(dpct::get_in_order_queue().memcpy(out->get_data_ptr(), this->data_, this->elements_*sizeof(T)).wait())'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          17449
+    Length:          11
+    ReplacementText: '0'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          17568
+    Length:          0
+    ReplacementText: "\n    catch (sycl::exception const &exc) {\n      std::cerr << exc.what() << \"Exception caught at file:\" << __FILE__ << \", line:\" << __LINE__ << std::endl;\n      std::exit(1);\n    }"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          17654
+    Length:          0
+    ReplacementText: ' try '
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          17733
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         if( cudaGetDevice(&cur_device) != cudaSuccess) {*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          17745
+    Length:          26
+    ReplacementText: 'DPCT_CHECK_ERROR(cur_device = dpct::get_current_device_id())'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          17775
+    Length:          11
+    ReplacementText: '0'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          17881
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         if( cur_device != device_ && cudaSetDevice(device_) != cudaSuccess) {*/\n        /*\n        DPCT1093:122: The \"device_\" device may be not the one intended for use. Adjust the selected device if needed.\n        */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          17918
+    Length:          13
+    ReplacementText: 'DPCT_CHECK_ERROR(dpct::select_device'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          17940
+    Length:          0
+    ReplacementText: ')'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          17944
+    Length:          11
+    ReplacementText: '0'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          18138
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         if( cudaSetDevice(device) != cudaSuccess) {*/\n        /*\n        DPCT1093:123: The \"device\" device may be not the one intended for use. Adjust the selected device if needed.\n        */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          18150
+    Length:          13
+    ReplacementText: 'DPCT_CHECK_ERROR(dpct::select_device'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          18171
+    Length:          0
+    ReplacementText: ')'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          18175
+    Length:          11
+    ReplacementText: '0'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          18190
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG             cudaSetDevice(cur_device);*/\n            /*\n            DPCT1093:124: The \"cur_device\" device may be not the one intended for use. Adjust the selected device if needed.\n            */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          18202
+    Length:          13
+    ReplacementText: 'dpct::select_device'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          18377
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         if (cudaMemcpy(this->data_, tmp->get_data_ptr(), this->elements_*sizeof(T), cudaMemcpyHostToDevice) != cudaSuccess) {*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          18389
+    Length:          95
+    ReplacementText: 'DPCT_CHECK_ERROR(dpct::get_in_order_queue().memcpy(this->data_, tmp->get_data_ptr(), this->elements_*sizeof(T)).wait())'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          18488
+    Length:          11
+    ReplacementText: '0'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          18503
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG             cudaSetDevice(cur_device);*/\n            /*\n            DPCT1093:125: The \"cur_device\" device may be not the one intended for use. Adjust the selected device if needed.\n            */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          18515
+    Length:          13
+    ReplacementText: 'dpct::select_device'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          18629
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         if( cudaSetDevice(cur_device) != cudaSuccess) {*/\n        /*\n        DPCT1093:126: The \"cur_device\" device may be not the one intended for use. Adjust the selected device if needed.\n        */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          18641
+    Length:          13
+    ReplacementText: 'DPCT_CHECK_ERROR(dpct::select_device'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          18666
+    Length:          0
+    ReplacementText: ')'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          18670
+    Length:          11
+    ReplacementText: '0'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          18799
+    Length:          0
+    ReplacementText: "\n    catch (sycl::exception const &exc) {\n      std::cerr << exc.what() << \"Exception caught at file:\" << __FILE__ << \", line:\" << __LINE__ << std::endl;\n      std::exit(1);\n    }"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          18918
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     inline thrust::device_ptr<T> cuNDArray<T>::get_device_ptr()*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          18929
+    Length:          18
+    ReplacementText: 'dpct::device_pointer'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          18988
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         return thrust::device_ptr<T>(this->data_);*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          19003
+    Length:          18
+    ReplacementText: 'dpct::device_pointer'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          19072
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     inline const thrust::device_ptr<T> cuNDArray<T>::get_device_ptr() const*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          19089
+    Length:          18
+    ReplacementText: 'dpct::device_pointer'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          19154
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         return thrust::device_ptr<T>(this->data_);*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          19169
+    Length:          18
+    ReplacementText: 'dpct::device_pointer'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          19239
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     inline thrust::device_ptr<T> cuNDArray<T>::begin()*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          19250
+    Length:          18
+    ReplacementText: 'dpct::device_pointer'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          19300
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         return thrust::device_ptr<T>(this->data_);*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          19315
+    Length:          18
+    ReplacementText: 'dpct::device_pointer'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          19385
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     inline thrust::device_ptr<T> cuNDArray<T>::end()*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          19396
+    Length:          18
+    ReplacementText: 'dpct::device_pointer'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          19444
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         return thrust::device_ptr<T>(this->data_)+this->get_number_of_elements();*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          19459
+    Length:          65
+    ReplacementText: 'dpct::device_pointer<T>(this->data_)+this->get_number_of_elements()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          19560
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     inline const thrust::device_ptr<T> cuNDArray<T>::begin() const*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          19577
+    Length:          18
+    ReplacementText: 'dpct::device_pointer'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          19633
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         return thrust::device_ptr<T>(this->data_);*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          19648
+    Length:          18
+    ReplacementText: 'dpct::device_pointer'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          19717
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     inline const thrust::device_ptr<T> cuNDArray<T>::end() const*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          19734
+    Length:          18
+    ReplacementText: 'dpct::device_pointer'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          19788
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         return thrust::device_ptr<T>(this->data_)+this->get_number_of_elements();*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          19803
+    Length:          65
+    ReplacementText: 'dpct::device_pointer<T>(this->data_)+this->get_number_of_elements()'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          20109
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         CUDA_CALL(cudaMemcpy(&res, &this->get_data_ptr()[idx], sizeof(T), cudaMemcpyDeviceToHost));*/\n        /*\n        DPCT1064:181: Migrated cudaMemcpy call is used in a macro/template definition and may not be valid for all macro/template uses. Adjust the code.\n        */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          20127
+    Length:          79
+    ReplacementText: 'DPCT_CHECK_ERROR(dpct::get_in_order_queue().memcpy(&res, &this->get_data_ptr()[idx], sizeof(T)).wait())'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          20483
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         CUDA_CALL(cudaMemcpy(&res, &this->get_data_ptr()[idx], sizeof(T), cudaMemcpyDeviceToHost));*/\n        /*\n        DPCT1064:182: Migrated cudaMemcpy call is used in a macro/template definition and may not be valid for all macro/template uses. Adjust the code.\n        */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          20501
+    Length:          79
+    ReplacementText: 'DPCT_CHECK_ERROR(dpct::get_in_order_queue().memcpy(&res, &this->get_data_ptr()[idx], sizeof(T)).wait())'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          20682
+    Length:          0
+    ReplacementText: ' try '
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          21083
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         if (cudaGetDevice(&device_no_old) != cudaSuccess) {*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          21095
+    Length:          29
+    ReplacementText: 'DPCT_CHECK_ERROR(device_no_old = dpct::get_current_device_id())'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          21128
+    Length:          11
+    ReplacementText: '0'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          21279
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG             if (cudaSetDevice(device_) != cudaSuccess) {*/\n            /*\n            DPCT1093:127: The \"device_\" device may be not the one intended for use. Adjust the selected device if needed.\n            */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          21295
+    Length:          13
+    ReplacementText: 'DPCT_CHECK_ERROR(dpct::select_device'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          21317
+    Length:          0
+    ReplacementText: ')'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          21321
+    Length:          11
+    ReplacementText: '0'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          21450
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG         if (cudaMalloc((void**) &this->data_,size) != cudaSuccess) {*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          21462
+    Length:          38
+    ReplacementText: 'DPCT_CHECK_ERROR((this->data_) = (typename std::remove_reference<decltype(this->data_)>::type)sycl::malloc_device(size, dpct::get_in_order_queue()))'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          21504
+    Length:          11
+    ReplacementText: '0'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          21559
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG             cudaMemGetInfo(&free, &total);*/\n            /*\n            DPCT1106:148: 'cudaMemGetInfo' was migrated with the Intel extensions for device information which may not be supported by all compilers or runtimes. You may need to adjust the code.\n            */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          21571
+    Length:          29
+    ReplacementText: 'dpct::get_current_device().get_memory_info(free, total)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          22122
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG             if (cudaSetDevice(device_no_old) != cudaSuccess) {*/\n            /*\n            DPCT1093:128: The \"device_no_old\" device may be not the one intended for use. Adjust the selected device if needed.\n            */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          22138
+    Length:          13
+    ReplacementText: 'DPCT_CHECK_ERROR(dpct::select_device'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          22166
+    Length:          0
+    ReplacementText: ')'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          22170
+    Length:          11
+    ReplacementText: '0'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          22307
+    Length:          0
+    ReplacementText: "\n    catch (sycl::exception const &exc) {\n      std::cerr << exc.what() << \"Exception caught at file:\" << __FILE__ << \", line:\" << __LINE__ << std::endl;\n      std::exit(1);\n    }"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          22383
+    Length:          0
+    ReplacementText: ' try '
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          22444
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG             CUDA_CALL(cudaGetDevice(&device_no_old));*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          22466
+    Length:          29
+    ReplacementText: 'DPCT_CHECK_ERROR(device_no_old = dpct::get_current_device_id())'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          22542
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                 CUDA_CALL(cudaSetDevice(device_));*/\n                /*\n                DPCT1093:131: The \"device_\" device may be not the one intended for use. Adjust the selected device if needed.\n                */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          22568
+    Length:          13
+    ReplacementText: 'DPCT_CHECK_ERROR(dpct::select_device'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          22590
+    Length:          0
+    ReplacementText: ')'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          22608
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG             CUDA_CALL(cudaFree(this->data_));*/\n            /*\n            DPCT1064:183: Migrated cudaFree call is used in a macro/template definition and may not be valid for all macro/template uses. Adjust the code.\n            */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          22630
+    Length:          21
+    ReplacementText: 'DPCT_CHECK_ERROR(dpct::dpct_free(this->data_, dpct::get_in_order_queue()))'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          22698
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG                 CUDA_CALL(cudaSetDevice(device_no_old));*/\n                /*\n                DPCT1093:132: The \"device_no_old\" device may be not the one intended for use. Adjust the selected device if needed.\n                */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          22724
+    Length:          13
+    ReplacementText: 'DPCT_CHECK_ERROR(dpct::select_device'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          22752
+    Length:          0
+    ReplacementText: ')'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
+    Offset:          22813
+    Length:          0
+    ReplacementText: "\n    catch (sycl::exception const &exc) {\n      std::cerr << exc.what() << \"Exception caught at file:\" << __FILE__ << \", line:\" << __LINE__ << std::endl;\n      std::exit(1);\n    }"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+MainSourceFilesDigest:
+  - MainSourceFile:  ''
+    Digest:          ''
+    HasCUDASyntax:   false
+DpctVersion:     2025.2.0
+SDKVersionMajor: '12'
+SDKVersionMinor: '8'
+MainHelperFileName: ''
+USMLevel:        ''
+FeatureMap:      {}
+CompileTargets:  {}
+OptionMap:
+  AnalysisScopePath:
+    Value:           ''
+    ValueVec:
+      - '/gadgetron'
+    Specified:       false
+  AsyncHandler:
+    Value:           'false'
+    Specified:       false
+  BuildScript:
+    Value:           '0'
+    Specified:       false
+  CodePinEnabled:
+    Value:           'false'
+    Specified:       false
+  CommentsEnabled:
+    Value:           'false'
+    Specified:       false
+  CompilationsDir:
+    Value:           ''
+    Specified:       false
+  CtadEnabled:
+    Value:           'false'
+    Specified:       false
+  EnablepProfiling:
+    Value:           'false'
+    Specified:       false
+  ExperimentalFlag:
+    Value:           '0'
+    Specified:       false
+  ExplicitNamespace:
+    Value:           '20'
+    Specified:       false
+  ExtensionDDFlag:
+    Value:           '0'
+    Specified:       false
+  ExtensionDEFlag:
+    Value:           '4294967295'
+    Specified:       false
+  HelperFuncPreferenceFlag:
+    Value:           '0'
+    Specified:       false
+  NDRangeDim:
+    Value:           '3'
+    Specified:       false
+  NoDRYPattern:
+    Value:           'false'
+    Specified:       false
+  OptimizeMigration:
+    Value:           'false'
+    Specified:       false
+  ProcessAll:
+    Value:           'true'
+    Specified:       true
+  RuleFile:
+    Value:           ''
+    Specified:       false
+  SyclNamedLambda:
+    Value:           'true'
+    Specified:       true
+  UseSYCLCompat:
+    Value:           'false'
+    Specified:       false
+  UsmLevel:
+    Value:           '1'
+    Specified:       false
+...

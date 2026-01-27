@@ -1,13 +1,19 @@
 #pragma once
 
-
-
+#define DPCT_PROFILING_ENABLED
+#include <sycl/sycl.hpp>
+#include <dpct/dpct.hpp>
 #include <vector>
-#include <cublas_v2.h>
-#include <cusparse.h>
+#include <dpct/blas_utils.hpp>
 
-#include <library_types.h>
+#include <dpct/sparse_utils.hpp>
+
+/* DPCT_ORIG #include <cublas_v2.h>*/
+/* DPCT_ORIG #include <cusparse.h>*/
+
+/* DPCT_ORIG #include <library_types.h>*/
 #include "complext.h"
+#include <dpct/lib_common_utils.hpp>
 
 namespace Gadgetron{
 
@@ -54,14 +60,18 @@ namespace Gadgetron{
     // Access to Cublas is protected by a mutex
     // Despite what the Cublas manual claims, we have not found it thread safe.
 
-    cublasHandle_t lockHandle();
-    cublasHandle_t lockHandle(int device);
+/* DPCT_ORIG     cublasHandle_t lockHandle();*/
+    dpct::blas::descriptor_ptr lockHandle();
+/* DPCT_ORIG     cublasHandle_t lockHandle(int device);*/
+    dpct::blas::descriptor_ptr lockHandle(int device);
 
     void unlockHandle();
     void unlockHandle(int device);
 
-    cusparseHandle_t lockSparseHandle();
-    cusparseHandle_t lockSparseHandle(int device);
+/* DPCT_ORIG     cusparseHandle_t lockSparseHandle();*/
+    dpct::sparse::descriptor_ptr lockSparseHandle();
+/* DPCT_ORIG     cusparseHandle_t lockSparseHandle(int device);*/
+    dpct::sparse::descriptor_ptr lockSparseHandle(int device);
 
     void unlockSparseHandle();
     void unlockSparseHandle(int device);
@@ -85,8 +95,10 @@ namespace Gadgetron{
     std::vector<int> _max_griddim;
     std::vector<int> _major;
     std::vector<int> _minor;
-    std::vector<cublasHandle_t> _handle;
-    std::vector<cusparseHandle_t> _sparse_handle;
+/* DPCT_ORIG     std::vector<cublasHandle_t> _handle;*/
+    std::vector<dpct::blas::descriptor_ptr> _handle;
+/* DPCT_ORIG     std::vector<cusparseHandle_t> _sparse_handle;*/
+    std::vector<dpct::sparse::descriptor_ptr> _sparse_handle;
     static cudaDeviceManager * _instance;
   };
 
@@ -96,32 +108,34 @@ namespace Gadgetron{
 
   template<>
   struct cudaDataType<float>{
-    static constexpr cudaDataType_t value = CUDA_R_32F;
+/* DPCT_ORIG     static constexpr cudaDataType_t value = CUDA_R_32F;*/
+    static constexpr dpct::library_data_t value = dpct::library_data_t::real_float;
   };
 
   template<>
   struct cudaDataType<double>{
-    static constexpr cudaDataType_t value = CUDA_R_64F;
+/* DPCT_ORIG     static constexpr cudaDataType_t value = CUDA_R_64F;*/
+    static constexpr dpct::library_data_t value = dpct::library_data_t::real_double;
   };
 
   template<>
   struct cudaDataType<complext<float>>{
-    static constexpr cudaDataType_t value = CUDA_C_32F;
+/* DPCT_ORIG     static constexpr cudaDataType_t value = CUDA_C_32F;*/
+    static constexpr dpct::library_data_t value = dpct::library_data_t::complex_float;
   };
 
   template<>
   struct cudaDataType<complext<double>>{
-    static constexpr cudaDataType_t value = CUDA_C_64F;
+/* DPCT_ORIG     static constexpr cudaDataType_t value = CUDA_C_64F;*/
+    static constexpr dpct::library_data_t value = dpct::library_data_t::complex_double;
   };
 
+/* DPCT_ORIG   template<class T>
+  constexpr cudaDataType_t cuda_datatype(){return cudaDataType<T>::value;}*/
+  template <class T> constexpr dpct::library_data_t cuda_datatype() { return cudaDataType<T>::value; }
 
-  template<class T>
-  constexpr cudaDataType_t cuda_datatype(){return cudaDataType<T>::value;}
-
-	std::string gadgetron_getCusparseErrorString(cusparseStatus_t err);
-
-
-
+/* DPCT_ORIG 	std::string gadgetron_getCusparseErrorString(cusparseStatus_t err);*/
+        std::string gadgetron_getCusparseErrorString(int err);
 }
 
 

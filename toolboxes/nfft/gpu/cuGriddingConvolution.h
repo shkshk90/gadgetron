@@ -1,5 +1,8 @@
-#pragma once 
+#pragma once
 
+#define DPCT_PROFILING_ENABLED
+#include <sycl/sycl.hpp>
+#include <dpct/dpct.hpp>
 #include "GriddingConvolution.h"
 
 #include "cuSparseMatrix.h"
@@ -154,7 +157,8 @@ namespace Gadgetron
         /**
          * \brief Non-Cartesian sample coordinates.
          */
-        thrust::device_vector<vector_td<REAL, D>> trajectory_;
+/* DPCT_ORIG         thrust::device_vector<vector_td<REAL, D>> trajectory_;*/
+        dpct::device_vector<vector_td<REAL, D>> trajectory_;
 
         /**
          * \brief Active device.
@@ -200,7 +204,8 @@ namespace Gadgetron
         virtual ~Convolver() { };
 
         virtual void prepare(
-            const thrust::device_vector<vector_td<REAL, D>>& trajectory) = 0;
+            /* DPCT_ORIG             const thrust::device_vector<vector_td<REAL, D>>& trajectory) = 0;*/
+            const dpct::device_vector<vector_td<REAL, D>>& trajectory) = 0;
 
         virtual void compute(
             const cuNDArray<T>& input,
@@ -225,7 +230,8 @@ namespace Gadgetron
           : Convolver<T, D, K>(plan) { };
 
         void prepare(
-            const thrust::device_vector<vector_td<REAL, D>>& trajectory) override;
+            /* DPCT_ORIG             const thrust::device_vector<vector_td<REAL, D>>& trajectory) override;*/
+            const dpct::device_vector<vector_td<REAL, D>>& trajectory) override;
 
         void compute(
             const cuNDArray<T>& image,
@@ -246,7 +252,8 @@ namespace Gadgetron
           : Convolver<T, D, K>(plan) { };
 
         void prepare(
-            const thrust::device_vector<vector_td<REAL, D>>& trajectory) override;
+            /* DPCT_ORIG             const thrust::device_vector<vector_td<REAL, D>>& trajectory) override;*/
+            const dpct::device_vector<vector_td<REAL, D>>& trajectory) override;
 
         void compute(
             const cuNDArray<T>& samples,
@@ -260,8 +267,10 @@ namespace Gadgetron
             cuNDArray<T>& target,
             bool accumulate);
 
-        thrust::device_vector<unsigned int> tuples_first, tuples_last;
-        thrust::device_vector<unsigned int> bucket_begin, bucket_end;
+/* DPCT_ORIG         thrust::device_vector<unsigned int> tuples_first, tuples_last;*/
+        dpct::device_vector<unsigned int> tuples_first, tuples_last;
+/* DPCT_ORIG         thrust::device_vector<unsigned int> bucket_begin, bucket_end;*/
+        dpct::device_vector<unsigned int> bucket_begin, bucket_end;
     };
 
 
@@ -277,7 +286,8 @@ namespace Gadgetron
           : Convolver<T, D, K>(plan) { };
 
         void prepare(
-            const thrust::device_vector<vector_td<REAL, D>>& trajectory) override;
+            /* DPCT_ORIG             const thrust::device_vector<vector_td<REAL, D>>& trajectory) override;*/
+            const dpct::device_vector<vector_td<REAL, D>>& trajectory) override;
 
         void compute(
             const cuNDArray<T>& samples,
@@ -298,7 +308,8 @@ namespace Gadgetron
           : Convolver<T, D, K>(plan) { };
 
         void prepare(
-            const thrust::device_vector<vector_td<REAL, D>>& trajectory) override;
+            /* DPCT_ORIG             const thrust::device_vector<vector_td<REAL, D>>& trajectory) override;*/
+            const dpct::device_vector<vector_td<REAL, D>>& trajectory) override;
 
         void compute(
             const cuNDArray<T>& samples,

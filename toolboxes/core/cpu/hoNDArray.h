@@ -301,3 +301,4 @@ namespace Gadgetron{
 }
 
 #include "hoNDArray.hxx"
+#include <cmath>

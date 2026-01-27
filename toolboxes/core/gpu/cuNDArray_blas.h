@@ -12,11 +12,14 @@
 
 #pragma once
 
+#define DPCT_PROFILING_ENABLED
+#include <sycl/sycl.hpp>
+#include <dpct/dpct.hpp>
 #include "cuNDArray.h"
 #include "complext.h"
+#include <dpct/blas_utils.hpp>
 
-
-#include <cublas_v2.h>
+/* DPCT_ORIG #include <cublas_v2.h>*/
 
 namespace Gadgetron{
 
@@ -81,7 +84,7 @@ namespace Gadgetron{
    */
   
   template<class T> typename realType<T>::Type asum( cuNDArray<T> *x , size_t batchSize = INT_MAX );
-  
-  std::string gadgetron_getCublasErrorString(cublasStatus_t err);
 
+/* DPCT_ORIG   std::string gadgetron_getCublasErrorString(cublasStatus_t err);*/
+  std::string gadgetron_getCublasErrorString(int err);
 }

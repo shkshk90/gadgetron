@@ -13,7 +13,7 @@
 
 // Std includes
 #include "GadgetronTimer.h"
-#include "hoArmadillo.h"
+#include "cpu/math/hoArmadillo.h"
 #include <boost/make_shared.hpp>
 #include <boost/shared_ptr.hpp>
 #include <iostream>

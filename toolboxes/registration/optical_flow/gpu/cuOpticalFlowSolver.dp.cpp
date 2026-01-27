@@ -1,0 +1,391 @@
+#include <oneapi/dpl/execution>
+#include <oneapi/dpl/algorithm>
+#define DPCT_PROFILING_ENABLED
+#include <sycl/sycl.hpp>
+#include <dpct/dpct.hpp>
+#include "cuOpticalFlowSolver.h"
+#include "vector_td_utilities.h"
+#include "check_CUDA.h"
+
+#include <stdexcept>
+#include <cmath>
+
+namespace Gadgetron{
+
+  //
+  // Kernel prototype declarations
+  //
+
+/* DPCT_ORIG   template<class REAL, unsigned int D> __global__
+  void spatial_grad_kernel(const REAL*, const REAL*,REAL*,typename uint64d<D>::Type,unsigned int,unsigned int);*/
+  template <class REAL, unsigned int D>
+  void spatial_grad_kernel(const REAL*, const REAL*, REAL*, typename uint64d<D>::Type, unsigned int, unsigned int);
+
+/* DPCT_ORIG   template<class REAL, unsigned int D> __global__
+  void temporal_grad_kernel(const REAL*, const REAL*,REAL*,typename uint64d<D>::Type,unsigned int,unsigned int);*/
+  template <class REAL, unsigned int D>
+  void temporal_grad_kernel(const REAL*, const REAL*, REAL*, typename uint64d<D>::Type, unsigned int, unsigned int);
+
+  // There is some issue about Cuda defining min/max incompatibly...
+  //
+
+/* DPCT_ORIG   template <class T> __host__ __device__ const T& _cuOF_max (const T& a, const T& b) {*/
+  template <class T> const T& _cuOF_max(const T& a, const T& b) {
+    return (a<b)?b:a;
+  }
+
+/* DPCT_ORIG   template <class T> __host__ __device__ const T& _cuOF_min (const T& a, const T& b) {*/
+  template <class T> const T& _cuOF_min(const T& a, const T& b) {
+    return (a>b)?b:a;
+  }
+
+  template <class T, unsigned int D>
+  void
+  /* DPCT_ORIG   cuOpticalFlowSolver<T,D>::setup_grid( dim3 *blockDim, dim3* gridDim, */
+  cuOpticalFlowSolver<T, D>::setup_grid(dpct::dim3* blockDim, dpct::dim3* gridDim, unsigned int number_of_elements,
+                                        unsigned int num_batches, bool use_2d_blocks, unsigned int num_unknowns) try {
+    int device;
+/* DPCT_ORIG     cudaDeviceProp deviceProp; */
+    dpct::device_info deviceProp;
+
+/* DPCT_ORIG     if( cudaGetDevice( &device ) != cudaSuccess) {*/
+    if (DPCT_CHECK_ERROR(device = dpct::get_current_device_id()) != 0) {
+      throw std::runtime_error("cuOpticalFlowSolver::setup_grid(): unable to determine current device");
+    }
+
+/* DPCT_ORIG     if( cudaGetDeviceProperties( &deviceProp, device ) != cudaSuccess) {*/
+    if (DPCT_CHECK_ERROR(dpct::get_device(device).get_device_info(deviceProp)) != 0) {
+      throw std::runtime_error("cuOpticalFlowSolver::setup_grid(): unable to query current device");
+    }
+
+/* DPCT_ORIG     int max_blockdim = deviceProp.maxThreadsDim[0];*/
+    int max_blockdim = deviceProp.get_max_work_item_sizes<int*>()[0];
+/* DPCT_ORIG     int max_griddim  = deviceProp.maxGridSize[0];*/
+    /*
+    DPCT1022:254: There is no exact match between the maxGridSize and the max_nd_range size. Verify the correctness of
+    the code.
+    */
+    int max_griddim = deviceProp.get_max_nd_range_size<int*>()[0];
+/* DPCT_ORIG     int warp_size    = deviceProp.warpSize;*/
+    int warp_size = deviceProp.get_max_sub_group_size();
+
+    // For small arrays we keep the block dimension fairly small
+    if( use_2d_blocks )
+/* DPCT_ORIG       *blockDim = dim3(((256/num_unknowns)/warp_size)*warp_size, num_unknowns);*/
+      *blockDim = dpct::dim3(((256 / num_unknowns) / warp_size) * warp_size, num_unknowns);
+    else
+/* DPCT_ORIG       *blockDim = dim3(256);*/
+      *blockDim = dpct::dim3(256);
+
+/* DPCT_ORIG     *gridDim = dim3((number_of_elements+(blockDim->x*blockDim->y)-1)/(blockDim->x*blockDim->y),
+ * num_batches);*/
+    *gridDim =
+        dpct::dim3((number_of_elements + (blockDim->x * blockDim->y) - 1) / (blockDim->x * blockDim->y), num_batches);
+
+    // Extend block/grid dimensions for large arrays
+    if( gridDim->x > max_griddim ){
+      if( use_2d_blocks )
+        blockDim->x = ((max_blockdim/num_unknowns)/warp_size)*warp_size;
+      else
+        blockDim->x = max_blockdim;
+    
+      gridDim->x = (number_of_elements+(blockDim->x*blockDim->y)-1)/(blockDim->x*blockDim->y);
+    }
+
+    if( gridDim->x > max_griddim ){
+      gridDim->x = ((unsigned int)std::sqrt((T)number_of_elements)+(blockDim->x*blockDim->y)-1)/(blockDim->x*blockDim->y);
+      gridDim->y *= ((number_of_elements+(blockDim->x*blockDim->y)*gridDim->x-1)/((blockDim->x*blockDim->y)*gridDim->x));
+    }
+   
+    if( gridDim->x > max_griddim || gridDim->y > max_griddim ){      
+      throw std::runtime_error("cuOpticalFlowSolver::setup_grid(): maximum grid dimensions exceeded");
+    }
+  }
+  catch (sycl::exception const& exc) {
+    std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
+    std::exit(1);
+  }
+
+  template<class T, unsigned int D> void
+  cuOpticalFlowSolver<T,D>::core_grad_spatial( T *fixed_image, T *moving_image, T *gradient_image, 
+						  typename uint64d<D>::Type matrix_size_moving, 
+						  size_t number_of_batches_fixed, 
+						  size_t number_of_batches_moving )
+  {        
+    unsigned int number_of_elements = prod(matrix_size_moving);
+/* DPCT_ORIG     dim3 blockDim; dim3 gridDim;*/
+    dpct::dim3 blockDim; dpct::dim3 gridDim;
+
+    setup_grid( &blockDim, &gridDim, number_of_elements, _cuOF_max(number_of_batches_moving, number_of_batches_fixed)*D );
+    
+    // Invoke kernel (spatial partial derivatives)
+/* DPCT_ORIG     spatial_grad_kernel<T,D><<< gridDim, blockDim >>>
+      ( fixed_image, moving_image, gradient_image, matrix_size_moving, number_of_batches_fixed, number_of_batches_moving
+   );*/
+    /*
+    DPCT1049:114: The work-group size passed to the SYCL kernel may exceed the limit. To get the device limit, query
+    info::device::max_work_group_size. Adjust the work-group size if needed.
+    */
+    {
+        dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
+
+        dpct::get_in_order_queue()
+            .parallel_for<dpct_kernel_name<class spatial_grad_kernel_a7a181, T, dpct_kernel_scalar<D>>>(
+                sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {
+                    spatial_grad_kernel<T, D>(fixed_image, moving_image, gradient_image, matrix_size_moving,
+                                              number_of_batches_fixed, number_of_batches_moving);
+                });
+    }
+
+    CHECK_FOR_CUDA_ERROR();
+  }
+  
+  template<class T, unsigned int D> void
+  cuOpticalFlowSolver<T,D>::core_grad_temporal( T *fixed_image, T *moving_image, T *gradient_image, 
+						   typename uint64d<D>::Type matrix_size_moving, 
+						   size_t number_of_batches_fixed, 
+						   size_t number_of_batches_moving )
+  {        
+    unsigned int number_of_elements = prod(matrix_size_moving);
+/* DPCT_ORIG     dim3 blockDim; dim3 gridDim;*/
+    dpct::dim3 blockDim; dpct::dim3 gridDim;
+
+    setup_grid( &blockDim, &gridDim, number_of_elements, _cuOF_max(number_of_batches_moving, number_of_batches_fixed) );
+    
+    // Invoke kernel (temporal partial derivative)
+/* DPCT_ORIG     temporal_grad_kernel<T,D><<< gridDim, blockDim >>>
+      ( fixed_image, moving_image, gradient_image,
+        matrix_size_moving, number_of_batches_fixed, number_of_batches_moving );*/
+    /*
+    DPCT1049:115: The work-group size passed to the SYCL kernel may exceed the limit. To get the device limit, query
+    info::device::max_work_group_size. Adjust the work-group size if needed.
+    */
+    {
+        dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
+
+        dpct::get_in_order_queue()
+            .parallel_for<dpct_kernel_name<class temporal_grad_kernel_93ddfd, T, dpct_kernel_scalar<D>>>(
+                sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {
+                    temporal_grad_kernel<T, D>(fixed_image, moving_image, gradient_image, matrix_size_moving,
+                                               number_of_batches_fixed, number_of_batches_moving);
+                });
+    }
+
+    CHECK_FOR_CUDA_ERROR();
+  }
+  
+  // Helpers
+  //
+
+/* DPCT_ORIG   template<unsigned int D> __device__
+  typename uint64d<D>::Type compute_stride( unsigned int dim )*/
+  template <unsigned int D> typename uint64d<D>::Type compute_stride(unsigned int dim)
+  {
+    typename uint64d<D>::Type res;
+  
+    for( unsigned int d=0; d<D; d++ ){
+      res.vec[d] = (d==dim) ? 1 : 0;
+    }
+    return res;
+  }
+
+/* DPCT_ORIG   template<unsigned int D> __device__
+  bool is_border_pixel_in_stride_dim_before( unsigned int dim, typename uint64d<D>::Type co, typename uint64d<D>::Type
+  dims )*/
+  template <unsigned int D>
+  bool is_border_pixel_in_stride_dim_before(unsigned int dim, typename uint64d<D>::Type co,
+                                            typename uint64d<D>::Type dims)
+  {
+    if( co.vec[dim] == 0 )
+      return true;
+    else
+      return false;
+  }
+
+/* DPCT_ORIG   template<unsigned int D> __device__
+  bool is_border_pixel_in_stride_dim_after( unsigned int dim, typename uint64d<D>::Type co, typename uint64d<D>::Type
+  dims )*/
+  template <unsigned int D>
+  bool is_border_pixel_in_stride_dim_after(unsigned int dim, typename uint64d<D>::Type co,
+                                           typename uint64d<D>::Type dims)
+  {
+    if( co.vec[dim] == (dims.vec[dim]-1) )
+      return true;
+    else
+      return false;
+  }
+
+  // Spatial partial derivatives
+  //
+
+/* DPCT_ORIG   template<class REAL, unsigned int D> __global__ void
+  spatial_grad_kernel( const REAL * __restrict__ fixed_image, const REAL * __restrict__ moving_image, REAL *
+  __restrict__ gradient_image, typename uint64d<D>::Type matrix_size, unsigned int num_batches_fixed, unsigned int
+  num_batches_moving )*/
+  /*
+DPCT1110:113: The total declared local variable size in device function spatial_grad_kernel exceeds 128 bytes and may
+cause high register pressure. Consult with your hardware vendor to find the total register size available and adjust the
+code, or use smaller sub-group size to avoid high register pressure.
+*/
+  template <class REAL, unsigned int D>
+  void spatial_grad_kernel(const REAL* __restrict__ fixed_image, const REAL* __restrict__ moving_image,
+                           REAL* __restrict__ gradient_image, typename uint64d<D>::Type matrix_size,
+                           unsigned int num_batches_fixed, unsigned int num_batches_moving)
+  {
+/* DPCT_ORIG     const unsigned int idx = blockIdx.y*gridDim.x*blockDim.x + blockIdx.x*blockDim.x+threadIdx.x;*/
+    auto item_ct1 = sycl::ext::oneapi::this_work_item::get_nd_item<3>();
+    const unsigned int idx = item_ct1.get_group(1) * item_ct1.get_group_range(2) * item_ct1.get_local_range(2) +
+                             item_ct1.get_group(2) * item_ct1.get_local_range(2) + item_ct1.get_local_id(2);
+
+    // Number of elements per partial derivate
+    const unsigned int num_elements_per_batch = prod(matrix_size);
+    const unsigned int num_elements_per_pdev_fixed = num_elements_per_batch*num_batches_fixed;
+    const unsigned int num_elements_per_pdev_moving = num_elements_per_batch*num_batches_moving;
+
+    // Total number of elements for all partial derivatives
+    const unsigned int num_elements_total = _cuOF_max(num_elements_per_pdev_fixed, num_elements_per_pdev_moving)*D;
+  
+    if( idx < num_elements_total ){
+    
+      // The (minimum) index in the slowest varying output dimension determines which partial derivative to compute 
+      const unsigned int stride_dim_fixed = idx/(num_elements_per_pdev_fixed);
+      const unsigned int stride_dim_moving = idx/(num_elements_per_pdev_moving);
+      const unsigned int stride_dim = _cuOF_min(stride_dim_fixed, stride_dim_moving);
+
+      // Local index to the partial derivative
+      const unsigned int idx_in_pdev_fixed = idx-stride_dim_fixed*num_elements_per_pdev_fixed;
+      const unsigned int idx_in_pdev_moving = idx-stride_dim_moving*num_elements_per_pdev_moving;
+
+      // Batch idx (second slowest varying dimension)   
+      const unsigned int batch_idx_fixed = idx_in_pdev_fixed/num_elements_per_batch;
+      const unsigned int batch_idx_moving = idx_in_pdev_moving/num_elements_per_batch;
+
+      // Local index to the batch (should be identical for the fixed/moving image)
+      const size_t idx_in_batch = idx_in_pdev_moving-batch_idx_moving*num_elements_per_batch;
+
+      // Local co to the image
+      const typename uint64d<D>::Type co = idx_to_co( idx_in_batch, matrix_size );
+ 
+      REAL res;
+      unsigned int count = 0;
+
+      //
+      // Find partial derivatives using central differences
+      //
+    
+      typename uint64d<D>::Type stride = compute_stride<D>(stride_dim);
+    
+      const unsigned int base_idx_moving = batch_idx_moving*num_elements_per_batch;
+      const unsigned int base_idx_fixed = batch_idx_fixed*num_elements_per_batch;
+
+      unsigned int stride_base_idx, fixed_idx, moving_idx;
+     
+      // Neighbor "plus stride" side
+      if( !is_border_pixel_in_stride_dim_after<D>( stride_dim, co, matrix_size )){
+        stride_base_idx = co_to_idx(co+stride, matrix_size);
+        count++;
+      }
+      else{
+        stride_base_idx = idx_in_batch;
+      }
+    
+      fixed_idx = stride_base_idx+base_idx_fixed;
+      moving_idx = stride_base_idx+base_idx_moving;
+    
+      res = (fixed_image[fixed_idx]+moving_image[moving_idx])*REAL(0.5);
+
+      // Neighbor "minus stride" side
+      if( !is_border_pixel_in_stride_dim_before<D>( stride_dim, co, matrix_size )){
+        stride_base_idx = co_to_idx(co-stride, matrix_size);
+        count++;
+      }
+      else{
+        stride_base_idx = co_to_idx(co, matrix_size);
+      }
+    
+      fixed_idx = stride_base_idx+base_idx_fixed;
+      moving_idx = stride_base_idx+base_idx_moving;
+    
+      res -= (fixed_image[fixed_idx]+moving_image[moving_idx])*REAL(0.5);
+
+      if( count == 2 ) // Both neighbors exist
+        res /= REAL(2);
+
+      // Output result
+      //
+    
+      gradient_image[idx] = res;
+    }
+  }
+
+  // Temporal partial derivatives
+  //
+
+/* DPCT_ORIG   template<class REAL, unsigned int D> __global__ void
+  temporal_grad_kernel( const REAL * __restrict__ fixed_image, const REAL * __restrict__ moving_image, REAL *
+  __restrict__ gradient_image, typename uint64d<D>::Type matrix_size, unsigned int num_batches_fixed, unsigned int
+  num_batches_moving )*/
+  template <class REAL, unsigned int D>
+  void temporal_grad_kernel(const REAL* __restrict__ fixed_image, const REAL* __restrict__ moving_image,
+                            REAL* __restrict__ gradient_image, typename uint64d<D>::Type matrix_size,
+                            unsigned int num_batches_fixed, unsigned int num_batches_moving)
+  {
+/* DPCT_ORIG     const unsigned int idx = blockIdx.y*gridDim.x*blockDim.x + blockIdx.x*blockDim.x+threadIdx.x;*/
+    auto item_ct1 = sycl::ext::oneapi::this_work_item::get_nd_item<3>();
+    const unsigned int idx = item_ct1.get_group(1) * item_ct1.get_group_range(2) * item_ct1.get_local_range(2) +
+                             item_ct1.get_group(2) * item_ct1.get_local_range(2) + item_ct1.get_local_id(2);
+
+    // Number of elements per partial derivate
+    const unsigned int num_elements_per_batch = prod(matrix_size);
+    const unsigned int num_elements_per_pdev_fixed = num_elements_per_batch*num_batches_fixed;
+    const unsigned int num_elements_per_pdev_moving = num_elements_per_batch*num_batches_moving;
+
+    // Total number of elements for all partial derivatives
+    const unsigned int num_elements_total = _cuOF_max(num_elements_per_pdev_fixed, num_elements_per_pdev_moving);
+  
+    if( idx < num_elements_total ){
+    
+      const unsigned int stride_dim_fixed = idx/(num_elements_per_pdev_fixed);
+      const unsigned int stride_dim_moving = idx/(num_elements_per_pdev_moving);
+
+      // Local index to the partial derivative
+      const unsigned int idx_in_pdev_fixed = idx-stride_dim_fixed*num_elements_per_pdev_fixed;
+      const unsigned int idx_in_pdev_moving = idx-stride_dim_moving*num_elements_per_pdev_moving;
+
+      // Batch idx (second slowest varying dimension)   
+      const unsigned int batch_idx_fixed = idx_in_pdev_fixed/num_elements_per_batch;
+      const unsigned int batch_idx_moving = idx_in_pdev_moving/num_elements_per_batch;
+
+      // Local index to the batch (should be identical for the fixed/moving image)
+      const unsigned int idx_in_batch = idx_in_pdev_moving-batch_idx_moving*num_elements_per_batch;
+
+      const unsigned int base_idx_fixed = batch_idx_fixed*num_elements_per_batch;
+      const unsigned int base_idx_moving = batch_idx_moving*num_elements_per_batch;
+    
+      // Ctr pixel
+      const unsigned int fixed_idx = idx_in_batch+base_idx_fixed;
+      const unsigned int moving_idx = idx_in_batch+base_idx_moving;
+    
+      const REAL res = moving_image[moving_idx]-fixed_image[fixed_idx];
+    
+      // Output result
+      //
+    
+      gradient_image[idx] = res;        
+    }    
+  }
+
+  // 
+  // Template instantiation
+  //
+
+  template class EXPORTGPUREG cuOpticalFlowSolver<float,1>;
+  template class EXPORTGPUREG cuOpticalFlowSolver<float,2>;
+  template class EXPORTGPUREG cuOpticalFlowSolver<float,3>;
+  template class EXPORTGPUREG cuOpticalFlowSolver<float,4>;
+
+  template class EXPORTGPUREG cuOpticalFlowSolver<double,1>;
+  template class EXPORTGPUREG cuOpticalFlowSolver<double,2>;
+  template class EXPORTGPUREG cuOpticalFlowSolver<double,3>;
+  template class EXPORTGPUREG cuOpticalFlowSolver<double,4>;
+}

@@ -1,0 +1,459 @@
+---
+MainSourceFile:  '/gadgetron_sycl_migrated/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+Replacements:
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          14
+    Length:          0
+    ReplacementText: "#define DPCT_PROFILING_ENABLED\n#include <sycl/sycl.hpp>\n#include <dpct/dpct.hpp>\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          369
+    Length:          0
+    ReplacementText: "/*\nDPCT1049:110: The work-group size passed to the SYCL kernel may exceed the limit. To get the device limit, query info::device::max_work_group_size. Adjust the work-group size if needed.\n*/\n/*\nDPCT1049:111: The work-group size passed to the SYCL kernel may exceed the limit. To get the device limit, query info::device::max_work_group_size. Adjust the work-group size if needed.\n*/\n/*\nDPCT1049:112: The work-group size passed to the SYCL kernel may exceed the limit. To get the device limit, query info::device::max_work_group_size. Adjust the work-group size if needed.\n*/\n/*\nDPCT1129:109: The type \"vector_td<unsigned int, D>\" is used in the SYCL kernel, but it is not device copyable. The sycl::is_device_copyable specialization has been added for this type. Please review the code.\n*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          517
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template<class T, unsigned int D> __global__ void                     \\*/ \\\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          553
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          976
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     const unsigned int idx = blockIdx.y*gridDim.x*blockDim.x + blockIdx.x*blockDim.x+threadIdx.x; \\*/ \\\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          1005
+    Length:          10
+    ReplacementText: 'sycl::ext::oneapi::this_work_item::get_nd_item<3>().get_group(1)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          1016
+    Length:          9
+    ReplacementText: 'sycl::ext::oneapi::this_work_item::get_nd_item<3>().get_group_range(2)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          1026
+    Length:          10
+    ReplacementText: 'sycl::ext::oneapi::this_work_item::get_nd_item<3>().get_local_range(2)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          1039
+    Length:          10
+    ReplacementText: 'sycl::ext::oneapi::this_work_item::get_nd_item<3>().get_group(2)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          1050
+    Length:          10
+    ReplacementText: 'sycl::ext::oneapi::this_work_item::get_nd_item<3>().get_local_range(2)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          1061
+    Length:          11
+    ReplacementText: 'sycl::ext::oneapi::this_work_item::get_nd_item<3>().get_local_id(2)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          2269
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template<class T, unsigned int D> __global__ void                     \\*/ \\\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          2305
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          2861
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     const unsigned int idx = blockIdx.y*gridDim.x*blockDim.x + blockIdx.x*blockDim.x+threadIdx.x; \\*/ \\\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          2890
+    Length:          10
+    ReplacementText: 'sycl::ext::oneapi::this_work_item::get_nd_item<3>().get_group(1)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          2901
+    Length:          9
+    ReplacementText: 'sycl::ext::oneapi::this_work_item::get_nd_item<3>().get_group_range(2)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          2911
+    Length:          10
+    ReplacementText: 'sycl::ext::oneapi::this_work_item::get_nd_item<3>().get_local_range(2)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          2924
+    Length:          10
+    ReplacementText: 'sycl::ext::oneapi::this_work_item::get_nd_item<3>().get_group(2)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          2935
+    Length:          10
+    ReplacementText: 'sycl::ext::oneapi::this_work_item::get_nd_item<3>().get_local_range(2)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          2946
+    Length:          11
+    ReplacementText: 'sycl::ext::oneapi::this_work_item::get_nd_item<3>().get_local_id(2)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          8135
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     dim3 blockDim, gridDim;                                             \\*/ \\\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          8139
+    Length:          4
+    ReplacementText: 'dpct::dim3'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          8875
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG       mult_M_kernel_batch<T,D><<< gridDim, blockDim >>>                 \\\n        ( in->get_data_ptr(), out->get_data_ptr(),                      \\\n          this->offsets_->get_data_ptr(), vector_td<unsigned int,D>(matrix_size), num_batches ); \\*/ \\\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          8881
+    Length:          237
+    ReplacementText: "  dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});\\\n\\\n  dpct::get_in_order_queue().submit(\\\n    [&](sycl::handler &cgh) {\\\n      auto in_get_data_ptr_ct0 = in->get_data_ptr();\\\n      auto out_get_data_ptr_ct1 = out->get_data_ptr();\\\n      auto this_offsets__get_data_ptr_ct2 = this->offsets_->get_data_ptr();\\\n      auto vector_td_unsigned_int_D_matrix_size_ct3 = vector_td<unsigned int,D>(matrix_size);\\\n      auto num_batches_ct4 = num_batches;\\\n\\\n      cgh.parallel_for<dpct_kernel_name<class mult_M_kernel_batch_1c5b70, T, dpct_kernel_scalar<D>>>(\\\n        sycl::nd_range<3>(gridDim * blockDim, blockDim), \\\n        [=](sycl::nd_item<3> item_ct1) {\\\n          mult_M_kernel_batch<T, D>(in_get_data_ptr_ct0, out_get_data_ptr_ct1, this_offsets__get_data_ptr_ct2, vector_td_unsigned_int_D_matrix_size_ct3, num_batches_ct4);\\\n        });\\\n    });"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: true
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          9118
+    Length:          1
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          9270
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG       mult_M_kernel_extended<T,D><<< gridDim, blockDim >>>              \\\n        ( in->get_data_ptr(), out->get_data_ptr(), this->offsets_->get_data_ptr(), \\\n          vector_td<unsigned int,D>(matrix_size), in->get_number_of_elements(), extended_dim ); \\*/ \\\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          9276
+    Length:          247
+    ReplacementText: "  dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});\\\n\\\n  dpct::get_in_order_queue().submit(\\\n    [&](sycl::handler &cgh) {\\\n      auto in_get_data_ptr_ct0 = in->get_data_ptr();\\\n      auto out_get_data_ptr_ct1 = out->get_data_ptr();\\\n      auto this_offsets__get_data_ptr_ct2 = this->offsets_->get_data_ptr();\\\n      auto vector_td_unsigned_int_D_matrix_size_ct3 = vector_td<unsigned int,D>(matrix_size);\\\n      auto in_get_number_of_elements_ct4 = in->get_number_of_elements();\\\n      auto extended_dim_ct5 = extended_dim;\\\n\\\n      cgh.parallel_for<dpct_kernel_name<class mult_M_kernel_extended_f0e8b1, T, dpct_kernel_scalar<D>>>(\\\n        sycl::nd_range<3>(gridDim * blockDim, blockDim), \\\n        [=](sycl::nd_item<3> item_ct1) {\\\n          mult_M_kernel_extended<T, D>(in_get_data_ptr_ct0, out_get_data_ptr_ct1, this_offsets__get_data_ptr_ct2, vector_td_unsigned_int_D_matrix_size_ct3, in_get_number_of_elements_ct4, extended_dim_ct5);\\\n        });\\\n    });"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: true
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          9523
+    Length:          1
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          10193
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG   template<class T, unsigned int D> __global__ void                     \\*/ \\\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          10229
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          10662
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     const unsigned int idx = blockIdx.y*gridDim.x*blockDim.x + blockIdx.x*blockDim.x+threadIdx.x; \\*/ \\\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          10691
+    Length:          10
+    ReplacementText: 'sycl::ext::oneapi::this_work_item::get_nd_item<3>().get_group(1)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          10702
+    Length:          9
+    ReplacementText: 'sycl::ext::oneapi::this_work_item::get_nd_item<3>().get_group_range(2)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          10712
+    Length:          10
+    ReplacementText: 'sycl::ext::oneapi::this_work_item::get_nd_item<3>().get_local_range(2)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          10725
+    Length:          10
+    ReplacementText: 'sycl::ext::oneapi::this_work_item::get_nd_item<3>().get_group(2)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          10736
+    Length:          10
+    ReplacementText: 'sycl::ext::oneapi::this_work_item::get_nd_item<3>().get_local_range(2)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          10747
+    Length:          11
+    ReplacementText: 'sycl::ext::oneapi::this_work_item::get_nd_item<3>().get_local_id(2)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          17009
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     dim3 blockDim, gridDim;                                             \\*/ \\\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          17013
+    Length:          4
+    ReplacementText: 'dpct::dim3'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          17231
+    Length:          0
+    ReplacementText: "/* DPCT_ORIG     mult_MH_kernel<T,D><<< gridDim, blockDim >>>                        \\\n      ( in->get_data_ptr(), tmp_out->get_data_ptr(),                    \\\n        raw_pointer_cast(&this->weights_[0]), raw_pointer_cast(&this->indices_[0]), \\\n        raw_pointer_cast(&this->lower_bounds_[0]), raw_pointer_cast(&this->upper_bounds_[0]), \\\n        num_elements, num_batches );                                    \\*/ \\\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          17235
+    Length:          361
+    ReplacementText: "{\\\n  dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});\\\n\\\n  dpct::get_in_order_queue().submit(\\\n    [&](sycl::handler &cgh) {\\\n      auto in_get_data_ptr_ct0 = in->get_data_ptr();\\\n      auto tmp_out_get_data_ptr_ct1 = tmp_out->get_data_ptr();\\\n      auto raw_pointer_cast_this_weights__ct2 = raw_pointer_cast(&this->weights_[0]);\\\n      auto raw_pointer_cast_this_indices__ct3 = raw_pointer_cast(&this->indices_[0]);\\\n      auto raw_pointer_cast_this_lower_bounds__ct4 = raw_pointer_cast(&this->lower_bounds_[0]);\\\n      auto raw_pointer_cast_this_upper_bounds__ct5 = raw_pointer_cast(&this->upper_bounds_[0]);\\\n      auto num_elements_ct6 = num_elements;\\\n      auto num_batches_ct7 = num_batches;\\\n\\\n      cgh.parallel_for<dpct_kernel_name<class mult_MH_kernel_c6fecd, T, dpct_kernel_scalar<D>>>(\\\n        sycl::nd_range<3>(gridDim * blockDim, blockDim), \\\n        [=](sycl::nd_item<3> item_ct1) {\\\n          mult_MH_kernel<T, D>(in_get_data_ptr_ct0, tmp_out_get_data_ptr_ct1, raw_pointer_cast_this_weights__ct2, raw_pointer_cast_this_indices__ct3, raw_pointer_cast_this_lower_bounds__ct4, raw_pointer_cast_this_upper_bounds__ct5, num_elements_ct6, num_batches_ct7);\\\n        });\\\n    });\\\n}"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: true
+  - FilePath:        '/gadgetron/toolboxes/registration/optical_flow/gpu/cuResampleOperator_macros.h'
+    Offset:          17596
+    Length:          1
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+MainSourceFilesDigest:
+  - MainSourceFile:  ''
+    Digest:          ''
+    HasCUDASyntax:   false
+DpctVersion:     2025.2.0
+SDKVersionMajor: '12'
+SDKVersionMinor: '8'
+MainHelperFileName: ''
+USMLevel:        ''
+FeatureMap:      {}
+CompileTargets:  {}
+OptionMap:
+  AnalysisScopePath:
+    Value:           ''
+    ValueVec:
+      - '/gadgetron'
+    Specified:       false
+  AsyncHandler:
+    Value:           'false'
+    Specified:       false
+  BuildScript:
+    Value:           '0'
+    Specified:       false
+  CodePinEnabled:
+    Value:           'false'
+    Specified:       false
+  CommentsEnabled:
+    Value:           'false'
+    Specified:       false
+  CompilationsDir:
+    Value:           ''
+    Specified:       false
+  CtadEnabled:
+    Value:           'false'
+    Specified:       false
+  EnablepProfiling:
+    Value:           'false'
+    Specified:       false
+  ExperimentalFlag:
+    Value:           '0'
+    Specified:       false
+  ExplicitNamespace:
+    Value:           '20'
+    Specified:       false
+  ExtensionDDFlag:
+    Value:           '0'
+    Specified:       false
+  ExtensionDEFlag:
+    Value:           '4294967295'
+    Specified:       false
+  HelperFuncPreferenceFlag:
+    Value:           '0'
+    Specified:       false
+  NDRangeDim:
+    Value:           '3'
+    Specified:       false
+  NoDRYPattern:
+    Value:           'false'
+    Specified:       false
+  OptimizeMigration:
+    Value:           'false'
+    Specified:       false
+  ProcessAll:
+    Value:           'true'
+    Specified:       true
+  RuleFile:
+    Value:           ''
+    Specified:       false
+  SyclNamedLambda:
+    Value:           'true'
+    Specified:       true
+  UseSYCLCompat:
+    Value:           'false'
+    Specified:       false
+  UsmLevel:
+    Value:           '1'
+    Specified:       false
+...

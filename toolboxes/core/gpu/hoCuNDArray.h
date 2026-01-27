@@ -8,6 +8,9 @@
 
 #pragma once
 
+#define DPCT_PROFILING_ENABLED
+#include <sycl/sycl.hpp>
+#include <dpct/dpct.hpp>
 #include "cuNDArray.h"
 #include "hoNDArray.h"
 #include "check_CUDA.h"
@@ -124,7 +127,8 @@ namespace Gadgetron{
             this->create(rhs.get_dimensions());
         }
 
-          cudaMemcpy(this->data_, rhs.get_data_ptr(), this->elements_*sizeof(T),cudaMemcpyDeviceToHost);
+/* DPCT_ORIG           cudaMemcpy(this->data_, rhs.get_data_ptr(), this->elements_*sizeof(T),cudaMemcpyDeviceToHost);*/
+          dpct::get_in_order_queue().memcpy(this->data_, rhs.get_data_ptr(), this->elements_ * sizeof(T)).wait();
         return *this;
     }
 #if __cplusplus > 199711L
@@ -154,13 +158,16 @@ namespace Gadgetron{
       }
 
       size_t size = this->elements_ * sizeof(T);
-      CUDA_CALL(cudaMallocHost((void**)&this->data_,size));
+/* DPCT_ORIG       CUDA_CALL(cudaMallocHost((void**)&this->data_,size));*/
+      CUDA_CALL(DPCT_CHECK_ERROR((this->data_) = (typename std::remove_reference<decltype(this->data_)>::type)
+                                     sycl::malloc_host(size, dpct::get_in_order_queue())));
     }
 
     virtual void deallocate_memory()
     {
       if (this->data_) {
-        CUDA_CALL(cudaFreeHost(this->data_));
+/* DPCT_ORIG         CUDA_CALL(cudaFreeHost(this->data_));*/
+        CUDA_CALL(DPCT_CHECK_ERROR(sycl::free(this->data_, dpct::get_in_order_queue())));
         this->data_ = 0;
       }
     }

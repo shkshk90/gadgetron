@@ -42,29 +42,25 @@ include(GoogleTest)
         set(test_src_files ${test_src_files} python_converter_test.cpp)
     endif ()
 
-    if (CUDA_FOUND)
+    if (SYCL_FOUND)
         set(test_src_files ${test_src_files}
-                cuNDArray_elemwise_test.cpp
-                cuNDArray_operators_test.cpp
-                cuNDArray_blas_test.cpp
-                cuNDArray_utils_test.cpp
+                cuNDArray_elemwise_test.cpp.dp.cpp
+                cuNDArray_operators_test.cpp.dp.cpp
+                cuNDArray_blas_test.cpp.dp.cpp
+                cuNDArray_utils_test.cpp.dp.cpp
                 #        vector_td_test.cpp
                 cuVector_td_test_kernels.h
-                cuVector_td_test_kernels.cu
-                cuNDFFT_test.cpp
-                cuSDC_test.cpp
-                cuNFFT_test.cpp
+                cuVector_td_test_kernels.dp.cpp
+                cuNDFFT_test.cpp.dp.cpp
+                cuSDC_test.cpp.dp.cpp
+                cuNFFT_test.cpp.dp.cpp
                 )
-
-        cuda_add_executable(test_all
-                ${test_src_files}
-                )
-    else ()
-        add_executable(test_all
-                ${test_src_files})
     endif ()
 
-    if (CUDA_FOUND)
+    add_executable(test_all
+            ${test_src_files})
+
+    if (SYCL_FOUND)
         target_link_libraries(test_all
                 gadgetron_toolbox_gpu
                 )

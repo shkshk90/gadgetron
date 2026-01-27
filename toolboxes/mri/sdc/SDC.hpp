@@ -1,4 +1,7 @@
 
+#define DPCT_PROFILING_ENABLED
+#include <sycl/sycl.hpp>
+#include <dpct/dpct.hpp>
 #include "SDC.h"
 
 #include "ConvolutionKernel.h"
@@ -6,7 +9,8 @@
 
 namespace Gadgetron {
 template <class T> struct safe_divides {
-    __host__ __device__ T operator()(const T& x, const T& y) const { return y == T(0) ? T(0) : x / y; }
+/* DPCT_ORIG     __host__ __device__ T operator()(const T& x, const T& y) const { return y == T(0) ? T(0) : x / y; }*/
+    T operator()(const T& x, const T& y) const { return y == T(0) ? T(0) : x / y; }
 };
 
 template <template <class> class ARRAY, class REAL> struct updates {

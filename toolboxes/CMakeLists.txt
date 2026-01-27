@@ -44,11 +44,10 @@ endif ()
 
 set(GADGETRON_BUILD_RPATH "${CMAKE_CURRENT_BINARY_DIR};${GADGETRON_BUILD_RPATH}" PARENT_SCOPE)
 
-if(CUDA_FOUND)
-    # We compile all GPU code into one library to workaround Thrust and Cub using statics in templates
-    # (e.g. https://github.com/NVIDIA/cub/blob/48768e86a40c25d231a6ff1e04107a60016314a7/cub/util_device.cuh#L208)
-    # that when used from multiple libraries can cause crashes.
-    # See https://github.com/NVIDIA/thrust/issues/1401 for more information.
+if(SYCL_FOUND)
+    # All GPU code compiled into one library.
+    # Originally CUDA, migrated to SYCL via Intel dpct.
+    # The .cu files have been converted to .dp.cpp files by dpct.
     if (WIN32)
         add_definitions(-D__BUILD_GADGETRON_GPU__)
         add_definitions(-D_USE_MATH_DEFINES)
@@ -57,25 +56,25 @@ if(CUDA_FOUND)
         link_directories(${Boost_LIBRARY_DIRS})
     endif ()
 
-    cuda_add_library(gadgetron_toolbox_gpu SHARED 
+    add_library(gadgetron_toolbox_gpu SHARED
         core/gpu/check_CUDA.h
-        core/gpu/CUBLASContextProvider.cpp
+        core/gpu/CUBLASContextProvider.cpp.dp.cpp
         core/gpu/CUBLASContextProvider.h
-        core/gpu/cudaDeviceManager.cpp
+        core/gpu/cudaDeviceManager.cpp.dp.cpp
         core/gpu/cudaDeviceManager.h
-        core/gpu/cuNDArray_blas.cu
+        core/gpu/cuNDArray_blas.dp.cpp
         core/gpu/cuNDArray_blas.h
-        core/gpu/cuNDArray_elemwise.cu
+        core/gpu/cuNDArray_elemwise.dp.cpp
         core/gpu/cuNDArray_elemwise.h
         core/gpu/cuNDArray_fileio.h
-        core/gpu/cuNDArray_operators.cu
+        core/gpu/cuNDArray_operators.dp.cpp
         core/gpu/cuNDArray_operators.h
-        core/gpu/cuNDArray_reductions.cu
+        core/gpu/cuNDArray_reductions.dp.cpp
         core/gpu/cuNDArray_reductions.h
-        core/gpu/cuNDArray_utils.cu
+        core/gpu/cuNDArray_utils.dp.cpp
         core/gpu/cuNDArray_utils.h
         core/gpu/cuNDArray.h
-        core/gpu/cuSparseMatrix.cu
+        core/gpu/cuSparseMatrix.dp.cpp
         core/gpu/GadgetronCuException.h
         core/gpu/GPUTimer.h
         core/gpu/hoCuNDArray_blas.cpp
@@ -83,78 +82,78 @@ if(CUDA_FOUND)
         core/gpu/hoCuNDArray_elemwise.h
         core/gpu/hoCuNDArray_utils.h
         core/gpu/hoCuNDArray.h
-        core/gpu/radial_utilities.cu
+        core/gpu/radial_utilities.dp.cpp
         core/gpu/radial_utilities.h
         core/gpu/real_utilities_device.h
         core/gpu/setup_grid.h
-        dwt/gpu/cuNDDWT.cu
+        dwt/gpu/cuNDDWT.dp.cpp
         dwt/gpu/cuNDDWT.h
         fft/gpu/cuFFTCachedPlan.h
         fft/gpu/cuFFTPlan.h
         fft/gpu/cuFFTPlan.hpp
         fft/gpu/cuNDFFT.cpp
-        fft/gpu/cuNDFFT.cu
+        fft/gpu/cuNDFFT.dp.cpp
         fft/gpu/cuNDFFT.h
-        mri/hyper/CSI_utils.cu
+        mri/hyper/CSI_utils.dp.cpp
         mri/hyper/CSI_utils.h
         mri/hyper/CSIOperator.cpp
         mri/hyper/CSIOperator.h
         mri/hyper/gadgetron_toolbox_hyper_export.h
-        mri/pmri/gpu/b1_map_NIH_Souheil.cu
-        mri/pmri/gpu/b1_map.cu
+        mri/pmri/gpu/b1_map_NIH_Souheil.dp.cpp
+        mri/pmri/gpu/b1_map.dp.cpp
         mri/pmri/gpu/b1_map.h
         mri/pmri/gpu/cuBuffer.cpp
         mri/pmri/gpu/cuBuffer.h
-        mri/pmri/gpu/cuCartesianSenseOperator.cu
+        mri/pmri/gpu/cuCartesianSenseOperator.dp.cpp
         mri/pmri/gpu/cuCartesianSenseOperator.h
-        mri/pmri/gpu/cuNonCartesianKtSenseOperator.cu
+        mri/pmri/gpu/cuNonCartesianKtSenseOperator.dp.cpp
         mri/pmri/gpu/cuNonCartesianKtSenseOperator.h
-        mri/pmri/gpu/cuNonCartesianSenseOperator.cu
+        mri/pmri/gpu/cuNonCartesianSenseOperator.dp.cpp
         mri/pmri/gpu/cuNonCartesianSenseOperator.h
         mri/pmri/gpu/cuSenseBuffer.cpp
         mri/pmri/gpu/cuSenseBuffer.h
         mri/pmri/gpu/cuSenseBufferCg.cpp
         mri/pmri/gpu/cuSenseBufferCg.h
-        mri/pmri/gpu/cuSenseOperator.cu
+        mri/pmri/gpu/cuSenseOperator.dp.cpp
         mri/pmri/gpu/cuSenseOperator.h
         mri/pmri/gpu/cuSpiritBuffer.cpp
         mri/pmri/gpu/cuSpiritOperator.h
         mri/pmri/gpu/gpupmri_export.h
         mri/pmri/gpu/htgrappa.cpp
-        mri/pmri/gpu/htgrappa.cu
+        mri/pmri/gpu/htgrappa.dp.cpp
         mri/pmri/gpu/htgrappa.h
-        mri/pmri/gpu/sense_utilities.cu
+        mri/pmri/gpu/sense_utilities.dp.cpp
         mri/pmri/gpu/sense_utilities.h
         mri/pmri/gpu/senseOperator.h
-        mri/pmri/gpu/spirit_calibration.cu
+        mri/pmri/gpu/spirit_calibration.dp.cpp
         mri/pmri/gpu/spirit_calibration.h
-        mri/pmri/gpu/trajectory_utils.cu
+        mri/pmri/gpu/trajectory_utils.dp.cpp
         mri/pmri/gpu/trajectory_utils.h
-        mri/sdc/gpu/cuSDC.cu
-        nfft/gpu/cuGriddingConvolution.cu
+        mri/sdc/gpu/cuSDC.dp.cpp
+        nfft/gpu/cuGriddingConvolution.dp.cpp
         nfft/gpu/cuGriddingConvolution.h
-        nfft/gpu/cuNFFT.cu
+        nfft/gpu/cuNFFT.dp.cpp
         nfft/gpu/cuNFFT.h
         nfft/gpu/cuNFFTOperator.cpp
         operators/gpu/../generalOperator.h
         operators/gpu/../linearOperator.h
-        operators/gpu/cuConvolutionOperator.cu
+        operators/gpu/cuConvolutionOperator.dp.cpp
         operators/gpu/cuConvolutionOperator.h
-        operators/gpu/cuLaplaceOperator.cu
+        operators/gpu/cuLaplaceOperator.dp.cpp
         operators/gpu/cuLaplaceOperator.h
-        operators/gpu/cuPartialDerivativeOperator.cu
+        operators/gpu/cuPartialDerivativeOperator.dp.cpp
         operators/gpu/cuPartialDerivativeOperator.h
-        operators/gpu/cuPartialDerivativeOperator2.cu
-        operators/gpu/cuTv1dOperator.cu
+        operators/gpu/cuPartialDerivativeOperator2.dp.cpp
+        operators/gpu/cuTv1dOperator.dp.cpp
         operators/gpu/cuTv1dOperator.h
-        operators/gpu/cuTvOperator.cu
+        operators/gpu/cuTvOperator.dp.cpp
         operators/gpu/cuTvOperator.h
-        registration/optical_flow/gpu/cuCKOpticalFlowSolver.cu
-        registration/optical_flow/gpu/cuHSOpticalFlowSolver.cu
-        registration/optical_flow/gpu/cuLinearResampleOperator.cu
-        registration/optical_flow/gpu/cuOpticalFlowSolver.cu
-        registration/optical_flow/gpu/cuResampleOperator.cu
-        solvers/gpu/cuSolverUtils.cu
+        registration/optical_flow/gpu/cuCKOpticalFlowSolver.dp.cpp
+        registration/optical_flow/gpu/cuHSOpticalFlowSolver.dp.cpp
+        registration/optical_flow/gpu/cuLinearResampleOperator.dp.cpp
+        registration/optical_flow/gpu/cuOpticalFlowSolver.dp.cpp
+        registration/optical_flow/gpu/cuResampleOperator.dp.cpp
+        solvers/gpu/cuSolverUtils.dp.cpp
         solvers/gpu/gpusolvers_export.h
     )
 
@@ -177,17 +176,13 @@ if(CUDA_FOUND)
 
     set_target_properties(gadgetron_toolbox_gpu PROPERTIES VERSION ${GADGETRON_VERSION_STRING} SOVERSION ${GADGETRON_SOVERSION})
 
-    target_link_libraries(gadgetron_toolbox_gpu 
+    target_link_libraries(gadgetron_toolbox_gpu
         gadgetron_toolbox_cpucore
         gadgetron_toolbox_cpucore_math
         gadgetron_toolbox_log
         gadgetron_toolbox_nfft
         gadgetron_toolbox_operator
         gadgetron_toolbox_sdc
-        ${CUDA_LIBRARIES}
-        ${CUDA_CUFFT_LIBRARIES} 
-        ${CUDA_CUBLAS_LIBRARIES} 
-        ${CUDA_CUSPARSE_LIBRARIES}
         ${MKL_LIBRARIES}
     )
 
@@ -214,7 +209,7 @@ if(CUDA_FOUND)
         core/gpu/cuNDArray.h
         core/gpu/cuSparseMatrix.h
         core/gpu/GadgetronCuException.h
-        core/gpu/GPUTimer.h				
+        core/gpu/GPUTimer.h
         core/gpu/hoCuNDArray_blas.h
         core/gpu/hoCuNDArray_elemwise.h
         core/gpu/hoCuNDArray_math.h
@@ -246,7 +241,7 @@ if(CUDA_FOUND)
         mri/pmri/gpu/sense_utilities.h
         mri/pmri/gpu/senseOperator.h
         mri/sdc/gpu/cuSDC.h
-        nfft/gpu/cuGriddingConvolution.h 
+        nfft/gpu/cuGriddingConvolution.h
         nfft/gpu/cuNFFT.h
         operators/gpu/cuConvolutionOperator.h
         operators/gpu/cuDiagonalOperator.h
@@ -294,5 +289,5 @@ if(CUDA_FOUND)
         DESTINATION ${GADGETRON_INSTALL_INCLUDE_PATH} COMPONENT main)
 
 else()
-    message("CUDA not found, not compiling gpu toolbox")
+    message("SYCL not found, not compiling gpu toolbox")
 endif()

@@ -1,10 +1,16 @@
 #pragma once
 
+#include <oneapi/dpl/execution>
+#include <oneapi/dpl/algorithm>
+#define DPCT_PROFILING_ENABLED
+#include <sycl/sycl.hpp>
+#include <dpct/dpct.hpp>
 #include "resampleOperator.h"
 #include "cuNDArray_math.h"
 #include "gpureg_export.h"
+#include <dpct/dpl_utils.hpp>
 
-#include <thrust/device_vector.h>
+/* DPCT_ORIG #include <thrust/device_vector.h>*/
 
 namespace Gadgetron{
 
@@ -20,10 +26,14 @@ namespace Gadgetron{
   
     virtual void reset()
     {
-      lower_bounds_ = thrust::device_vector<unsigned int>();
-      upper_bounds_ = thrust::device_vector<unsigned int>();
-      indices_ = thrust::device_vector<unsigned int>();
-      weights_ = thrust::device_vector<REAL>();
+/* DPCT_ORIG       lower_bounds_ = thrust::device_vector<unsigned int>();*/
+      lower_bounds_ = dpct::device_vector<unsigned int>();
+/* DPCT_ORIG       upper_bounds_ = thrust::device_vector<unsigned int>();*/
+      upper_bounds_ = dpct::device_vector<unsigned int>();
+/* DPCT_ORIG       indices_ = thrust::device_vector<unsigned int>();*/
+      indices_ = dpct::device_vector<unsigned int>();
+/* DPCT_ORIG       weights_ = thrust::device_vector<REAL>();*/
+      weights_ = dpct::device_vector<REAL>();
       resampleOperator< cuNDArray<typename realType<T>::Type>, cuNDArray<T> >::reset();
     }
     
@@ -34,9 +44,13 @@ namespace Gadgetron{
     virtual void write_sort_arrays( void* sort_keys ) = 0;
     
   protected:
-    thrust::device_vector<unsigned int> lower_bounds_;
-    thrust::device_vector<unsigned int> upper_bounds_;
-    thrust::device_vector<unsigned int> indices_;
-    thrust::device_vector<REAL> weights_;
+/* DPCT_ORIG     thrust::device_vector<unsigned int> lower_bounds_;*/
+    dpct::device_vector<unsigned int> lower_bounds_;
+/* DPCT_ORIG     thrust::device_vector<unsigned int> upper_bounds_;*/
+    dpct::device_vector<unsigned int> upper_bounds_;
+/* DPCT_ORIG     thrust::device_vector<unsigned int> indices_;*/
+    dpct::device_vector<unsigned int> indices_;
+/* DPCT_ORIG     thrust::device_vector<REAL> weights_;*/
+    dpct::device_vector<REAL> weights_;
   };
 }

@@ -4,6 +4,6 @@ include_directories(
 
 
 add_subdirectory(cpu)
-if (CUDA_FOUND)
+if (SYCL_FOUND)
   add_subdirectory(gpu)
 endif()

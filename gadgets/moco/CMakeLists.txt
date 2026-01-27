@@ -2,13 +2,13 @@ if (WIN32)
     add_definitions(-D__BUILD_GADGETRON_MOCO__)
 endif ()
 
-if (CUDA_FOUND)
+if (SYCL_FOUND)
     list(APPEND CPU_GADGETS cpuRegistrationAveragingGadget.cpp)
     list(APPEND CPU_LIBS gadgetron_toolbox_cpucore_math gadgetron_toolbox_cpureg)
 
 
     list(APPEND GPU_GADGETS gpuRegistrationAveragingGadget.cpp gpuRegistrationScatteringGadget.cpp)
-    list(APPEND GPU_LIBS gadgetron_toolbox_gpu ${CUDA_LIBRARIES})
+    list(APPEND GPU_LIBS gadgetron_toolbox_gpu)
 
 
     add_library(gadgetron_moco SHARED
@@ -47,8 +47,8 @@ if (CUDA_FOUND)
             DESTINATION ${GADGETRON_INSTALL_INCLUDE_PATH} COMPONENT main)
 
     add_subdirectory(config)
-elseif (CUDA_FOUND)
-    message("Cuda not found, not compiling gpu-based registration gadgets")
+elseif (SYCL_FOUND)
+    message("SYCL not found, not compiling gpu-based registration gadgets")
 endif ()
 
 set(GADGETRON_BUILD_RPATH "${CMAKE_CURRENT_BINARY_DIR};${GADGETRON_BUILD_RPATH}" PARENT_SCOPE)

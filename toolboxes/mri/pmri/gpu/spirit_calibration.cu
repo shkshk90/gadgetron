@@ -12,7 +12,7 @@
 #include "complext.h"
 #include "CUBLASContextProvider.h"
 #include "GPUTimer.h"
-#include "hoNDArray_fileio.h"
+#include "cpu/hoNDArray_fileio.h"
 #include "htgrappa.h"
 
 #include <cublas_v2.h>

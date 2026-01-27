@@ -9,7 +9,11 @@
 #define CUBLASCONTEXTPROVIDER_H_
 #pragma once
 
-#include <cublas_v2.h>
+/* DPCT_ORIG #include <cublas_v2.h>*/
+#define DPCT_PROFILING_ENABLED
+#include <sycl/sycl.hpp>
+#include <dpct/dpct.hpp>
+#include <dpct/blas_utils.hpp>
 #include <map>
 #include <iostream>
 
@@ -19,7 +23,8 @@ class CUBLASContextProvider
 public:
 	static CUBLASContextProvider* instance();
 
-	cublasHandle_t* getCublasHandle(int device_no = 0);
+/* DPCT_ORIG 	cublasHandle_t* getCublasHandle(int device_no = 0);*/
+        dpct::blas::descriptor_ptr* getCublasHandle(int device_no = 0);
 
 private:
 	CUBLASContextProvider() {}
@@ -27,7 +32,8 @@ private:
 
 	static CUBLASContextProvider* instance_;
 
-	std::map<int, cublasHandle_t> handles_;
+/* DPCT_ORIG 	std::map<int, cublasHandle_t> handles_;*/
+        std::map<int, dpct::blas::descriptor_ptr> handles_;
 };
 
 #endif /* CUBLASCONTEXTPROVIDER_H_ */

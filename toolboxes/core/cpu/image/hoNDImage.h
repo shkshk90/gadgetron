@@ -497,3 +497,4 @@ namespace Gadgetron
 }
 
 #include "hoNDImage.hxx"
+#include <cmath>

@@ -3,6 +3,11 @@
 */
 
 #pragma once
+#include <oneapi/dpl/execution>
+#include <oneapi/dpl/algorithm>
+#define DPCT_PROFILING_ENABLED
+#include <sycl/sycl.hpp>
+#include <dpct/dpct.hpp>
 #include "core_defines.h"
 #include "NDArray.h"
 #include "hoNDArray.h"
@@ -11,10 +16,11 @@
 #include "check_CUDA.h"
 #include <boost/shared_ptr.hpp>
 #include <boost/make_shared.hpp>
+#include <dpct/dpl_utils.hpp>
 
-#include <cuda.h>
-#include <cuda_runtime_api.h>
-#include <thrust/device_vector.h>
+/* DPCT_ORIG #include <cuda.h>*/
+/* DPCT_ORIG #include <cuda_runtime_api.h>*/
+/* DPCT_ORIG #include <thrust/device_vector.h>*/
 
 namespace Gadgetron{
 
@@ -77,12 +83,18 @@ namespace Gadgetron{
         virtual void set_device(int device);
         int get_device();
 
-        thrust::device_ptr<T> get_device_ptr();
-        const thrust::device_ptr<T> get_device_ptr() const;
-        thrust::device_ptr<T> begin();
-        thrust::device_ptr<T> end();
-        const thrust::device_ptr<T> begin() const;
-        const thrust::device_ptr<T> end() const;
+/* DPCT_ORIG         thrust::device_ptr<T> get_device_ptr();*/
+        dpct::device_pointer<T> get_device_ptr();
+/* DPCT_ORIG         const thrust::device_ptr<T> get_device_ptr() const;*/
+        const dpct::device_pointer<T> get_device_ptr() const;
+/* DPCT_ORIG         thrust::device_ptr<T> begin();*/
+        dpct::device_pointer<T> begin();
+/* DPCT_ORIG         thrust::device_ptr<T> end();*/
+        dpct::device_pointer<T> end();
+/* DPCT_ORIG         const thrust::device_ptr<T> begin() const;*/
+        const dpct::device_pointer<T> begin() const;
+/* DPCT_ORIG         const thrust::device_ptr<T> end() const;*/
+        const dpct::device_pointer<T> end() const;
 
         T at( size_t idx );
         T operator[]( size_t idx );
@@ -98,32 +110,64 @@ namespace Gadgetron{
 
     template <typename T> 
     cuNDArray<T>::cuNDArray() : Gadgetron::NDArray<T>::NDArray() 
-    { 
-        cudaGetDevice(&this->device_); 
+    {
+/* DPCT_ORIG         cudaGetDevice(&this->device_); */
+        this->device_ = dpct::get_current_device_id();
     }
 
-    template <typename T> 
-    cuNDArray<T>::cuNDArray(const cuNDArray<T> &a) : Gadgetron::NDArray<T>::NDArray() 
+    template <typename T> cuNDArray<T>::cuNDArray(const cuNDArray<T>& a) try : Gadgetron::NDArray<T>::NDArray()
     {
-        cudaGetDevice(&this->device_);
+/* DPCT_ORIG         cudaGetDevice(&this->device_);*/
+        this->device_ = dpct::get_current_device_id();
         this->data_ = 0;
         this->dimensions_ = a.dimensions_;
         allocate_memory();
         if (a.device_ == this->device_) {
-            CUDA_CALL(cudaMemcpy(this->data_, a.data_, this->elements_*sizeof(T), cudaMemcpyDeviceToDevice));
+/* DPCT_ORIG             CUDA_CALL(cudaMemcpy(this->data_, a.data_, this->elements_*sizeof(T),
+ * cudaMemcpyDeviceToDevice));*/
+            /*
+            DPCT1064:178: Migrated cudaMemcpy call is used in a macro/template definition and may not be valid for all
+            macro/template uses. Adjust the code.
+            */
+            CUDA_CALL(DPCT_CHECK_ERROR(dpct::get_in_order_queue().memcpy(this->data_, a.data_, this->elements_ * sizeof(T))));
         } else {
             //This memory is on a different device, we must move it.
-            cudaSetDevice(a.device_);
+/* DPCT_ORIG             cudaSetDevice(a.device_);*/
+            /*
+            DPCT1093:133: The "a.device_" device may be not the one intended for use. Adjust the selected device if
+            needed.
+            */
+            dpct::select_device(a.device_);
             boost::shared_ptr< hoNDArray<T> > tmp = a.to_host();
-            cudaSetDevice(this->device_);
-            cudaError_t err = cudaMemcpy(this->data_, tmp->get_data_ptr(), this->elements_*sizeof(T), cudaMemcpyHostToDevice);
-            if (err !=cudaSuccess) {
+/* DPCT_ORIG             cudaSetDevice(this->device_);*/
+            /*
+            DPCT1093:134: The "this->device_" device may be not the one intended for use. Adjust the selected device if
+            needed.
+            */
+            dpct::select_device(this->device_);
+/* DPCT_ORIG             cudaError_t err = cudaMemcpy(this->data_, tmp->get_data_ptr(), this->elements_*sizeof(T),
+ * cudaMemcpyHostToDevice);*/
+            dpct::err0 err = DPCT_CHECK_ERROR(dpct::get_in_order_queue()
+                                                  .memcpy(this->data_, tmp->get_data_ptr(), this->elements_ * sizeof(T))
+                                                  .wait());
+/* DPCT_ORIG             if (err !=cudaSuccess) {*/
+            /*
+            DPCT1000:136: Error handling if-stmt was detected but could not be rewritten.
+            */
+            if (err != 0) {
+                /*
+                DPCT1001:135: The statement could not be removed.
+                */
                 deallocate_memory();
                 this->data_ = 0;
                 this->dimensions_.clear();
                 throw cuda_error(err);
             }
         }
+    }
+    catch (sycl::exception const& exc) {
+      std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
+      std::exit(1);
     }
 
 #if __cplusplus > 199711L
@@ -138,37 +182,48 @@ namespace Gadgetron{
         this->delete_data_on_destruct_ = a.delete_data_on_destruct_;
     }
 #endif
-    template <typename T> 
-    cuNDArray<T>::cuNDArray(const hoNDArray<T> &a) : Gadgetron::NDArray<T>::NDArray() 
+    template <typename T> cuNDArray<T>::cuNDArray(const hoNDArray<T>& a) try : Gadgetron::NDArray<T>::NDArray()
     {
-        cudaGetDevice(&this->device_);
+/* DPCT_ORIG         cudaGetDevice(&this->device_);*/
+        this->device_ = dpct::get_current_device_id();
         a.get_dimensions(this->dimensions_);
         allocate_memory();
-        if (cudaMemcpy(this->data_, a.get_data_ptr(), this->elements_*sizeof(T), cudaMemcpyHostToDevice) != cudaSuccess) {
+/* DPCT_ORIG         if (cudaMemcpy(this->data_, a.get_data_ptr(), this->elements_*sizeof(T), cudaMemcpyHostToDevice) !=
+ * cudaSuccess) {*/
+        if (DPCT_CHECK_ERROR(
+                dpct::get_in_order_queue().memcpy(this->data_, a.get_data_ptr(), this->elements_ * sizeof(T)).wait()) !=
+            0) {
             deallocate_memory();
             this->data_ = 0;
             this->dimensions_.clear();
         }
     }
+    catch (sycl::exception const& exc) {
+      std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
+      std::exit(1);
+    }
 
     template <typename T> 
     cuNDArray<T>::cuNDArray(const std::vector<size_t> &dimensions) : Gadgetron::NDArray<T>::NDArray()
     {
-        cudaGetDevice(&this->device_);
+/* DPCT_ORIG         cudaGetDevice(&this->device_);*/
+        this->device_ = dpct::get_current_device_id();
         create(dimensions);
     }
 
     template <typename T> 
     cuNDArray<T>::cuNDArray(const std::vector<size_t> &dimensions, int device_no) : Gadgetron::NDArray<T>::NDArray()
     {
-        cudaGetDevice(&this->device_);
+/* DPCT_ORIG         cudaGetDevice(&this->device_);*/
+        this->device_ = dpct::get_current_device_id();
         create(dimensions,device_no);
     }
 
     template <typename T> 
     cuNDArray<T>::cuNDArray(const std::vector<size_t> &dimensions, T* data, bool delete_data_on_destruct) : Gadgetron::NDArray<T>::NDArray()
     {
-        cudaGetDevice(&this->device_);
+/* DPCT_ORIG         cudaGetDevice(&this->device_);*/
+        this->device_ = dpct::get_current_device_id();
         create(dimensions,data,delete_data_on_destruct);
     }
 
@@ -177,7 +232,8 @@ namespace Gadgetron{
     {
         std::vector<size_t> dim(1);
         dim[0] = len;
-        cudaGetDevice(&this->device_);
+/* DPCT_ORIG         cudaGetDevice(&this->device_);*/
+        this->device_ = dpct::get_current_device_id();
         create(dim);
     }
 
@@ -187,7 +243,8 @@ namespace Gadgetron{
         std::vector<size_t> dim(2);
         dim[0] = sx;
         dim[1] = sy;
-        cudaGetDevice(&this->device_);
+/* DPCT_ORIG         cudaGetDevice(&this->device_);*/
+        this->device_ = dpct::get_current_device_id();
         create(dim);
     }
 
@@ -198,7 +255,8 @@ namespace Gadgetron{
         dim[0] = sx;
         dim[1] = sy;
         dim[2] = sz;
-        cudaGetDevice(&this->device_);
+/* DPCT_ORIG         cudaGetDevice(&this->device_);*/
+        this->device_ = dpct::get_current_device_id();
         create(dim);
     }
 
@@ -210,7 +268,8 @@ namespace Gadgetron{
         dim[1] = sy;
         dim[2] = sz;
         dim[3] = st;
-        cudaGetDevice(&this->device_);
+/* DPCT_ORIG         cudaGetDevice(&this->device_);*/
+        this->device_ = dpct::get_current_device_id();
         create(dim);
     }
 
@@ -223,7 +282,8 @@ namespace Gadgetron{
         dim[2] = sz;
         dim[3] = st;
         dim[4] = sp;
-        cudaGetDevice(&this->device_);
+/* DPCT_ORIG         cudaGetDevice(&this->device_);*/
+        this->device_ = dpct::get_current_device_id();
         create(dim);
     }
 
@@ -237,7 +297,8 @@ namespace Gadgetron{
         dim[3] = st;
         dim[4] = sp;
         dim[5] = sq;
-        cudaGetDevice(&this->device_);
+/* DPCT_ORIG         cudaGetDevice(&this->device_);*/
+        this->device_ = dpct::get_current_device_id();
         create(dim);
     }
 
@@ -252,7 +313,8 @@ namespace Gadgetron{
         dim[4] = sp;
         dim[5] = sq;
         dim[6] = sr;
-        cudaGetDevice(&this->device_);
+/* DPCT_ORIG         cudaGetDevice(&this->device_);*/
+        this->device_ = dpct::get_current_device_id();
         create(dim);
     }
 
@@ -268,7 +330,8 @@ namespace Gadgetron{
         dim[5] = sq;
         dim[6] = sr;
         dim[7] = ss;
-        cudaGetDevice(&this->device_);
+/* DPCT_ORIG         cudaGetDevice(&this->device_);*/
+        this->device_ = dpct::get_current_device_id();
         create(dim);
     }
 
@@ -295,17 +358,27 @@ namespace Gadgetron{
     }
 #endif
 
-    template <typename T> 
-    cuNDArray<T>& cuNDArray<T>::operator=(const cuNDArray<T>& rhs)
-    {
-        int cur_device; 
-        CUDA_CALL(cudaGetDevice(&cur_device));
+    template <typename T> cuNDArray<T>& cuNDArray<T>::operator=(const cuNDArray<T>& rhs) try {
+        int cur_device;
+/* DPCT_ORIG         CUDA_CALL(cudaGetDevice(&cur_device));*/
+        CUDA_CALL(DPCT_CHECK_ERROR(cur_device = dpct::get_current_device_id()));
         bool dimensions_match = this->dimensions_equal(rhs);
         if (dimensions_match && (rhs.device_ == cur_device) && (cur_device == this->device_)) {
-            CUDA_CALL(cudaMemcpy(this->data_, rhs.data_, this->elements_*sizeof(T), cudaMemcpyDeviceToDevice));
+/* DPCT_ORIG             CUDA_CALL(cudaMemcpy(this->data_, rhs.data_, this->elements_*sizeof(T),
+ * cudaMemcpyDeviceToDevice));*/
+            /*
+            DPCT1064:179: Migrated cudaMemcpy call is used in a macro/template definition and may not be valid for all
+            macro/template uses. Adjust the code.
+            */
+            CUDA_CALL(DPCT_CHECK_ERROR(dpct::get_in_order_queue().memcpy(this->data_, rhs.data_, this->elements_ * sizeof(T))));
         }
         else {
-            CUDA_CALL(cudaSetDevice(this->device_));
+/* DPCT_ORIG             CUDA_CALL(cudaSetDevice(this->device_));*/
+            /*
+            DPCT1093:137: The "this->device_" device may be not the one intended for use. Adjust the selected device if
+            needed.
+            */
+            CUDA_CALL(DPCT_CHECK_ERROR(dpct::select_device(this->device_)));
             if( !dimensions_match ){
                 deallocate_memory();
                 this->elements_ = rhs.elements_;
@@ -313,59 +386,136 @@ namespace Gadgetron{
                 allocate_memory();
             }
             if (this->device_ == rhs.device_) {
-                if (cudaMemcpy(this->data_, rhs.data_, this->elements_*sizeof(T), cudaMemcpyDeviceToDevice) !=cudaSuccess) {	    
-                    cudaSetDevice(cur_device);
+/* DPCT_ORIG                 if (cudaMemcpy(this->data_, rhs.data_, this->elements_*sizeof(T), cudaMemcpyDeviceToDevice)
+ * !=cudaSuccess) {	    */
+                if (DPCT_CHECK_ERROR(
+                        dpct::get_in_order_queue().memcpy(this->data_, rhs.data_, this->elements_ * sizeof(T))) != 0) {
+/* DPCT_ORIG                     cudaSetDevice(cur_device);*/
+                    /*
+                    DPCT1093:138: The "cur_device" device may be not the one intended for use. Adjust the selected
+                    device if needed.
+                    */
+                    dpct::select_device(cur_device);
                     throw cuda_error("cuNDArray::operator=: failed to copy data (2)");
                 }
             } else {
-                if( cudaSetDevice(rhs.device_) != cudaSuccess) {
-                    cudaSetDevice(cur_device);
+/* DPCT_ORIG                 if( cudaSetDevice(rhs.device_) != cudaSuccess) {*/
+                /*
+                DPCT1093:139: The "rhs.device_" device may be not the one intended for use. Adjust the selected device
+                if needed.
+                */
+                if (DPCT_CHECK_ERROR(dpct::select_device(rhs.device_)) != 0) {
+/* DPCT_ORIG                     cudaSetDevice(cur_device);*/
+                    /*
+                    DPCT1093:140: The "cur_device" device may be not the one intended for use. Adjust the selected
+                    device if needed.
+                    */
+                    dpct::select_device(cur_device);
                     throw cuda_error("cuNDArray::operator=: unable to set device no (2)");
                 }
                 boost::shared_ptr< hoNDArray<T> > tmp = rhs.to_host();
-                if( cudaSetDevice(this->device_) != cudaSuccess) {
-                    cudaSetDevice(cur_device);
+/* DPCT_ORIG                 if( cudaSetDevice(this->device_) != cudaSuccess) {*/
+                /*
+                DPCT1093:141: The "this->device_" device may be not the one intended for use. Adjust the selected device
+                if needed.
+                */
+                if (DPCT_CHECK_ERROR(dpct::select_device(this->device_)) != 0) {
+/* DPCT_ORIG                     cudaSetDevice(cur_device);*/
+                    /*
+                    DPCT1093:142: The "cur_device" device may be not the one intended for use. Adjust the selected
+                    device if needed.
+                    */
+                    dpct::select_device(cur_device);
                     throw cuda_error("cuNDArray::operator=: unable to set device no (3)");
                 }
-                if (cudaMemcpy(this->data_, tmp->get_data_ptr(), this->elements_*sizeof(T), cudaMemcpyHostToDevice) != cudaSuccess) {
-                    cudaSetDevice(cur_device);
+/* DPCT_ORIG                 if (cudaMemcpy(this->data_, tmp->get_data_ptr(), this->elements_*sizeof(T),
+ * cudaMemcpyHostToDevice) != cudaSuccess) {*/
+                if (DPCT_CHECK_ERROR(dpct::get_in_order_queue()
+                                         .memcpy(this->data_, tmp->get_data_ptr(), this->elements_ * sizeof(T))
+                                         .wait()) != 0) {
+/* DPCT_ORIG                     cudaSetDevice(cur_device);*/
+                    /*
+                    DPCT1093:143: The "cur_device" device may be not the one intended for use. Adjust the selected
+                    device if needed.
+                    */
+                    dpct::select_device(cur_device);
                     throw cuda_error("cuNDArray::operator=: failed to copy data (3)");
                 }
             }
-            if( cudaSetDevice(cur_device) != cudaSuccess) {
+/* DPCT_ORIG             if( cudaSetDevice(cur_device) != cudaSuccess) {*/
+            /*
+            DPCT1093:144: The "cur_device" device may be not the one intended for use. Adjust the selected device if
+            needed.
+            */
+            if (DPCT_CHECK_ERROR(dpct::select_device(cur_device)) != 0) {
                 throw cuda_error("cuNDArray::operator=: unable to restore to current device");
             }
         }
         return *this;
     }
+    catch (sycl::exception const& exc) {
+      std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
+      std::exit(1);
+    }
 
-    template <typename T> 
-    cuNDArray<T>& cuNDArray<T>::operator=(const hoNDArray<T>& rhs)
-    {
-        int cur_device; 
-        CUDA_CALL(cudaGetDevice(&cur_device));
+    template <typename T> cuNDArray<T>& cuNDArray<T>::operator=(const hoNDArray<T>& rhs) try {
+        int cur_device;
+/* DPCT_ORIG         CUDA_CALL(cudaGetDevice(&cur_device));*/
+        CUDA_CALL(DPCT_CHECK_ERROR(cur_device = dpct::get_current_device_id()));
         bool dimensions_match = this->dimensions_equal(rhs);
         if (dimensions_match && (cur_device == this->device_)) {
-            CUDA_CALL(cudaMemcpy(this->get_data_ptr(), rhs.get_data_ptr(), this->get_number_of_elements()*sizeof(T), cudaMemcpyHostToDevice));
+/* DPCT_ORIG             CUDA_CALL(cudaMemcpy(this->get_data_ptr(), rhs.get_data_ptr(),
+ * this->get_number_of_elements()*sizeof(T), cudaMemcpyHostToDevice));*/
+            /*
+            DPCT1064:180: Migrated cudaMemcpy call is used in a macro/template definition and may not be valid for all
+            macro/template uses. Adjust the code.
+            */
+            CUDA_CALL(DPCT_CHECK_ERROR(
+                dpct::get_in_order_queue()
+                    .memcpy(this->get_data_ptr(), rhs.get_data_ptr(), this->get_number_of_elements() * sizeof(T))
+                    .wait()));
         }
         else {
-            CUDA_CALL(cudaSetDevice(this->device_));
+/* DPCT_ORIG             CUDA_CALL(cudaSetDevice(this->device_));*/
+            /*
+            DPCT1093:145: The "this->device_" device may be not the one intended for use. Adjust the selected device if
+            needed.
+            */
+            CUDA_CALL(DPCT_CHECK_ERROR(dpct::select_device(this->device_)));
             if( !dimensions_match ){
                 deallocate_memory();
                 this->elements_ = rhs.get_number_of_elements();
                 rhs.get_dimensions(this->dimensions_);
                 allocate_memory();
             }
-            if (cudaMemcpy(this->get_data_ptr(), rhs.get_data_ptr(), this->get_number_of_elements()*sizeof(T),
-                cudaMemcpyHostToDevice) !=cudaSuccess) {
-                    cudaSetDevice(cur_device);
+/* DPCT_ORIG             if (cudaMemcpy(this->get_data_ptr(), rhs.get_data_ptr(),
+   this->get_number_of_elements()*sizeof(T), cudaMemcpyHostToDevice) !=cudaSuccess) {*/
+            if (DPCT_CHECK_ERROR(
+                    dpct::get_in_order_queue()
+                        .memcpy(this->get_data_ptr(), rhs.get_data_ptr(), this->get_number_of_elements() * sizeof(T))
+                        .wait()) != 0) {
+/* DPCT_ORIG                     cudaSetDevice(cur_device);*/
+                    /*
+                    DPCT1093:146: The "cur_device" device may be not the one intended for use. Adjust the selected
+                    device if needed.
+                    */
+                    dpct::select_device(cur_device);
                     throw cuda_error("cuNDArray::operator=: failed to copy data (1)");
             }
-            if( cudaSetDevice(cur_device) != cudaSuccess) {
+/* DPCT_ORIG             if( cudaSetDevice(cur_device) != cudaSuccess) {*/
+            /*
+            DPCT1093:147: The "cur_device" device may be not the one intended for use. Adjust the selected device if
+            needed.
+            */
+            if (DPCT_CHECK_ERROR(dpct::select_device(cur_device)) != 0) {
                 throw cuda_error("cuNDArray::operator=: unable to restore to current device");
             }
         }
         return *this;
+    }
+    catch (sycl::exception const& exc) {
+      std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
+      std::exit(1);
     }
 
     template <typename T> 
@@ -395,35 +545,45 @@ namespace Gadgetron{
         Gadgetron::NDArray<T>::create(dimensions);
     }
 
-    template <typename T> 
-    inline void cuNDArray<T>::create(const std::vector<size_t> &dimensions, T* data, bool delete_data_on_destruct)
-    {
+    template <typename T>
+    inline void cuNDArray<T>::create(const std::vector<size_t>& dimensions, T* data, bool delete_data_on_destruct) try {
         if (!data) {
             throw std::runtime_error("cuNDArray::create: 0x0 pointer provided");
         }
 
-        int tmp_device; 
-        if( cudaGetDevice(&tmp_device) != cudaSuccess) {
+        int tmp_device;
+/* DPCT_ORIG         if( cudaGetDevice(&tmp_device) != cudaSuccess) {*/
+        if (DPCT_CHECK_ERROR(tmp_device = dpct::get_current_device_id()) != 0) {
             throw cuda_error("cuNDArray::create: Unable to query for device");
         }
 
-        cudaDeviceProp deviceProp;
-        if( cudaGetDeviceProperties( &deviceProp, tmp_device) != cudaSuccess) {
+/* DPCT_ORIG         cudaDeviceProp deviceProp;*/
+        dpct::device_info deviceProp;
+/* DPCT_ORIG         if( cudaGetDeviceProperties( &deviceProp, tmp_device) != cudaSuccess) {*/
+        if (DPCT_CHECK_ERROR(dpct::get_device(tmp_device).get_device_info(deviceProp)) != 0) {
             throw cuda_error("cuNDArray::create: Unable to query device properties");
         }
 
-        if (deviceProp.unifiedAddressing) {
-            cudaPointerAttributes attrib;
-            if (cudaPointerGetAttributes(&attrib, data) != cudaSuccess) {
+/* DPCT_ORIG         if (deviceProp.unifiedAddressing) {*/
+        if (deviceProp.get_host_unified_memory()) {
+/* DPCT_ORIG             cudaPointerAttributes attrib;*/
+            dpct::pointer_attributes attrib;
+/* DPCT_ORIG             if (cudaPointerGetAttributes(&attrib, data) != cudaSuccess) {*/
+            if (DPCT_CHECK_ERROR(attrib.init(data)) != 0) {
                 CHECK_FOR_CUDA_ERROR();
                 throw cuda_error("cuNDArray::create: Unable to determine attributes of pointer");
             }
-            this->device_ = attrib.device;
+/* DPCT_ORIG             this->device_ = attrib.device;*/
+            this->device_ = attrib.get_device_id();
         } else {
             this->device_ = tmp_device;
         }
 
         Gadgetron::NDArray<T>::create(dimensions, data, delete_data_on_destruct);
+    }
+    catch (sycl::exception const& exc) {
+      std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
+      std::exit(1);
     }
 
     template <typename T> 
@@ -526,9 +686,7 @@ namespace Gadgetron{
       return ret;
     }
 
-    template <typename T> 
-    inline void cuNDArray<T>::to_host( hoNDArray<T> *out ) const 
-    {
+    template <typename T> inline void cuNDArray<T>::to_host(hoNDArray<T>* out) const try {
         if( !out ){
             throw std::runtime_error("cuNDArray::to_host(): illegal array passed.");
         }
@@ -537,82 +695,131 @@ namespace Gadgetron{
             out->create(this->get_dimensions());
         }
 
-        if( cudaMemcpy( out->get_data_ptr(), this->data_, this->elements_*sizeof(T), cudaMemcpyDeviceToHost) != cudaSuccess) {
+/* DPCT_ORIG         if( cudaMemcpy( out->get_data_ptr(), this->data_, this->elements_*sizeof(T),
+ * cudaMemcpyDeviceToHost) != cudaSuccess) {*/
+        if (DPCT_CHECK_ERROR(dpct::get_in_order_queue()
+                                 .memcpy(out->get_data_ptr(), this->data_, this->elements_ * sizeof(T))
+                                 .wait()) != 0) {
             throw cuda_error("cuNDArray::to_host(): failed to copy memory from device");
         }
     }
+    catch (sycl::exception const& exc) {
+      std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
+      std::exit(1);
+    }
 
-    template <typename T> 
-    inline void cuNDArray<T>::set_device(int device)
-    {
+    template <typename T> inline void cuNDArray<T>::set_device(int device) try {
         if( device_ == device )
             return;
 
         int cur_device;
-        if( cudaGetDevice(&cur_device) != cudaSuccess) {
+/* DPCT_ORIG         if( cudaGetDevice(&cur_device) != cudaSuccess) {*/
+        if (DPCT_CHECK_ERROR(cur_device = dpct::get_current_device_id()) != 0) {
             throw cuda_error("cuNDArray::set_device: unable to get device no");
         }
 
-        if( cur_device != device_ && cudaSetDevice(device_) != cudaSuccess) {
+/* DPCT_ORIG         if( cur_device != device_ && cudaSetDevice(device_) != cudaSuccess) {*/
+        /*
+        DPCT1093:122: The "device_" device may be not the one intended for use. Adjust the selected device if needed.
+        */
+        if (cur_device != device_ && DPCT_CHECK_ERROR(dpct::select_device(device_)) != 0) {
             throw cuda_error("cuNDArray::set_device: unable to set device no");
         }
 
         boost::shared_ptr< hoNDArray<T> > tmp = to_host();
         deallocate_memory();
-        if( cudaSetDevice(device) != cudaSuccess) {
-            cudaSetDevice(cur_device);
+/* DPCT_ORIG         if( cudaSetDevice(device) != cudaSuccess) {*/
+        /*
+        DPCT1093:123: The "device" device may be not the one intended for use. Adjust the selected device if needed.
+        */
+        if (DPCT_CHECK_ERROR(dpct::select_device(device)) != 0) {
+/* DPCT_ORIG             cudaSetDevice(cur_device);*/
+            /*
+            DPCT1093:124: The "cur_device" device may be not the one intended for use. Adjust the selected device if
+            needed.
+            */
+            dpct::select_device(cur_device);
             throw cuda_error("cuNDArray::set_device: unable to set device no (2)");
         }
 
         device_ = device;
         allocate_memory();
-        if (cudaMemcpy(this->data_, tmp->get_data_ptr(), this->elements_*sizeof(T), cudaMemcpyHostToDevice) != cudaSuccess) {
-            cudaSetDevice(cur_device);
+/* DPCT_ORIG         if (cudaMemcpy(this->data_, tmp->get_data_ptr(), this->elements_*sizeof(T), cudaMemcpyHostToDevice)
+ * != cudaSuccess) {*/
+        if (DPCT_CHECK_ERROR(dpct::get_in_order_queue()
+                                 .memcpy(this->data_, tmp->get_data_ptr(), this->elements_ * sizeof(T))
+                                 .wait()) != 0) {
+/* DPCT_ORIG             cudaSetDevice(cur_device);*/
+            /*
+            DPCT1093:125: The "cur_device" device may be not the one intended for use. Adjust the selected device if
+            needed.
+            */
+            dpct::select_device(cur_device);
             throw cuda_error("cuNDArray::set_device: failed to copy data");
         }
 
-        if( cudaSetDevice(cur_device) != cudaSuccess) {
+/* DPCT_ORIG         if( cudaSetDevice(cur_device) != cudaSuccess) {*/
+        /*
+        DPCT1093:126: The "cur_device" device may be not the one intended for use. Adjust the selected device if needed.
+        */
+        if (DPCT_CHECK_ERROR(dpct::select_device(cur_device)) != 0) {
             throw cuda_error("cuNDArray::set_device: unable to restore device to current device");
         }
+    }
+    catch (sycl::exception const& exc) {
+      std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
+      std::exit(1);
     }
 
     template <typename T> 
     inline int cuNDArray<T>::get_device() { return device_; }
 
-    template <typename T> 
-    inline thrust::device_ptr<T> cuNDArray<T>::get_device_ptr()
+    template <typename T>
+    /* DPCT_ORIG     inline thrust::device_ptr<T> cuNDArray<T>::get_device_ptr()*/
+    inline dpct::device_pointer<T> cuNDArray<T>::get_device_ptr()
     {
-        return thrust::device_ptr<T>(this->data_);
+/* DPCT_ORIG         return thrust::device_ptr<T>(this->data_);*/
+        return dpct::device_pointer<T>(this->data_);
     }
 
     template <typename T>
-    inline const thrust::device_ptr<T> cuNDArray<T>::get_device_ptr() const
+    /* DPCT_ORIG     inline const thrust::device_ptr<T> cuNDArray<T>::get_device_ptr() const*/
+    inline const dpct::device_pointer<T> cuNDArray<T>::get_device_ptr() const
     {
-        return thrust::device_ptr<T>(this->data_);
-    }
-
-    template <typename T> 
-    inline thrust::device_ptr<T> cuNDArray<T>::begin()
-    {
-        return thrust::device_ptr<T>(this->data_);
-    }
-
-    template <typename T> 
-    inline thrust::device_ptr<T> cuNDArray<T>::end()
-    {
-        return thrust::device_ptr<T>(this->data_)+this->get_number_of_elements();
-    }
-
-    template <typename T> 
-    inline const thrust::device_ptr<T> cuNDArray<T>::begin() const
-    {
-        return thrust::device_ptr<T>(this->data_);
+/* DPCT_ORIG         return thrust::device_ptr<T>(this->data_);*/
+        return dpct::device_pointer<T>(this->data_);
     }
 
     template <typename T>
-    inline const thrust::device_ptr<T> cuNDArray<T>::end() const
+    /* DPCT_ORIG     inline thrust::device_ptr<T> cuNDArray<T>::begin()*/
+    inline dpct::device_pointer<T> cuNDArray<T>::begin()
     {
-        return thrust::device_ptr<T>(this->data_)+this->get_number_of_elements();
+/* DPCT_ORIG         return thrust::device_ptr<T>(this->data_);*/
+        return dpct::device_pointer<T>(this->data_);
+    }
+
+    template <typename T>
+    /* DPCT_ORIG     inline thrust::device_ptr<T> cuNDArray<T>::end()*/
+    inline dpct::device_pointer<T> cuNDArray<T>::end()
+    {
+/* DPCT_ORIG         return thrust::device_ptr<T>(this->data_)+this->get_number_of_elements();*/
+        return dpct::device_pointer<T>(this->data_) + this->get_number_of_elements();
+    }
+
+    template <typename T>
+    /* DPCT_ORIG     inline const thrust::device_ptr<T> cuNDArray<T>::begin() const*/
+    inline const dpct::device_pointer<T> cuNDArray<T>::begin() const
+    {
+/* DPCT_ORIG         return thrust::device_ptr<T>(this->data_);*/
+        return dpct::device_pointer<T>(this->data_);
+    }
+
+    template <typename T>
+    /* DPCT_ORIG     inline const thrust::device_ptr<T> cuNDArray<T>::end() const*/
+    inline const dpct::device_pointer<T> cuNDArray<T>::end() const
+    {
+/* DPCT_ORIG         return thrust::device_ptr<T>(this->data_)+this->get_number_of_elements();*/
+        return dpct::device_pointer<T>(this->data_) + this->get_number_of_elements();
     }
 
     template <typename T>
@@ -622,7 +829,12 @@ namespace Gadgetron{
             throw std::runtime_error("cuNDArray::at(): index out of range.");
         }
         T res;
-        CUDA_CALL(cudaMemcpy(&res, &this->get_data_ptr()[idx], sizeof(T), cudaMemcpyDeviceToHost));
+/* DPCT_ORIG         CUDA_CALL(cudaMemcpy(&res, &this->get_data_ptr()[idx], sizeof(T), cudaMemcpyDeviceToHost));*/
+        /*
+        DPCT1064:181: Migrated cudaMemcpy call is used in a macro/template definition and may not be valid for all
+        macro/template uses. Adjust the code.
+        */
+        CUDA_CALL(DPCT_CHECK_ERROR(dpct::get_in_order_queue().memcpy(&res, &this->get_data_ptr()[idx], sizeof(T)).wait()));
         return res;
     }
 
@@ -633,13 +845,16 @@ namespace Gadgetron{
             throw std::runtime_error("cuNDArray::operator[]: index out of range.");
         }
         T res;
-        CUDA_CALL(cudaMemcpy(&res, &this->get_data_ptr()[idx], sizeof(T), cudaMemcpyDeviceToHost));
+/* DPCT_ORIG         CUDA_CALL(cudaMemcpy(&res, &this->get_data_ptr()[idx], sizeof(T), cudaMemcpyDeviceToHost));*/
+        /*
+        DPCT1064:182: Migrated cudaMemcpy call is used in a macro/template definition and may not be valid for all
+        macro/template uses. Adjust the code.
+        */
+        CUDA_CALL(DPCT_CHECK_ERROR(dpct::get_in_order_queue().memcpy(&res, &this->get_data_ptr()[idx], sizeof(T)).wait()));
         return res;
     }
 
-    template <typename T> 
-    void cuNDArray<T>::allocate_memory()
-    {
+    template <typename T> void cuNDArray<T>::allocate_memory() try {
         deallocate_memory();
 
         this->elements_ = 1;
@@ -652,19 +867,32 @@ namespace Gadgetron{
         size_t size = this->elements_ * sizeof(T);
 
         int device_no_old;
-        if (cudaGetDevice(&device_no_old) != cudaSuccess) {
+/* DPCT_ORIG         if (cudaGetDevice(&device_no_old) != cudaSuccess) {*/
+        if (DPCT_CHECK_ERROR(device_no_old = dpct::get_current_device_id()) != 0) {
             throw cuda_error("cuNDArray::allocate_memory: unable to get device no");
         }
 
         if (device_ != device_no_old) {
-            if (cudaSetDevice(device_) != cudaSuccess) {
+/* DPCT_ORIG             if (cudaSetDevice(device_) != cudaSuccess) {*/
+            /*
+            DPCT1093:127: The "device_" device may be not the one intended for use. Adjust the selected device if
+            needed.
+            */
+            if (DPCT_CHECK_ERROR(dpct::select_device(device_)) != 0) {
                 throw cuda_error("cuNDArray::allocate_memory: unable to set device no");
             }
         }
 
-        if (cudaMalloc((void**) &this->data_,size) != cudaSuccess) {
+/* DPCT_ORIG         if (cudaMalloc((void**) &this->data_,size) != cudaSuccess) {*/
+        if (DPCT_CHECK_ERROR((this->data_) = (typename std::remove_reference<decltype(this->data_)>::type)
+                                 sycl::malloc_device(size, dpct::get_in_order_queue())) != 0) {
             size_t free = 0, total = 0;
-            cudaMemGetInfo(&free, &total);
+/* DPCT_ORIG             cudaMemGetInfo(&free, &total);*/
+            /*
+            DPCT1106:148: 'cudaMemGetInfo' was migrated with the Intel extensions for device information which may not
+            be supported by all compilers or runtimes. You may need to adjust the code.
+            */
+            dpct::get_current_device().get_memory_info(free, total);
             std::stringstream err("cuNDArray::allocate_memory() : Error allocating CUDA memory");
             err << "CUDA Memory: " << free << " (" << total << ")";
 
@@ -678,28 +906,55 @@ namespace Gadgetron{
         }
 
         if (device_ != device_no_old) {
-            if (cudaSetDevice(device_no_old) != cudaSuccess) {
+/* DPCT_ORIG             if (cudaSetDevice(device_no_old) != cudaSuccess) {*/
+            /*
+            DPCT1093:128: The "device_no_old" device may be not the one intended for use. Adjust the selected device if
+            needed.
+            */
+            if (DPCT_CHECK_ERROR(dpct::select_device(device_no_old)) != 0) {
                 throw cuda_error("cuNDArray::allocate_memory: unable to restore device no");
             }
         }
     }
+    catch (sycl::exception const& exc) {
+      std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
+      std::exit(1);
+    }
 
-    template <typename T> 
-    void cuNDArray<T>::deallocate_memory()
-    {
+    template <typename T> void cuNDArray<T>::deallocate_memory() try {
         if (this->data_) {
 
             int device_no_old;
-            CUDA_CALL(cudaGetDevice(&device_no_old));
+/* DPCT_ORIG             CUDA_CALL(cudaGetDevice(&device_no_old));*/
+            CUDA_CALL(DPCT_CHECK_ERROR(device_no_old = dpct::get_current_device_id()));
             if (device_ != device_no_old) {
-                CUDA_CALL(cudaSetDevice(device_));
+/* DPCT_ORIG                 CUDA_CALL(cudaSetDevice(device_));*/
+                /*
+                DPCT1093:131: The "device_" device may be not the one intended for use. Adjust the selected device if
+                needed.
+                */
+                CUDA_CALL(DPCT_CHECK_ERROR(dpct::select_device(device_)));
             }
 
-            CUDA_CALL(cudaFree(this->data_));
+/* DPCT_ORIG             CUDA_CALL(cudaFree(this->data_));*/
+            /*
+            DPCT1064:183: Migrated cudaFree call is used in a macro/template definition and may not be valid for all
+            macro/template uses. Adjust the code.
+            */
+            CUDA_CALL(DPCT_CHECK_ERROR(dpct::dpct_free(this->data_, dpct::get_in_order_queue())));
             if (device_ != device_no_old) {
-                CUDA_CALL(cudaSetDevice(device_no_old));
+/* DPCT_ORIG                 CUDA_CALL(cudaSetDevice(device_no_old));*/
+                /*
+                DPCT1093:132: The "device_no_old" device may be not the one intended for use. Adjust the selected device
+                if needed.
+                */
+                CUDA_CALL(DPCT_CHECK_ERROR(dpct::select_device(device_no_old)));
             }
             this->data_ = 0;
         }
+    }
+    catch (sycl::exception const& exc) {
+      std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
+      std::exit(1);
     }
 }

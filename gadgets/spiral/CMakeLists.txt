@@ -3,7 +3,7 @@
 set(SPIRAL_HEADER_FILES SpiralToGenericGadget.h)
 set(SPIRAL_SRC_FILES SpiralToGenericGadget.cpp)
 
-if (CUDA_FOUND)
+if (SYCL_FOUND)
 set(SPIRAL_HEADER_FILES gpuSpiralSensePrepGadget.h gpuSpiralDeblurGadget.h ${SPIRAL_HEADER_FILES})
 set(SPIRAL_SRC_FILES  gpuSpiralSensePrepGadget.cpp gpuSpiralDeblurGadget.cpp ${SPIRAL_SRC_FILES})
 endif()
@@ -20,7 +20,7 @@ target_link_libraries(gadgetron_spiral
 	gadgetron_toolbox_spiral
   gadgetron_toolbox_cpucore)
 
-if (CUDA_FOUND)
+if (SYCL_FOUND)
     target_link_libraries(gadgetron_spiral
                                 gadgetron_gpuparallelmri
                                 gadgetron_toolbox_gpu

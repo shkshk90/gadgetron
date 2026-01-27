@@ -7,8 +7,15 @@
 
 #pragma once
 
+#include <oneapi/dpl/execution>
+#include <oneapi/dpl/algorithm>
+#define DPCT_PROFILING_ENABLED
+#include <sycl/sycl.hpp>
+#include <dpct/dpct.hpp>
 #include "cuNDArray.h"
-#include <thrust/device_vector.h>
+#include <dpct/dpl_utils.hpp>
+
+/* DPCT_ORIG #include <thrust/device_vector.h>*/
 #include "gadgetron_toolbox_hyper_export.h"
 namespace Gadgetron {
 

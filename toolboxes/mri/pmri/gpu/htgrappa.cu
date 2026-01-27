@@ -5,7 +5,7 @@
 #include "GPUTimer.h"
 #include "cuNDArray_elemwise.h"
 #include "CUBLASContextProvider.h"
-#include "hoNDArray_fileio.h"
+#include "cpu/hoNDArray_fileio.h"
 
 #include <cublas_v2.h>
 //#include <cula_lapack_device.h>

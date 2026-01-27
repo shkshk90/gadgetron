@@ -98,8 +98,8 @@ if (BUILD_PYTHON_SUPPORT)
     add_definitions("-DCOMPILING_WITH_PYTHON_SUPPORT")
 endif ()
 
-if (CUDA_FOUND)
-    target_link_libraries(gadgetron ${CUDA_LIBRARIES})
+if (SYCL_FOUND)
+    # SYCL runtime is linked via -fsycl compile/link flags set globally
 endif ()
 
 if (GPERFTOOLS_PROFILER)

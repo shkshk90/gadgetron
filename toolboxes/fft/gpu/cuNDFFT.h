@@ -6,6 +6,11 @@
 #define CUNDFFT_H
 #pragma once
 
+#include <oneapi/dpl/execution>
+#include <oneapi/dpl/algorithm>
+#define DPCT_PROFILING_ENABLED
+#include <sycl/sycl.hpp>
+#include <dpct/dpct.hpp>
 #include "cuNDArray.h"
 #include "gpufft_export.h"
 #include <vector>

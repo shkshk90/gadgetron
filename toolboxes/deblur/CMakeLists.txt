@@ -1,4 +1,4 @@
-if (CUDA_FOUND)
+if (SYCL_FOUND)
 add_library(gadgetron_toolbox_deblur SHARED
         MFIOperator.h
         MFIOperator.cpp)

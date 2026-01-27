@@ -12,6 +12,7 @@
 #include "vector_td_utilities.h"
 
 #include <algorithm>
+#include <cmath>
 
 namespace Gadgetron{
 

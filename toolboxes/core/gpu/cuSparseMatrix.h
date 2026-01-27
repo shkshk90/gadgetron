@@ -6,8 +6,15 @@
  */
 
 #pragma once
-#include "cusparse.h"
-#include <thrust/device_vector.h>
+/* DPCT_ORIG #include "cusparse.h"*/
+#include <oneapi/dpl/execution>
+#include <oneapi/dpl/algorithm>
+#define DPCT_PROFILING_ENABLED
+#include <sycl/sycl.hpp>
+#include <dpct/dpct.hpp>
+#include <dpct/sparse_utils.hpp>
+#include <dpct/dpl_utils.hpp>
+/* DPCT_ORIG #include <thrust/device_vector.h>*/
 #include "cuNDArray.h"
 #include "cudaDeviceManager.h"
 
@@ -19,18 +26,32 @@ namespace Gadgetron
 	struct cuCsrMatrix
 	{
 
-		cuCsrMatrix(size_t rows, size_t cols, thrust::device_vector<int> csrRow, thrust::device_vector<int> csrColdnd, thrust::device_vector<T> data) : csrRow{std::move(csrRow)}, csrColdnd{std::move(csrColdnd)}, data{std::move(data)}, rows{rows}, cols{cols}
-		{
-			cusparseCreateCsr(&descr, rows, cols, this->data.size(), 
-				thrust::raw_pointer_cast(this->csrRow.data()), thrust::raw_pointer_cast(this->csrColdnd.data()), thrust::raw_pointer_cast(this->data.data()), 
-				CUSPARSE_INDEX_32I, CUSPARSE_INDEX_32I, CUSPARSE_INDEX_BASE_ZERO, Gadgetron::cuda_datatype<T>());
-		}
+/* DPCT_ORIG 		cuCsrMatrix(size_t rows, size_t cols, thrust::device_vector<int> csrRow,
+ * thrust::device_vector<int> csrColdnd, thrust::device_vector<T> data) : csrRow{std::move(csrRow)},
+ * csrColdnd{std::move(csrColdnd)}, data{std::move(data)}, rows{rows}, cols{cols}*/
+                cuCsrMatrix(size_t rows, size_t cols, dpct::device_vector<int> csrRow,
+                            dpct::device_vector<int> csrColdnd, dpct::device_vector<T> data)
+                    : csrRow{std::move(csrRow)}, csrColdnd{std::move(csrColdnd)}, data{std::move(data)}, rows{rows},
+                      cols{cols}
+                {
+/* DPCT_ORIG 			cusparseCreateCsr(&descr, rows, cols, this->data.size(),
+                                thrust::raw_pointer_cast(this->csrRow.data()),
+   thrust::raw_pointer_cast(this->csrColdnd.data()), thrust::raw_pointer_cast(this->data.data()), CUSPARSE_INDEX_32I,
+   CUSPARSE_INDEX_32I, CUSPARSE_INDEX_BASE_ZERO, Gadgetron::cuda_datatype<T>());*/
+                        descr = std::make_shared<dpct::sparse::sparse_matrix_desc>(
+                            rows, cols, this->data.size(), dpct::get_raw_pointer(this->csrRow.data()),
+                            dpct::get_raw_pointer(this->csrColdnd.data()), dpct::get_raw_pointer(this->data.data()),
+                            dpct::library_data_t::real_int32, dpct::library_data_t::real_int32,
+                            oneapi::mkl::index_base::zero, Gadgetron::cuda_datatype<T>(),
+                            dpct::sparse::matrix_format::csr);
+                }
 
 		~cuCsrMatrix()
 		{
 			if (this->descr)
-				cusparseDestroySpMat(this->descr);
-		}
+/* DPCT_ORIG 				cusparseDestroySpMat(this->descr);*/
+                                (this->descr).reset();
+                }
 
 		cuCsrMatrix(cuCsrMatrix &&other)
 		{
@@ -48,10 +69,13 @@ namespace Gadgetron
 		}
 
 		size_t rows, cols;
-		thrust::device_vector<int> csrRow, csrColdnd;
-		thrust::device_vector<T> data;
-		cusparseSpMatDescr_t descr;
-	};
+/* DPCT_ORIG 		thrust::device_vector<int> csrRow, csrColdnd;*/
+                dpct::device_vector<int> csrRow, csrColdnd;
+/* DPCT_ORIG 		thrust::device_vector<T> data;*/
+                dpct::device_vector<T> data;
+/* DPCT_ORIG 		cusparseSpMatDescr_t descr;*/
+                dpct::sparse::sparse_matrix_desc_t descr;
+        };
 
 	/**
  * Performs a sparse matrix vector multiplication: vec_out = alpha*Mat * beta*vec_in

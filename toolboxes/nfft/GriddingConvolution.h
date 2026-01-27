@@ -76,8 +76,11 @@ namespace Gadgetron
                                 REAL os_factor,
                                 const K<REAL, D>& kernel);
 
+        /*
+        DPCT1109:66: Virtual functions cannot be called in SYCL device code. You need to adjust the code.
+        */
         virtual ~GriddingConvolutionBase() = default;
-        
+
         /**
          * \brief Prepare gridding convolution.
          * 

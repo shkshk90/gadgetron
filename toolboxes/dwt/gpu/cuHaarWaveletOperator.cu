@@ -115,9 +115,9 @@ template<class T, unsigned int D, class wave> __global__ void haarKernel(T* in, 
 
 	const int idx = blockIdx.y*gridDim.x*blockDim.x + blockIdx.x*blockDim.x + threadIdx.x;
 	if( idx < newsize ){
-		vector_td<int,D> co = idx_to_co<D>(idx,dims2);
+		vector_td<int,D> co = idx_to_co<int,D>(idx,dims2);
 		co *= 2;
-		recWave<T,D,wave,D-1>::loadData(elements,in+co_to_idx<D>(co,dims),dims);
+		recWave<T,D,wave,D-1>::loadData(elements,in+co_to_idx<int, D>(co,dims),dims);
 		recWave<T,D,wave,D-1>::predict(elements);
 
 		for (int i = 0; i < Pow<2,D>::Value; i++){
@@ -141,10 +141,10 @@ template<class T, unsigned int D, class wave> __global__ void inv_haarKernel(T* 
 			elements[i] = in[i*oldsize+idx] ;
 		}
 		recWave<T,D,wave,D-1>::ipredict(elements);
-		vector_td<int,D> co = idx_to_co<D>(idx,dims2);
+		vector_td<int,D> co = idx_to_co<int,D>(idx,dims2);
 		co *= 2;
 
-		recWave<T,D,wave,D-1>::saveData(elements,out+co_to_idx<D>(co,dims),dims);
+		recWave<T,D,wave,D-1>::saveData(elements,out+co_to_idx<int,D>(co,dims),dims);
 
 
 
@@ -191,7 +191,7 @@ template<class T, unsigned int D> void cuHaarWaveletOperator<T,D>::mult_M(cuNDAr
 	if (in->dimensions_equal(tmp_in))
 		*tmp_in = *in;
 	else
-		pad<T,D>(in,tmp_in);
+		pad<T,D>(*in,*tmp_in);
 
 
 	cuNDArray<T>* tmp_out;
@@ -221,7 +221,7 @@ template<class T, unsigned int D> void cuHaarWaveletOperator<T,D>::mult_M(cuNDAr
 	dims2 /= 2;
 	if (dims != dims2){
 		std::vector<size_t> sdim = to_std_vector(vector_td<size_t,D>(dims));
-		cuNDArray<T> smallArray(&sdim,tmp_out->get_data_ptr());
+		cuNDArray<T> smallArray(sdim,tmp_out->get_data_ptr());
 		smallArray.squeeze();
 		cuNDArray<T> smallTmp(smallArray);
 		linearOperator<cuNDArray<T> >* smallWave;
@@ -271,9 +271,9 @@ template<class T, unsigned int D> void cuHaarWaveletOperator<T,D>::mult_MH(cuNDA
 
 	if (prod(cur_dims) > 1){
 		std::vector<size_t> sdim = to_std_vector(vector_td<size_t,D>(cur_dims));
-		cuNDArray<T> smallIn(&sdim,tmp_in->get_data_ptr());
+		cuNDArray<T> smallIn(sdim,tmp_in->get_data_ptr());
 		smallIn.squeeze();
-		cuNDArray<T> smallOut(&sdim,tmp_out->get_data_ptr());
+		cuNDArray<T> smallOut(sdim,tmp_out->get_data_ptr());
 		smallOut.squeeze();
 		linearOperator<cuNDArray<T> >* smallWave;
 
@@ -314,7 +314,8 @@ template<class T, unsigned int D> void cuHaarWaveletOperator<T,D>::mult_MH(cuNDA
 		tmp_in = new cuNDArray<T>(this->domain_dims_);
 		vector_td<size_t,D> offset;
 		for (int i = 0; i < D; i++ ) offset[i] = (this->codomain_dims_[i]-this->domain_dims_[i])/2;
-		crop<T,D>(offset,tmp_out,tmp_in);
+		throw std::runtime_error("cuHaarWaveletOperator::crop error: Size was never implemented.");
+		//crop<T,D>(offset,*tmp_out,*tmp_in);
 	}
 
 	if (accumulate){
@@ -327,24 +328,24 @@ template<class T, unsigned int D> void cuHaarWaveletOperator<T,D>::mult_MH(cuNDA
 
 }
 
-template class  cuHaarWaveletOperator<float,1>;
-template class  cuHaarWaveletOperator<float,2>;
-template class  cuHaarWaveletOperator<float,3>;
-template class  cuHaarWaveletOperator<float,4>;
+template class  Gadgetron::cuHaarWaveletOperator<float,1>;
+template class  Gadgetron::cuHaarWaveletOperator<float,2>;
+template class  Gadgetron::cuHaarWaveletOperator<float,3>;
+template class  Gadgetron::cuHaarWaveletOperator<float,4>;
 
-template class  cuHaarWaveletOperator<double,1>;
-template class  cuHaarWaveletOperator<double,2>;
-template class  cuHaarWaveletOperator<double,3>;
-template class  cuHaarWaveletOperator<double,4>;
+template class  Gadgetron::cuHaarWaveletOperator<double,1>;
+template class  Gadgetron::cuHaarWaveletOperator<double,2>;
+template class  Gadgetron::cuHaarWaveletOperator<double,3>;
+template class  Gadgetron::cuHaarWaveletOperator<double,4>;
 
-template class  cuHaarWaveletOperator<float_complext,1>;
-template class  cuHaarWaveletOperator<float_complext,2>;
-template class  cuHaarWaveletOperator<float_complext,3>;
-template class  cuHaarWaveletOperator<float_complext,4>;
+template class  Gadgetron::cuHaarWaveletOperator<float_complext,1>;
+template class  Gadgetron::cuHaarWaveletOperator<float_complext,2>;
+template class  Gadgetron::cuHaarWaveletOperator<float_complext,3>;
+template class  Gadgetron::cuHaarWaveletOperator<float_complext,4>;
 
-template class  cuHaarWaveletOperator<double_complext,1>;
-template class  cuHaarWaveletOperator<double_complext,2>;
-template class  cuHaarWaveletOperator<double_complext,3>;
-template class  cuHaarWaveletOperator<double_complext,4>;
+template class  Gadgetron::cuHaarWaveletOperator<double_complext,1>;
+template class  Gadgetron::cuHaarWaveletOperator<double_complext,2>;
+template class  Gadgetron::cuHaarWaveletOperator<double_complext,3>;
+template class  Gadgetron::cuHaarWaveletOperator<double_complext,4>;
 
 

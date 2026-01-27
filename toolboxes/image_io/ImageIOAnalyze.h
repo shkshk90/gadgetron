@@ -13,6 +13,7 @@
 
 #include "ImageIOBase.h"
 #include <filesystem>
+#include <cmath>
 
 // the file input/output utility functions for the Analyze format
 
