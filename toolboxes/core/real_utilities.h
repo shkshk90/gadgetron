@@ -28,7 +28,7 @@ template<class T> __inline__ __host__ __device__ T get_epsilon();
 // Math prototypes
 //
 
-template<class REAL> __inline__ __device__ REAL get_pi();
+template<class REAL> __inline__ __host__ __device__ REAL get_pi();
 
 //
 // Implementation
