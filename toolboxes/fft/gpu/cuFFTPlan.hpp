@@ -1,6 +1,9 @@
 #pragma once
 #include "cuNDFFT.h"
 #include <numeric>
+#include <cufft.h>
+#include <vector>
+#include <type_traits>
 
 namespace Gadgetron::FFT_internal {
     namespace {

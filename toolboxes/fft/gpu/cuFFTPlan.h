@@ -1,6 +1,7 @@
 #pragma once
 #include <cufft.h>
 #include "complext.h"
+#include "cuNDArray.h"
 namespace Gadgetron {
 
 template <class ComplexType, class = std::enable_if_t<is_complex_type_v<ComplexType>>> class cuFFTPlan {

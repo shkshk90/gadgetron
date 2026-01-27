@@ -8,6 +8,7 @@
 
 #include "cuNDArray.h"
 #include "gpufft_export.h"
+#include <vector>
 
 namespace Gadgetron{
 
