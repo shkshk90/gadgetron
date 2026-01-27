@@ -15,8 +15,8 @@ cmake                                                               \
   -G Ninja                                                          \
   -DCMAKE_EXPORT_COMPILE_COMMANDS=ON                                \
   -DCMAKE_CXX_FLAGS=-I${HOME}/.local/include                        \
-  -DCMAKE_C_COMPILER=icx                                            \
-  -DCMAKE_CXX_COMPILER=icpx                                         \
+  -DCMAKE_C_COMPILER=clang                                            \
+  -DCMAKE_CXX_COMPILER=clang++                                         \
   -DCMAKE_CUDA_HOST_COMPILER=clang                                  \
   -DBoost_NO_BOOST_CMAKE=TRUE                                       \
   -DBoost_NO_SYSTEM_PATHS=TRUE                                      \

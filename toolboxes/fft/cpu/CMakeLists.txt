@@ -11,12 +11,23 @@ add_library(gadgetron_toolbox_cpufft SHARED
 
 set_target_properties(gadgetron_toolbox_cpufft PROPERTIES VERSION ${GADGETRON_VERSION_STRING} SOVERSION ${GADGETRON_SOVERSION})
 
-target_include_directories(
-        gadgetron_toolbox_cpufft
-        PUBLIC
-        $<INSTALL_INTERFACE:include/gadgetron>
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-)
+if (${CMAKE_CXX_COMPILER} STREQUAL "clang")
+        target_include_directories(
+                gadgetron_toolbox_cpufft
+                PUBLIC
+                $<INSTALL_INTERFACE:include/gadgetron>
+                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+        )
+else()
+        target_include_directories(
+                gadgetron_toolbox_cpufft
+                PUBLIC
+                $<INSTALL_INTERFACE:include/gadgetron>
+                $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+                /opt/intel/oneapi/compiler/2025.2/opt/compiler/include
+        )
+endif()
+
 
 target_link_libraries(gadgetron_toolbox_cpufft
         gadgetron_toolbox_cpucore
