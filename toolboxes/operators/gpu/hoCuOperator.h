@@ -27,9 +27,6 @@ template<class T > class hoCuOperator : public linearOperator<hoCuNDArray<T> > {
 			op->mult_MH_M(in,out,accumulate);
 		}
 
-		virtual boost::shared_ptr< linearOperator< hoCuNDArray<T> > > clone() {
-			return linearOperator< hoCuNDArray<T> >::clone(this);
-		}
 		virtual boost::shared_ptr< std::vector<unsigned int> > get_codomain_dimensions(){
 			return op->get_codomain_dimensions();
 		}

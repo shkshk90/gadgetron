@@ -126,9 +126,6 @@ public:
     R_->mult_MH( &tmp_in_out2, out );
   }
   
-  virtual boost::shared_ptr< linearOperator< cuNDArray< complext<REAL> > > > clone() {
-    return linearOperator< cuNDArray<complext< REAL > > >::clone(this);
-  }
   
 private:
   boost::shared_ptr< cuNonCartesianSenseOperator<REAL,D> > E_;

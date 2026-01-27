@@ -22,9 +22,6 @@ namespace Gadgetron{
 
     typedef typename imageOperator< hoNDArray<typename realType<T>::Type>, hoNDArray<T> >::REAL REAL;
 
-    virtual boost::shared_ptr< linearOperator< hoNDArray<T> > > clone() {
-      return linearOperator< hoNDArray<T> >::clone(this);
-    }
 
   protected:
 

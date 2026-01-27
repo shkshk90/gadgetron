@@ -16,8 +16,5 @@ public:
   cuMultiplicationOperatorContainer() : multiplicationOperatorContainer< REAL, cuNDArray<T> >() {}
   virtual ~cuMultiplicationOperatorContainer() {}
   
-  virtual boost::shared_ptr< linearOperator< REAL, cuNDArray<T> > > clone(){
-    return linearOperator< REAL, cuNDArray<T> >::clone(this);
-  }  
 };
 }

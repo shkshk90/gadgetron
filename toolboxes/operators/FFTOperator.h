@@ -66,10 +66,6 @@ public:
 			*out = *in;
 	}
 
-	virtual boost::shared_ptr< linearOperator< ARRAY_TYPE > > clone()
-    		{
-		return linearOperator<ARRAY_TYPE>::clone(this);
-    		}
 private:
 	typedef typename ARRAY_TYPE::element_type ELEMENT_TYPE;
 };

@@ -139,8 +139,6 @@ template <class ARRAY_TYPE> class multiplicationOperatorContainer : public linea
         }
     }
 
-    virtual boost::shared_ptr<linearOperator<ARRAY_TYPE>> clone() { return linearOperator<ARRAY_TYPE>::clone(this); }
-
   protected:
     std::vector<boost::shared_ptr<linearOperator<ARRAY_TYPE>>> operators_;
 };

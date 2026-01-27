@@ -120,22 +120,22 @@ template<class T, unsigned int D> typename realType<T>::Type cuTvOperator<T,D>::
 	return asum(&out);
 }
 
-template class EXPORTGPUOPERATORS cuTvOperator<float,1>;
-template class EXPORTGPUOPERATORS cuTvOperator<float,2>;
-template class EXPORTGPUOPERATORS cuTvOperator<float,3>;
-template class EXPORTGPUOPERATORS cuTvOperator<float,4>;
+template class EXPORTGPUOPERATORS Gadgetron::cuTvOperator<float,1>;
+template class EXPORTGPUOPERATORS Gadgetron::cuTvOperator<float,2>;
+template class EXPORTGPUOPERATORS Gadgetron::cuTvOperator<float,3>;
+template class EXPORTGPUOPERATORS Gadgetron::cuTvOperator<float,4>;
 
-template class EXPORTGPUOPERATORS cuTvOperator<double,1>;
-template class EXPORTGPUOPERATORS cuTvOperator<double,2>;
-template class EXPORTGPUOPERATORS cuTvOperator<double,3>;
-template class EXPORTGPUOPERATORS cuTvOperator<double,4>;
+template class EXPORTGPUOPERATORS Gadgetron::cuTvOperator<double,1>;
+template class EXPORTGPUOPERATORS Gadgetron::cuTvOperator<double,2>;
+template class EXPORTGPUOPERATORS Gadgetron::cuTvOperator<double,3>;
+template class EXPORTGPUOPERATORS Gadgetron::cuTvOperator<double,4>;
 
-template class EXPORTGPUOPERATORS cuTvOperator<float_complext,1>;
-template class EXPORTGPUOPERATORS cuTvOperator<float_complext,2>;
-template class EXPORTGPUOPERATORS cuTvOperator<float_complext,3>;
-template class EXPORTGPUOPERATORS cuTvOperator<float_complext,4>;
+template class EXPORTGPUOPERATORS Gadgetron::cuTvOperator<float_complext,1>;
+template class EXPORTGPUOPERATORS Gadgetron::cuTvOperator<float_complext,2>;
+template class EXPORTGPUOPERATORS Gadgetron::cuTvOperator<float_complext,3>;
+template class EXPORTGPUOPERATORS Gadgetron::cuTvOperator<float_complext,4>;
 
-template class EXPORTGPUOPERATORS cuTvOperator<double_complext,1>;
-template class EXPORTGPUOPERATORS cuTvOperator<double_complext,2>;
-template class EXPORTGPUOPERATORS cuTvOperator<double_complext,3>;
-template class EXPORTGPUOPERATORS cuTvOperator<double_complext,4>;
+template class EXPORTGPUOPERATORS Gadgetron::cuTvOperator<double_complext,1>;
+template class EXPORTGPUOPERATORS Gadgetron::cuTvOperator<double_complext,2>;
+template class EXPORTGPUOPERATORS Gadgetron::cuTvOperator<double_complext,3>;
+template class EXPORTGPUOPERATORS Gadgetron::cuTvOperator<double_complext,4>;
