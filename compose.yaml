@@ -18,6 +18,7 @@ services:
     volumes:
       - .:/gadgetron:ro
       - ./docker/cmake.config.sh:/config.sh:ro
+      - ./docker/run.cmake.sh:/run.sh:ro
       - ./bin:/install:rw
       - ./build:/build:rw
       # - ./to-be-mounted/intel-dpcpp-cpp-compiler-2025.2.1.7_offline.sh:/dpcpp.sh:ro
