@@ -74,7 +74,7 @@ protected:
 };
 
 typedef Types<float, double> realImplementations;
-typedef Types</*std::complex<float>, std::complex<double>,*/ float_complext> cplxImplementations;
+typedef Types< float_complext> cplxImplementations;
 
 TYPED_TEST_SUITE(cuNDArray_elemwise_TestReal, realImplementations);
 

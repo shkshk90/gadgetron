@@ -60,13 +60,13 @@ protected:
     GadgetronTimer timer_;
 };
 
-typedef Types<float, double> realImplementations;
+typedef Types<float, double> realImplementationsPlPlotUtilWiseTst;
 
 typedef Types< std::complex<float> > cpfloatImplementations;
 
-typedef Types<std::complex<float>, std::complex<double>, float_complext, double_complext> cplxImplementations;
-typedef Types<std::complex<float>, std::complex<double> > stdCplxImplementations;
-typedef Types<float_complext, double_complext> cplxtImplementations;
+typedef Types<std::complex<float>, std::complex<double>, float_complext, double_complext> cplxImplementationsPlPlotUtilWiseTst;
+typedef Types<std::complex<float>, std::complex<double> > stdCplxImplementationsPlPlotUtilWiseTst;
+typedef Types<float_complext, double_complext> cplxtImplementationsPlPlotUtilWiseTst;
 
 TYPED_TEST_SUITE(gt_plplot_Test, cpfloatImplementations);
 

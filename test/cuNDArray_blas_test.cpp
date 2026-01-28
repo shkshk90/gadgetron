@@ -117,7 +117,7 @@ protected:
   cuNDArray<T> Array2;
 };
 
-typedef Types</*std::complex<float>, std::complex<double>,*/ float_complext, double_complext> cplxImplementations;
+typedef Types< float_complext, double_complext> cplxImplementations;
 
 TYPED_TEST_SUITE(cuNDArray_blas_Cplx, cplxImplementations);
 

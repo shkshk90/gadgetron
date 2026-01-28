@@ -36,4 +36,5 @@ cmake                                                               \
   -DBUILD_SUPPRESS_WARNINGS=TRUE                                    \
   -DUSE_AMALGAMATED=TRUE                                            \
   -DUSE_OPENMP=OFF                                                  \
+  -DBUILD_TESTING=ON                                                \
   -Wno-dev

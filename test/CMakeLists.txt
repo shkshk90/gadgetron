@@ -105,7 +105,7 @@ if (NOT USE_AMALGAMATED)
 
     install(TARGETS test_all DESTINATION bin COMPONENT main)
 else()
-    add_executable(test_all tests_amalgamated.cpp)
+    add_executable(test_all tests_amalgamated.cu)
     target_link_libraries(test_all ${GADGETRON_AMALGAMATED_LIBS} ${GTEST_LIBRARIES} GTest::gmock)
     gtest_discover_tests(test_all DISCOVERY_MODE PRE_TEST)
     install(TARGETS test_all DESTINATION bin COMPONENT main)
