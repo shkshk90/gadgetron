@@ -7,7 +7,7 @@ if [ ! -d "/oneMKLwithCublas/lib" ]; then
     /tmp/install_mkl.sh
 fi
 
-cmake --build /build/clang -j 12
+cmake --build /build/clang  -j16
 mkdir -p /install/new/clang
 cmake --install /build/clang --prefix /install/new/clang
 

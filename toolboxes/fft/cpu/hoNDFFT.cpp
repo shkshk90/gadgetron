@@ -4,13 +4,17 @@
 #include <cmath>
 #include <numeric>
 #include <set>
+#ifdef USE_OMP
 #include <omp.h>
+#endif // USE_OMP
 
 #include "hoMatrix.h"
 #include "hoNDArray_elemwise.h"
 #include "hoNDArray_math.h"
 #include "hoNDFFT.h"
 #include <boost/container/flat_set.hpp>
+
+#pragma diag_suppress 177
 
 namespace Gadgetron {
 
@@ -729,6 +733,7 @@ namespace Gadgetron {
 
     // TODO: implement more optimized threading strategy
     inline int get_num_threads_fft1(size_t n0, size_t num) {
+        #ifdef USE_OMP
         if (omp_get_max_threads() == 1)
             return 1;
 
@@ -741,14 +746,15 @@ namespace Gadgetron {
         } else if (n0 * num > 128 * 128) {
             return 2;
         }
-
+        #endif
         return 1;
     }
 
     inline int get_num_threads_fft2(size_t n0, size_t n1, size_t num) {
+        #ifdef USE_OMP
         if (omp_get_max_threads() == 1)
-            return 1;
-
+        return 1;
+        
         if (n0 * n1 * num > 128 * 128 * 64) {
             return omp_get_max_threads();
         } else if (n0 * n1 * num > 128 * 128 * 32) {
@@ -758,18 +764,21 @@ namespace Gadgetron {
         } else if (n0 * n1 * num > 128 * 128 * 8) {
             return 2;
         }
+        #endif
 
         return 1;
     }
 
     inline int get_num_threads_fft3(size_t n0, size_t n1, size_t n2, size_t num) {
+        #ifdef USE_OMP
         if (omp_get_max_threads() == 1)
-            return 1;
-
+        return 1;
+        
         if (num >= omp_get_max_threads()) {
             return omp_get_max_threads();
         }
-
+        #endif
+        
         return 1;
     }
 
@@ -783,7 +792,11 @@ namespace Gadgetron {
         case 3:
             return get_num_threads_fft3(dimensions[0], dimensions[1], dimensions[2], num);
         default:
-            return std::min<long long>(omp_get_max_threads(), num);
+        #ifdef USE_OMP
+        return std::min<long long>(omp_get_max_threads(), num);
+        #else
+            return num;
+        #endif
         }
     }
 

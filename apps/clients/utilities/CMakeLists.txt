@@ -11,18 +11,28 @@ if(WIN32)
 endif()
 
 
-add_executable(gt_alive gt_alive.cpp)
-add_executable(gtdependencyquery gt_query.cpp DependencyQueryReader.h)
+if (NOT USE_AMALGAMATED)
+    add_executable(gt_alive gt_alive.cpp)
+    add_executable(gtdependencyquery gt_query.cpp DependencyQueryReader.h)
 
-target_link_libraries(gt_alive gadgetron_toolbox_cpucore 
-                               gadgetron_toolbox_gadgettools 
-			       gadgetron_toolbox_log)
+    target_link_libraries(gt_alive gadgetron_toolbox_cpucore
+                                   gadgetron_toolbox_gadgettools
+                                   gadgetron_toolbox_log)
 
-target_link_libraries(gtdependencyquery gadgetron_toolbox_cpucore 
-                                        gadgetron_toolbox_gadgettools 
-                    					gadgetron_toolbox_log
-                                        boost
-                                         )
+    target_link_libraries(gtdependencyquery gadgetron_toolbox_cpucore
+                                            gadgetron_toolbox_gadgettools
+                                            gadgetron_toolbox_log
+                                            boost
+                                             )
 
-install(TARGETS gt_alive gtdependencyquery DESTINATION bin COMPONENT main)
-install(FILES DependencyQueryReader.h DESTINATION ${GADGETRON_INSTALL_INCLUDE_PATH} COMPONENT main)
+    install(TARGETS gt_alive gtdependencyquery DESTINATION bin COMPONENT main)
+    install(FILES DependencyQueryReader.h DESTINATION ${GADGETRON_INSTALL_INCLUDE_PATH} COMPONENT main)
+else()
+    add_executable(gt_alive gt_alive_amalgamated.cpp)
+    target_link_libraries(gt_alive ${GADGETRON_AMALGAMATED_LIBS})
+
+    add_executable(gtdependencyquery gt_query_amalgamated.cpp)
+    target_link_libraries(gtdependencyquery ${GADGETRON_AMALGAMATED_LIBS})
+
+    install(TARGETS gt_alive gtdependencyquery DESTINATION bin COMPONENT main)
+endif()

@@ -1,8 +1,5 @@
 #include "hoNDArray_reductions.h"
 #include "hoArmadillo.h"
-#include <range/v3/core.hpp>
-#include <range/v3/numeric.hpp>
-#include <range/v3/view/zip_with.hpp>
 
 #ifndef lapack_int
 #define lapack_int int
@@ -464,13 +461,13 @@ namespace Gadgetron {
 
     float jensen_shannon_divergence(const hoNDArray<float>& dataset1, const hoNDArray<float>& dataset2,
                                    size_t bins) {
-        using namespace ranges;
         const auto maximum_value = std::max(max(dataset1), max(dataset2));
         const auto minimum_value = std::min(min(dataset1), min(dataset2));
         auto normalized_histogram = [=](const auto& data){
             auto int_hist = histogram(data, bins, minimum_value, maximum_value);
             auto hist = std::vector<float>(int_hist.begin(),int_hist.end());
-            auto d_sum = accumulate(hist,size_t(0));
+            float d_sum = 0.0f;
+            for (float h : hist) d_sum += h;
             for (auto& h : hist) h /= d_sum;
             return hist;
         };
@@ -484,16 +481,25 @@ namespace Gadgetron {
         const auto prob_p = normalized_histogram(dataset1);
         const auto prob_q = normalized_histogram(dataset2);
 
-        auto prob_m = views::zip_with([](auto val1, auto val2){return (val1+val2)/2;},prob_p, prob_q);
+        auto p_it = prob_p.begin();
+        auto q_it = prob_q.begin();
 
+        auto const p_eit = prob_p.end();
+        auto const q_eit = prob_q.end();
 
-        auto left = accumulate( views::zip_with([&rel_entr](const auto& d1,const auto& d2) -> float{
-            return rel_entr(d1,d2);
-        },prob_p,prob_m),0.0f);
+        float left  = 0.0f;
+        float right = 0.0f;
 
-        auto right = accumulate( views::zip_with([&rel_entr](const auto& d1,const auto& d2){
-            return rel_entr(d1,d2);
-        },prob_q,prob_m),0.0f);
+        for (; p_it != p_eit && q_it != q_eit; ++p_it, ++q_it) {
+
+                auto val1 = *p_it;
+                auto val2 = *q_it;
+
+                auto m =  (val1+val2)/2;
+
+                left  += rel_entr(*p_it, m);
+                right += rel_entr(*q_it, m);
+        }
 
         return std::sqrt((left+right)/2);
     }

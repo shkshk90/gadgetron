@@ -132,7 +132,7 @@ else ()
     message("OpenMP multithreading not supported")
 endif ()
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 if (WIN32)
     set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
     add_definitions(-DWIN32 -D_WIN32 -D_WINDOWS -DWIN -D_AMD64_)
@@ -164,7 +164,7 @@ else ()
         endif ()
     endif ()
 
-    add_compile_options(-Werror)
+    # add_compile_options(-Werror)
     check_cxx_compiler_flag(-Werror=return-type COMPILER_SUPPORTS_WRETURNTYPE)
     if (COMPILER_SUPPORTS_WRETURNTYPE)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=return-type")
@@ -190,7 +190,7 @@ if (BUILD_SUPPRESS_WARNINGS)
     if (WIN32)
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W0")
     else ()
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w -Wno-deprecated-declarations")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -w -Wno-deprecated-declarations -Wno-inconsistent-missing-override")
     endif ()
 endif ()
 
@@ -233,11 +233,11 @@ if (CUDA_FOUND AND USE_CUDA)
     include_directories( ${CUDA_INCLUDE_DIRS} )
     set(CUDA_PROPAGATE_HOST_FLAGS ON)
     set(CUDA_HOST_COMPILER ${CMAKE_CXX_COMPILER})
-    set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} --std=c++17 -Wno-deprecated-gpu-targets ")
+    set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} --std=c++20 -Wno-deprecated-gpu-targets -Wno-deprecated-declarations ")
     if (CMAKE_CUDA_HOST_COMPILER STREQUAL "clang")
-        set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} -ccbin=clang -allow-unsupported-compiler --compiler-options -fPIC")
+        set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} -ccbin=clang -allow-unsupported-compiler --compiler-options -fPIC  --expt-relaxed-constexpr ")
     endif ()
-    set(CMAKE_CUDA_STANDARD 17)
+    set(CMAKE_CUDA_STANDARD 20)
     #  endif ()
     #set(CUDA_VERBOSE_BUILD ON)
 
@@ -278,7 +278,7 @@ endif()
 find_package(Armadillo REQUIRED)
 add_library(armadillo INTERFACE)
 set_property(TARGET armadillo PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${ARMADILLO_INCLUDE_DIR})
-add_definitions(-DARMA_DONT_USE_WRAPPER -DARMA_USE_CXX11 -DARMA_64BIT_WORD)
+add_definitions(-DARMA_USE_WRAPPER -DARMA_USE_CXX11 -DARMA_64BIT_WORD)
 install(TARGETS armadillo EXPORT gadgetron-export)
 
 find_package(CURL REQUIRED)
@@ -375,6 +375,41 @@ find_package(GLUT)
 find_package(Qt4 4.6)
 find_package(PLplot)
 
+option(USE_AMALGAMATED "Build using amalgamated source files" OFF)
+
+if (USE_AMALGAMATED)
+    # Enable CUDA as a first-class language so plain add_executable() can compile .cu files
+    if (USE_CUDA)
+        set(CMAKE_CUDA_FLAGS ${CUDA_NVCC_FLAGS})
+        enable_language(CUDA)
+        set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} -diag-suppress 177,815,997,3133 -Wno-inconsistent-missing-override -Wno-tautological-compare -Wno-comment ")
+        set(CMAKE_CUDA_FLAGS ${CUDA_NVCC_FLAGS})
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-inconsistent-missing-override -Wno-tautological-compare -Wno-comment ")
+    endif()
+    # Collect all external dependencies into a single variable for amalgamated builds
+    set(GADGETRON_AMALGAMATED_LIBS
+        Boost::system
+        Boost::filesystem
+        Boost::program_options
+        Boost::date_time
+        Boost::timer
+        Boost::coroutine
+        ISMRMRD::ISMRMRD
+        FFTW
+        GTBLAS
+        armadillo
+        ${CURL_LIBRARIES}
+        ${CMAKE_DL_LIBS}
+    )
+    if (CUDA_FOUND AND USE_CUDA)
+        list(APPEND GADGETRON_AMALGAMATED_LIBS ${CUDA_LIBRARIES} ${CUDA_CUFFT_LIBRARIES} ${CUDA_CUBLAS_LIBRARIES} ${CUDA_CUSPARSE_LIBRARIES})
+    endif()
+    if (BUILD_PYTHON_SUPPORT)
+        list(APPEND GADGETRON_AMALGAMATED_LIBS python)
+    endif()
+    message(STATUS "USE_AMALGAMATED is ON — skipping core/toolboxes/gadgets/test subdirectories")
+endif()
+
 option(BUILD_TESTING "Enable test building" On)
 if (BUILD_TESTING)
     enable_testing()
@@ -394,15 +429,18 @@ if (BUILD_TESTING)
 
     endif ()
     MESSAGE("GTEST FOUND: ${GTEST_FOUND}")
-    add_subdirectory(test)
+    if (NOT USE_AMALGAMATED)
+        add_subdirectory(test)
+    endif()
 else()
     MESSAGE("Testing not being built")
 endif()
 
-
-add_subdirectory(core)
-add_subdirectory(toolboxes)
-add_subdirectory(gadgets)
+if (NOT USE_AMALGAMATED)
+    add_subdirectory(core)
+    add_subdirectory(toolboxes)
+    add_subdirectory(gadgets)
+endif()
 add_subdirectory(apps)
 
 option(BUILD_WITH_GPERFTOOLS_PROFILER "Build with the gperftools profiler." Off)

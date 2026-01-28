@@ -11,11 +11,6 @@
 
 #include "grappa_common.h"
 
-#include <range/v3/algorithm/max_element.hpp>
-#include <range/v3/numeric.hpp>
-#include <range/v3/view.hpp>
-#include <range/v3/algorithm.hpp>
-
 namespace {
     using namespace Gadgetron;
     using namespace Gadgetron::Core;

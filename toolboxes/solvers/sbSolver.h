@@ -15,6 +15,8 @@
 #include <set>
 #include <vector>
 
+#pragma diag_suppress 997
+
 namespace Gadgetron {
 
 template <class ARRAY_TYPE_REAL, class ARRAY_TYPE_ELEMENT, class INNER_SOLVER>

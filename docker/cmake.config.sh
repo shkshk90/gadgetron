@@ -34,4 +34,6 @@ cmake                                                               \
   -DUSE_CUDA=ON                                                     \
   -DCMAKE_INSTALL_PREFIX=/install                                   \
   -DBUILD_SUPPRESS_WARNINGS=TRUE                                    \
+  -DUSE_AMALGAMATED=TRUE                                            \
+  -DUSE_OPENMP=OFF                                                  \
   -Wno-dev

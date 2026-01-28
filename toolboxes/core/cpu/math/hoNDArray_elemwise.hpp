@@ -5,7 +5,7 @@
 #pragma once
 namespace {
     using namespace Gadgetron;
-    namespace gadgetron_detail {
+    namespace gadgetron_detail_elemwise {
         //
         // Math internal complex types
         // this replaces std::complex<T> with complext<T>
@@ -93,46 +93,46 @@ namespace {
 
 template <class T, class S>
 void Gadgetron::add(const hoNDArray<T>& x, const hoNDArray<S>& y, hoNDArray<typename mathReturnType<T, S>::type>& r) {
-    ::gadgetron_detail::transform_arrays(x, y, r, std::plus<>());
+    ::gadgetron_detail_elemwise::transform_arrays(x, y, r, std::plus<>());
 }
 
 template <class T, class S>
 void Gadgetron::subtract(
     const hoNDArray<T>& x, const hoNDArray<S>& y, hoNDArray<typename mathReturnType<T, S>::type>& r) {
-    ::gadgetron_detail::transform_arrays(x, y, r, std::minus<>());
+    ::gadgetron_detail_elemwise::transform_arrays(x, y, r, std::minus<>());
 }
 
 template <class T, class S>
 void Gadgetron::multiply(
     const hoNDArray<T>& x, const hoNDArray<S>& y, hoNDArray<typename mathReturnType<T, S>::type>& r) {
-    ::gadgetron_detail::transform_arrays(x, y, r, std::multiplies<>());
+    ::gadgetron_detail_elemwise::transform_arrays(x, y, r, std::multiplies<>());
 }
 
 template <class T, class S>
 void Gadgetron::divide(
     const hoNDArray<T>& x, const hoNDArray<S>& y, hoNDArray<typename mathReturnType<T, S>::type>& r) {
-    ::gadgetron_detail::transform_arrays(x, y, r, std::divides<>());
+    ::gadgetron_detail_elemwise::transform_arrays(x, y, r, std::divides<>());
 }
 template <class T, class S>
 void Gadgetron::multiplyConj(
     const hoNDArray<T>& x, const hoNDArray<S>& y, hoNDArray<typename mathReturnType<T, S>::type>& r) {
-    ::gadgetron_detail::transform_arrays(x, y, r, [](auto& a, auto& b) { return a * conj(b); });
+    ::gadgetron_detail_elemwise::transform_arrays(x, y, r, [](auto& a, auto& b) { return a * conj(b); });
 }
 
 template <class T, class S> Gadgetron::hoNDArray<T>& Gadgetron::operator+=(hoNDArray<T>& x, const hoNDArray<S>& y) {
-    ::gadgetron_detail::transform_arrays_inplace(x, y, std::plus<>());
+    ::gadgetron_detail_elemwise::transform_arrays_inplace(x, y, std::plus<>());
     return x;
 }
 template <class T, class S> Gadgetron::hoNDArray<T>& Gadgetron::operator-=(hoNDArray<T>& x, const hoNDArray<S>& y) {
-    ::gadgetron_detail::transform_arrays_inplace(x, y, std::minus<>());
+    ::gadgetron_detail_elemwise::transform_arrays_inplace(x, y, std::minus<>());
     return x;
 }
 template <class T, class S> Gadgetron::hoNDArray<T>& Gadgetron::operator*=(hoNDArray<T>& x, const hoNDArray<S>& y) {
-    ::gadgetron_detail::transform_arrays_inplace(x, y, std::multiplies<>());
+    ::gadgetron_detail_elemwise::transform_arrays_inplace(x, y, std::multiplies<>());
     return x;
 }
 template <class T, class S> Gadgetron::hoNDArray<T>& Gadgetron::operator/=(hoNDArray<T>& x, const hoNDArray<S>& y) {
-    ::gadgetron_detail::transform_arrays_inplace(x, y, std::divides<>());
+    ::gadgetron_detail_elemwise::transform_arrays_inplace(x, y, std::divides<>());
     return x;
 }
 

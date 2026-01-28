@@ -8,8 +8,7 @@
 
 #include <numeric>
 #include <queue>
-#include <range/v3/view/transform.hpp>
-#include <range/v3/range/conversion.hpp>
+#include <ranges>
 
 #ifdef USE_OMP
 
@@ -230,8 +229,6 @@ namespace Gadgetron {
             //Now we can loop over each pixel and estimate the new frames, but first we have to have somewhere to put the data
 
 
-            using namespace ranges;
-
             auto image_generator = [&](float cycle_time) -> Core::Image<std::complex<float>> {
                 const auto&[ref_header, ref_data, ref_meta] = buffer.front();
                 auto header = ref_header;
@@ -273,8 +270,8 @@ namespace Gadgetron {
                 return {header, data, meta};
             };
 
-            auto output = ranges::transform_view(recon_cycle_time, image_generator) | to<std::vector>;
-
+            auto view = recon_cycle_time | std::views::transform(image_generator);
+            std::vector output(view.begin(), view.end());
 
             if ((interp_method == PhysioInterpolationMethod::Spline) || (mode != PhysioInterpolationMode::complete)) {
                 spline_interpolate_series(buffer, relative_cycle_time, recon_cycle_time, output);

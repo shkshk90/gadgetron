@@ -3,6 +3,7 @@
 //
 #include "demons_registration.h"
 #include <unordered_set>
+#include <lagorithm>
 
 #include "PureGadget.h"
 #include "cmr_parametric_mapping.h"
@@ -12,8 +13,6 @@
 #include "mri_core_data.h"
 #include "mri_core_def.h"
 #include "t1fit.h"
-#include <range/v3/algorithm.hpp>
-#include <range/v3/range_concepts.hpp>
 namespace Gadgetron {
 
 class T1MocoGadget : public Core::ChannelGadget<IsmrmrdImageArray> {
@@ -326,8 +325,7 @@ class T1MocoGadget : public Core::ChannelGadget<IsmrmrdImageArray> {
     hoNDArray<vector_td<float, 2>> register_compatible_frames(const hoNDArray<float>& abs_data,
                                                               const std::vector<float>& TIs) const {
         using namespace Gadgetron::Indexing;
-        using namespace ranges;
-        auto arg_max_TI = max_element(TIs) - TIs.begin();
+        auto arg_max_TI = std::max_element(TIs) - TIs.begin();
 
         const hoNDArray<float> reference_frame = abs_data(slice, slice, arg_max_TI);
 

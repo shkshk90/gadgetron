@@ -7,7 +7,7 @@
 
 #include "ExtractGadget.h"
 #include <bitset>
-#include <cpu/math/hoNDArray_math.h>
+#include <hoNDArray_math.h>
 #include <unordered_map>
 
 #include <boost/math/constants/constants.hpp>

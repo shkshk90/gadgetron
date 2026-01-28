@@ -7,7 +7,6 @@
 #include <gtest/gtest.h>
 #include <complex>
 #include <vector>
-#include <range/v3/view.hpp>
 
 using namespace Gadgetron;
 using testing::Types;
@@ -254,7 +253,6 @@ TEST(hoNDArray_utils_Test,concat_test){
     auto arr3 = arr1;
     arr3.fill(3);
 
-    using namespace ranges;
 
     auto concatenated = concat( arr1,arr2,arr3);
 

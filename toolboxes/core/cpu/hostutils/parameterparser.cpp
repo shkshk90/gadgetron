@@ -248,7 +248,6 @@ namespace Gadgetron {
  
   void ParameterParser::print_usage()
   {
-    int space_fill = 0;
     std::stringstream usage_stream;
 
     GINFO("----------------------------------------------------\n");
@@ -270,10 +269,9 @@ namespace Gadgetron {
         }
         if (m_parameter_list[i]->get_number_of_values() > 0){
           usage_stream << "[" << m_parameter_list[i]->get_desc() << "]";
-          space_fill = (m_max_desc_length - m_parameter_list[i]->get_desc().length())+2;
         }
         else{
-          space_fill = m_max_desc_length+2+2;
+          usage_stream << " "; 
         }
         usage_stream << "\n";
       }

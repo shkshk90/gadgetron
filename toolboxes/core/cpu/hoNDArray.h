@@ -16,7 +16,7 @@ namespace Gadgetron{
 
     namespace Indexing {
         class Slice {};
-        constexpr auto slice = Slice{};
+        // constexpr auto slice = Slice{};
     }
    template<class... ARGS>
    struct ValidIndex : std::integral_constant<bool, Core::all_of_v<Core::is_convertible_v<ARGS,size_t>...>> {};

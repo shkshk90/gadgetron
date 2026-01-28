@@ -29,7 +29,7 @@ Gadgetron Version Info
   -- Julia Support      : NO
   -- Matlab Support     : NO
   -- CUDA Support       : YES
-  -- NVCC Flags         : -gencode arch=compute_60,code=sm_60;-gencode arch=compute_61,code=sm_61;-gencode arch=compute_70,code=sm_70;-gencode arch=compute_75,code=sm_75;-gencode arch=compute_80,code=sm_80;-gencode arch=compute_86,code=sm_86 --std=c++17
+  -- NVCC Flags         : -gencode arch=compute_60,code=sm_60;-gencode arch=compute_61,code=sm_61;-gencode arch=compute_70,code=sm_70;-gencode arch=compute_75,code=sm_75;-gencode arch=compute_80,code=sm_80;-gencode arch=compute_86,code=sm_86 --std=c++20
     * Number of CUDA capable devices: 1
       - Device 0: Tesla P100-PCIE-16GB
          + CUDA Driver Version / Runtime Version: 11.6/11.6

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cpu/hoNDArray.h>
+#include <hoNDArray.h>
 
 #include "Writer.h"
 

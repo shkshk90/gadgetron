@@ -86,7 +86,7 @@ namespace Gadgetron
            NFFT deapodization.
            \param[in,out] image the image to be deapodized (inplace).
         */
-        virtual void deapodize(cuNDArray <complext<REAL>> &image, bool fourier_domain = false);
+        virtual void deapodize(cuNDArray <complext<REAL>> &image, bool fourier_domain = false) override;
 
     private:
 

@@ -1,13 +1,18 @@
 #pragma once
 
 #include <boost/make_shared.hpp>
-#include <boost/range/combine.hpp>
 #include <numeric>
 #include "hoNDArray.h"
 #include "hoNDArray_iterators.h"
 #include "vector_td_utilities.h"
 
 #include <boost/version.hpp>
+
+#ifndef __CUDACC__
+#include <range/v3/view/concat.hpp>
+#endif
+
+#include <ranges>
 
 #if (BOOST_VERSION < 107200)
 #include <boost/math/interpolators/cubic_b_spline.hpp>
@@ -19,9 +24,6 @@ namespace boost::math::interpolators {
 #endif
 #include <boost/math/special_functions/trunc.hpp>
 #include <boost/range/adaptor/strided.hpp>
-#include <range/v3/numeric.hpp>
-#include <range/v3/view.hpp>
-#include <range/v3/action.hpp>
 
 #ifdef USE_OMP
 #include <omp.h>
@@ -33,6 +35,8 @@ namespace boost::math::interpolators {
 #ifdef min
 #undef min
 #endif
+
+#pragma diag_suppress 3133
 
 namespace Gadgetron {
   class ArrayIterator
@@ -1000,7 +1004,6 @@ namespace Gadgetron {
    */
 
   template <class COLL> auto concat_along_dimension(const COLL& arrays, size_t dimension) {
-      using namespace ranges;
       using T = std::decay_t<decltype(*std::begin(*std::begin(arrays)))>;
       if (arrays.empty())
           return hoNDArray<T>();
@@ -1008,9 +1011,11 @@ namespace Gadgetron {
       const hoNDArray<T>& first = *std::begin(arrays);
       std::vector dims = first.dimensions();
 
-      size_t count = ranges::accumulate(arrays | views::transform([dimension](const auto& array) {
+      auto v = arrays | std::views::transform([dimension](const auto& array) {
                                             return array.dimensions().at(dimension);
-                                        }),
+                                        });
+
+      size_t count = std::accumulate(v.begin(), v.end(),
                                         size_t(0));
       dims[dimension] = count;
 
@@ -1025,12 +1030,16 @@ namespace Gadgetron {
           return result && (d.size() == dims.size());
       };
 
-      bool all_dimensions_valid = ranges::accumulate(arrays | views::transform(dimensions_valid), true, std::logical_and() );
+      auto v_tmp_1 = arrays | std::views::transform(dimensions_valid);
+
+      bool all_dimensions_valid = std::accumulate(v_tmp_1.begin(), v_tmp_1.end(), true, std::logical_and() );
       if (!all_dimensions_valid) throw std::runtime_error("The dimensions of all provided arrays must be equal except along the concatenate dimension");
 
       auto result = hoNDArray<T>(dims);
 
-      const size_t inner_stride = ranges::accumulate(dims | views::slice(size_t(0), dimension),
+      auto v_tmp_2 = dims | std::views::take(dimension);
+
+      const size_t inner_stride = std::accumulate(v_tmp_2.begin(), v_tmp_2.end(),
                                                      size_t(1), std::multiplies());
       const size_t outer_stride = inner_stride * count;
       size_t current_slice = 0;
@@ -1079,12 +1088,13 @@ namespace Gadgetron {
       return output;
   }
 
+#ifndef __CUDACC__
   template<class T, class...  ARRAYS>
   hoNDArray<T> concat(const hoNDArray<T>& first_array, const ARRAYS& ... arrays){
 
       static_assert((std::is_same_v<hoNDArray<T>,std::decay_t<ARRAYS>> && ...));
-      using namespace ranges;
-      return concat(views::concat(views::single(first_array),views::single(arrays)...));
+      return concat(::ranges::views::concat(std::views::single(first_array),std::views::single(arrays)...));
   }
+#endif
 }
 

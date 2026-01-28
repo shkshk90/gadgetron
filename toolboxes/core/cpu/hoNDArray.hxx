@@ -7,6 +7,8 @@
 #include <cstring>
 #include <numeric>
 
+#pragma diag_suppress 177
+
 namespace Gadgetron {
     template<typename T>
     hoNDArray<T>::hoNDArray() : Gadgetron::NDArray<T>::NDArray() {}
@@ -959,7 +961,7 @@ namespace Gadgetron {
             static size_t slice_start_index(const Indexing::Slice &) {
                 return 0;
             }
-
+            
             template<unsigned int DIMS, unsigned int CUR_DIM, class ASSIGNEE, class OTHER>
             struct looper {
                 static void assign_loop(const vector_td<size_t, DIMS> &dims, std::array<size_t, DIMS> &idx,

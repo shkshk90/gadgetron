@@ -230,7 +230,7 @@ int main(int argc, char** argv)
   //
 
   if( profiles_per_frame > num_profiles ) profiles_per_frame = num_profiles;
-  if( frames_per_reconstruction < 0 ) frames_per_reconstruction = num_profiles / profiles_per_frame;
+  
   if( frames_per_reconstruction*profiles_per_frame > num_profiles ) frames_per_reconstruction = num_profiles / profiles_per_frame;
   
   unsigned int profiles_per_reconstruction = frames_per_reconstruction*profiles_per_frame;

@@ -4,8 +4,6 @@
 
 #include "FlagTriggerGadget.h"
 #include <boost/algorithm/string.hpp>
-#include <range/v3/numeric.hpp>
-#include <range/v3/view.hpp>
 
 #include "ChannelAlgorithms.h"
 #include "io/from_string.h"
@@ -201,7 +199,6 @@ void Gadgetron::FlagTriggerGadget::process(Core::InputChannel<Core::Acquisition>
 
 Gadgetron::FlagTriggerGadget::FlagTriggerGadget(const Core::Context& context, const Core::GadgetProperties& props)
     : ChannelGadget(context, props) {
-    using namespace ranges;
     this->predicate = create_trigger_filter(trigger_flags);
 }
 

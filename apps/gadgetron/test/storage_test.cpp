@@ -7,7 +7,6 @@
 #include <date/date.h>
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
-#include <range/v3/range.hpp>
 
 #include "storage.h"
 

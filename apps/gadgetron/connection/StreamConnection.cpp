@@ -57,11 +57,13 @@ namespace {
         return handlers;
     }
 
-    std::vector<std::unique_ptr<Writer>> prepare_writers(std::vector<std::unique_ptr<Writer>> &writers) {
-        auto ws = default_writers();
-        for (auto &writer : writers) { ws.emplace_back(std::move(writer)); }
-        return ws;
-    }
+    struct StreamConnectionUtil {
+        static std::vector<std::unique_ptr<Writer>> prepare_writers(std::vector<std::unique_ptr<Writer>> &writers) {
+            auto ws = default_writers();
+            for (auto &writer : writers) { ws.emplace_back(std::move(writer)); }
+            return ws;
+        }
+    };
 }
 
 
@@ -93,7 +95,7 @@ namespace Gadgetron::Server::Connection::StreamConnection {
         std::thread output_thread = start_output_thread(
                 stream,
                 std::move(ochannel.input),
-                [&]() { return prepare_writers(writers); },
+                [&]() { return StreamConnectionUtil::prepare_writers(writers); },
                 error_handler
         );
 

@@ -24,7 +24,7 @@ namespace {
 
 
         void send_error_to_client(std::iostream &stream) {
-            Writers::TextWriter writer{};
+            Gadgetron::Server::Connection::Writers::TextWriter writer{};
 
             for (auto &error : errors) {
                 writer.serialize(stream, error);

@@ -1,6 +1,6 @@
 #include "hoNDArray_elemwise.h"
 #include "hoNDArray_math.h"
-#include <cpu/math/hoNDArray_linalg.h>
+#include <hoNDArray_linalg.h>
 #include <gtest/gtest.h>
 #include <random>
 #include <vector>

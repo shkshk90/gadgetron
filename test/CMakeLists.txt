@@ -1,5 +1,6 @@
 include(GoogleTest)
 
+if (NOT USE_AMALGAMATED)
     if (WIN32)
         link_directories(${Boost_LIBRARY_DIRS})
     endif ()
@@ -21,7 +22,7 @@ include(GoogleTest)
             cmr_mapping_test.cpp
             hoNDArray_linalg_test.cpp
             core_test.cpp
-            core_primitive_io_test.cpp 
+            core_primitive_io_test.cpp
             threadpool_test.cpp
             from_string_test.cpp
             hoNDArrayView_test.cpp
@@ -33,9 +34,9 @@ include(GoogleTest)
             hoSDC_test.cpp
             nhlbi_compression_tests.cpp
             mri_core_stream_test.cpp
-            gadgets/setup_gadget.h 
-            gadgets/AcquisitionAccumulateTrigget_test.cpp 
-            gadgets/FlagTriggerParsing_test.cpp  
+            gadgets/setup_gadget.h
+            gadgets/AcquisitionAccumulateTrigget_test.cpp
+            gadgets/FlagTriggerParsing_test.cpp
             )
 
     if (PYTHONLIBS_FOUND)
@@ -103,4 +104,10 @@ include(GoogleTest)
     gtest_discover_tests(test_all DISCOVERY_MODE PRE_TEST)
 
     install(TARGETS test_all DESTINATION bin COMPONENT main)
+else()
+    add_executable(test_all tests_amalgamated.cpp)
+    target_link_libraries(test_all ${GADGETRON_AMALGAMATED_LIBS} ${GTEST_LIBRARIES} GTest::gmock)
+    gtest_discover_tests(test_all DISCOVERY_MODE PRE_TEST)
+    install(TARGETS test_all DESTINATION bin COMPONENT main)
+endif()
 

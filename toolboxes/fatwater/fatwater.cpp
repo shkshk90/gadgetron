@@ -23,10 +23,10 @@
 #include <boost/math/constants/constants.hpp>
 #include <armadillo>
 #include <random>
-#include <cpu/hoNDArray_fileio.h>
+#include <hoNDArray_fileio.h>
 #include <GadgetronTimer.h>
 #include <complex>
-#include <cpu/math/hoNDImage_util.h>
+#include <hoNDImage_util.h>
 
 
 #include <algorithm>

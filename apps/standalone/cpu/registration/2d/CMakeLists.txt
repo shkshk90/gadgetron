@@ -5,26 +5,36 @@ include_directories(
         ${ISMRMRD_INCLUDE_DIR}
     )
 
-add_executable(register_HS_2d_cpu register_HS_2d.cpp)
-add_executable(register_CK_2d_cpu register_CK_2d.cpp)
+if (NOT USE_AMALGAMATED)
+    add_executable(register_HS_2d_cpu register_HS_2d.cpp)
+    add_executable(register_CK_2d_cpu register_CK_2d.cpp)
 
-target_link_libraries(register_HS_2d_cpu 
-  gadgetron_toolbox_hostutils 
-  gadgetron_toolbox_cpureg 
-  gadgetron_toolbox_cpucore 
-  gadgetron_toolbox_cpucore_math
-  armadillo
-  )
+    target_link_libraries(register_HS_2d_cpu
+      gadgetron_toolbox_hostutils
+      gadgetron_toolbox_cpureg
+      gadgetron_toolbox_cpucore
+      gadgetron_toolbox_cpucore_math
+      armadillo
+      )
 
-target_link_libraries(register_CK_2d_cpu 
-  gadgetron_toolbox_hostutils 
-  gadgetron_toolbox_cpureg 
-  gadgetron_toolbox_cpucore
-  gadgetron_toolbox_cpucore_math
-  armadillo
-  )
+    target_link_libraries(register_CK_2d_cpu
+      gadgetron_toolbox_hostutils
+      gadgetron_toolbox_cpureg
+      gadgetron_toolbox_cpucore
+      gadgetron_toolbox_cpucore_math
+      armadillo
+      )
 
-install(TARGETS 
-  register_HS_2d_cpu
-  register_CK_2d_cpu 
-  DESTINATION bin COMPONENT main)
+    install(TARGETS
+      register_HS_2d_cpu
+      register_CK_2d_cpu
+      DESTINATION bin COMPONENT main)
+else()
+    add_executable(register_HS_2d_cpu register_HS_2d_amalgamated.cpp)
+    target_link_libraries(register_HS_2d_cpu ${GADGETRON_AMALGAMATED_LIBS})
+
+    add_executable(register_CK_2d_cpu register_CK_2d_amalgamated.cpp)
+    target_link_libraries(register_CK_2d_cpu ${GADGETRON_AMALGAMATED_LIBS})
+
+    install(TARGETS register_HS_2d_cpu register_CK_2d_cpu DESTINATION bin COMPONENT main)
+endif()

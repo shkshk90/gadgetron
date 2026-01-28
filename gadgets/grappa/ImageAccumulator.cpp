@@ -12,7 +12,6 @@
 #include "hoNDFFT.h"
 
 #include "log.h"
-#include <range/v3/action.hpp>
 
 namespace {
     using namespace Gadgetron;
@@ -60,7 +59,11 @@ namespace Gadgetron::Grappa {
 
         for (auto slice : in) {
 
-            slice = std::move(slice) | ranges::actions::remove_if([](auto& acq){return std::get<ISMRMRD::AcquisitionHeader>(acq).isFlagSet(ISMRMRD::ISMRMRD_ACQ_IS_PARALLEL_CALIBRATION);});
+            // This moves 1, 3, 5 to the front, but the vector size is still 5!
+            auto it = std::remove_if(slice.begin(), slice.end(), [](auto& acq){return std::get<ISMRMRD::AcquisitionHeader>(acq).isFlagSet(ISMRMRD::ISMRMRD_ACQ_IS_PARALLEL_CALIBRATION);});
+
+            // You must manually erase the "trash" at the end
+            slice.erase(it, slice.end());
 
             buffer.add(slice);
             out.push(create_reconstruction_job(slice.front(), slice.back(), buffer));

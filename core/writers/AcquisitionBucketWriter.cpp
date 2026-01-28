@@ -1,26 +1,15 @@
 #include "AcquisitionBucketWriter.h"
 
-#include "io/primitives.h"
-#include "io/adapt_struct.h"
+#include "io/AcquisitionBucketCommon.h"
 
 #include "MessageID.h"
 
 using namespace Gadgetron;
 using namespace Gadgetron::Core;
 
-GADGETRON_ADAPT_STRUCT(AcquisitionBucketStats,
-        GADGETRON_ACCESS_ELEMENT(kspace_encode_step_1),
-        GADGETRON_ACCESS_ELEMENT(kspace_encode_step_2),
-        GADGETRON_ACCESS_ELEMENT(slice),
-        GADGETRON_ACCESS_ELEMENT(phase),
-        GADGETRON_ACCESS_ELEMENT(contrast),
-        GADGETRON_ACCESS_ELEMENT(repetition),
-        GADGETRON_ACCESS_ELEMENT(set),
-        GADGETRON_ACCESS_ELEMENT(segment),
-        GADGETRON_ACCESS_ELEMENT(average)
-)
 
 namespace {
+    namespace AcqWr{
 
     struct bundle_meta {
         uint64_t count;
@@ -130,9 +119,11 @@ namespace {
         write_stringstream(output, streams.header);
         write_stringstream(output, streams.data);
     }
+    }
 }
 
 namespace Gadgetron::Core::Writers {
+    using namespace AcqWr;
 
     void AcquisitionBucketWriter::serialize(
             std::ostream &stream,

@@ -1,26 +1,16 @@
 #include "AcquisitionBucketReader.h"
-#include <mri_core_acquisition_bucket.h>
+#include "io/AcquisitionBucketCommon.h"
 
 #include "MessageID.h"
-#include "io/primitives.h"
-#include "io/adapt_struct.h"
+
 
 using namespace Gadgetron;
 using namespace Gadgetron::Core;
 
 
-GADGETRON_ADAPT_STRUCT(AcquisitionBucketStats,
-    GADGETRON_ACCESS_ELEMENT(kspace_encode_step_1),
-    GADGETRON_ACCESS_ELEMENT(kspace_encode_step_2),
-    GADGETRON_ACCESS_ELEMENT(slice),
-    GADGETRON_ACCESS_ELEMENT(phase),
-    GADGETRON_ACCESS_ELEMENT(contrast),
-    GADGETRON_ACCESS_ELEMENT(repetition),
-    GADGETRON_ACCESS_ELEMENT(set),
-    GADGETRON_ACCESS_ELEMENT(segment),
-    GADGETRON_ACCESS_ELEMENT(average)
-)
+
 namespace {
+    namespace AcqRd{
 
     struct bundle_meta {
         uint64_t count;
@@ -90,10 +80,11 @@ namespace {
         }
         return wavs;
     }
-
+    }
 }
 
 namespace Gadgetron::Core::Readers {
+    using namespace AcqRd;
 
     Message AcquisitionBucketReader::read(std::istream& stream) {
 

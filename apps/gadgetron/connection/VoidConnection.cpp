@@ -18,13 +18,16 @@ namespace {
     using namespace Gadgetron::Server::Connection::Writers;
     using namespace Gadgetron::Server::Connection::Handlers;
 
-    std::vector<std::unique_ptr<Writer>> prepare_writers(std::vector<std::unique_ptr<Writer>> &writers) {
-        auto ws = default_writers();
+    struct VoidConnectionUtil {
+        static std::vector<std::unique_ptr<Writer>> prepare_writers(std::vector<std::unique_ptr<Writer>> &writers) {
+            auto ws = default_writers();
+    
+            for (auto &writer : writers) { ws.emplace_back(std::move(writer)); }
+    
+            return std::move(ws);
+        }
 
-        for (auto &writer : writers) { ws.emplace_back(std::move(writer)); }
-
-        return std::move(ws);
-    }
+    };
 }
 
 namespace Gadgetron::Server::Connection::VoidConnection {
@@ -48,7 +51,7 @@ namespace Gadgetron::Server::Connection::VoidConnection {
         std::thread output_thread = start_output_thread(
                 stream,
                 std::move(ochannel.input),
-                [&writers]() { return prepare_writers(writers); },
+                [&writers]() { return VoidConnectionUtil::prepare_writers(writers); },
                 error_handler
         );
 
