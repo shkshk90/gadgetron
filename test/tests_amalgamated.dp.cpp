@@ -10376,6 +10376,19 @@ namespace Gadgetron
     template<class T, unsigned int D, template<class, unsigned int> class K, ConvolutionType C>
     struct ConvolverNC2C;
 
+    // SYCL kernel name template structs - unique per template instantiation
+    template<class T, unsigned int D, template<class, unsigned int> class K, ConvolutionType C>
+    struct NFFT_convolve_kernel_name {};
+
+    template<class T, unsigned int D, template<class, unsigned int> class K>
+    struct wrap_image_kernel_name {};
+
+    template<class T, unsigned int D, template<class, unsigned int> class K>
+    struct NFFT_H_convolve_kernel_name {};
+
+    template<class T, unsigned int D, template<class, unsigned int> class K>
+    struct NFFT_H_atomic_convolve_kernel_name {};
+
     /**
      * \brief Gridding convolution (GPU implementation).
      * 
@@ -10590,8 +10603,7 @@ namespace Gadgetron
     {
         using REAL = realType_t<T>;
 
-    public:      
-
+    public:
         ConvolverNC2C(cuGriddingConvolution<T, D, K>& plan)
           : Convolver<T, D, K>(plan) { };
 
@@ -10625,7 +10637,6 @@ namespace Gadgetron
         using REAL = realType_t<T>;
 
     public:
-
         ConvolverNC2C(cuGriddingConvolution<T, D, K>& plan)
           : Convolver<T, D, K>(plan) { };
 
@@ -27523,7 +27534,7 @@ namespace Gadgetron
 
                         cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
-                        cgh.parallel_for<dpct_kernel_name<class NFFT_convolve_kernel_abc123, T, dpct_kernel_scalar<D>, K<realType_t<T>, D>, dpct_kernel_scalar<(int)(C)>>>(
+                        cgh.parallel_for<NFFT_convolve_kernel_name<T, D, K, C>>(
                             sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
                                   NFFT_convolve_kernel<T, D, K>(
                                       vector_td_unsigned_int_D_this_plan__matrix_size_os__ct0,
@@ -27782,7 +27793,7 @@ namespace Gadgetron
 
                         cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
-                        cgh.parallel_for<dpct_kernel_name<class NFFT_H_standard_convolve_kernel_1231ga, T, dpct_kernel_scalar<D>, K<realType_t<T>, D>>> (
+                        cgh.parallel_for<NFFT_H_convolve_kernel_name<T, D, K>>(
                             sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
                                   NFFT_H_convolve_kernel<T, D, K>(
                                       vector_td_unsigned_int_D_this_plan__matrix_size_os__this_plan__matrix_padding__ct0,
@@ -27864,8 +27875,7 @@ namespace Gadgetron
 
                   cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
-                  cgh.parallel_for<dpct_kernel_name<class wrap_image_kernel_cb0437, T, dpct_kernel_scalar<D>, K<realType_t<T>, D>>> 
-                  (
+                  cgh.parallel_for<wrap_image_kernel_name<T, D, K>>(
                       sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
                             wrap_image_kernel<T, D>(source_get_data_ptr_ct0, target_get_data_ptr_ct1,
                                                     vector_td_unsigned_int_D_this_plan__matrix_size_os__ct2,
@@ -28007,8 +28017,7 @@ namespace Gadgetron
 
                         cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
-                        cgh.parallel_for<dpct_kernel_name
-                          <class NFFT_H_atomic_convolve_kernel_7271fa, T, dpct_kernel_scalar<D>, K<realType_t<T>, D>>>(
+                        cgh.parallel_for<NFFT_H_atomic_convolve_kernel_name<T, D, K>>(
                             sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
                                   NFFT_H_atomic_convolve_kernel<T, D, K>(
                                       vector_td_unsigned_int_D_this_plan__matrix_size_os__ct0,
