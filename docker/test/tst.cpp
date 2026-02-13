@@ -95,6 +95,197 @@
 #include <typeinfo>
 #include <vector>
 
+// === Begin: DIM FIX ===
+std::pair<sycl::nd_range<3>, sycl::range<3>>                                                                                                                                                                                                                                               
+adjust_nd_range(sycl::device& device, sycl::range<3> global, sycl::range<3> local) {
+  #if 0
+    size_t max_wg_size = device.get_info<sycl::info::device::max_work_group_size>();
+    auto max_dims = device.get_info<sycl::info::device::max_work_item_sizes<3>>();
+
+    // Clamp each dimension to its per-axis limit
+    size_t bz = std::min(local[0], max_dims[0]);
+    size_t by = std::min(local[1], max_dims[1]);
+    size_t bx = std::min(local[2], max_dims[2]);
+
+    // Shrink until total product fits within max_work_group_size
+    while (bx * by * bz > max_wg_size) {
+        // Shrink the largest dimension
+        if (bx >= by && bx >= bz)      bx /= 2;
+        else if (by >= bx && by >= bz)  by /= 2;
+        else                            bz /= 2;
+    }
+
+    // Round up global sizes to be multiples of local sizes
+    size_t gz = ((global[0] + bz - 1) / bz) * bz;
+    size_t gy = ((global[1] + by - 1) / by) * by;
+    size_t gx = ((global[2] + bx - 1) / bx) * bx;
+
+    sycl::range<3> adjusted_local(bz, by, bx);
+    sycl::range<3> adjusted_global(gz, gy, gx);
+
+    return { sycl::nd_range<3>(adjusted_global, adjusted_local), global };
+    #else
+    int slm_size = 0; int sg_size = 32;
+                  bool used_barrier = true; bool used_large_grf = false;
+     size_t max_wg_size = device.get_info<sycl::info::device::max_work_group_size>();
+    auto max_dims = device.get_info<sycl::info::device::max_work_item_sizes<3>>();
+
+    // Clamp local dimensions to per-axis limits
+    size_t bz = std::min(local[0], max_dims[0]);
+    size_t by = std::min(local[1], max_dims[1]);
+    size_t bx = std::min(local[2], max_dims[2]);
+
+    while (bx * by * bz > max_wg_size) {
+        if (bx >= by && bx >= bz)      bx /= 2;
+        else if (by >= bx && by >= bz)  by /= 2;
+        else                            bz /= 2;
+    }
+
+    int wg_size = static_cast<int>(bx * by * bz);
+
+    // Query max active work-groups per Xe-core
+    int max_wg_per_xecore = 0;
+    dpct::experimental::calculate_max_active_wg_per_xecore(
+        &max_wg_per_xecore, wg_size, slm_size, sg_size,
+        used_barrier, used_large_grf);
+
+    // Total Xe-cores (sub-slices) on the device
+    std::uint32_t num_ss = 1;
+    if (device.has(sycl::aspect::ext_intel_gpu_slices) &&
+        device.has(sycl::aspect::ext_intel_gpu_subslices_per_slice)) {
+        num_ss =
+            device.get_info<sycl::ext::intel::info::device::gpu_slices>() *
+            device.get_info<sycl::ext::intel::info::device::gpu_subslices_per_slice>();
+    }
+
+    size_t max_total_wgs = static_cast<size_t>(max_wg_per_xecore) * num_ss;
+
+    // Compute requested work-groups per dimension
+    size_t wgs_z = (global[0] + bz - 1) / bz;
+    size_t wgs_y = (global[1] + by - 1) / by;
+    size_t wgs_x = (global[2] + bx - 1) / bx;
+    size_t requested_wgs = wgs_z * wgs_y * wgs_x;
+
+    // Scale down if exceeding device capacity
+    if (requested_wgs > max_total_wgs) {
+        double scale = std::cbrt(static_cast<double>(max_total_wgs) / requested_wgs);
+        wgs_z = std::max((size_t)1, static_cast<size_t>(wgs_z * scale));
+        wgs_y = std::max((size_t)1, static_cast<size_t>(wgs_y * scale));
+        wgs_x = std::max((size_t)1, static_cast<size_t>(wgs_x * scale));
+
+        while (wgs_x * wgs_y * wgs_z > max_total_wgs) {
+            if (wgs_x >= wgs_y && wgs_x >= wgs_z)      wgs_x--;
+            else if (wgs_y >= wgs_z)                     wgs_y--;
+            else                                         wgs_z--;
+        }
+    }
+
+    size_t gz = wgs_z * bz;
+    size_t gy = wgs_y * by;
+    size_t gx = wgs_x * bx;
+
+    return { sycl::nd_range<3>({gz, gy, gx}, {bz, by, bx}), global };
+
+    #endif
+}
+
+sycl::range<3> clamp_global_dim3(sycl::device& device,
+                               sycl::range<3> global, sycl::range<3> local,                                                                                                                                                                                                             
+                               int slm_size = 0, int sg_size = 32,                                                                                                                                                                                                                      
+                               bool used_barrier = false,                                                                                                                                                                                                                               
+                               bool used_large_grf = false) {                                                                                                                                                                                                                           
+    int wg_size = local[0] * local[1] * local[2];                                                                                                                                                                                                                                          
+
+    int max_wg_per_xecore = 0;
+    dpct::experimental::calculate_max_active_wg_per_xecore(
+        &max_wg_per_xecore, wg_size, slm_size, sg_size,
+        used_barrier, used_large_grf);
+
+    std::uint32_t num_ss = 1;
+    if (device.has(sycl::aspect::ext_intel_gpu_slices) &&
+        device.has(sycl::aspect::ext_intel_gpu_subslices_per_slice)) {
+        num_ss =
+            device.get_info<sycl::ext::intel::info::device::gpu_slices>() *
+            device.get_info<sycl::ext::intel::info::device::gpu_subslices_per_slice>();
+    }
+
+    size_t max_total_wgs = static_cast<size_t>(max_wg_per_xecore) * num_ss;
+
+    size_t wgs_0 = (global[0] + local[0] - 1) / local[0];
+    size_t wgs_1 = (global[1] + local[1] - 1) / local[1];
+    size_t wgs_2 = (global[2] + local[2] - 1) / local[2];
+
+    if (wgs_0 * wgs_1 * wgs_2 > max_total_wgs) {
+        double scale = std::cbrt(static_cast<double>(max_total_wgs) /
+                                  (wgs_0 * wgs_1 * wgs_2));
+        wgs_0 = std::max((size_t)1, static_cast<size_t>(wgs_0 * scale));
+        wgs_1 = std::max((size_t)1, static_cast<size_t>(wgs_1 * scale));
+        wgs_2 = std::max((size_t)1, static_cast<size_t>(wgs_2 * scale));
+
+        while (wgs_0 * wgs_1 * wgs_2 > max_total_wgs) {
+            if (wgs_0 >= wgs_1 && wgs_0 >= wgs_2)  wgs_0--;
+            else if (wgs_1 >= wgs_2)                wgs_1--;
+            else                                    wgs_2--;
+        }
+    }
+
+    auto return_val = sycl::range<3>(wgs_0 * local[0], wgs_1 * local[1], wgs_2 * local[2]);
+
+    #define SB_ENABLE_COMPARE_VALUES_CHANGED 0
+    #if SB_ENABLE_COMPARE_VALUES_CHANGED == 1
+
+    /*
+    One example:
+      ======================================================================================
+      original :: global [0]: 1[1]: 1[2]: 2097152
+      original :: local  [0]: 1[1]: 1[2]: 64
+      ======================================================================================
+      new2     :: global [0]: 1[1]: 1[2]: 1792
+      ======================================================================================
+      new1 :: global [0]: 1[1]: 1[2]: 1792
+      new1 :: local  [0]: 1[1]: 1[2]: 2097152
+      ======================================================================================
+    
+    Another
+      ======================================================================================
+      original :: global [0]: 1[1]: 437[2]: 2048
+      original :: local  [0]: 1[1]: 1[2]: 512
+      ======================================================================================
+      new2     :: global [0]: 1[1]: 3[2]: 512
+      ======================================================================================
+      new1 :: global [0]: 1[1]: 3[2]: 512
+      new1 :: local  [0]: 1[1]: 437[2]: 2048
+      ======================================================================================
+
+    */
+
+    auto [ngg,nl] = adjust_nd_range(device, global, local);
+    auto ng = ngg.get_global_range();
+
+    std::cerr << "======================================================================================" << std::endl;
+    std::cerr << "original :: global [0]: " << global[0] << "[1]: " << global[1] << "[2]: " << global[2] << std::endl;
+    std::cerr << "original :: local  [0]: " << local[0]  << "[1]: " << local[1]  << "[2]: " << local[2] << std::endl;
+    std::cerr << "======================================================================================" << std::endl;
+    std::cerr << "new2     :: global [0]: " << return_val[0] << "[1]: " << return_val[1] << "[2]: " << return_val[2] << std::endl;
+    std::cerr << "======================================================================================" << std::endl;
+    std::cerr << "new1 :: global [0]: " << ng[0] << "[1]: " << ng[1] << "[2]: " << ng[2] << std::endl;
+    std::cerr << "new1 :: local  [0]: " << nl[0]  << "[1]: " << nl[1]  << "[2]: " << nl[2] << std::endl;
+    std::cerr << "======================================================================================" << std::endl;
+    // throw 123;
+
+    #endif 
+    #undef SB_ENABLE_COMPARE_VALUES_CHANGED
+
+    return return_val;
+}
+
+
+
+
+
+// === End: DIM FIX ===
+
+
 
 // ===== Begin: test/tests.cpp =====
 /*
@@ -5814,22 +6005,15 @@ TYPED_TEST(cuNDArray_elemwise_TestReal,clamp_minTest){
 }
 
 TYPED_TEST(cuNDArray_elemwise_TestReal,clamp_maxTest){
-  std::cout << "== A " << std::endl;
   fill(&this->Array,TypeParam(5.7));
-  std::cout << "== B " << std::endl;
   TypeParam tmp(101.3);
-  std::cout << "== C " << std::endl;
   /* DPCT_ORIG   CUDA_CALL(cudaMemcpy(&this->Array.get_data_ptr()[91], &tmp, sizeof(TypeParam),
   * cudaMemcpyHostToDevice));*/
  CUDA_CALL(DPCT_CHECK_ERROR(
    dpct::get_in_order_queue().memcpy(&this->Array.get_data_ptr()[91], &tmp, sizeof(TypeParam)).wait()));
-  std::cout << "== D " << std::endl;
   clamp_max(&this->Array,TypeParam(10.6));
-  std::cout << "== E " << std::endl;
   EXPECT_FLOAT_EQ(TypeParam(5.7),this->Array[28]);
-  std::cout << "== F " << std::endl;
   EXPECT_FLOAT_EQ(TypeParam(10.6),this->Array[91]);
-  std::cout << "== G " << std::endl;
 }
 
 TYPED_TEST(cuNDArray_elemwise_TestReal,normalizeTest){
@@ -7377,11 +7561,11 @@ template <class T, unsigned int D> void abs_kernel(vector_td<T, D>* data, unsign
 template<class T, unsigned int D> void Gadgetron::test_abs(cuNDArray< vector_td<T,D> >* data){
 
 /* DPCT_ORIG 	dim3
- * dimBlock(std::min(cudaDeviceManager::Instance()->max_griddim(),(int)data->get_number_of_elements()));*/
-        dpct::dim3 dimBlock(std::min(cudaDeviceManager::Instance()->max_griddim(), (int)data->get_number_of_elements()));
-/* DPCT_ORIG 	dim3 dimGrid((dimBlock.x-1)/data->get_number_of_elements()+1);*/
-        dpct::dim3 dimGrid((dimBlock.x - 1) / data->get_number_of_elements() + 1);
-/* DPCT_ORIG 	abs_kernel<<<dimGrid,dimBlock>>>(data->get_data_ptr(),data->get_number_of_elements());*/
+ * blockDim(std::min(cudaDeviceManager::Instance()->max_griddim(),(int)data->get_number_of_elements()));*/
+        dpct::dim3 blockDim(std::min(cudaDeviceManager::Instance()->max_griddim(), (int)data->get_number_of_elements()));
+/* DPCT_ORIG 	dim3 gridDim((blockDim.x-1)/data->get_number_of_elements()+1);*/
+        dpct::dim3 gridDim((blockDim.x - 1) / data->get_number_of_elements() + 1);
+/* DPCT_ORIG 	abs_kernel<<<gridDim,blockDim>>>(data->get_data_ptr(),data->get_number_of_elements());*/
         /*
         DPCT1049:0: The work-group size passed to the SYCL kernel may exceed the limit. To get the device limit, query
         info::device::max_work_group_size. Adjust the work-group size if needed.
@@ -7402,8 +7586,16 @@ template<class T, unsigned int D> void Gadgetron::test_abs(cuNDArray< vector_td<
                   DPCT1050:167: The template argument of the dpct_kernel_name could not be deduced. You need to update
                   this code.
                   */
+
+                  sycl::range<3> global = gridDim * blockDim;
+                  sycl::range<3> local = blockDim;
+
+                  auto [nd_range, original_global] = adjust_nd_range(dpct::get_current_device(), global, local);
+                  auto globalX = clamp_global_dim3(dpct::get_current_device(), global, local);
+                  sycl::nd_range<3> nd_range2(globalX, local); 
+
                   cgh.parallel_for<dpct_kernel_name<class abs_kernel_jas1234, T, dpct_kernel_scalar<D>>>(
-                      sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                      nd_range2, exp_props, [=](sycl::nd_item<3> item_ct1) {
                             abs_kernel(data_get_data_ptr_ct0, data_get_number_of_elements_ct1);
                       });
             });
@@ -20677,6 +20869,7 @@ namespace {
                 sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
             dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
 
+            auto device = dpct::get_in_order_queue().get_device();
             dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
                   // helper variables defined
                   auto in_get_data_ptr_ct0 = in.get_data_ptr();
@@ -20692,8 +20885,16 @@ namespace {
                   DPCT1050:168: The template argument of the dpct_kernel_name could not be deduced. You need to update
                   this code.
                   */
+                  sycl::range<3> global = gridDim * blockDim;
+                  sycl::range<3> local = blockDim;
+
+                  auto [nd_range, original_global] = adjust_nd_range(device, global, local);
+                  auto globalX = clamp_global_dim3(device, global, local);
+                  sycl::nd_range<3> nd_range2(globalX, local);
+
                   cgh.parallel_for<dpct_kernel_name<class cuNDArray_permute_kernel_743982, T>>(
-                      sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                      nd_range2, exp_props, [=](sycl::nd_item<3> item_ct1) {
+                        // if (x < original_global[2] && y < original_global[1] && z < original_global[0])
                             cuNDArray_permute_kernel(
                                 in_get_data_ptr_ct0, out_get_data_ptr_ct1, in_get_number_of_dimensions_ct2,
                                 thrust_raw_pointer_cast_dims_dev_data_ct3,
@@ -20858,8 +21059,15 @@ namespace {
 
                   cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
+                  sycl::range<3> global = gridDim * blockDim;
+                  sycl::range<3> local = blockDim;
+
+                  auto [nd_range, original_global] = adjust_nd_range(dpct::get_current_device(), global, local);
+                  auto globalX = clamp_global_dim3(dpct::get_current_device(), global, local);
+                  sycl::nd_range<3> nd_range2(globalX, local);
+
                   cgh.parallel_for<dpct_kernel_name<class expand_kernel_2b4aea, T>>(
-                      sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                      nd_range2, exp_props, [=](sycl::nd_item<3> item_ct1) {
                             expand_kernel<T>(in_get_data_ptr_ct0, out_get_data_ptr_ct1, in_get_number_of_elements_ct2,
                                              number_of_elements_out);
                       });
@@ -20947,8 +21155,15 @@ namespace {
 
                   cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
+                  sycl::range<3> global = gridDim * blockDim;
+                  sycl::range<3> local = blockDim;
+
+                  auto [nd_range, original_global] = adjust_nd_range(dpct::get_current_device(), global, local);
+                  auto globalX = clamp_global_dim3(dpct::get_current_device(), global, local);
+                  sycl::nd_range<3> nd_range2(globalX, local);
+
                   cgh.parallel_for<dpct_kernel_name<class crop_kernel_dc4a76, T, dpct_kernel_scalar<D>>>(
-                      sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                      nd_range2, exp_props, [=](sycl::nd_item<3> item_ct1) {
                             crop_kernel<T, D>(vector_td<unsigned int, D>(offset),
                                               vector_td<unsigned int, D>(matrix_size_in),
                                               vector_td<unsigned int, D>(matrix_size_out), in_get_data_ptr_ct3,
@@ -21061,8 +21276,18 @@ namespace {
 
                   cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
+                  sycl::range<3> global = gridDim * blockDim;
+                  sycl::range<3> local = blockDim;
+
+                  auto [nd_range, original_global] = adjust_nd_range(dpct::get_current_device(), global, local);
+                  auto globalX = clamp_global_dim3(dpct::get_current_device(), global, local);
+                  sycl::nd_range<3> nd_range2(globalX, local);
+
+                  static_assert(std::is_trivially_copyable_v<vector_td<unsigned int, 5>>, 
+                    "Type is not actually copyable!");
+
                   cgh.parallel_for<dpct_kernel_name<class pad_kernel_7d9b19, T, dpct_kernel_scalar<D>>>(
-                      sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                      nd_range2, exp_props, [=](sycl::nd_item<3> item_ct1) {
                             pad_kernel<T, D>(vector_td<unsigned int, D>(matrix_size_in),
                                              vector_td<unsigned int, D>(matrix_size_out), in_get_data_ptr_ct2,
                                              out_get_data_ptr_ct3, number_of_batches, prod_matrix_size_out_ct5, val);
@@ -21154,8 +21379,15 @@ namespace {
 
                   cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
+                  sycl::range<3> global = gridDim * blockDim;
+                  sycl::range<3> local = blockDim;
+
+                  auto [nd_range, original_global] = adjust_nd_range(dpct::get_current_device(), global, local);
+                  auto globalX = clamp_global_dim3(dpct::get_current_device(), global, local);
+                  sycl::nd_range<3> nd_range2(globalX, local);
+
                   cgh.parallel_for<dpct_kernel_name<class fill_border_kernel_8646f3, T, dpct_kernel_scalar<D>>>(
-                      sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                      nd_range2, exp_props, [=](sycl::nd_item<3> item_ct1) {
                             fill_border_kernel<T, D>(
                                 vector_td<unsigned int, D>(matrix_size_in), vector_td<unsigned int, D>(matrix_size_out),
                                 in_out_get_data_ptr_ct2, number_of_batches, prod_matrix_size_out_ct4, val);
@@ -21232,8 +21464,15 @@ namespace {
 
                   cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
+                  sycl::range<3> global = gridDim * blockDim;
+                  sycl::range<3> local = blockDim;
+
+                  auto [nd_range, original_global] = adjust_nd_range(dpct::get_current_device(), global, local);
+                  auto globalX = clamp_global_dim3(dpct::get_current_device(), global, local);
+                  sycl::nd_range<3> nd_range2(globalX, local);
+
                   cgh.parallel_for<dpct_kernel_name<class fill_border_kernel_9b19f3, T, dpct_kernel_scalar<D>>>(
-                      sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                      nd_range2, exp_props, [=](sycl::nd_item<3> item_ct1) {
                             fill_border_kernel<T, D>(radius, vector_td<int, D>(matrix_size_out),
                                                      in_out_get_data_ptr_ct2, number_of_batches,
                                                      prod_matrix_size_out_ct4, val);
@@ -21355,8 +21594,15 @@ or use smaller sub-group size to avoid high register pressure.
 
                   cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
+                  sycl::range<3> global = gridDim * blockDim;
+                  sycl::range<3> local = blockDim;
+
+                  auto [nd_range, original_global] = adjust_nd_range(dpct::get_current_device(), global, local);
+                  auto globalX = clamp_global_dim3(dpct::get_current_device(), global, local);
+                  sycl::nd_range<3> nd_range2(globalX, local);
+
                   cgh.parallel_for<dpct_kernel_name<class upsample_kernel_cd7ef7, T, dpct_kernel_scalar<D>>>(
-                      sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                      nd_range2, exp_props, [=](sycl::nd_item<3> item_ct1) {
                             upsample_kernel<T, D>(vector_td<unsigned int, D>(matrix_size_in),
                                                   vector_td<unsigned int, D>(matrix_size_out), number_of_batches,
                                                   in_get_data_ptr_ct3, out_get_data_ptr_ct4);
@@ -21496,8 +21742,15 @@ or use smaller sub-group size to avoid high register pressure.
 
                   cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
+                  sycl::range<3> global = gridDim * blockDim;
+                  sycl::range<3> local = blockDim;
+
+                  auto [nd_range, original_global] = adjust_nd_range(dpct::get_current_device(), global, local);
+                  auto globalX = clamp_global_dim3(dpct::get_current_device(), global, local);
+                  sycl::nd_range<3> nd_range2(globalX, local);
+
                   cgh.parallel_for<dpct_kernel_name<class downsample_kernel_ae7f28, T, dpct_kernel_scalar<D>>>(
-                      sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                      nd_range2, exp_props, [=](sycl::nd_item<3> item_ct1) {
                             downsample_kernel<T, D>(vector_td<int, D>(matrix_size_in),
                                                     vector_td<int, D>(matrix_size_out), (int)number_of_batches,
                                                     in_get_data_ptr_ct3, out_get_data_ptr_ct4);
@@ -21880,8 +22133,15 @@ namespace Gadgetron {
 
                   cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
+                  sycl::range<3> global = gridDim * blockDim;
+                  sycl::range<3> local = blockDim;
+
+                  auto [nd_range, original_global] = adjust_nd_range(dpct::get_current_device(), global, local);
+                  auto globalX = clamp_global_dim3(dpct::get_current_device(), global, local);
+                  sycl::nd_range<3> nd_range2(globalX, local);                  
+
                   cgh.parallel_for<dpct_kernel_name<class sum_kernel_c4fe4b, T>>(
-                      sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                      nd_range2, exp_props, [=](sycl::nd_item<3> item_ct1) {
                             sum_kernel<T>(in_get_data_ptr_ct0, out_get_data_ptr_ct1, stride, number_of_batches,
                                           number_of_elements);
                       });
@@ -22851,15 +23111,15 @@ template <class T> void timeswitch_kernel3D(T* data, size_t nelements) {
 template<class T> void Gadgetron::timeswitch1D(cuNDArray<complext<T> >* inout){
 	if (inout->get_size(0) > cudaDeviceManager::Instance()->max_blockdim())
 		return timeswitch(inout,0);
-/* DPCT_ORIG 	dim3 dimBlock(inout->get_size(0));*/
-        dpct::dim3 dimBlock(inout->get_size(0));
+/* DPCT_ORIG 	dim3 blockDim(inout->get_size(0));*/
+        dpct::dim3 blockDim(inout->get_size(0));
         size_t max_grid = cudaDeviceManager::Instance()->max_griddim();
 	size_t nelements = inout->get_number_of_elements();
-	size_t gridX = std::max(std::min(nelements/dimBlock.x,max_grid),size_t(1));
-	size_t gridY = std::max(size_t(1),nelements/(gridX*dimBlock.x));
-/* DPCT_ORIG 	dim3 dimGrid(gridX,gridY);*/
-        dpct::dim3 dimGrid(gridX, gridY);
-/* DPCT_ORIG 	timeswitch_kernel1D<<<dimGrid,dimBlock>>>(inout->get_data_ptr(),nelements);*/
+	size_t gridX = std::max(std::min(nelements/blockDim.x,max_grid),size_t(1));
+	size_t gridY = std::max(size_t(1),nelements/(gridX*blockDim.x));
+/* DPCT_ORIG 	dim3 gridDim(gridX,gridY);*/
+        dpct::dim3 gridDim(gridX, gridY);
+/* DPCT_ORIG 	timeswitch_kernel1D<<<gridDim,blockDim>>>(inout->get_data_ptr(),nelements);*/
         /*
         DPCT1049:22: The work-group size passed to the SYCL kernel may exceed the limit. To get the device limit, query
         info::device::max_work_group_size. Adjust the work-group size if needed.
@@ -22878,8 +23138,15 @@ template<class T> void Gadgetron::timeswitch1D(cuNDArray<complext<T> >* inout){
                   DPCT1050:169: The template argument of the dpct_kernel_name could not be deduced. You need to update
                   this code.
                   */
+                 sycl::range<3> global = gridDim * blockDim;
+                  sycl::range<3> local = blockDim;
+
+                  auto [nd_range, original_global] = adjust_nd_range(dpct::get_current_device(), global, local);
+                  auto globalX = clamp_global_dim3(dpct::get_current_device(), global, local);
+                  sycl::nd_range<3> nd_range2(globalX, local); 
+
                   cgh.parallel_for<dpct_kernel_name<class timeswitch_kernel1D_asf894, T>>(
-                      sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                      nd_range2, exp_props, [=](sycl::nd_item<3> item_ct1) {
                             timeswitch_kernel1D(inout_get_data_ptr_ct0, nelements);
                       });
             });
@@ -22892,15 +23159,15 @@ template<class T> void Gadgetron::timeswitch2D(cuNDArray<complext<T> >* inout){
 		timeswitch(inout,1);
 		return;
 	}
-/* DPCT_ORIG 	dim3 dimBlock(inout->get_size(0));*/
-        dpct::dim3 dimBlock(inout->get_size(0));
+/* DPCT_ORIG 	dim3 blockDim(inout->get_size(0));*/
+        dpct::dim3 blockDim(inout->get_size(0));
         size_t max_grid = cudaDeviceManager::Instance()->max_griddim();
 	size_t nelements = inout->get_number_of_elements();
 	size_t gridX = inout->get_size(1);
-	size_t gridY = std::max(size_t(1),nelements/(gridX*dimBlock.x));
-/* DPCT_ORIG 	dim3 dimGrid(gridX,gridY);*/
-        dpct::dim3 dimGrid(gridX, gridY);
-/* DPCT_ORIG 	timeswitch_kernel2D<<<dimGrid,dimBlock>>>(inout->get_data_ptr(),nelements);*/
+	size_t gridY = std::max(size_t(1),nelements/(gridX*blockDim.x));
+/* DPCT_ORIG 	dim3 gridDim(gridX,gridY);*/
+        dpct::dim3 gridDim(gridX, gridY);
+/* DPCT_ORIG 	timeswitch_kernel2D<<<gridDim,blockDim>>>(inout->get_data_ptr(),nelements);*/
         /*
         DPCT1049:23: The work-group size passed to the SYCL kernel may exceed the limit. To get the device limit, query
         info::device::max_work_group_size. Adjust the work-group size if needed.
@@ -22919,8 +23186,16 @@ template<class T> void Gadgetron::timeswitch2D(cuNDArray<complext<T> >* inout){
                   DPCT1050:170: The template argument of the dpct_kernel_name could not be deduced. You need to update
                   this code.
                   */
+
+                  sycl::range<3> global = gridDim * blockDim;
+                  sycl::range<3> local = blockDim;
+
+                  auto [nd_range, original_global] = adjust_nd_range(dpct::get_current_device(), global, local);
+                  auto globalX = clamp_global_dim3(dpct::get_current_device(), global, local);
+                  sycl::nd_range<3> nd_range2(globalX, local); 
+
                   cgh.parallel_for<dpct_kernel_name<class timeswitch_kernel2D_uio23, T>>(
-                      sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                      nd_range2, exp_props, [=](sycl::nd_item<3> item_ct1) {
                             timeswitch_kernel2D(inout_get_data_ptr_ct0, nelements);
                       });
             });
@@ -22935,16 +23210,16 @@ template<class T> void Gadgetron::timeswitch3D(cuNDArray<complext<T> >* inout){
 		timeswitch(inout,2);
 		return;
 	}
-/* DPCT_ORIG 	dim3 dimBlock(inout->get_size(0));*/
-        dpct::dim3 dimBlock(inout->get_size(0));
+/* DPCT_ORIG 	dim3 blockDim(inout->get_size(0));*/
+        dpct::dim3 blockDim(inout->get_size(0));
         size_t max_grid = cudaDeviceManager::Instance()->max_griddim();
 	size_t nelements = inout->get_number_of_elements();
 	size_t gridX = inout->get_size(1);
 	size_t gridY = inout->get_size(2);
-	size_t gridZ = std::max(size_t(1),nelements/(gridX*dimBlock.x*gridY));
-/* DPCT_ORIG 	dim3 dimGrid(gridX,gridY,gridZ);*/
-        dpct::dim3 dimGrid(gridX, gridY, gridZ);
-/* DPCT_ORIG 	timeswitch_kernel3D<<<dimGrid,dimBlock>>>(inout->get_data_ptr(),nelements);*/
+	size_t gridZ = std::max(size_t(1),nelements/(gridX*blockDim.x*gridY));
+/* DPCT_ORIG 	dim3 gridDim(gridX,gridY,gridZ);*/
+        dpct::dim3 gridDim(gridX, gridY, gridZ);
+/* DPCT_ORIG 	timeswitch_kernel3D<<<gridDim,blockDim>>>(inout->get_data_ptr(),nelements);*/
         /*
         DPCT1049:24: The work-group size passed to the SYCL kernel may exceed the limit. To get the device limit, query
         info::device::max_work_group_size. Adjust the work-group size if needed.
@@ -22963,8 +23238,16 @@ template<class T> void Gadgetron::timeswitch3D(cuNDArray<complext<T> >* inout){
                   DPCT1050:171: The template argument of the dpct_kernel_name could not be deduced. You need to update
                   this code.
                   */
+
+                  sycl::range<3> global = gridDim * blockDim;
+                  sycl::range<3> local = blockDim;
+
+                  auto [nd_range, original_global] = adjust_nd_range(dpct::get_current_device(), global, local);
+                  auto globalX = clamp_global_dim3(dpct::get_current_device(), global, local);
+                  sycl::nd_range<3> nd_range2(globalX, local); 
+
                   cgh.parallel_for<dpct_kernel_name<class timeswitch_kernel3D_bvc293, T>>(
-                      sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                      nd_range2, exp_props, [=](sycl::nd_item<3> item_ct1) {
                             timeswitch_kernel3D(inout_get_data_ptr_ct0, nelements);
                       });
             });
@@ -22983,17 +23266,17 @@ template<class T> void Gadgetron::timeswitch(cuNDArray<complext<T> >* inout, int
 	size_t nelements = inout->get_number_of_elements();
 
 	size_t max_block = cudaDeviceManager::Instance()->max_blockdim();
-/* DPCT_ORIG 	dim3 dimBlock(std::min(max_block,nelements));*/
-        dpct::dim3 dimBlock(std::min(max_block, nelements));
+/* DPCT_ORIG 	dim3 blockDim(std::min(max_block,nelements));*/
+        dpct::dim3 blockDim(std::min(max_block, nelements));
 
         size_t max_grid = cudaDeviceManager::Instance()->max_griddim();
-	size_t gridX = std::max(std::min(nelements/dimBlock.x,max_grid),size_t(1));
-	size_t gridY = std::max(size_t(1),nelements/(gridX*dimBlock.x));
+	size_t gridX = std::max(std::min(nelements/blockDim.x,max_grid),size_t(1));
+	size_t gridY = std::max(size_t(1),nelements/(gridX*blockDim.x));
 
-/* DPCT_ORIG 	dim3 dimGrid(gridX,gridY);*/
-        dpct::dim3 dimGrid(gridX, gridY);
+/* DPCT_ORIG 	dim3 gridDim(gridX,gridY);*/
+        dpct::dim3 gridDim(gridX, gridY);
 
-/* DPCT_ORIG 	timeswitch_kernel<<<dimGrid,dimBlock>>>(inout->get_data_ptr(),dimsize,batchsize,nelements);*/
+/* DPCT_ORIG 	timeswitch_kernel<<<gridDim,blockDim>>>(inout->get_data_ptr(),dimsize,batchsize,nelements);*/
         /*
         DPCT1049:25: The work-group size passed to the SYCL kernel may exceed the limit. To get the device limit, query
         info::device::max_work_group_size. Adjust the work-group size if needed.
@@ -23012,8 +23295,16 @@ template<class T> void Gadgetron::timeswitch(cuNDArray<complext<T> >* inout, int
                   DPCT1050:172: The template argument of the dpct_kernel_name could not be deduced. You need to update
                   this code.
                   */
+
+                  sycl::range<3> global = gridDim * blockDim;
+                  sycl::range<3> local = blockDim;
+
+                  auto [nd_range, original_global] = adjust_nd_range(dpct::get_current_device(), global, local);
+                  auto globalX = clamp_global_dim3(dpct::get_current_device(), global, local);
+                  sycl::nd_range<3> nd_range2(globalX, local); 
+
                   cgh.parallel_for<dpct_kernel_name<class timeswitch_kernel_bzvc2393, T>>(
-                      sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                      nd_range2, exp_props, [=](sycl::nd_item<3> item_ct1) {
                             timeswitch_kernel(inout_get_data_ptr_ct0, dimsize, batchsize, nelements);
                       });
             });
@@ -26557,8 +26848,15 @@ write_pairs( typename uintd<D>::Type matrix_size_os, typename uintd<D>::Type mat
             dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
                   cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
+                  sycl::range<3> global = gridDim * blockDim;
+                  sycl::range<3> local = blockDim;
+
+                  auto [nd_range, original_global] = adjust_nd_range(dpct::get_current_device(), global, local);
+                  auto globalX = clamp_global_dim3(dpct::get_current_device(), global, local);
+                  sycl::nd_range<3> nd_range2(globalX, local); 
+
                   cgh.parallel_for<dpct_kernel_name<class write_pairs_kernel_e39f1a, REAL, dpct_kernel_scalar<D>>>(
-                      sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                      nd_range2, exp_props, [=](sycl::nd_item<3> item_ct1) {
                             write_pairs_kernel<REAL, D>(matrix_size_os, matrix_size_wrap, num_samples_per_frame, half_W,
                                                         traj_positions, write_offsets, tuples_first, tuples_last);
                       });
@@ -27118,13 +27416,13 @@ cuCsrMatrix<T> make_conv_matrix(
         auto data = dpct::device_vector<T>(num_pairs);
         //cuNDArray<T > values(ind_dims);
 
-/* DPCT_ORIG 	dim3 dimBlock;*/
-        dpct::dim3 dimBlock;
-/* DPCT_ORIG 	dim3 dimGrid;*/
-        dpct::dim3 dimGrid;
-        setup_grid(points.size(),&dimBlock,&dimGrid);
+/* DPCT_ORIG 	dim3 blockDim;*/
+        dpct::dim3 blockDim;
+/* DPCT_ORIG 	dim3 gridDim;*/
+        dpct::dim3 gridDim;
+        setup_grid(points.size(),&blockDim,&gridDim);
 
-/* DPCT_ORIG 	make_conv_matrix_kernel<<<dimGrid,dimBlock>>>(
+/* DPCT_ORIG 	make_conv_matrix_kernel<<<gridDim,blockDim>>>(
                 thrust::dpct::get_raw_pointer(points.data()),
                 thrust::dpct::get_raw_pointer(csrRow.data()),
                 thrust::dpct::get_raw_pointer(data.data()),
@@ -27158,9 +27456,16 @@ cuCsrMatrix<T> make_conv_matrix(
                   this code.
                   */
 
+                  sycl::range<3> global = gridDim * blockDim;
+                  sycl::range<3> local = blockDim;
+
+                  auto [nd_range, original_global] = adjust_nd_range(dpct::get_current_device(), global, local);
+                  auto globalX = clamp_global_dim3(dpct::get_current_device(), global, local);
+                  sycl::nd_range<3> nd_range2(globalX, local); 
+
                   cgh.parallel_for<dpct_kernel_name<
                     class make_conv_matrix_kernel_zx01, T, dpct_kernel_scalar<D>, K<realType_t<T>, D>>>(
-                      sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                      nd_range2, exp_props, [=](sycl::nd_item<3> item_ct1) {
                             make_conv_matrix_kernel(
                                 thrust_raw_pointer_cast_points_data_ct0, thrust_raw_pointer_cast_csrRow_data_ct1,
                                 thrust_raw_pointer_cast_data_data_ct2, thrust_raw_pointer_cast_csrColdnd_data_ct3,
@@ -27318,7 +27623,11 @@ namespace Gadgetron
             oneapi::dpl::minmax_element(oneapi::dpl::execution::make_device_policy(dpct::get_in_order_queue()),
                                         traj_view.begin(), traj_view.end());
 
-        if (*mm_pair.first < REAL(-0.5) || *mm_pair.second > REAL(0.5))
+        REAL first = 0;
+        REAL second = 0;
+        dpct::get_default_queue().memcpy(&first, mm_pair.first.get(), sizeof(REAL)).wait();
+        dpct::get_default_queue().memcpy(&second, mm_pair.second.get(), sizeof(REAL)).wait();
+        if (first < REAL(-0.5) || second > REAL(0.5))
         {
             std::stringstream ss;
             ss << "Error: cuGriddingConvolution::preprocess: trajectory [" <<
@@ -27482,10 +27791,10 @@ namespace Gadgetron
             domain_size_coils_desired - (num_repetitions - 1) * domain_size_coils;
 
         // Block and grid dimensions.
-/* DPCT_ORIG         dim3 dimBlock(threads_per_block);*/
-        dpct::dim3 dimBlock(threads_per_block);
-/* DPCT_ORIG         dim3 dimGrid((this->plan_.num_samples_ + dimBlock.x - 1) / dimBlock.x,*/
-        dpct::dim3 dimGrid((this->plan_.num_samples_ + dimBlock.x - 1) / dimBlock.x, this->plan_.num_frames_);
+/* DPCT_ORIG         dim3 blockDim(threads_per_block);*/
+        dpct::dim3 blockDim(threads_per_block);
+/* DPCT_ORIG         dim3 gridDim((this->plan_.num_samples_ + blockDim.x - 1) / blockDim.x,*/
+        dpct::dim3 gridDim((this->plan_.num_samples_ + blockDim.x - 1) / blockDim.x, this->plan_.num_frames_);
 
         // Calculate how much shared memory to use per thread.
         size_t bytes_per_thread = domain_size_coils * sizeof(T);
@@ -27519,12 +27828,12 @@ namespace Gadgetron
             
             // Size of shared memory.
             size_t sharedMemSize = (repetition == num_repetitions - 1) ?
-                dimBlock.x * bytes_per_thread_tail :
-                dimBlock.x * bytes_per_thread;
+                blockDim.x * bytes_per_thread_tail :
+                blockDim.x * bytes_per_thread;
 
             // Launch CUDA kernel.
 /* DPCT_ORIG             NFFT_convolve_kernel<T, D, K>
-                <<<dimGrid, dimBlock, sharedMemSize>>>(
+                <<<gridDim, blockDim, sharedMemSize>>>(
                 vector_td<unsigned int, D>(this->plan_.matrix_size_os_),
                 vector_td<unsigned int, D>(this->plan_.matrix_padding_),
                 this->plan_.num_samples_,
@@ -27570,8 +27879,15 @@ namespace Gadgetron
 
                         cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
+                        sycl::range<3> global = gridDim * blockDim;
+                        sycl::range<3> local = blockDim;
+
+                        auto [nd_range, original_global] = adjust_nd_range(dpct::get_current_device(), global, local);
+                        auto globalX = clamp_global_dim3(dpct::get_current_device(), global, local);
+                        sycl::nd_range<3> nd_range2(globalX, local); 
+
                         cgh.parallel_for<NFFT_convolve_kernel_name<T, D, K, C>>(
-                            sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                            nd_range2, exp_props, [=](sycl::nd_item<3> item_ct1) {
                                   NFFT_convolve_kernel<T, D, K>(
                                       vector_td_unsigned_int_D_this_plan__matrix_size_os__ct0,
                                       vector_td_unsigned_int_D_this_plan__matrix_padding__ct1,
@@ -27715,11 +28031,11 @@ namespace Gadgetron
             domain_size_coils_desired - (num_repetitions - 1) * domain_size_coils;
 
         // Block and grid dimensions.
-/* DPCT_ORIG         dim3 dimBlock(threads_per_block);*/
-        dpct::dim3 dimBlock(threads_per_block);
-/* DPCT_ORIG         dim3 dimGrid((prod(this->plan_.matrix_size_os_ + this->plan_.matrix_padding_) +*/
-        dpct::dim3 dimGrid((prod(this->plan_.matrix_size_os_ + this->plan_.matrix_padding_) + dimBlock.x - 1) /
-                               dimBlock.x,
+/* DPCT_ORIG         dim3 blockDim(threads_per_block);*/
+        dpct::dim3 blockDim(threads_per_block);
+/* DPCT_ORIG         dim3 gridDim((prod(this->plan_.matrix_size_os_ + this->plan_.matrix_padding_) +*/
+        dpct::dim3 gridDim((prod(this->plan_.matrix_size_os_ + this->plan_.matrix_padding_) + blockDim.x - 1) /
+                               blockDim.x,
                            this->plan_.num_frames_);
 
         // Calculate how much shared memory to use per thread.
@@ -27770,12 +28086,12 @@ namespace Gadgetron
             
             // Size of shared memory.
             size_t sharedMemSize = (repetition == num_repetitions - 1) ?
-                dimBlock.x * bytes_per_thread_tail :
-                dimBlock.x * bytes_per_thread;
+                blockDim.x * bytes_per_thread_tail :
+                blockDim.x * bytes_per_thread;
 
             // Launch CUDA kernel.
 /* DPCT_ORIG             NFFT_H_convolve_kernel<T, D, K>
-                <<<dimGrid, dimBlock, sharedMemSize>>>(
+                <<<gridDim, blockDim, sharedMemSize>>>(
                 vector_td<unsigned int, D>(this->plan_.matrix_size_os_ +
                                            this->plan_.matrix_padding_),
                 this->plan_.num_samples_,
@@ -27829,8 +28145,15 @@ namespace Gadgetron
 
                         cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
+                        sycl::range<3> global = gridDim * blockDim;
+                        sycl::range<3> local = blockDim;
+
+                        auto [nd_range, original_global] = adjust_nd_range(dpct::get_current_device(), global, local);
+                        auto globalX = clamp_global_dim3(dpct::get_current_device(), global, local);
+                        sycl::nd_range<3> nd_range2(globalX, local); 
+
                         cgh.parallel_for<NFFT_H_convolve_kernel_name<T, D, K>>(
-                            sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                            nd_range2, exp_props, [=](sycl::nd_item<3> item_ct1) {
                                   NFFT_H_convolve_kernel<T, D, K>(
                                       vector_td_unsigned_int_D_this_plan__matrix_size_os__this_plan__matrix_padding__ct0,
                                       this_plan__num_samples__ct1, num_coils,
@@ -27865,10 +28188,10 @@ namespace Gadgetron
 
         // Set dimensions of grid/blocks.
         unsigned int bdim = 256;
-/* DPCT_ORIG         dim3 dimBlock(bdim);*/
-        dpct::dim3 dimBlock(bdim);
-/* DPCT_ORIG         dim3 dimGrid(prod(this->plan_.matrix_size_os_) / bdim,*/
-        dpct::dim3 dimGrid(prod(this->plan_.matrix_size_os_) / bdim, this->plan_.num_frames_ * num_batches);
+/* DPCT_ORIG         dim3 blockDim(bdim);*/
+        dpct::dim3 blockDim(bdim);
+/* DPCT_ORIG         dim3 gridDim(prod(this->plan_.matrix_size_os_) / bdim,*/
+        dpct::dim3 gridDim(prod(this->plan_.matrix_size_os_) / bdim, this->plan_.num_frames_ * num_batches);
 
         // Safety check.
         if ((prod(this->plan_.matrix_size_os_) % bdim) != 0)
@@ -27881,7 +28204,7 @@ namespace Gadgetron
 
         // Invoke kernel.
 /* DPCT_ORIG         wrap_image_kernel<T, D>
-            <<<dimGrid, dimBlock>>>(
+            <<<gridDim, blockDim>>>(
             source.get_data_ptr(),
             target.get_data_ptr(),
             vector_td<unsigned int, D>(this->plan_.matrix_size_os_),
@@ -27911,8 +28234,15 @@ namespace Gadgetron
 
                   cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
+                  sycl::range<3> global = gridDim * blockDim;
+                  sycl::range<3> local = blockDim;
+
+                  auto [nd_range, original_global] = adjust_nd_range(dpct::get_current_device(), global, local);
+                  auto globalX = clamp_global_dim3(dpct::get_current_device(), global, local);
+                  sycl::nd_range<3> nd_range2(globalX, local); 
+
                   cgh.parallel_for<wrap_image_kernel_name<T, D, K>>(
-                      sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                      nd_range2, exp_props, [=](sycl::nd_item<3> item_ct1) {
                             wrap_image_kernel<T, D>(source_get_data_ptr_ct0, target_get_data_ptr_ct1,
                                                     vector_td_unsigned_int_D_this_plan__matrix_size_os__ct2,
                                                     vector_td_unsigned_int_D_this_plan__matrix_padding__ct3,
@@ -27976,10 +28306,10 @@ namespace Gadgetron
             domain_size_coils_desired - (num_repetitions - 1) * domain_size_coils;
 
         // Block and grid dimensions.
-/* DPCT_ORIG         dim3 dimBlock(threads_per_block);*/
-        dpct::dim3 dimBlock(threads_per_block);
-/* DPCT_ORIG         dim3 dimGrid((this->plan_.num_samples_ + dimBlock.x - 1) / dimBlock.x,*/
-        dpct::dim3 dimGrid((this->plan_.num_samples_ + dimBlock.x - 1) / dimBlock.x, this->plan_.num_frames_);
+/* DPCT_ORIG         dim3 blockDim(threads_per_block);*/
+        dpct::dim3 blockDim(threads_per_block);
+/* DPCT_ORIG         dim3 gridDim((this->plan_.num_samples_ + blockDim.x - 1) / blockDim.x,*/
+        dpct::dim3 gridDim((this->plan_.num_samples_ + blockDim.x - 1) / blockDim.x, this->plan_.num_frames_);
 
         // Calculate how much shared memory to use per thread.
         size_t bytes_per_thread =
@@ -28003,12 +28333,12 @@ namespace Gadgetron
 
             // Size of shared memory.
             size_t sharedMemSize = (repetition == num_repetitions - 1) ?
-                dimBlock.x * bytes_per_thread_tail :
-                dimBlock.x * bytes_per_thread;
+                blockDim.x * bytes_per_thread_tail :
+                blockDim.x * bytes_per_thread;
 
             // Launch CUDA kernel.
 /* DPCT_ORIG             NFFT_H_atomic_convolve_kernel<T, D, K>
-                <<<dimGrid, dimBlock, sharedMemSize>>>(
+                <<<gridDim, blockDim, sharedMemSize>>>(
                 vector_td<unsigned int, D>(this->plan_.matrix_size_os_),
                 vector_td<unsigned int, D>(this->plan_.matrix_padding_),
                 this->plan_.num_samples_,
@@ -28053,8 +28383,15 @@ namespace Gadgetron
 
                         cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
+                        sycl::range<3> global = gridDim * blockDim;
+                        sycl::range<3> local = blockDim;
+
+                        auto [nd_range, original_global] = adjust_nd_range(dpct::get_current_device(), global, local);
+                        auto globalX = clamp_global_dim3(dpct::get_current_device(), global, local);
+                        sycl::nd_range<3> nd_range2(globalX, local); 
+
                         cgh.parallel_for<NFFT_H_atomic_convolve_kernel_name<T, D, K>>(
-                            sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                            nd_range2, exp_props, [=](sycl::nd_item<3> item_ct1) {
                                   NFFT_H_atomic_convolve_kernel<T, D, K>(
                                       vector_td_unsigned_int_D_this_plan__matrix_size_os__ct0,
                                       vector_td_unsigned_int_D_this_plan__matrix_padding__ct1,
@@ -31047,13 +31384,13 @@ Gadgetron::cuNFFT_impl<REAL, D, CONV>::compute_deapodization_filter(bool FFTed) 
     matrix_size_os_real = vector_td<REAL, D>(this->matrix_size_os_);
 
     // Find dimensions of grid/blocks.
-/* DPCT_ORIG     dim3 dimBlock(256);*/
-    dpct::dim3 dimBlock(256);
-/* DPCT_ORIG     dim3 dimGrid((prod(this->matrix_size_os_) + dimBlock.x - 1) / dimBlock.x);*/
-    dpct::dim3 dimGrid((prod(this->matrix_size_os_) + dimBlock.x - 1) / dimBlock.x);
+/* DPCT_ORIG     dim3 blockDim(256);*/
+    dpct::dim3 blockDim(256);
+/* DPCT_ORIG     dim3 gridDim((prod(this->matrix_size_os_) + blockDim.x - 1) / blockDim.x);*/
+    dpct::dim3 gridDim((prod(this->matrix_size_os_) + blockDim.x - 1) / blockDim.x);
 
     // Invoke kernel
-/* DPCT_ORIG     compute_deapodization_filter_kernel<REAL, D><<<dimGrid, dimBlock>>>(
+/* DPCT_ORIG     compute_deapodization_filter_kernel<REAL, D><<<gridDim, blockDim>>>(
         vector_td<unsigned int, D>(
         this->matrix_size_os_), matrix_size_os_real,
         filter->get_data_ptr(),
@@ -31092,8 +31429,16 @@ Gadgetron::cuNFFT_impl<REAL, D, CONV>::compute_deapodization_filter(bool FFTed) 
                   DPCT1050:174: The template argument of the dpct_kernel_name could not be deduced. You need to update
                   this code.
                   */
+
+                  sycl::range<3> global = gridDim * blockDim;
+                  sycl::range<3> local = blockDim;
+
+                  auto [nd_range, original_global] = adjust_nd_range(dpct::get_current_device(), global, local);
+                  auto globalX = clamp_global_dim3(dpct::get_current_device(), global, local);
+                  sycl::nd_range<3> nd_range2(globalX, local); 
+
                   cgh.parallel_for<dpct_kernel_name<class compute_deapodization_filter_kernel_ab1516, REAL, dpct_kernel_scalar<D>, dpct_kernel_scalar<(int)CONV>>> (
-                      sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                      nd_range2, exp_props, [=](sycl::nd_item<3> item_ct1) {
                             compute_deapodization_filter_kernel<REAL, D>(
                                 vector_td_unsigned_int_D_this_matrix_size_os__ct0, matrix_size_os_real,
                                 filter_get_data_ptr_ct2,

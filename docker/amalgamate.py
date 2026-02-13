@@ -35,6 +35,7 @@ GENERATED_HEADERS = {
     'core_defines.h': """\
 #pragma once
 #define GADGETRON_CUDA_IS_AVAILABLE 0
+#define GADGETRON_SYCL_IS_AVAILABLE 0
 #ifndef __CUDACC__
 #if !defined(__host__)
 #define __host__
