@@ -14,16 +14,16 @@ mkdir -p /install/new/cuda
 
 cmake --install /build/cuda --prefix /install/new/cuda
 
-echo "run ::    export LD_LIBRARY_PATH=/install/new/cuda/lib:\$LD_LIBRARY_PATH "
-echo "          /install/new/cuda/bin/test_all"
+echo "run ::    "
+echo "          LD_LIBRARY_PATH=/install/new/cuda/lib:\$LD_LIBRARY_PATH /install/new/cuda/bin/test/test_all"
 
 exit 0
 
 cmake --build /build/icpx -j 12
 mkdir -p /install/new/icpx
 cmake --install /build/icpx --prefix /install/new/icpx
-
-echo "run ::    export LD_LIBRARY_PATH=/install/new/icpx/lib:\$LD_LIBRARY_PATH "
+# 38385
+echo "run ::    LD_LIBRARY_PATH=/install/new/icpx/lib:\$LD_LIBRARY_PATH "
 echo "          /install/new/icpx/bin/test_all"
 
 # Failing tests:
