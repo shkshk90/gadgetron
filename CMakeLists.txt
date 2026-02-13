@@ -217,9 +217,81 @@ endif()
 
 
 option(USE_CUDA "Build with CUDA support" On)
+option(USE_SYCL "Build with SYCL support (Intel DPC++)" Off)
+
+if (USE_SYCL AND USE_CUDA)
+    message(FATAL_ERROR "Cannot enable both USE_CUDA and USE_SYCL. Choose one.")
+endif()
+
+# When USE_SYCL is enabled, automatically enable USE_AMALGAMATED and USE_MKL
+if (USE_SYCL)
+    set(USE_AMALGAMATED ON CACHE BOOL "Build using amalgamated source files" FORCE)
+    set(USE_MKL ON CACHE BOOL "Use MKL" FORCE)
+    message(STATUS "USE_SYCL enabled: auto-enabling USE_AMALGAMATED and USE_MKL")
+endif()
 
 if (USE_CUDA)
     find_package(CUDA_advanced)
+endif()
+
+if (USE_SYCL)
+    # SYCL support using Intel DPC++ or AdaptiveCpp
+    if (DEFINED DPCPP_HOME)
+        set(SYCL_COMPILER "${DPCPP_HOME}/bin/clang++")
+        set(CMAKE_CXX_COMPILER "${DPCPP_HOME}/bin/clang++")
+    else ()
+        find_package(IntelSYCL QUIET)
+        if (IntelSYCL_FOUND)
+            message(STATUS "Found Intel DPC++ compiler")
+            set(SYCL_COMPILER "dpcpp")
+        else()
+            # Try to find icpx (Intel oneAPI 2024+)
+            find_program(ICPX_COMPILER icpx)
+            if (ICPX_COMPILER)
+                message(STATUS "Found Intel icpx compiler: ${ICPX_COMPILER}")
+                set(CMAKE_CXX_COMPILER ${ICPX_COMPILER})
+                set(SYCL_COMPILER "icpx")
+            else()
+                # Try AdaptiveCpp (formerly hipSYCL)
+                find_package(AdaptiveCpp QUIET)
+                if (AdaptiveCpp_FOUND)
+                    message(STATUS "Found AdaptiveCpp")
+                    set(SYCL_COMPILER "acpp")
+                else()
+                    message(FATAL_ERROR "USE_SYCL is ON but no SYCL compiler found. "
+                        "Install Intel oneAPI DPC++ or AdaptiveCpp.")
+                endif()
+            endif()
+        endif()
+    endif()
+
+    add_definitions(-DUSE_SYCL)
+    set(GADGETRON_SYCL_FOUND_BOOL 1)
+
+    # SYCL compile flags
+    if (SYCL_COMPILER STREQUAL "icpx" OR SYCL_COMPILER STREQUAL "dpcpp")
+        set(SYCL_FLAGS "-fsycl ")
+        # Target both SPIR-V (Intel) and CUDA (NVIDIA) if available
+        if (EXISTS "/usr/local/cuda")
+            set(SYCL_FLAGS "${SYCL_FLAGS} -fsycl-targets=nvptx64-nvidia-cuda -Xsycl-target-backend --cuda-gpu-arch=sm_80 ")
+        else()
+            set(SYCL_FLAGS "${SYCL_FLAGS} -fsycl-targets=spir64")
+            message(FATAL_ERROR "/usr/local/cuda doesn't exist.")
+        endif()
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${SYCL_FLAGS}")
+    elseif(DEFINED DPCPP_HOME)
+        set(SYCL_FLAGS "-fsycl -fsycl-targets=nvptx64-nvidia-cuda -Xsycl-target-backend --cuda-gpu-arch=sm_80 ")
+    endif()
+
+    # Find oneDPL for parallel algorithms (Thrust replacement)
+    find_package(oneDPL QUIET)
+    if (oneDPL_FOUND)
+        message(STATUS "Found oneDPL for parallel algorithms")
+    endif()
+
+    message(STATUS "SYCL support enabled with compiler: ${SYCL_COMPILER}")
+else()
+    set(GADGETRON_SYCL_FOUND_BOOL 0)
 endif()
 
 if (CUDA_FOUND AND USE_CUDA)
@@ -298,18 +370,19 @@ install(TARGETS FFTW EXPORT gadgetron-export)
 
 set(GADGETRON_BUILD_RPATH "")
 
-option(USE_MKL Off)
+option(USE_MKL ON)
 if (USE_MKL)
     if (LINUX)
         list(APPEND CMAKE_PREFIX_PATH "/opt/intel/oneapi/mkl/latest")
     endif()
-    find_package(MKL REQUIRED)
+    find_package(MKL CONFIG REQUIRED)
     link_directories(GTBLAS BEFORE INTERFACE "${MKL_ROOT}/lib/intel64/")
     add_library(GTBLAS INTERFACE)
     set_property(TARGET GTBLAS PROPERTY INTERFACE_LINK_LIBRARIES ${MKL_LIBRARIES})
     message("MKL LIB DIR ${MKL_ROOT}/lib/intel64")
 
     add_definitions(-DUSE_MKL -DARMA_BLAS_LONG_LONG -DARMA_USE_BLAS -DARMA_USE_LAPACK)
+    set(is_dpcpp TRUE)
 else ()
     find_package(CBLAS REQUIRED)
     find_package(LAPACK REQUIRED)
@@ -396,13 +469,26 @@ if (USE_AMALGAMATED)
         Boost::coroutine
         ISMRMRD::ISMRMRD
         FFTW
-        GTBLAS
+        # GTBLAS
         armadillo
         ${CURL_LIBRARIES}
         ${CMAKE_DL_LIBS}
     )
     if (CUDA_FOUND AND USE_CUDA)
         list(APPEND GADGETRON_AMALGAMATED_LIBS ${CUDA_LIBRARIES} ${CUDA_CUFFT_LIBRARIES} ${CUDA_CUBLAS_LIBRARIES} ${CUDA_CUSPARSE_LIBRARIES})
+    endif()
+    if (USE_SYCL)
+        include_directories("${DPCPP_HOME}/include" "/oneMKLwithCublas/include" "${DPCPP_HOME}/../_deps/level-zero-loader-src/include" )
+        # SYCL runtime is linked via compiler flags, but add oneDPL if available
+        if (oneDPL_FOUND)
+            # list(APPEND GADGETRON_AMALGAMATED_LIBS oneDPL)
+        endif()
+        # Add oneMKL for FFT/BLAS if using Intel SYCL
+        # find_package(MKL QUIET COMPONENTS sycl)
+        # if (MKL_FOUND)
+        #     # list(APPEND GADGETRON_AMALGAMATED_LIBS MKL::MKL_DPCPP)
+        #     # list(APPEND GADGETRON_AMALGAMATED_LIBS sycl OpenCL stdc++fs  mkl_core "/oneMKLwithCublas/lib/libonemath_blas_cublas.so" "/oneMKLwithCublas/lib/libonemath.so" )
+        # endif()
     endif()
     if (BUILD_PYTHON_SUPPORT)
         list(APPEND GADGETRON_AMALGAMATED_LIBS python)

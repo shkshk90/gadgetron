@@ -74,19 +74,19 @@ namespace Gadgetron{
   
   // Instantiations
 
-  template class EXPORTGPUOPERATORS cuLaplaceOperator<float, 1>;
-  template class EXPORTGPUOPERATORS cuLaplaceOperator<float, 2>;
-  template class EXPORTGPUOPERATORS cuLaplaceOperator<float, 3>;
+  template class EXPORTGPUOPERATORS Gadgetron::cuLaplaceOperator<float, 1>;
+  template class EXPORTGPUOPERATORS Gadgetron::cuLaplaceOperator<float, 2>;
+  template class EXPORTGPUOPERATORS Gadgetron::cuLaplaceOperator<float, 3>;
 
-  template class EXPORTGPUOPERATORS cuLaplaceOperator<float_complext, 1>;
-  template class EXPORTGPUOPERATORS cuLaplaceOperator<float_complext, 2>;
-  template class EXPORTGPUOPERATORS cuLaplaceOperator<float_complext, 3>;
+  template class EXPORTGPUOPERATORS Gadgetron::cuLaplaceOperator<float_complext, 1>;
+  template class EXPORTGPUOPERATORS Gadgetron::cuLaplaceOperator<float_complext, 2>;
+  template class EXPORTGPUOPERATORS Gadgetron::cuLaplaceOperator<float_complext, 3>;
 
-  template class EXPORTGPUOPERATORS cuLaplaceOperator<double, 1>;
-  template class EXPORTGPUOPERATORS cuLaplaceOperator<double, 2>;
-  template class EXPORTGPUOPERATORS cuLaplaceOperator<double, 3>;
+  template class EXPORTGPUOPERATORS Gadgetron::cuLaplaceOperator<double, 1>;
+  template class EXPORTGPUOPERATORS Gadgetron::cuLaplaceOperator<double, 2>;
+  template class EXPORTGPUOPERATORS Gadgetron::cuLaplaceOperator<double, 3>;
 
-  template class EXPORTGPUOPERATORS cuLaplaceOperator<double_complext, 1>;
-  template class EXPORTGPUOPERATORS cuLaplaceOperator<double_complext, 2>;
-  template class EXPORTGPUOPERATORS cuLaplaceOperator<double_complext, 3>;
+  template class EXPORTGPUOPERATORS Gadgetron::cuLaplaceOperator<double_complext, 1>;
+  template class EXPORTGPUOPERATORS Gadgetron::cuLaplaceOperator<double_complext, 2>;
+  template class EXPORTGPUOPERATORS Gadgetron::cuLaplaceOperator<double_complext, 3>;
 }

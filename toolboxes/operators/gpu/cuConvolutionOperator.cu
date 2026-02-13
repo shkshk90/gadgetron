@@ -76,14 +76,14 @@ namespace Gadgetron {
       cuNDFFT<REAL>::instance()->ifft(image);
   }    
   
-  template EXPORTGPUOPERATORS class cuConvolutionOperator<float,1>;
-  template EXPORTGPUOPERATORS class cuConvolutionOperator<float,2>;
-  template EXPORTGPUOPERATORS class cuConvolutionOperator<float,3>;
-  template EXPORTGPUOPERATORS class cuConvolutionOperator<float,4>;
+  template EXPORTGPUOPERATORS class Gadgetron::cuConvolutionOperator<float,1>;
+  template EXPORTGPUOPERATORS class Gadgetron::cuConvolutionOperator<float,2>;
+  template EXPORTGPUOPERATORS class Gadgetron::cuConvolutionOperator<float,3>;
+  template EXPORTGPUOPERATORS class Gadgetron::cuConvolutionOperator<float,4>;
 
-  template EXPORTGPUOPERATORS class cuConvolutionOperator<double,1>;
-  template EXPORTGPUOPERATORS class cuConvolutionOperator<double,2>;
-  template EXPORTGPUOPERATORS class cuConvolutionOperator<double,3>;
-  template EXPORTGPUOPERATORS class cuConvolutionOperator<double,4>;
+  template EXPORTGPUOPERATORS class Gadgetron::cuConvolutionOperator<double,1>;
+  template EXPORTGPUOPERATORS class Gadgetron::cuConvolutionOperator<double,2>;
+  template EXPORTGPUOPERATORS class Gadgetron::cuConvolutionOperator<double,3>;
+  template EXPORTGPUOPERATORS class Gadgetron::cuConvolutionOperator<double,4>;
   
 }

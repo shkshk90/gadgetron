@@ -145,7 +145,7 @@ namespace Gadgetron
     }
 
 
-    template<class REAL, unsigned int D, template<class, unsigned int> class K>
+    template<class REAL, unsigned int D, template<class, unsigned int> class K> __host__ __device__
     ConvolutionKernel<REAL, D, K>::ConvolutionKernel(REAL width)
       : width_(width)
       , radius_(width / REAL(2))
@@ -154,14 +154,14 @@ namespace Gadgetron
     }
 
 
-    template<class REAL, unsigned int D, template<class, unsigned int> class K>
+    template<class REAL, unsigned int D, template<class, unsigned int> class K> __host__ __device__
     ConvolutionKernel<REAL, D, K>::~ConvolutionKernel()
     {
 
     }  
 
 
-    template<class REAL, unsigned int D, template<class, unsigned int> class K>
+    template<class REAL, unsigned int D, template<class, unsigned int> class K> __host__ __device__
     inline REAL ConvolutionKernel<REAL, D, K>::get(const vector_td<REAL, D>& u) const
     {
         if (weak_greater(u, vector_td<REAL, D>(this->radius_)))
@@ -170,7 +170,7 @@ namespace Gadgetron
     }
 
 
-    template<class REAL, unsigned int D, template<class, unsigned int> class K>
+    template<class REAL, unsigned int D, template<class, unsigned int> class K> __host__ __device__
     inline REAL ConvolutionKernel<REAL, D, K>::get(REAL r, size_t ax) const
     {
         r = abs(r);
@@ -180,49 +180,49 @@ namespace Gadgetron
     }
 
 
-    template<class REAL, unsigned int D, template<class, unsigned int> class K>
+    template<class REAL, unsigned int D, template<class, unsigned int> class K> __host__ __device__
     inline REAL ConvolutionKernel<REAL, D, K>::compute(const vector_td<REAL, D>& u) const
     {
         return static_cast<const K<REAL, D>*>(this)->compute(u);
     }
 
 
-    template<class REAL, unsigned int D, template<class, unsigned int> class K>
+    template<class REAL, unsigned int D, template<class, unsigned int> class K> __host__ __device__
     inline REAL ConvolutionKernel<REAL, D, K>::compute(REAL r, size_t ax) const
     {
         return static_cast<const K<REAL, D>*>(this)->compute(r, ax);
     }
 
 
-    template<class REAL, unsigned int D, template<class, unsigned int> class K>
+    template<class REAL, unsigned int D, template<class, unsigned int> class K> __host__ __device__
     inline REAL ConvolutionKernel<REAL, D, K>::lookup(const vector_td<REAL, D>& u) const
     {
         return static_cast<const K<REAL, D>*>(this)->lookup(u);
     }
 
 
-    template<class REAL, unsigned int D, template<class, unsigned int> class K>
+    template<class REAL, unsigned int D, template<class, unsigned int> class K> __host__ __device__
     inline REAL ConvolutionKernel<REAL, D, K>::lookup(REAL r, size_t ax) const
     {
         return static_cast<const K<REAL, D>*>(this)->lookup(r, ax);
     }
 
 
-    template<class REAL, unsigned int D, template<class, unsigned int> class K>
+    template<class REAL, unsigned int D, template<class, unsigned int> class K> __host__ __device__
     inline REAL ConvolutionKernel<REAL, D, K>::get_width() const
     {
         return width_;
     }
 
 
-    template<class REAL, unsigned int D, template<class, unsigned int> class K>
+    template<class REAL, unsigned int D, template<class, unsigned int> class K> __host__ __device__
     inline REAL ConvolutionKernel<REAL, D, K>::get_radius() const
     {
         return radius_;
     }
 
 
-    template<class REAL, unsigned int D>
+    template<class REAL, unsigned int D> __host__ __device__
     KaiserKernel<REAL, D>::KaiserKernel(
         const vector_td<unsigned int, D>& matrix_size,
         const vector_td<unsigned int, D>& matrix_size_os,
@@ -238,7 +238,7 @@ namespace Gadgetron
     }
 
 
-    template<class REAL, unsigned int D>
+    template<class REAL, unsigned int D> __host__ __device__
     KaiserKernel<REAL, D>::KaiserKernel(
         const vector_td<unsigned int, D>& matrix_size,
         REAL os_factor,
@@ -254,7 +254,7 @@ namespace Gadgetron
     }
 
 
-    template<class REAL, unsigned int D>
+    template<class REAL, unsigned int D> __host__ __device__
     inline REAL KaiserKernel<REAL, D>::compute(const vector_td<REAL, D>& u) const
     {
         return KaiserBessel<REAL>(
@@ -265,7 +265,7 @@ namespace Gadgetron
     }
 
 
-    template<class REAL, unsigned int D>
+    template<class REAL, unsigned int D> __host__ __device__
     inline REAL KaiserKernel<REAL, D>::compute(REAL r, size_t ax) const
     {
         return KaiserBessel(
@@ -276,14 +276,14 @@ namespace Gadgetron
     }
 
 
-    template<class REAL, unsigned int D>
+    template<class REAL, unsigned int D> __host__ __device__
     inline vector_td<REAL, D> KaiserKernel<REAL, D>::get_beta() const
     {
         return this->beta_;
     }
 
 
-    template<class REAL, unsigned int D>
+    template<class REAL, unsigned int D> __host__ __device__
     vector_td<REAL, D> KaiserKernel<REAL, D>::compute_beta() const
     {
         // Square utility.
@@ -303,7 +303,7 @@ namespace Gadgetron
     }
 
 
-    template<class REAL, unsigned int D>
+    template<class REAL, unsigned int D> __host__ __device__
     JincKernel<REAL, D>::JincKernel(
         float kernelWidth)
       : ConvolutionKernel<REAL, D, JincKernel>(0.0)
@@ -345,7 +345,7 @@ namespace Gadgetron
     // }
 
 
-    template<class REAL, unsigned int D>
+    template<class REAL, unsigned int D> __host__ __device__
     inline REAL JincKernel<REAL, D>::compute(const vector_td<REAL, D>& u) const
     {
         // This kernel is implemented with circular symmetry, so get the radius
@@ -360,7 +360,7 @@ namespace Gadgetron
     }
 
 
-    template<class REAL, unsigned int D>
+    template<class REAL, unsigned int D> __host__ __device__
     inline REAL JincKernel<REAL, D>::compute(REAL r, size_t ax) const
     {
         // Normalize radius.

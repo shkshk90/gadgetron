@@ -93,12 +93,12 @@ cuNonCartesianSenseOperator<REAL,D>::set_dcw( boost::shared_ptr< cuNDArray<REAL>
 // Instantiations
 //
 
-template class EXPORTGPUPMRI cuNonCartesianSenseOperator<float,1>;
-template class EXPORTGPUPMRI cuNonCartesianSenseOperator<float,2>;
-template class EXPORTGPUPMRI cuNonCartesianSenseOperator<float,3>;
-template class EXPORTGPUPMRI cuNonCartesianSenseOperator<float,4>;
+template class EXPORTGPUPMRI Gadgetron::cuNonCartesianSenseOperator<float,1>;
+template class EXPORTGPUPMRI Gadgetron::cuNonCartesianSenseOperator<float,2>;
+template class EXPORTGPUPMRI Gadgetron::cuNonCartesianSenseOperator<float,3>;
+template class EXPORTGPUPMRI Gadgetron::cuNonCartesianSenseOperator<float,4>;
 
-template class EXPORTGPUPMRI cuNonCartesianSenseOperator<double,1>;
-template class EXPORTGPUPMRI cuNonCartesianSenseOperator<double,2>;
-template class EXPORTGPUPMRI cuNonCartesianSenseOperator<double,3>;
-template class EXPORTGPUPMRI cuNonCartesianSenseOperator<double,4>;
+template class EXPORTGPUPMRI Gadgetron::cuNonCartesianSenseOperator<double,1>;
+template class EXPORTGPUPMRI Gadgetron::cuNonCartesianSenseOperator<double,2>;
+template class EXPORTGPUPMRI Gadgetron::cuNonCartesianSenseOperator<double,3>;
+template class EXPORTGPUPMRI Gadgetron::cuNonCartesianSenseOperator<double,4>;

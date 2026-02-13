@@ -78,7 +78,7 @@ int main(int argc, char** argv){
 	hoNFFT_plan<float, 2> plan(matrixSize, osf, kernelWidth);
 	hoNDArray<complext<float>> result(matrixSizeOs[0], matrixSizeOs[1]);
 	plan.preprocess(k);
-	plan.compute((*data), result, (*weights), hoNFFT_plan<float, 2>::NFFT_BACKWARDS_NC2C);
+	plan.compute((*data), result, (*weights), NFFT_comp_mode::NFFT_BACKWARDS_NC2C);
 		
 	auto output = boost::make_shared<hoNDArray<complext<float>>>(result);
 	write_nd_array<complext<float>>(output.get(), (char*) parms.get_parameter('o')->get_string_value());

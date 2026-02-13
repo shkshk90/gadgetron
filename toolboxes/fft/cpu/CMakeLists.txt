@@ -24,7 +24,8 @@ else()
                 PUBLIC
                 $<INSTALL_INTERFACE:include/gadgetron>
                 $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-                /opt/intel/oneapi/compiler/2025.2/opt/compiler/include
+                ${DPCPP_HOME}/include
+                # /opt/intel/oneapi/compiler/2025.3/opt/compiler/include
         )
 endif()
 

@@ -57,7 +57,7 @@ COPY --from=deps /plplot                                /plplot
 
 COPY --from=mrd /downloads/mrd/mrd-storage-server       /usr/local/bin/mrd-storage-server
 
-COPY docker/oneapi-for-nvidia-gpus-2025.2.0-linux.sh /tmp/oneapi-for-nvidia-gpus-2025.2.0-linux.sh
+# COPY docker/oneapi-for-nvidia-gpus-2025.2.0-linux.sh /tmp/oneapi-for-nvidia-gpus-2025.2.0-linux.sh
 
 RUN echo 'precedence ::ffff:0:0/96 100' >> /etc/gai.conf \
     && sed -i 's|http://archive.ubuntu.com|http://ftp.uni-stuttgart.de|g' /etc/apt/sources.list \
@@ -74,12 +74,19 @@ RUN echo 'precedence ::ffff:0:0/96 100' >> /etc/gai.conf \
         git \
         graphviz \
         jq \
+        autoconf \
+        sudo \
+        libtool \
         ninja-build \
         nlohmann-json3-dev \
         yq \
         zfp \
         libarmadillo-dev \
         libbart-dev \
+        ocl-icd-opencl-dev \
+        libhwloc-dev \
+        numactl \
+        ocl-icd-libopencl1 \
         # libboost-system-dev \
         # libboost-coroutine-dev \
         # libboost-timer-dev \
@@ -124,16 +131,34 @@ RUN mkdir -p /downloads \
     && cp   /downloads/bart/libbart.so                /bart/libbart.so                          \
     && cp   /downloads/bart/src/bart_embed_api.h      /bart/bart_embed_api.h                    \
     && rm -rf /downloads
-
-
+    
+    
+    
+RUN mkdir -p /downloads \
+    && curl --output /downloads/zstd-1.5.7.tar.gz --silent --location https://github.com/facebook/zstd/releases/download/v1.5.7/zstd-1.5.7.tar.gz \
+    && tar -xzf /downloads/zstd-1.5.7.tar.gz -C /downloads \ 
+    && cd /downloads/zstd-1.5.7 \
+    && CFLAGS="-fPIC" CXXFLAGS="-fPIC" make -j12 \
+    && make install \
+    && rm -rf /downloads 
 
 RUN mkdir -p /downloads \
-    && curl --output /downloads/intel-oneapi-base-toolkit-2025.2.0.592_offline.sh --silent --location \
-        https://registrationcenter-download.intel.com/akdlm/IRC_NAS/bd1d0273-a931-4f7e-ab76-6a2a67d646c7/intel-oneapi-base-toolkit-2025.2.0.592_offline.sh \
-    && chmod +x /downloads/intel-oneapi-base-toolkit-2025.2.0.592_offline.sh   \
-    && /downloads/intel-oneapi-base-toolkit-2025.2.0.592_offline.sh  \ 
+    && curl --output /downloads/v6.3.0.tar.gz --silent --location https://github.com/intel/llvm/archive/refs/tags/v6.3.0.tar.gz \
+    && tar -xzf /downloads/v6.3.0.tar.gz -C /downloads \ 
+    && mkdir -p /sycl_linux \ 
+    && mkdir -p /dpcpp_home \ 
+    && mv /downloads/llvm-6.3.0 /sycl_linux/llvm \ 
+    && rm -rf /downloads \ 
+    && python3 /sycl_linux/llvm/buildbot/configure.py -t Release --use-zstd --no-assertions  --cuda -o /dpcpp_home \
+    && python3 /sycl_linux/llvm/buildbot/compile.py -o /dpcpp_home -j 12
+
+RUN mkdir -p /downloads \
+    && curl --output /downloads/intel-oneapi-base-toolkit-2025.3.1.36_offline.sh --silent --location \
+        https://registrationcenter-download.intel.com/akdlm/IRC_NAS/6caa93ca-e10a-4cc5-b210-68f385feea9e/intel-oneapi-base-toolkit-2025.3.1.36_offline.sh \
+    && chmod +x /downloads/intel-oneapi-base-toolkit-2025.3.1.36_offline.sh   \
+    && /downloads/intel-oneapi-base-toolkit-2025.3.1.36_offline.sh  \ 
                 --remove-extracted-files yes   \
-                --log   /tmp/intel-oneapi-base-toolkit-2025.2.0.592_offline.log      \
+                --log   /tmp/intel-oneapi-base-toolkit.log      \
                 -a \
                 --silent \
                 --action install \
@@ -143,22 +168,32 @@ RUN mkdir -p /downloads \
                 --download-cache /tmp   \
                 --download-dir /tmp \
     && rm -rf /downloads \
-    && ln -s /opt/intel/oneapi/mkl/2025.2/lib/libmkl_core.so  /usr/lib/x86_64-linux-gnu/libmkl_core.so  \
-    && ln -s /opt/intel/oneapi/mkl/2025.2/lib/libmkl_gnu_thread.so  /usr/lib/x86_64-linux-gnu/libmkl_gnu_thread.so \
-    && ln -s /opt/intel/oneapi/mkl/2025.2/lib/libmkl_intel_lp64.so /usr/lib/x86_64-linux-gnu/libmkl_intel_lp64.so \
-    && chmod +x /tmp/oneapi-for-nvidia-gpus-2025.2.0-linux.sh   \
-    && /tmp/oneapi-for-nvidia-gpus-2025.2.0-linux.sh --yes      \
-    && rm -rf /tmp/*                                            \
-    && echo "source /opt/intel/oneapi/setvars.sh --include-intel-llvm"                  >> /etc/bash.bashrc
+    && ln -s /opt/intel/oneapi/mkl/2025.3/lib/libmkl_core.so  /usr/lib/x86_64-linux-gnu/libmkl_core.so  \
+    && ln -s /opt/intel/oneapi/mkl/2025.3/lib/libmkl_gnu_thread.so  /usr/lib/x86_64-linux-gnu/libmkl_gnu_thread.so \
+    && ln -s /opt/intel/oneapi/mkl/2025.3/lib/libmkl_intel_lp64.so /usr/lib/x86_64-linux-gnu/libmkl_intel_lp64.so 
+    # && echo "source /opt/intel/oneapi/setvars.sh --include-intel-llvm"                  >> /etc/bash.bashrc
+
+RUN mkdir -p /downloads \
+    && cd /downloads \
+    && curl -O --silent --location https://github.com/intel/intel-graphics-compiler/releases/download/v2.27.10/intel-igc-core-2_2.27.10+20617_amd64.deb \
+    && curl -O --silent --location https://github.com/intel/intel-graphics-compiler/releases/download/v2.27.10/intel-igc-opencl-2_2.27.10+20617_amd64.deb \
+    && curl -O --silent --location https://github.com/intel/compute-runtime/releases/download/26.01.36711.4/intel-ocloc_26.01.36711.4-0_amd64.deb \
+    && curl -O --silent --location https://github.com/intel/compute-runtime/releases/download/26.01.36711.4/intel-opencl-icd_26.01.36711.4-0_amd64.deb \
+    && curl -O --silent --location https://github.com/intel/compute-runtime/releases/download/26.01.36711.4/libigdgmm12_22.9.0_amd64.deb \
+    && curl -O --silent --location https://github.com/intel/compute-runtime/releases/download/26.01.36711.4/libze-intel-gpu1_26.01.36711.4-0_amd64.deb \
+    && curl -O --silent --location https://github.com/intel/cm-compiler/releases/download/cmclang-1.0.119/intel-igc-cm-1.0-119.u18.04-release.x86_64.deb \
+    && curl -O --silent --location https://github.com/oneapi-src/level-zero/releases/download/v1.26.3/level-zero_1.26.3+u22.04_amd64.deb \
+    && dpkg -i *.deb \
+    && rm -rf /downloads 
 
 COPY docker/install_mkl.sh /tmp/install_mkl.sh
-RUN chmod +x /tmp/install_mkl.sh \
+RUN chmod +x /tmp/install_mkl.sh 
     # && /tmp/install_mkl.sh \
-    && echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/install/lib"                     >> /etc/bash.bashrc     \
-    && echo "export LD_LIBRARY_PATH=/oneMKLwithCublas/lib:\$LD_LIBRARY_PATH"            >> /etc/bash.bashrc     \
-    && echo "export LIBRARY_PATH=/oneMKLwithCublas/lib:\$LIBRARY_PATH"                  >> /etc/bash.bashrc     \
-    && echo "export CPLUS_INCLUDE_DIR=/oneMKLwithCublas/include:\$CPLUS_INCLUDE_DIR"    >> /etc/bash.bashrc     \
-    && echo "export CPLUS_INCLUDE_DIR=/include:\$CPLUS_INCLUDE_DIR"                     >> /etc/bash.bashrc
+    # && echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/install/lib"                     >> /etc/bash.bashrc     \
+    # && echo "export LD_LIBRARY_PATH=/oneMKLwithCublas/lib:\$LD_LIBRARY_PATH"            >> /etc/bash.bashrc     \
+    # && echo "export LIBRARY_PATH=/oneMKLwithCublas/lib:\$LIBRARY_PATH"                  >> /etc/bash.bashrc     \
+    # && echo "export CPLUS_INCLUDE_DIR=/oneMKLwithCublas/include:\$CPLUS_INCLUDE_DIR"    >> /etc/bash.bashrc     \
+    # && echo "export CPLUS_INCLUDE_DIR=/include:\$CPLUS_INCLUDE_DIR"                     >> /etc/bash.bashrc
 
 
 # RUN mkdir -p /downloads                                         \

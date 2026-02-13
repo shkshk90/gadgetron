@@ -21,6 +21,29 @@ services:
       - ./docker/run.cmake.sh:/run.sh:ro
       - ./bin:/install:rw
       - ./build:/build:rw
+  oneapi:
+    build: 
+      context: .
+      dockerfile: ./oneapi.Dockerfile
+      network: host
+      ulimits:
+        nproc: 65535
+        nofile:
+          soft: 20000
+          hard: 40000
+    command: ["/bin/bash"]
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: ["gpu"]
+    volumes:
+      - .:/gadgetron:ro
+      - ./docker/cmake.config.sh:/config.sh:ro
+      - ./docker/run.cmake.sh:/run.sh:ro
+      - ./bin:/install:rw
+      - ./build:/build:rw
       # - ./to-be-mounted/intel-dpcpp-cpp-compiler-2025.2.1.7_offline.sh:/dpcpp.sh:ro
       # - ./to-be-mounted/oneapi-for-nvidia-gpus-2025.2.0-linux.sh:/oanv.sh:ro
       # - ./etc/cuda-samples:/cuda-samples:ro

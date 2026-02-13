@@ -1,22 +1,9 @@
-#include "GadgetronConnector.h"
-#include "GadgetMRIHeaders.h"
-#include "GadgetContainerMessage.h"
+#if 0
 
-#include <ace/SOCK_Acceptor.h>
-#include <ace/Addr.h>
-#include <ace/INET_Addr.h>
-#include <ace/Log_Msg.h>
-#include <ace/Get_Opt.h>
-#include <ace/OS_NS_string.h>
-
-#include <fstream>
-#include <time.h>
-#include <iomanip>
-#include <iostream>
 
 using namespace Gadgetron;
 
-int ACE_TMAIN(int argc, ACE_TCHAR *argv[] )
+int ACE_TXAIN(int argc, ACE_TCHAR *argv[] )
 {
 	GadgetronConnector con;
 
@@ -66,3 +53,4 @@ int ACE_TMAIN(int argc, ACE_TCHAR *argv[] )
 
 	return 0;
 }
+#endif

@@ -105,9 +105,72 @@ if (NOT USE_AMALGAMATED)
 
     install(TARGETS test_all DESTINATION bin COMPONENT main)
 else()
-    add_executable(test_all tests_amalgamated.cu)
-    target_link_libraries(test_all ${GADGETRON_AMALGAMATED_LIBS} ${GTEST_LIBRARIES} GTest::gmock)
-    gtest_discover_tests(test_all DISCOVERY_MODE PRE_TEST)
-    install(TARGETS test_all DESTINATION bin COMPONENT main)
+    # Amalgamated build
+    if (USE_SYCL)
+        
+        # SYCL amalgamated build - use converted .dp.cpp file
+        set(AMALGAMATED_SOURCE "${CMAKE_SOURCE_DIR}/sycl_output/test/tests_amalgamated.dp.cpp")
+        if (NOT EXISTS ${AMALGAMATED_SOURCE})
+            # Fall back to local sycl converted file
+            set(AMALGAMATED_SOURCE "tests_amalgamated.dp.cpp")
+        endif()
+        find_package(CBLAS REQUIRED)
+        add_executable(test_all ${AMALGAMATED_SOURCE})
+        
+        target_include_directories(test_all PUBLIC "/downloads/rt/include" "/dpcpp_home/include" "/opt/intel/oneapi/dpcpp-ct/2025.3/include" "/opt/intel/oneapi/dpl/latest/include" )
+        target_compile_options(test_all PRIVATE -fsycl -fsycl-targets=nvptx64-nvidia-cuda -Xsycl-target-backend --cuda-gpu-arch=sm_80 )
+        target_link_options(test_all PRIVATE -fsycl -fsycl-targets=nvptx64-nvidia-cuda -Xsycl-target-backend --cuda-gpu-arch=sm_80 )
+        # target_link_directories(test_all PRIVATE /dpcpp_home/install/lib /oneMKLwithCublas/lib )
+        target_link_libraries(test_all 
+            Boost::system
+            Boost::filesystem
+            Boost::program_options
+            Boost::date_time
+            Boost::timer
+            Boost::coroutine
+            ISMRMRD::ISMRMRD
+            # FFTW
+            armadillo
+            # ${CURL_LIBRARIES}
+            # ${CMAKE_DL_LIBS}
+            ${GTEST_LIBRARIES} GTest::gmock
+            # ${BOOST_LIBRARIES}
+            "/dpcpp_home/install/lib/libsycl.so"
+            # "/dpcpp_home/install/lib/libsycl-jit.so"
+            # OpenCL 
+            stdc++fs
+            # oneMath dispatch + NVIDIA backends (cuBLAS, cuFFT, cuSOLVER, cuRAND, cuSPARSE)
+            "/oneMKLwithCublas/lib/libonemath.so"
+            "/oneMKLwithCublas/lib/libonemath_blas_cublas.so"
+            "/oneMKLwithCublas/lib/libonemath_sparse_blas_cusparse.so"
+            # MKL CPU-only libraries (host-side math, no mkl_sycl_* GPU offload libs)
+            # $<LINK_ONLY:MKL::MKL>
+            
+            # mkl_core 
+            # mkl_intel_ilp64 
+            # mkl_gf_ilp64 
+
+            # mkl_tbb_thread
+            # "/opt/intel/oneapi/tbb/2022.3/lib/libtbb.so"
+            ${CBLAS_LIBRARIES}
+        )
+        if (oneDPL_FOUND)
+            target_link_libraries(test_all oneDPL)
+        endif()
+        gtest_discover_tests(test_all DISCOVERY_MODE PRE_TEST)
+        install(TARGETS test_all DESTINATION bin COMPONENT main)
+    elseif (USE_CUDA)
+        # CUDA amalgamated build
+        add_executable(test_all tests_amalgamated.cu)
+        target_link_libraries(test_all ${GADGETRON_AMALGAMATED_LIBS} ${GTEST_LIBRARIES} GTest::gmock)
+        gtest_discover_tests(test_all DISCOVERY_MODE PRE_TEST)
+        install(TARGETS test_all DESTINATION bin COMPONENT main)
+    else()
+        # CPU-only amalgamated build
+        add_executable(test_all tests_amalgamated.cpp)
+        target_link_libraries(test_all ${GADGETRON_AMALGAMATED_LIBS} ${GTEST_LIBRARIES} GTest::gmock)
+        gtest_discover_tests(test_all DISCOVERY_MODE PRE_TEST)
+        install(TARGETS test_all DESTINATION bin COMPONENT main)
+    endif()
 endif()
 

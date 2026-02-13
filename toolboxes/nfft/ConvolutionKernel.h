@@ -141,7 +141,7 @@ namespace Gadgetron
      * \tparam REAL Value type. Must be a real type.
      * \tparam D Number of dimensions.
      */
-    template<class REAL, unsigned int D>
+    template<class REAL, unsigned int D> 
     class KaiserKernel : public ConvolutionKernel<REAL, D, KaiserKernel>
     {
     public:

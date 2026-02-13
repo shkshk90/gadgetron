@@ -74,8 +74,8 @@ namespace Gadgetron
     _max_griddim = std::vector<int>(_num_devices, 0);
     _major = std::vector<int>(_num_devices, 0);
     _minor = std::vector<int>(_num_devices, 0);
-    _handle = std::vector<cublasHandle_t>(_num_devices, (cublasContext *)0x0);
-    _sparse_handle = std::vector<cusparseHandle_t>(_num_devices, (cusparseHandle_t)0x0);
+    _handle = std::vector<cublasHandle_t>(_num_devices, nullptr);
+    _sparse_handle = std::vector<cusparseHandle_t>(_num_devices, nullptr);
 
     for (int device = 0; device < _num_devices; device++)
     {

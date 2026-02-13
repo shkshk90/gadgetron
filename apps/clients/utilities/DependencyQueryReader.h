@@ -6,11 +6,11 @@
 
 #pragma once
 
+#if 0
+
 #include <fstream>
 #include <iomanip>
 
-#include "GadgetMessageInterface.h"
-#include "ismrmrd/meta.h"
 
 namespace Gadgetron
 {
@@ -98,3 +98,5 @@ class DependencyQueryReader : public GadgetMessageReader
 };
 
 } // namespace Gadgetron
+
+#endif

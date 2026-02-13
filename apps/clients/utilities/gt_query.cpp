@@ -1,16 +1,5 @@
-#include "GadgetronConnector.h"
-#include "GadgetMRIHeaders.h"
-#include "GadgetContainerMessage.h"
-#include "DependencyQueryReader.h"
+#if 0
 
-#include <ace/Log_Msg.h>
-#include <ace/Get_Opt.h>
-#include <ace/OS_NS_string.h>
-
-#include <fstream>
-#include <time.h>
-#include <iomanip>
-#include <sstream>
 
 using namespace Gadgetron;
 
@@ -28,7 +17,7 @@ static void usage()
     GDEBUG_STREAM(outs.str());
 }
 
-int ACE_TMAIN(int argc, ACE_TCHAR *argv[] )
+int ACE_TXAIN(int argc, ACE_TCHAR *argv[] )
 {
     GadgetronConnector con;
 
@@ -97,3 +86,5 @@ int ACE_TMAIN(int argc, ACE_TCHAR *argv[] )
 
     return 0;
 }
+
+#endif

@@ -4,10 +4,13 @@
 // DO NOT EDIT – changes will be overwritten.
 // ============================================================
 
+
+#include <sycl/sycl.hpp>
+#include <oneapi/math.hpp>
+
 #include <oneapi/dpl/execution>
 #include <oneapi/dpl/algorithm>
-#define ONEAPI_BACKEND_LEVEL_ZERO_EXT
-#include <sycl/sycl.hpp>
+
 #include <dpct/dpct.hpp>
 #include <algorithm>
 #include "armadillo"
@@ -29,11 +32,14 @@
 #include <cmath>
 #include <complex>
 #include <cstring>
+
 #include <dpct/blas_utils.hpp>
-
 #include <dpct/fft_utils.hpp>
-
 #include <dpct/sparse_utils.hpp>
+#include <dpct/detail/sparse_utils_detail.hpp>
+#include <dpct/dpl_utils.hpp>
+#include <dpct/lib_common_utils.hpp>
+
 
 /* DPCT_ORIG #include <cublas_v2.h>*/
 /* DPCT_ORIG #include <cuComplex.h>*/
@@ -69,7 +75,6 @@
 #include <stdlib.h> // for size_t
 #include <string>
 #include <string.h>
-#include <dpct/dpl_utils.hpp>
 
 #include <functional>
 
@@ -89,7 +94,6 @@
 #include <type_traits>
 #include <typeinfo>
 #include <vector>
-#include <vector> //For mask fields
 
 
 // ===== Begin: test/tests.cpp =====
@@ -202,6 +206,7 @@ int main(int argc, char **argv) {
 /** \file GadgetronException.h
     \brief An interface to the exception handling used in the Gadgetron to indicate runtime errors.
 */
+
 
 
 
@@ -4616,7 +4621,7 @@ namespace Gadgetron{
     }
     catch (sycl::exception const& exc) {
       std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-      std::exit(1);
+      throw __LINE__;
     }
 
 #if __cplusplus > 199711L
@@ -4649,7 +4654,7 @@ namespace Gadgetron{
     }
     catch (sycl::exception const& exc) {
       std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-      std::exit(1);
+      throw __LINE__;
     }
 
     template <typename T> 
@@ -4900,7 +4905,7 @@ namespace Gadgetron{
     }
     catch (sycl::exception const& exc) {
       std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-      std::exit(1);
+      throw __LINE__;
     }
 
     template <typename T> cuNDArray<T>& cuNDArray<T>::operator=(const hoNDArray<T>& rhs) try {
@@ -4956,7 +4961,7 @@ namespace Gadgetron{
     }
     catch (sycl::exception const& exc) {
       std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-      std::exit(1);
+      throw __LINE__;
     }
 
     template <typename T> 
@@ -5024,7 +5029,7 @@ namespace Gadgetron{
     }
     catch (sycl::exception const& exc) {
       std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-      std::exit(1);
+      throw __LINE__;
     }
 
     template <typename T> 
@@ -5146,7 +5151,7 @@ namespace Gadgetron{
     }
     catch (sycl::exception const& exc) {
       std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-      std::exit(1);
+      throw __LINE__;
     }
 
     template <typename T> inline void cuNDArray<T>::set_device(int device) try {
@@ -5209,7 +5214,7 @@ namespace Gadgetron{
     }
     catch (sycl::exception const& exc) {
       std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-      std::exit(1);
+      throw __LINE__;
     }
 
     template <typename T> 
@@ -5350,7 +5355,7 @@ namespace Gadgetron{
     }
     catch (sycl::exception const& exc) {
       std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-      std::exit(1);
+      throw __LINE__;
     }
 
     template <typename T> void cuNDArray<T>::deallocate_memory() try {
@@ -5383,7 +5388,7 @@ namespace Gadgetron{
     }
     catch (sycl::exception const& exc) {
       std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-      std::exit(1);
+      throw __LINE__;
     }
 }
 // ===== End: toolboxes/core/gpu/cuNDArray.h =====
@@ -5809,26 +5814,41 @@ TYPED_TEST(cuNDArray_elemwise_TestReal,clamp_minTest){
 }
 
 TYPED_TEST(cuNDArray_elemwise_TestReal,clamp_maxTest){
+  std::cout << "== A " << std::endl;
   fill(&this->Array,TypeParam(5.7));
+  std::cout << "== B " << std::endl;
   TypeParam tmp(101.3);
-/* DPCT_ORIG   CUDA_CALL(cudaMemcpy(&this->Array.get_data_ptr()[91], &tmp, sizeof(TypeParam),
- * cudaMemcpyHostToDevice));*/
-  CUDA_CALL(DPCT_CHECK_ERROR(
-      dpct::get_in_order_queue().memcpy(&this->Array.get_data_ptr()[91], &tmp, sizeof(TypeParam)).wait()));
+  std::cout << "== C " << std::endl;
+  /* DPCT_ORIG   CUDA_CALL(cudaMemcpy(&this->Array.get_data_ptr()[91], &tmp, sizeof(TypeParam),
+  * cudaMemcpyHostToDevice));*/
+ CUDA_CALL(DPCT_CHECK_ERROR(
+   dpct::get_in_order_queue().memcpy(&this->Array.get_data_ptr()[91], &tmp, sizeof(TypeParam)).wait()));
+  std::cout << "== D " << std::endl;
   clamp_max(&this->Array,TypeParam(10.6));
+  std::cout << "== E " << std::endl;
   EXPECT_FLOAT_EQ(TypeParam(5.7),this->Array[28]);
+  std::cout << "== F " << std::endl;
   EXPECT_FLOAT_EQ(TypeParam(10.6),this->Array[91]);
+  std::cout << "== G " << std::endl;
 }
 
 TYPED_TEST(cuNDArray_elemwise_TestReal,normalizeTest){
+  std::cout << "-- A " << std::endl;
   fill(&this->Array,TypeParam(50));
+  std::cout << "-- B " << std::endl;
   TypeParam tmp(-200);
+  std::cout << "-- C " << std::endl;
 /* DPCT_ORIG   CUDA_CALL(cudaMemcpy(&this->Array.get_data_ptr()[23], &tmp, sizeof(TypeParam),
  * cudaMemcpyHostToDevice));*/
-  CUDA_CALL(DPCT_CHECK_ERROR(
-      dpct::get_in_order_queue().memcpy(&this->Array.get_data_ptr()[23], &tmp, sizeof(TypeParam)).wait()));
+  auto x = DPCT_CHECK_ERROR(
+      dpct::get_in_order_queue().memcpy(&this->Array.get_data_ptr()[23], &tmp, sizeof(TypeParam)).wait());
+  std::cout << "-- Result :: " << x << std::endl;
+  // CUDA_CALL(DPCT_CHECK_ERROR(
+  //     dpct::get_in_order_queue().memcpy(&this->Array.get_data_ptr()[23], &tmp, sizeof(TypeParam)).wait()));
   normalize(&this->Array,110);
+  std::cout << "-- D :: " << std::endl;
   EXPECT_FLOAT_EQ(TypeParam(50)*TypeParam(110)/abs(TypeParam(-200)),this->Array[12345]);
+  std::cout << "-- E :: " << std::endl;
 }
 
 TYPED_TEST(cuNDArray_elemwise_TestReal,shrink1Test){
@@ -10277,36 +10297,36 @@ namespace Gadgetron
 namespace Gadgetron
 {
 
+	// Map Gadgetron types to std types for oneMath sparse API compatibility
+	template <typename T> struct onemath_type { using type = T; };
+	template <> struct onemath_type<complext<float>> { using type = std::complex<float>; };
+	template <> struct onemath_type<complext<double>> { using type = std::complex<double>; };
+	template <typename T> using onemath_type_t = typename onemath_type<T>::type;
 
 	template <class T>
 	struct cuCsrMatrix
 	{
-
-/* DPCT_ORIG 		cuCsrMatrix(size_t rows, size_t cols, thrust::device_vector<int> csrRow,
- * thrust::device_vector<int> csrColdnd, thrust::device_vector<T> data) : csrRow{std::move(csrRow)},
- * csrColdnd{std::move(csrColdnd)}, data{std::move(data)}, rows{rows}, cols{cols}*/
                 cuCsrMatrix(size_t rows, size_t cols, dpct::device_vector<int> csrRow,
                             dpct::device_vector<int> csrColdnd, dpct::device_vector<T> data)
                     : csrRow{std::move(csrRow)}, csrColdnd{std::move(csrColdnd)}, data{std::move(data)}, rows{rows},
                       cols{cols}
                 {
-/* DPCT_ORIG 			cusparseCreateCsr(&descr, rows, cols, this->data.size(),
-                                thrust::dpct::get_raw_pointer(this->csrRow.data()),
-   thrust::dpct::get_raw_pointer(this->csrColdnd.data()), thrust::dpct::get_raw_pointer(this->data.data()), CUSPARSE_INDEX_32I,
-   CUSPARSE_INDEX_32I, CUSPARSE_INDEX_BASE_ZERO, Gadgetron::cuda_datatype<T>());*/
-                        descr = std::make_shared<dpct::sparse::sparse_matrix_desc>(
-                            rows, cols, this->data.size(), dpct::get_raw_pointer(this->csrRow.data()),
-                            dpct::get_raw_pointer(this->csrColdnd.data()), dpct::get_raw_pointer(this->data.data()),
-                            dpct::library_data_t::real_int32, dpct::library_data_t::real_int32,
-                            oneapi::mkl::index_base::zero, Gadgetron::cuda_datatype<T>(),
-                            dpct::sparse::matrix_format::csr);
+                        auto& q = dpct::get_in_order_queue();
+                        oneapi::math::sparse::init_csr_matrix<onemath_type_t<T>, std::int32_t>(
+                            q, &descr, (std::int64_t)rows, (std::int64_t)cols, (std::int64_t)this->data.size(),
+                            oneapi::math::index_base::zero,
+                            reinterpret_cast<std::int32_t*>(dpct::get_raw_pointer(this->csrRow.data())),
+                            reinterpret_cast<std::int32_t*>(dpct::get_raw_pointer(this->csrColdnd.data())),
+                            reinterpret_cast<onemath_type_t<T>*>(dpct::get_raw_pointer(this->data.data())));
                 }
 
 		~cuCsrMatrix()
 		{
-			if (this->descr)
-/* DPCT_ORIG 				cusparseDestroySpMat(this->descr);*/
-                                (this->descr).reset();
+			if (this->descr) {
+                                auto& q = dpct::get_in_order_queue();
+                                oneapi::math::sparse::release_sparse_matrix(q, descr).wait();
+                                descr = nullptr;
+                        }
                 }
 
 		cuCsrMatrix(cuCsrMatrix &&other)
@@ -10320,17 +10340,14 @@ namespace Gadgetron
 			other.descr = nullptr;
 			this->csrColdnd = std::move(other.csrColdnd);
 			this->csrRow = std::move(other.csrRow);
-			this->data = std::move(this->data);
+			this->data = std::move(other.data);
 			return *this;
 		}
 
 		size_t rows, cols;
-/* DPCT_ORIG 		thrust::device_vector<int> csrRow, csrColdnd;*/
                 dpct::device_vector<int> csrRow, csrColdnd;
-/* DPCT_ORIG 		thrust::device_vector<T> data;*/
                 dpct::device_vector<T> data;
-/* DPCT_ORIG 		cusparseSpMatDescr_t descr;*/
-                dpct::sparse::sparse_matrix_desc_t descr;
+                oneapi::math::sparse::matrix_handle_t descr = nullptr;
         };
 
 	/**
@@ -19691,13 +19708,13 @@ namespace Gadgetron{
     */
     return [&]() {
     dpct::blas::wrapper_float_out res_wrapper_ct4(hndl->get_queue(), res);
-    oneapi::mkl::blas::column_major::nrm2(hndl->get_queue(), n, x, inc, res_wrapper_ct4.get_ptr());
+    oneapi::math::blas::column_major::nrm2(hndl->get_queue(), n, x, inc, res_wrapper_ct4.get_ptr());
     return 0;
     }();
   }
   catch (sycl::exception const& exc) {
     std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-    std::exit(1);
+    throw __LINE__;
   }
 
 /* DPCT_ORIG   template<> cublasStatus_t cublas_nrm2<double>(cublasHandle_t hndl, int n, const double*  x, int inc,
@@ -19710,13 +19727,13 @@ namespace Gadgetron{
     */
     return [&]() {
     dpct::blas::wrapper_double_out res_wrapper_ct4(hndl->get_queue(), res);
-    oneapi::mkl::blas::column_major::nrm2(hndl->get_queue(), n, x, inc, res_wrapper_ct4.get_ptr());
+    oneapi::math::blas::column_major::nrm2(hndl->get_queue(), n, x, inc, res_wrapper_ct4.get_ptr());
     return 0;
     }();
   }
   catch (sycl::exception const& exc) {
     std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-    std::exit(1);
+    throw __LINE__;
   }
 
 /* DPCT_ORIG   template<> cublasStatus_t cublas_nrm2<float_complext>(cublasHandle_t hndl, int n, const float_complext*
@@ -19731,14 +19748,14 @@ namespace Gadgetron{
     */
     return [&]() {
     dpct::blas::wrapper_float_out res_wrapper_ct4(hndl->get_queue(), res);
-    oneapi::mkl::blas::column_major::nrm2(hndl->get_queue(), n, (std::complex<float>*)x, inc,
+    oneapi::math::blas::column_major::nrm2(hndl->get_queue(), n, (std::complex<float>*)x, inc,
                                           res_wrapper_ct4.get_ptr());
     return 0;
     }();
   }
   catch (sycl::exception const& exc) {
     std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-    std::exit(1);
+    throw __LINE__;
   }
 
 /* DPCT_ORIG   template<> cublasStatus_t cublas_nrm2<double_complext>(cublasHandle_t hndl, int n, const double_complext*
@@ -19753,14 +19770,14 @@ namespace Gadgetron{
     */
     return [&]() {
     dpct::blas::wrapper_double_out res_wrapper_ct4(hndl->get_queue(), res);
-    oneapi::mkl::blas::column_major::nrm2(hndl->get_queue(), n, (std::complex<double>*)x, inc,
+    oneapi::math::blas::column_major::nrm2(hndl->get_queue(), n, (std::complex<double>*)x, inc,
                                           res_wrapper_ct4.get_ptr());
     return 0;
     }();
   }
   catch (sycl::exception const& exc) {
     std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-    std::exit(1);
+    throw __LINE__;
   }
 
   //DOT
@@ -19778,13 +19795,13 @@ namespace Gadgetron{
     */
     return [&]() {
     dpct::blas::wrapper_float_out res_wrapper_ct6(hndl->get_queue(), res);
-    oneapi::mkl::blas::column_major::dot(hndl->get_queue(), n, x, incx, y, incy, res_wrapper_ct6.get_ptr());
+    oneapi::math::blas::column_major::dot(hndl->get_queue(), n, x, incx, y, incy, res_wrapper_ct6.get_ptr());
     return 0;
     }();
   }
   catch (sycl::exception const& exc) {
     std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-    std::exit(1);
+    throw __LINE__;
   }
 
 /* DPCT_ORIG   template<> cublasStatus_t cublas_dot<double>(cublasHandle_t hndl, int n , const double* x , int incx,
@@ -19799,13 +19816,13 @@ namespace Gadgetron{
     */
     return [&]() {
     dpct::blas::wrapper_double_out res_wrapper_ct6(hndl->get_queue(), res);
-    oneapi::mkl::blas::column_major::dot(hndl->get_queue(), n, x, incx, y, incy, res_wrapper_ct6.get_ptr());
+    oneapi::math::blas::column_major::dot(hndl->get_queue(), n, x, incx, y, incy, res_wrapper_ct6.get_ptr());
     return 0;
     }();
   }
   catch (sycl::exception const& exc) {
     std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-    std::exit(1);
+    throw __LINE__;
   }
 
 /* DPCT_ORIG   template<> cublasStatus_t cublas_dot<float_complext>(cublasHandle_t hndl, int n , const float_complext* x
@@ -19822,7 +19839,7 @@ namespace Gadgetron{
       */
       return [&]() {
       dpct::blas::wrapper_float2_out res_wrapper_ct6(hndl->get_queue(), (sycl::float2*)res);
-      oneapi::mkl::blas::column_major::dotc(hndl->get_queue(), n, (std::complex<float>*)x, incx,
+      oneapi::math::blas::column_major::dotc(hndl->get_queue(), n, (std::complex<float>*)x, incx,
                                             (std::complex<float>*)y, incy,
                                             (std::complex<float>*)res_wrapper_ct6.get_ptr());
       return 0;
@@ -19836,7 +19853,7 @@ namespace Gadgetron{
       */
       return [&]() {
       dpct::blas::wrapper_float2_out res_wrapper_ct6(hndl->get_queue(), (sycl::float2*)res);
-      oneapi::mkl::blas::column_major::dotu(hndl->get_queue(), n, (std::complex<float>*)x, incx,
+      oneapi::math::blas::column_major::dotu(hndl->get_queue(), n, (std::complex<float>*)x, incx,
                                             (std::complex<float>*)y, incy,
                                             (std::complex<float>*)res_wrapper_ct6.get_ptr());
       return 0;
@@ -19844,7 +19861,7 @@ namespace Gadgetron{
   }
   catch (sycl::exception const& exc) {
     std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-    std::exit(1);
+    throw __LINE__;
   }
 
 /* DPCT_ORIG   template<> cublasStatus_t cublas_dot<double_complext>(cublasHandle_t hndl, int n , const double_complext*
@@ -19861,7 +19878,7 @@ namespace Gadgetron{
       */
       return [&]() {
       dpct::blas::wrapper_double2_out res_wrapper_ct6(hndl->get_queue(), (sycl::double2*)res);
-      oneapi::mkl::blas::column_major::dotc(hndl->get_queue(), n, (std::complex<double>*)x, incx,
+      oneapi::math::blas::column_major::dotc(hndl->get_queue(), n, (std::complex<double>*)x, incx,
                                             (std::complex<double>*)y, incy,
                                             (std::complex<double>*)res_wrapper_ct6.get_ptr());
       return 0;
@@ -19875,7 +19892,7 @@ namespace Gadgetron{
       */
       return [&]() {
       dpct::blas::wrapper_double2_out res_wrapper_ct6(hndl->get_queue(), (sycl::double2*)res);
-      oneapi::mkl::blas::column_major::dotu(hndl->get_queue(), n, (std::complex<double>*)x, incx,
+      oneapi::math::blas::column_major::dotu(hndl->get_queue(), n, (std::complex<double>*)x, incx,
                                             (std::complex<double>*)y, incy,
                                             (std::complex<double>*)res_wrapper_ct6.get_ptr());
       return 0;
@@ -19883,7 +19900,7 @@ namespace Gadgetron{
   }
   catch (sycl::exception const& exc) {
     std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-    std::exit(1);
+    throw __LINE__;
   }
 
   // AXPY
@@ -19895,12 +19912,12 @@ namespace Gadgetron{
   int cublas_axpy<float>(dpct::blas::descriptor_ptr hndl, int n, const float* a, const float* x, int incx, float* y,
                          int incy) try {
 /* DPCT_ORIG     return cublasSaxpy(hndl,n,a,x,incx,y,incy);*/
-    return DPCT_CHECK_ERROR(oneapi::mkl::blas::column_major::axpy(
+    return DPCT_CHECK_ERROR(oneapi::math::blas::column_major::axpy(
         hndl->get_queue(), n, dpct::get_value(a, hndl->get_queue()), x, incx, y, incy));
   }
   catch (sycl::exception const& exc) {
     std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-    std::exit(1);
+    throw __LINE__;
   }
 
 /* DPCT_ORIG   template<> cublasStatus_t cublas_axpy<double>(cublasHandle_t hndl , int n , const double* a , const
@@ -19909,12 +19926,12 @@ namespace Gadgetron{
   int cublas_axpy<double>(dpct::blas::descriptor_ptr hndl, int n, const double* a, const double* x, int incx, double* y,
                           int incy) try {
 /* DPCT_ORIG     return cublasDaxpy(hndl,n,a,x,incx,y,incy);*/
-    return DPCT_CHECK_ERROR(oneapi::mkl::blas::column_major::axpy(
+    return DPCT_CHECK_ERROR(oneapi::math::blas::column_major::axpy(
         hndl->get_queue(), n, dpct::get_value(a, hndl->get_queue()), x, incx, y, incy));
   }
   catch (sycl::exception const& exc) {
     std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-    std::exit(1);
+    throw __LINE__;
   }
 
 /* DPCT_ORIG   template<> cublasStatus_t cublas_axpy<float_complext>(cublasHandle_t hndl , int n , const float_complext*
@@ -19923,13 +19940,13 @@ namespace Gadgetron{
   int cublas_axpy<float_complext>(dpct::blas::descriptor_ptr hndl, int n, const float_complext* a,
                                   const float_complext* x, int incx, float_complext* y, int incy) try {
 /* DPCT_ORIG     return cublasCaxpy(hndl,n,(const cuComplex*) a, (const cuComplex*) x,incx, (cuComplex*)y,incy);*/
-    return DPCT_CHECK_ERROR(oneapi::mkl::blas::column_major::axpy(
+    return DPCT_CHECK_ERROR(oneapi::math::blas::column_major::axpy(
         hndl->get_queue(), n, dpct::get_value((const sycl::float2*)a, hndl->get_queue()), (std::complex<float>*)x, incx,
         (std::complex<float>*)y, incy));
   }
   catch (sycl::exception const& exc) {
     std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-    std::exit(1);
+    throw __LINE__;
   }
 
 /* DPCT_ORIG   template<> cublasStatus_t cublas_axpy<double_complext>(cublasHandle_t hndl , int n , const
@@ -19939,13 +19956,13 @@ namespace Gadgetron{
                                    const double_complext* x, int incx, double_complext* y, int incy) try {
 /* DPCT_ORIG     return cublasZaxpy(hndl,n,(const cuDoubleComplex*) a, (const cuDoubleComplex*) x,incx,
  * (cuDoubleComplex*)y,incy);*/
-    return DPCT_CHECK_ERROR(oneapi::mkl::blas::column_major::axpy(
+    return DPCT_CHECK_ERROR(oneapi::math::blas::column_major::axpy(
         hndl->get_queue(), n, dpct::get_value((const sycl::double2*)a, hndl->get_queue()), (std::complex<double>*)x,
         incx, (std::complex<double>*)y, incy));
   }
   catch (sycl::exception const& exc) {
     std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-    std::exit(1);
+    throw __LINE__;
   }
 
   //SUM
@@ -19962,13 +19979,13 @@ namespace Gadgetron{
     */
     return [&]() {
     dpct::blas::wrapper_float_out res_wrapper_ct4(hndl->get_queue(), result);
-    oneapi::mkl::blas::column_major::asum(hndl->get_queue(), n, x, incx, res_wrapper_ct4.get_ptr());
+    oneapi::math::blas::column_major::asum(hndl->get_queue(), n, x, incx, res_wrapper_ct4.get_ptr());
     return 0;
     }();
   }
   catch (sycl::exception const& exc) {
     std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-    std::exit(1);
+    throw __LINE__;
   }
 
 /* DPCT_ORIG   template<> cublasStatus_t cublas_asum<double>(cublasHandle_t hndl, int n,const double *x, int incx,
@@ -19982,13 +19999,13 @@ namespace Gadgetron{
     */
     return [&]() {
     dpct::blas::wrapper_double_out res_wrapper_ct4(hndl->get_queue(), result);
-    oneapi::mkl::blas::column_major::asum(hndl->get_queue(), n, x, incx, res_wrapper_ct4.get_ptr());
+    oneapi::math::blas::column_major::asum(hndl->get_queue(), n, x, incx, res_wrapper_ct4.get_ptr());
     return 0;
     }();
   }
   catch (sycl::exception const& exc) {
     std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-    std::exit(1);
+    throw __LINE__;
   }
 
 /* DPCT_ORIG   template<> cublasStatus_t cublas_asum<float_complext>(cublasHandle_t hndl, int n,const float_complext *x,
@@ -20003,14 +20020,14 @@ namespace Gadgetron{
     */
     return [&]() {
     dpct::blas::wrapper_float_out res_wrapper_ct4(hndl->get_queue(), result);
-    oneapi::mkl::blas::column_major::asum(hndl->get_queue(), n, (std::complex<float>*)x, incx,
+    oneapi::math::blas::column_major::asum(hndl->get_queue(), n, (std::complex<float>*)x, incx,
                                           res_wrapper_ct4.get_ptr());
     return 0;
     }();
   }
   catch (sycl::exception const& exc) {
     std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-    std::exit(1);
+    throw __LINE__;
   }
 
 /* DPCT_ORIG   template<> cublasStatus_t cublas_asum<double_complext>(cublasHandle_t hndl, int n,const double_complext
@@ -20025,14 +20042,14 @@ namespace Gadgetron{
     */
     return [&]() {
     dpct::blas::wrapper_double_out res_wrapper_ct4(hndl->get_queue(), result);
-    oneapi::mkl::blas::column_major::asum(hndl->get_queue(), n, (std::complex<double>*)x, incx,
+    oneapi::math::blas::column_major::asum(hndl->get_queue(), n, (std::complex<double>*)x, incx,
                                           res_wrapper_ct4.get_ptr());
     return 0;
     }();
   }
   catch (sycl::exception const& exc) {
     std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-    std::exit(1);
+    throw __LINE__;
   }
 
   //AMIN
@@ -20048,14 +20065,14 @@ namespace Gadgetron{
     */
     return [&]() {
     dpct::blas::wrapper_int_to_int64_out res_wrapper_ct4(hndl->get_queue(), result);
-    oneapi::mkl::blas::column_major::iamin(hndl->get_queue(), n, x, incx, res_wrapper_ct4.get_ptr(),
-                                           oneapi::mkl::index_base::one);
+    oneapi::math::blas::column_major::iamin(hndl->get_queue(), n, x, incx, res_wrapper_ct4.get_ptr(),
+                                           oneapi::math::index_base::one);
     return 0;
     }();
   }
   catch (sycl::exception const& exc) {
     std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-    std::exit(1);
+    throw __LINE__;
   }
 
 /* DPCT_ORIG   template<> cublasStatus_t cublas_amin<double>(cublasHandle_t hndl, int n,const double *x, int incx, int
@@ -20069,14 +20086,14 @@ namespace Gadgetron{
     */
     return [&]() {
     dpct::blas::wrapper_int_to_int64_out res_wrapper_ct4(hndl->get_queue(), result);
-    oneapi::mkl::blas::column_major::iamin(hndl->get_queue(), n, x, incx, res_wrapper_ct4.get_ptr(),
-                                           oneapi::mkl::index_base::one);
+    oneapi::math::blas::column_major::iamin(hndl->get_queue(), n, x, incx, res_wrapper_ct4.get_ptr(),
+                                           oneapi::math::index_base::one);
     return 0;
     }();
   }
   catch (sycl::exception const& exc) {
     std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-    std::exit(1);
+    throw __LINE__;
   }
 
 /* DPCT_ORIG   template<> cublasStatus_t cublas_amin<float_complext>(cublasHandle_t hndl, int n,const float_complext *x,
@@ -20091,14 +20108,14 @@ namespace Gadgetron{
     */
     return [&]() {
     dpct::blas::wrapper_int_to_int64_out res_wrapper_ct4(hndl->get_queue(), result);
-    oneapi::mkl::blas::column_major::iamin(hndl->get_queue(), n, (std::complex<float>*)x, incx,
-                                           res_wrapper_ct4.get_ptr(), oneapi::mkl::index_base::one);
+    oneapi::math::blas::column_major::iamin(hndl->get_queue(), n, (std::complex<float>*)x, incx,
+                                           res_wrapper_ct4.get_ptr(), oneapi::math::index_base::one);
     return 0;
     }();
   }
   catch (sycl::exception const& exc) {
     std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-    std::exit(1);
+    throw __LINE__;
   }
 
 /* DPCT_ORIG   template<> cublasStatus_t cublas_amin<double_complext>(cublasHandle_t hndl, int n,const double_complext
@@ -20113,14 +20130,14 @@ namespace Gadgetron{
     */
     return [&]() {
     dpct::blas::wrapper_int_to_int64_out res_wrapper_ct4(hndl->get_queue(), result);
-    oneapi::mkl::blas::column_major::iamin(hndl->get_queue(), n, (std::complex<double>*)x, incx,
-                                           res_wrapper_ct4.get_ptr(), oneapi::mkl::index_base::one);
+    oneapi::math::blas::column_major::iamin(hndl->get_queue(), n, (std::complex<double>*)x, incx,
+                                           res_wrapper_ct4.get_ptr(), oneapi::math::index_base::one);
     return 0;
     }();
   }
   catch (sycl::exception const& exc) {
     std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-    std::exit(1);
+    throw __LINE__;
   }
 
   //AMAX
@@ -20136,16 +20153,15 @@ namespace Gadgetron{
     */
     return [&]() {
     dpct::blas::wrapper_int_to_int64_out res_wrapper_ct4(hndl->get_queue(), result);
-    oneapi::mkl::blas::column_major::iamax(hndl->get_queue(), n, x, incx, res_wrapper_ct4.get_ptr(),
-                                           oneapi::mkl::index_base::one);
+    oneapi::math::blas::column_major::iamax(oneapi::mkl::backend_selector<oneapi::mkl::backend::cublas>{hndl->get_queue()}, n, x, incx, res_wrapper_ct4.get_ptr(),
+                                           oneapi::math::index_base::one);
     return 0;
     }();
   }
   catch (sycl::exception const& exc) {
     std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-    std::exit(1);
+    throw __LINE__;
   }
-
 /* DPCT_ORIG   template<> cublasStatus_t cublas_amax<double>(cublasHandle_t hndl, int n,const double *x, int incx, int
  * *result){*/
   template <>
@@ -20157,14 +20173,14 @@ namespace Gadgetron{
     */
     return [&]() {
     dpct::blas::wrapper_int_to_int64_out res_wrapper_ct4(hndl->get_queue(), result);
-    oneapi::mkl::blas::column_major::iamax(hndl->get_queue(), n, x, incx, res_wrapper_ct4.get_ptr(),
-                                           oneapi::mkl::index_base::one);
+    oneapi::math::blas::column_major::iamax(oneapi::mkl::backend_selector<oneapi::mkl::backend::cublas>{hndl->get_queue()}, n, x, incx, res_wrapper_ct4.get_ptr(),
+                                           oneapi::math::index_base::one);
     return 0;
     }();
   }
   catch (sycl::exception const& exc) {
     std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-    std::exit(1);
+    throw __LINE__;
   }
 
 /* DPCT_ORIG   template<> cublasStatus_t cublas_amax<float_complext>(cublasHandle_t hndl, int n,const float_complext *x,
@@ -20179,14 +20195,14 @@ namespace Gadgetron{
     */
     return [&]() {
     dpct::blas::wrapper_int_to_int64_out res_wrapper_ct4(hndl->get_queue(), result);
-    oneapi::mkl::blas::column_major::iamax(hndl->get_queue(), n, (std::complex<float>*)x, incx,
-                                           res_wrapper_ct4.get_ptr(), oneapi::mkl::index_base::one);
+    oneapi::math::blas::column_major::iamax(oneapi::mkl::backend_selector<oneapi::mkl::backend::cublas>{hndl->get_queue()}, n, (std::complex<float>*)x, incx,
+                                           res_wrapper_ct4.get_ptr(), oneapi::math::index_base::one);
     return 0;
     }();
   }
   catch (sycl::exception const& exc) {
     std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-    std::exit(1);
+    throw __LINE__;
   }
 
 /* DPCT_ORIG   template<> cublasStatus_t cublas_amax<double_complext>(cublasHandle_t hndl, int n,const double_complext
@@ -20201,14 +20217,14 @@ namespace Gadgetron{
     */
     return [&]() {
     dpct::blas::wrapper_int_to_int64_out res_wrapper_ct4(hndl->get_queue(), result);
-    oneapi::mkl::blas::column_major::iamax(hndl->get_queue(), n, (std::complex<double>*)x, incx,
-                                           res_wrapper_ct4.get_ptr(), oneapi::mkl::index_base::one);
+    oneapi::math::blas::column_major::iamax(oneapi::mkl::backend_selector<oneapi::mkl::backend::cublas>{hndl->get_queue()}, n, (std::complex<double>*)x, incx,
+                                           res_wrapper_ct4.get_ptr(), oneapi::math::index_base::one);
     return 0;
     }();
   }
   catch (sycl::exception const& exc) {
     std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-    std::exit(1);
+    throw __LINE__;
   }
 
   template <class T> typename realType<T>::Type nrm2(cuNDArray<T>* arr, size_t batchSize) try {
@@ -20248,7 +20264,7 @@ namespace Gadgetron{
   }
   catch (sycl::exception const& exc) {
     std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-    std::exit(1);
+    throw __LINE__;
   }
 
   template <class T> T dot(cuNDArray<T>* arr1, cuNDArray<T>* arr2, size_t batchSize, bool cc) try {
@@ -20288,7 +20304,7 @@ namespace Gadgetron{
   }
   catch (sycl::exception const& exc) {
     std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-    std::exit(1);
+    throw __LINE__;
   }
 
   template <class T> void axpy(T a, cuNDArray<T>* x, cuNDArray<T>* y, size_t batchSize) try {
@@ -20317,7 +20333,7 @@ namespace Gadgetron{
   }
   catch (sycl::exception const& exc) {
     std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-    std::exit(1);
+    throw __LINE__;
   }
 
   template <class T> void axpy(T a, cuNDArray<complext<T>>* x, cuNDArray<complext<T>>* y, size_t batchSize ) { axpy(complext<T>(a), x, y, batchSize); }
@@ -20355,7 +20371,7 @@ namespace Gadgetron{
   }
   catch (sycl::exception const& exc) {
     std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-    std::exit(1);
+    throw __LINE__;
   }
 
   template <class T> size_t amin(cuNDArray<T>* x, size_t batchSize ) 
@@ -22093,7 +22109,7 @@ namespace Gadgetron
   }
   catch (sycl::exception const& exc) {
     std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-    std::exit(1);
+    throw __LINE__;
   }
 
   cudaDeviceManager::~cudaDeviceManager()
@@ -22268,7 +22284,7 @@ namespace Gadgetron
   }
   catch (sycl::exception const& exc) {
     std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-    std::exit(1);
+    throw __LINE__;
   }
 
   void cudaDeviceManager::unlockHandle()
@@ -22318,7 +22334,7 @@ namespace Gadgetron
   }
   catch (sycl::exception const& exc) {
     std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-    std::exit(1);
+    throw __LINE__;
   }
 
   void cudaDeviceManager::unlockSparseHandle()
@@ -22531,7 +22547,7 @@ void cuNDFFT<T>::fft_int(cuNDArray<complext<T>>* input, std::vector<size_t>* dim
 }
 catch (sycl::exception const& exc) {
   std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-  std::exit(1);
+  throw __LINE__;
 }
 
 template <class T> void cuNDFFT<T>::fft1_int(cuNDArray<complext<T>>* input, int direction, bool do_scale) try {
@@ -22579,7 +22595,7 @@ template <class T> void cuNDFFT<T>::fft1_int(cuNDArray<complext<T>>* input, int 
 }
 catch (sycl::exception const& exc) {
   std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-  std::exit(1);
+  throw __LINE__;
 }
 
 template <class T> void cuNDFFT<T>::fft2_int(cuNDArray<complext<T>>* input, int direction, bool do_scale) try {
@@ -22627,7 +22643,7 @@ template <class T> void cuNDFFT<T>::fft2_int(cuNDArray<complext<T>>* input, int 
 }
 catch (sycl::exception const& exc) {
   std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-  std::exit(1);
+  throw __LINE__;
 }
 template <class T> void cuNDFFT<T>::fft3_int(cuNDArray<complext<T>>* input, int direction, bool do_scale) try {
 /* DPCT_ORIG 	cufftHandle plan;*/
@@ -22675,7 +22691,7 @@ template <class T> void cuNDFFT<T>::fft3_int(cuNDArray<complext<T>>* input, int 
 }
 catch (sycl::exception const& exc) {
   std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-  std::exit(1);
+  throw __LINE__;
 }
 template<class T> void
 cuNDFFT<T>::fft( cuNDArray< complext<T> > *input, std::vector<size_t> *dims_to_transform, bool do_scale )
@@ -23021,13 +23037,18 @@ template EXPORTGPUFFT void Gadgetron::timeswitch3D<double>(cuNDArray<double_comp
 
 // ===== Begin: toolboxes/core/cpu/math/cpp_blas.cpp =====
 
-#ifdef USE_MKL
-#include "mkl.h"
-#else
+// #ifdef USE_MKL
+// #include "mkl.h"
+// #else
+// extern "C" {
+// #include "cblas.h"
+// }
+// #endif // MKL_FOUND
+
+
 extern "C" {
 #include "cblas.h"
 }
-#endif // MKL_FOUND
 
 #ifdef OPENBLAS_SEQUENTIAL // Check for OpenBlas.
 #define CBLAS_COMPLEX_FLOAT openblas_complex_float
@@ -23349,6 +23370,7 @@ void Gadgetron::BLAS::herk(bool upper, bool trans, size_t n, size_t k, double al
     cblas_zherk(CblasColMajor, upper ? CblasUpper : CblasLower, trans ? CblasConjTrans : CblasNoTrans, n, k, alpha,
                 (double*)a, lda, beta, (double*)c, ldc);
 }
+
 // ===== End: toolboxes/core/cpu/math/cpp_blas.cpp =====
 
 
@@ -25440,109 +25462,122 @@ template  boost::shared_ptr<hoNDArray<std::complex<double>>> square<std::complex
 
 using namespace Gadgetron;
 
-template <class T> static auto create_DnVec(cuNDArray<T>& vec) try {
-
-        return std::make_shared<dpct::sparse::dense_vector_desc>(vec.size(), vec.data(), cuda_datatype<T>());
-}
-catch (sycl::exception const& exc) {
-  std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-  std::exit(1);
+template <class T>
+static oneapi::math::sparse::dense_vector_handle_t create_DnVec(sycl::queue& q, cuNDArray<T>& vec) {
+        oneapi::math::sparse::dense_vector_handle_t handle;
+        oneapi::math::sparse::init_dense_vector(q, &handle, (std::int64_t)vec.size(),
+            reinterpret_cast<onemath_type_t<T>*>(vec.data()));
+        return handle;
 }
 
 template <class T>
 void Gadgetron::sparseMV(T alpha, T beta, const cuCsrMatrix<T>& mat, const cuNDArray<T>& vec_in, cuNDArray<T>& vec_out,
-                         bool adjoint) try {
+                         bool adjoint) {
+    namespace sp = oneapi::math::sparse;
 
-        if (vec_in.get_number_of_elements() != (adjoint ? mat.rows : mat.cols))
-		throw std::runtime_error("Matrix and input vector have mismatching dimensions");
-	if (vec_out.get_number_of_elements() != (adjoint ? mat.rows : mat.cols))
-		throw std::runtime_error("Matrix and output vector have mismatching dimensions");
+    if (vec_in.get_number_of_elements() != (adjoint ? mat.rows : mat.cols))
+        throw std::runtime_error("Matrix and input vector have mismatching dimensions");
+    if (vec_out.get_number_of_elements() != (adjoint ? mat.rows : mat.cols))
+        throw std::runtime_error("Matrix and output vector have mismatching dimensions");
 
-/* DPCT_ORIG 	cusparseOperation_t trans = adjoint ?  CUSPARSE_OPERATION_CONJUGATE_TRANSPOSE :
- * CUSPARSE_OPERATION_NON_TRANSPOSE;*/
-        oneapi::mkl::transpose trans = adjoint ? oneapi::mkl::transpose::conjtrans : oneapi::mkl::transpose::nontrans;
-        //cusparseStatus_t status = sparseCSRMV(cudaDeviceManager::Instance()->lockSparseHandle(),trans,mat.m,mat.n,mat.nnz,&alpha, mat.descr,
-	//		thrust::dpct::get_raw_pointer(&mat.data[0]),thrust::dpct::get_raw_pointer(&mat.csrRow[0]),thrust::dpct::get_raw_pointer(&mat.csrColdnd[0]),vec_in.get_data_ptr(),&beta,vec_out.get_data_ptr());
+    auto trans = adjoint ? oneapi::math::transpose::conjtrans : oneapi::math::transpose::nontrans;
+    auto handle = cudaDeviceManager::Instance()->lockSparseHandle();
+    auto& q = handle->get_queue();
 
+    auto x_handle = create_DnVec(q, const_cast<cuNDArray<T>&>(vec_in));
+    auto y_handle = create_DnVec(q, vec_out);
 
-	auto dnvec_in = create_DnVec(const_cast<cuNDArray<T>&>(vec_in));
-	auto dnvec_out = create_DnVec(vec_out);
+    sp::spmv_descr_t spmv_descr = nullptr;
+    sp::init_spmv_descr(q, &spmv_descr);
 
-	size_t bufferSize;
-	auto handle =  cudaDeviceManager::Instance()->lockSparseHandle();
-/* DPCT_ORIG 	cusparseSpMV(handle, trans,
- * &alpha,mat.descr,dnvec_in.get(),&beta,dnvec_out.get(),cuda_datatype<T>(),CUSPARSE_SPMV_CSR_ALG2,&bufferSize);*/
-        dpct::sparse::spmv(handle->get_queue(), trans, &alpha, mat.descr, dnvec_in, &beta, dnvec_out,
-                           cuda_datatype<T>());
-        cuNDArray<char> buffer(bufferSize);
+    sp::matrix_view A_view;
+    std::size_t workspace_size = 0;
+    sp::spmv_buffer_size(q, trans, &alpha, A_view, mat.descr,
+                         x_handle, &beta, y_handle,
+                         sp::spmv_alg::default_alg, spmv_descr, workspace_size);
 
-/* DPCT_ORIG 	cusparseStatus_t status = cusparseSpMV(handle, trans,
- * &alpha,mat.descr,dnvec_in.get(),&beta,dnvec_out.get(),cuda_datatype<T>(),CUSPARSE_SPMV_CSR_ALG2, buffer.data());*/
-        int status = DPCT_CHECK_ERROR(dpct::sparse::spmv(handle->get_queue(), trans, &alpha, mat.descr, dnvec_in,
-                                                         &beta, dnvec_out, cuda_datatype<T>()));
+    void* workspace = nullptr;
+    if (workspace_size > 0)
+        workspace = sycl::malloc_device(workspace_size, q);
+    sp::spmv_optimize(q, trans, &alpha, A_view, mat.descr,
+                      x_handle, &beta, y_handle,
+                      sp::spmv_alg::default_alg, spmv_descr, workspace);
 
-        cudaDeviceManager::Instance()->unlockSparseHandle();
-/* DPCT_ORIG 	if (status != CUSPARSE_STATUS_SUCCESS){*/
-        if (status != 0) {
-                std::stringstream ss;
-		ss << "Sparse Matrix Vector multiplication failed. Error: ";
-		ss << gadgetron_getCusparseErrorString(status);
-		throw cuda_error(ss.str());
-	}
-}
-catch (sycl::exception const& exc) {
-  std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-  std::exit(1);
-}
-template <class T> static auto create_DnMat(cuNDArray<T>& mat) try {
+    sp::spmv(q, trans, &alpha, A_view, mat.descr,
+             x_handle, &beta, y_handle,
+             sp::spmv_alg::default_alg, spmv_descr).wait();
 
-        return std::make_shared<dpct::sparse::dense_matrix_desc>(mat.get_size(0), mat.get_size(1), mat.get_size(0),
-                                                                  mat.data(), cuda_datatype<T>(),
-                                                                  oneapi::mkl::layout::col_major);
-}
-catch (sycl::exception const& exc) {
-  std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-  std::exit(1);
+    if (workspace) sycl::free(workspace, q);
+    sp::release_dense_vector(q, x_handle).wait();
+    sp::release_dense_vector(q, y_handle).wait();
+    sp::release_spmv_descr(q, spmv_descr).wait();
+
+    cudaDeviceManager::Instance()->unlockSparseHandle();
 }
 
-template<class T> void Gadgetron::sparseMM(T alpha,T beta, const cuCsrMatrix<T> & mat, const cuNDArray<T> & mat_in, cuNDArray<T>& mat_out, bool adjoint) {
+template <class T>
+static oneapi::math::sparse::dense_matrix_handle_t create_DnMat(sycl::queue& q, cuNDArray<T>& mat) {
+        oneapi::math::sparse::dense_matrix_handle_t handle;
+        oneapi::math::sparse::init_dense_matrix(
+            q, &handle, (std::int64_t)mat.get_size(0), (std::int64_t)mat.get_size(1),
+            (std::int64_t)mat.get_size(0), oneapi::math::layout::col_major,
+            reinterpret_cast<onemath_type_t<T>*>(mat.data()));
+        return handle;
+}
 
-	if (mat_in.get_size(1) != mat_out.get_size(1)) throw std::runtime_error("In and out dense matrix must have same second dimension");
-	if (mat_in.get_size(0) != mat.rows) throw std::runtime_error("Input matrix and sparse matrix have mismatched dimensions");
-	if (mat_out.get_size(0) != mat.cols) throw std::runtime_error("Output matrix and sparse matrix have mismatched dimensions");
+template<class T> void Gadgetron::sparseMM(T alpha, T beta, const cuCsrMatrix<T>& mat, const cuNDArray<T>& mat_in, cuNDArray<T>& mat_out, bool adjoint) {
+    namespace sp = oneapi::math::sparse;
 
-/* DPCT_ORIG 	cusparseOperation_t trans = adjoint ?  CUSPARSE_OPERATION_CONJUGATE_TRANSPOSE :
- * CUSPARSE_OPERATION_NON_TRANSPOSE;*/
-        oneapi::mkl::transpose trans = adjoint ? oneapi::mkl::transpose::conjtrans : oneapi::mkl::transpose::nontrans;
-        auto handle = cudaDeviceManager::Instance()->lockSparseHandle();
+    if (mat_in.get_size(1) != mat_out.get_size(1)) throw std::runtime_error("In and out dense matrix must have same second dimension");
+    if (mat_in.get_size(0) != mat.rows) throw std::runtime_error("Input matrix and sparse matrix have mismatched dimensions");
+    if (mat_out.get_size(0) != mat.cols) throw std::runtime_error("Output matrix and sparse matrix have mismatched dimensions");
 
-	auto dnmat_in = create_DnMat(const_cast<cuNDArray<T>&>(mat_in));
-	auto dnmat_out = create_DnMat(mat_out);
-	size_t bufferSize;
-/* DPCT_ORIG 	CUSPARSE_CALL(cusparseSpMM_bufferSize(handle, trans, CUSPARSE_OPERATION_NON_TRANSPOSE, &alpha,
- * mat.descr, dnmat_in.get(), &beta, dnmat_out.get(), cuda_datatype<T>(),CUSPARSE_SPMM_CSR_ALG1, &bufferSize));*/
-        CUSPARSE_CALL(DPCT_CHECK_ERROR(bufferSize = 0));
-        cuNDArray<char> buffer(bufferSize);
+    auto opA = adjoint ? oneapi::math::transpose::conjtrans : oneapi::math::transpose::nontrans;
+    auto opB = oneapi::math::transpose::nontrans;
+    auto handle = cudaDeviceManager::Instance()->lockSparseHandle();
+    auto& q = handle->get_queue();
 
-/* DPCT_ORIG 	CUSPARSE_CALL(cusparseSpMM(handle, trans, CUSPARSE_OPERATION_NON_TRANSPOSE, &alpha, mat.descr,
- * dnmat_in.get(), &beta, dnmat_out.get(), cuda_datatype<T>(),CUSPARSE_SPMM_CSR_ALG1, buffer.data()));*/
-        CUSPARSE_CALL(DPCT_CHECK_ERROR(dpct::sparse::spmm(handle->get_queue(), trans, oneapi::mkl::transpose::nontrans,
-                                                          &alpha, mat.descr, dnmat_in, &beta, dnmat_out,
-                                                          cuda_datatype<T>())));
-        cudaDeviceManager::Instance()->unlockSparseHandle();
+    auto B_handle = create_DnMat(q, const_cast<cuNDArray<T>&>(mat_in));
+    auto C_handle = create_DnMat(q, mat_out);
 
+    sp::spmm_descr_t spmm_descr = nullptr;
+    sp::init_spmm_descr(q, &spmm_descr);
+
+    sp::matrix_view A_view;
+    std::size_t workspace_size = 0;
+    sp::spmm_buffer_size(q, opA, opB, &alpha, A_view, mat.descr,
+                         B_handle, &beta, C_handle,
+                         sp::spmm_alg::default_alg, spmm_descr, workspace_size);
+
+    void* workspace = nullptr;
+    if (workspace_size > 0)
+        workspace = sycl::malloc_device(workspace_size, q);
+    sp::spmm_optimize(q, opA, opB, &alpha, A_view, mat.descr,
+                      B_handle, &beta, C_handle,
+                      sp::spmm_alg::default_alg, spmm_descr, workspace);
+
+    sp::spmm(q, opA, opB, &alpha, A_view, mat.descr,
+             B_handle, &beta, C_handle,
+             sp::spmm_alg::default_alg, spmm_descr).wait();
+
+    if (workspace) sycl::free(workspace, q);
+    sp::release_dense_matrix(q, B_handle).wait();
+    sp::release_dense_matrix(q, C_handle).wait();
+    sp::release_spmm_descr(q, spmm_descr).wait();
+
+    cudaDeviceManager::Instance()->unlockSparseHandle();
 }
 
 
-template void Gadgetron::sparseMV<float>(float alpha,float beta, const cuCsrMatrix<float> & mat, const cuNDArray<float> & vec_in, cuNDArray<float>& vec_out, bool adjoint);
-template void Gadgetron::sparseMV<double>(double alpha,double beta, const cuCsrMatrix<double> & mat, const cuNDArray<double> & vec_in, cuNDArray<double>& vec_out, bool adjoint);
-template void Gadgetron::sparseMV<complext<float> >(complext<float> alpha,complext<float> beta, const cuCsrMatrix<complext<float> > & mat, const cuNDArray<complext<float> > & vec_in, cuNDArray<complext<float> >& vec_out, bool adjoint);
-template void Gadgetron::sparseMV<complext<double> >(complext<double> alpha,complext<double> beta, const cuCsrMatrix<complext<double> > & mat, const cuNDArray<complext<double> > & vec_in, cuNDArray<complext<double> >& vec_out, bool adjoint);
+// template void Gadgetron::sparseMV<float>(float alpha,float beta, const cuCsrMatrix<float> & mat, const cuNDArray<float> & vec_in, cuNDArray<float>& vec_out, bool adjoint);
+// template void Gadgetron::sparseMV<double>(double alpha,double beta, const cuCsrMatrix<double> & mat, const cuNDArray<double> & vec_in, cuNDArray<double>& vec_out, bool adjoint);
+// template void Gadgetron::sparseMV<complext<float> >(complext<float> alpha,complext<float> beta, const cuCsrMatrix<complext<float> > & mat, const cuNDArray<complext<float> > & vec_in, cuNDArray<complext<float> >& vec_out, bool adjoint);
+// template void Gadgetron::sparseMV<complext<double> >(complext<double> alpha,complext<double> beta, const cuCsrMatrix<complext<double> > & mat, const cuNDArray<complext<double> > & vec_in, cuNDArray<complext<double> >& vec_out, bool adjoint);
 
-template void Gadgetron::sparseMM<float>(float alpha,float beta, const cuCsrMatrix<float> & mat, const cuNDArray<float> & vec_in, cuNDArray<float>& vec_out, bool adjoint);
-template void Gadgetron::sparseMM<double>(double alpha,double beta, const cuCsrMatrix<double> & mat, const cuNDArray<double> & vec_in, cuNDArray<double>& vec_out, bool adjoint);
-template void Gadgetron::sparseMM<complext<float> >(complext<float> alpha,complext<float> beta, const cuCsrMatrix<complext<float> > & mat, const cuNDArray<complext<float> > & vec_in, cuNDArray<complext<float> >& vec_out, bool adjoint);
-template void Gadgetron::sparseMM<complext<double> >(complext<double> alpha,complext<double> beta, const cuCsrMatrix<complext<double> > & mat, const cuNDArray<complext<double> > & vec_in, cuNDArray<complext<double> >& vec_out, bool adjoint);
+// template void Gadgetron::sparseMM<float>(float alpha,float beta, const cuCsrMatrix<float> & mat, const cuNDArray<float> & vec_in, cuNDArray<float>& vec_out, bool adjoint);
+// template void Gadgetron::sparseMM<double>(double alpha,double beta, const cuCsrMatrix<double> & mat, const cuNDArray<double> & vec_in, cuNDArray<double>& vec_out, bool adjoint);
+// template void Gadgetron::sparseMM<complext<float> >(complext<float> alpha,complext<float> beta, const cuCsrMatrix<complext<float> > & mat, const cuNDArray<complext<float> > & vec_in, cuNDArray<complext<float> >& vec_out, bool adjoint);
+// template void Gadgetron::sparseMM<complext<double> >(complext<double> alpha,complext<double> beta, const cuCsrMatrix<complext<double> > & mat, const cuNDArray<complext<double> > & vec_in, cuNDArray<complext<double> >& vec_out, bool adjoint);
 // ===== End: toolboxes/core/gpu/cuSparseMatrix.cu =====
 
 
@@ -27259,7 +27294,7 @@ namespace Gadgetron
     }
     catch (sycl::exception const& exc) {
       std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-      std::exit(1);
+      throw __LINE__;
     }
 
     template<class T, unsigned int D, template<class, unsigned int> class K>
@@ -28280,7 +28315,7 @@ namespace Gadgetron
         }
         catch (sycl::exception const& exc) {
           std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-          std::exit(1);
+          throw __LINE__;
         }
     };
     template <class REAL, unsigned int D>
@@ -30952,7 +30987,7 @@ void Gadgetron::cuNFFT_impl<REAL, D, CONV>::initialize(int device) try {
 }
 catch (sycl::exception const& exc) {
   std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-  std::exit(1);
+  throw __LINE__;
 }
 
 //
@@ -31214,7 +31249,6 @@ template class Gadgetron::NFFT<cuNDArray,double,4>;
 #include <fftw3.h>
 #include <iostream>
 #include <mutex>
-#include <dpct/lib_common_utils.hpp>
 
 #include <complex>
 

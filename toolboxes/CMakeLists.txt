@@ -44,7 +44,7 @@ endif ()
 
 set(GADGETRON_BUILD_RPATH "${CMAKE_CURRENT_BINARY_DIR};${GADGETRON_BUILD_RPATH}" PARENT_SCOPE)
 
-if(CUDA_FOUND)
+if(CUDA_FOUND OR USE_SYCL)
     # We compile all GPU code into one library to workaround Thrust and Cub using statics in templates
     # (e.g. https://github.com/NVIDIA/cub/blob/48768e86a40c25d231a6ff1e04107a60016314a7/cub/util_device.cuh#L208)
     # that when used from multiple libraries can cause crashes.
@@ -57,7 +57,8 @@ if(CUDA_FOUND)
         link_directories(${Boost_LIBRARY_DIRS})
     endif ()
 
-    cuda_add_library(gadgetron_toolbox_gpu SHARED 
+    # Define GPU source files (will be converted to SYCL if USE_SYCL)
+    set(GPU_SOURCE_FILES 
         core/gpu/check_CUDA.h
         core/gpu/CUBLASContextProvider.cpp
         core/gpu/CUBLASContextProvider.h
@@ -158,6 +159,21 @@ if(CUDA_FOUND)
         solvers/gpu/gpusolvers_export.h
     )
 
+    # Build the GPU library with appropriate compiler
+    if (USE_SYCL)
+        # For SYCL builds, use converted .dp.cpp files from sycl_output/
+        # or build with SYCL compiler directly
+        add_library(gadgetron_toolbox_gpu SHARED ${GPU_SOURCE_FILES})
+        target_compile_options(gadgetron_toolbox_gpu PRIVATE -fsycl -fsycl-targets=nvptx64-nvidia-cuda -Xsycl-target-backend --cuda-gpu-arch=sm_80)
+        target_link_options(gadgetron_toolbox_gpu PRIVATE -fsycl -fsycl-targets=nvptx64-nvidia-cuda -Xsycl-target-backend --cuda-gpu-arch=sm_80)
+        if (oneDPL_FOUND)
+            target_link_libraries(gadgetron_toolbox_gpu oneDPL)
+        endif()
+    else()
+        # CUDA build
+        cuda_add_library(gadgetron_toolbox_gpu SHARED ${GPU_SOURCE_FILES})
+    endif()
+
     target_include_directories(gadgetron_toolbox_gpu
         PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
@@ -177,19 +193,30 @@ if(CUDA_FOUND)
 
     set_target_properties(gadgetron_toolbox_gpu PROPERTIES VERSION ${GADGETRON_VERSION_STRING} SOVERSION ${GADGETRON_SOVERSION})
 
-    target_link_libraries(gadgetron_toolbox_gpu 
+    target_link_libraries(gadgetron_toolbox_gpu
         gadgetron_toolbox_cpucore
         gadgetron_toolbox_cpucore_math
         gadgetron_toolbox_log
         gadgetron_toolbox_nfft
         gadgetron_toolbox_operator
         gadgetron_toolbox_sdc
-        ${CUDA_LIBRARIES}
-        ${CUDA_CUFFT_LIBRARIES} 
-        ${CUDA_CUBLAS_LIBRARIES} 
-        ${CUDA_CUSPARSE_LIBRARIES}
         ${MKL_LIBRARIES}
     )
+
+    if (USE_SYCL)
+        # SYCL libraries - oneMath backends for NVIDIA GPU (no mkl_sycl_* which target Intel GPU only)
+        target_link_libraries(gadgetron_toolbox_gpu sycl OpenCL stdc++fs mkl_core
+            "/oneMKLwithCublas/lib/libonemath.so" "/oneMKLwithCublas/lib/libonemath_blas_cublas.so"
+        )
+    else()
+        # CUDA libraries
+        target_link_libraries(gadgetron_toolbox_gpu
+            ${CUDA_LIBRARIES}
+            ${CUDA_CUFFT_LIBRARIES}
+            ${CUDA_CUBLAS_LIBRARIES}
+            ${CUDA_CUSPARSE_LIBRARIES}
+        )
+    endif()
 
 
     install(TARGETS gadgetron_toolbox_gpu
@@ -294,5 +321,5 @@ if(CUDA_FOUND)
         DESTINATION ${GADGETRON_INSTALL_INCLUDE_PATH} COMPONENT main)
 
 else()
-    message("CUDA not found, not compiling gpu toolbox")
+    message("CUDA/SYCL not found or not enabled, not compiling gpu toolbox")
 endif()
