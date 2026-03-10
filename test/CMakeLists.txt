@@ -47,6 +47,7 @@ include(GoogleTest)
                 cuNDArray_elemwise_test.cpp.sycl.cpp
                 cuNDArray_blas_test.cpp.sycl.cpp
                 cuNDArray_utils_test.cpp.sycl.cpp
+                cuVector_td_test_kernels.sycl.cpp
                 )
     endif ()
 

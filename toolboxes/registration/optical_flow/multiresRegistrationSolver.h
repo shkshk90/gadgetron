@@ -9,6 +9,7 @@
 #include "vector_td_utilities.h"
 #include "vector_td_operators.h"
 #include <boost/make_shared.hpp>
+#include <cmath>
 
 namespace Gadgetron{
 

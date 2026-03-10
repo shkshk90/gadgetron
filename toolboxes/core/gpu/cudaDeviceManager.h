@@ -1,7 +1,6 @@
 #pragma once
 
 #define ONEAPI_BACKEND_LEVEL_ZERO_EXT
-#define DPCT_PROFILING_ENABLED
 #include <sycl/sycl.hpp>
 #include <dpct/dpct.hpp>
 #include <vector>
@@ -99,32 +98,25 @@ namespace Gadgetron{
 
   template<>
   struct cudaDataType<float>{
-    static constexpr dpct::library_data_t value =
-        dpct::library_data_t::real_float;
+    static constexpr dpct::library_data_t value = dpct::library_data_t::real_float;
   };
 
   template<>
   struct cudaDataType<double>{
-    static constexpr dpct::library_data_t value =
-        dpct::library_data_t::real_double;
+    static constexpr dpct::library_data_t value = dpct::library_data_t::real_double;
   };
 
   template<>
   struct cudaDataType<complext<float>>{
-    static constexpr dpct::library_data_t value =
-        dpct::library_data_t::complex_float;
+    static constexpr dpct::library_data_t value = dpct::library_data_t::complex_float;
   };
 
   template<>
   struct cudaDataType<complext<double>>{
-    static constexpr dpct::library_data_t value =
-        dpct::library_data_t::complex_double;
+    static constexpr dpct::library_data_t value = dpct::library_data_t::complex_double;
   };
 
-  template <class T>
-  constexpr dpct::library_data_t cuda_datatype() {
-      return cudaDataType<T>::value;
-  }
+  template <class T> constexpr dpct::library_data_t cuda_datatype() { return cudaDataType<T>::value; }
 
         std::string gadgetron_getCusparseErrorString(int err);
 }

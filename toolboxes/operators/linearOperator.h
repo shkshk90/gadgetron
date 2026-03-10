@@ -5,6 +5,7 @@
 #pragma once
 
 #include "generalOperator.h"
+#include <cmath>
 
 namespace Gadgetron{
 

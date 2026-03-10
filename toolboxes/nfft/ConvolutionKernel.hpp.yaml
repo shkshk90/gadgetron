@@ -4,7 +4,7 @@ Replacements:
   - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
     Offset:          1
     Length:          0
-    ReplacementText: "#define ONEAPI_BACKEND_LEVEL_ZERO_EXT\n#define DPCT_PROFILING_ENABLED\n#include <sycl/sycl.hpp>\n#include <dpct/dpct.hpp>\n"
+    ReplacementText: "#define ONEAPI_BACKEND_LEVEL_ZERO_EXT\n#include <sycl/sycl.hpp>\n#include <dpct/dpct.hpp>\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -65,6 +65,15 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          3697
+    Length:          20
+    ReplacementText: 'sycl::sqrt(1.0 - tmp)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
     Offset:          3855
     Length:          11
     ReplacementText: ''
@@ -77,6 +86,15 @@ Replacements:
     Offset:          3866
     Length:          8
     ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          4088
+    Length:          21
+    ReplacementText: 'sycl::sqrt(1.0f - tmp)'
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -184,8 +202,8 @@ OptionMap:
     Value:           'false'
     Specified:       false
   CompilationsDir:
-    Value:           '/volume/cuda.build'
-    Specified:       true
+    Value:           ''
+    Specified:       false
   CtadEnabled:
     Value:           'false'
     Specified:       false

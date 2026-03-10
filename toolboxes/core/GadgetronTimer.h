@@ -15,6 +15,7 @@
 
 #include <string>
 #include "log.h"
+#include <cmath>
 
 namespace Gadgetron{
 

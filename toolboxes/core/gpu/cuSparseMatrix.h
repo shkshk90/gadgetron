@@ -9,7 +9,6 @@
 #include <oneapi/dpl/execution>
 #include <oneapi/dpl/algorithm>
 #define ONEAPI_BACKEND_LEVEL_ZERO_EXT
-#define DPCT_PROFILING_ENABLED
 #include <sycl/sycl.hpp>
 #include <dpct/dpct.hpp>
 #include <dpct/sparse_utils.hpp>
@@ -25,23 +24,16 @@ namespace Gadgetron
 	struct cuCsrMatrix
 	{
 
-                cuCsrMatrix(size_t rows, size_t cols,
-                            dpct::device_vector<int> csrRow,
-                            dpct::device_vector<int> csrColdnd,
-                            dpct::device_vector<T> data)
-                    : csrRow{std::move(csrRow)},
-                      csrColdnd{std::move(csrColdnd)}, data{std::move(data)},
-                      rows{rows}, cols{cols}
+                cuCsrMatrix(size_t rows, size_t cols, dpct::device_vector<int> csrRow,
+                            dpct::device_vector<int> csrColdnd, dpct::device_vector<T> data)
+                    : csrRow{std::move(csrRow)}, csrColdnd{std::move(csrColdnd)}, data{std::move(data)}, rows{rows},
+                      cols{cols}
                 {
                         cusparseCreateCsr(
-                            &descr, rows, cols, this->data.size(),
-                            dpct::get_raw_pointer(this->csrRow.data()),
-                            dpct::get_raw_pointer(this->csrColdnd.data()),
-                            dpct::get_raw_pointer(this->data.data()),
-                            dpct::library_data_t::real_int32,
-                            dpct::library_data_t::real_int32,
-                            oneapi::mkl::index_base::zero,
-                            Gadgetron::cuda_datatype<T>());
+                            &descr, rows, cols, this->data.size(), dpct::get_raw_pointer(this->csrRow.data()),
+                            dpct::get_raw_pointer(this->csrColdnd.data()), dpct::get_raw_pointer(this->data.data()),
+                            dpct::library_data_t::real_int32, dpct::library_data_t::real_int32,
+                            oneapi::mkl::index_base::zero, Gadgetron::cuda_datatype<T>());
                 }
 
 		~cuCsrMatrix()

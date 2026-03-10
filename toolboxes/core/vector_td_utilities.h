@@ -11,7 +11,6 @@
 #pragma once
 
 #define ONEAPI_BACKEND_LEVEL_ZERO_EXT
-#define DPCT_PROFILING_ENABLED
 #include <sycl/sycl.hpp>
 #include <dpct/dpct.hpp>
 #include "vector_td.h"
@@ -34,7 +33,7 @@
 #undef min
 #endif
 
-#ifndef __CUDA_ARCH__ // workaround for nvcc
+#ifndef DPCT_COMPATIBILITY_TEMP // workaround for nvcc
 using std::ceil;  
 using std::floor; 
 using std::abs;   

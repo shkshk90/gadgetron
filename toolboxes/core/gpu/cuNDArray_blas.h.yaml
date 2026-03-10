@@ -4,7 +4,7 @@ Replacements:
   - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray_blas.h'
     Offset:          637
     Length:          0
-    ReplacementText: "#define ONEAPI_BACKEND_LEVEL_ZERO_EXT\n#define DPCT_PROFILING_ENABLED\n#include <sycl/sycl.hpp>\n#include <dpct/dpct.hpp>\n"
+    ReplacementText: "#define ONEAPI_BACKEND_LEVEL_ZERO_EXT\n#include <sycl/sycl.hpp>\n#include <dpct/dpct.hpp>\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -67,8 +67,8 @@ OptionMap:
     Value:           'false'
     Specified:       false
   CompilationsDir:
-    Value:           '/volume/cuda.build'
-    Specified:       true
+    Value:           ''
+    Specified:       false
   CtadEnabled:
     Value:           'false'
     Specified:       false

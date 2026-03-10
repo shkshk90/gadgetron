@@ -4,7 +4,7 @@ Replacements:
   - FilePath:        '/gadgetron/toolboxes/core/complext.h'
     Offset:          304
     Length:          0
-    ReplacementText: "#define ONEAPI_BACKEND_LEVEL_ZERO_EXT\n#define DPCT_PROFILING_ENABLED\n#include <sycl/sycl.hpp>\n#include <dpct/dpct.hpp>\n"
+    ReplacementText: "#define ONEAPI_BACKEND_LEVEL_ZERO_EXT\n#include <sycl/sycl.hpp>\n#include <dpct/dpct.hpp>\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -455,6 +455,15 @@ Replacements:
     Offset:          7893
     Length:          11
     ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/core/complext.h'
+    Offset:          7945
+    Length:          55
+    ReplacementText: 'sycl::sqrt(comp._real * comp._real + comp._imag * comp._imag)'
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -994,8 +1003,8 @@ OptionMap:
     Value:           'false'
     Specified:       false
   CompilationsDir:
-    Value:           '/volume/cuda.build'
-    Specified:       true
+    Value:           ''
+    Specified:       false
   CtadEnabled:
     Value:           'false'
     Specified:       false

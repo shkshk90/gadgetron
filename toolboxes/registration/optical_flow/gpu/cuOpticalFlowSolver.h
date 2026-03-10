@@ -9,7 +9,6 @@
 #pragma once
 
 #define ONEAPI_BACKEND_LEVEL_ZERO_EXT
-#define DPCT_PROFILING_ENABLED
 #include <sycl/sycl.hpp>
 #include <dpct/dpct.hpp>
 #include "cuNDArray.h"
@@ -35,10 +34,8 @@ namespace Gadgetron{
     // General tool to set up the block/grid dimensions
     //
 
-    void setup_grid(dpct::dim3 *blockDim, dpct::dim3 *gridDim,
-                    unsigned int number_of_elements,
-                    unsigned int num_batches = 1, bool use_2d_blocks = false,
-                    unsigned int num_unknowns = D);
+    void setup_grid(dpct::dim3* blockDim, dpct::dim3* gridDim, unsigned int number_of_elements,
+                    unsigned int num_batches = 1, bool use_2d_blocks = false, unsigned int num_unknowns = D);
 
     // GPU-based computation of the spatial and temporal image gradient
     //

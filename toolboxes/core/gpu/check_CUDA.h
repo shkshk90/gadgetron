@@ -5,7 +5,6 @@
 #pragma once
 
 #define ONEAPI_BACKEND_LEVEL_ZERO_EXT
-#define DPCT_PROFILING_ENABLED
 #include <sycl/sycl.hpp>
 #include <dpct/dpct.hpp>
 #include "GadgetronCuException.h"
@@ -18,17 +17,16 @@ namespace Gadgetron {
    */
   inline void CHECK_FOR_CUDA_ERROR(char const * cur_fun, const char* file, const int line) {
     /*
-    DPCT1010:3: SYCL uses exceptions to report errors and does not use the error
-    codes. The cudaGetLastError function call was replaced with 0. You need to
-    rewrite this code.
+    DPCT1010:4: SYCL uses exceptions to report errors and does not use the error codes. The cudaGetLastError function
+    call was replaced with 0. You need to rewrite this code.
     */
     dpct::err0 errorCode = 0;
     /*
-    DPCT1000:2: Error handling if-stmt was detected but could not be rewritten.
+    DPCT1000:3: Error handling if-stmt was detected but could not be rewritten.
     */
     if (errorCode != 0) {
       /*
-      DPCT1001:1: The statement could not be removed.
+      DPCT1001:2: The statement could not be removed.
       */
       throw cuda_error(errorCode);
     }
@@ -51,14 +49,11 @@ namespace Gadgetron {
  *  Call "res", checks for CUDA errors and throws an exception if an error was detected.
  */
 /*
-DPCT1001:11: The statement could not be removed.
+DPCT1001:12: The statement could not be removed.
 */
 /*
-DPCT1000:12: Error handling if-stmt was detected but could not be rewritten.
+DPCT1000:13: Error handling if-stmt was detected but could not be rewritten.
 */
-#define CUDA_CALL(res)                                                         \
-    { dpct::err0 errorCode = res; if (errorCode != 0) {                        \
-        throw cuda_error(errorCode);                                           \
-    } }
+#define CUDA_CALL(res) { dpct::err0 errorCode = res; if (errorCode != 0) { throw cuda_error(errorCode); } }
 
 #define CUSPARSE_CALL(res) {cusparseStatus_t errorCode = res; if (errorCode != CUSPARSE_STATUS_SUCCESS){ std::stringstream ss; ss << "CUSPARSE failed with error: " <<  gadgetron_getCusparseErrorString(errorCode); throw cuda_error(ss.str());}}

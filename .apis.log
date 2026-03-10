@@ -1,0 +1,25 @@
+API name				Frequency
+class thrust::device_ptr<float> thrust::transform(class thrust::device_ptr<float> first,class thrust::device_ptr<float> last,class thrust::device_ptr<float> result,struct updateF_functor<float> op)               1
+class thrust::device_ptr<float> thrust::transform(class thrust::zip_iterator<struct thrust::tuple<class thrust::device_ptr<float>, class thrust::device_ptr<float> > > first,class thrust::zip_iterator<struct thrust::tuple<class thrust::device_ptr<float>, class thrust::device_ptr<float> > > last,class thrust::device_ptr<float> result,struct add_square_functor<float> op)               1
+class thrust::device_ptr<float> thrust::transform(class thrust::zip_iterator<struct thrust::tuple<class thrust::device_ptr<float>, class thrust::device_ptr<float> > > first,class thrust::zip_iterator<struct thrust::tuple<class thrust::device_ptr<float>, class thrust::device_ptr<float> > > last,class thrust::device_ptr<float> result,struct updateFgroup_functor<float> op)               1
+const char * cudaGetErrorString(cudaError_t error)               1
+cublasStatus_t                               1
+cudaDeviceProp                               1
+cudaError_t                                 18
+cudaError_t cudaFree(void * devPtr)               1
+cudaError_t cudaGetDevice(int * device)              20
+cudaError_t cudaGetDeviceProperties_v2(struct cudaDeviceProp * prop,int device)               1
+cudaError_t cudaGetLastError()               1
+cudaError_t cudaMalloc(void ** devPtr,size_t size)               1
+cudaError_t cudaMallocHost(void ** ptr,size_t size)               1
+cudaError_t cudaMemGetInfo(size_t * free,size_t * total)               1
+cudaError_t cudaMemcpy(void * dst,const void * src,size_t count,enum cudaMemcpyKind kind)               2
+cudaError_t cudaPointerGetAttributes(struct cudaPointerAttributes * attributes,const void * ptr)               1
+cudaError_t cudaSetDevice(int device)              22
+cudaPointerAttributes                        1
+dim3                                         2
+float abs(float __x)                         1
+float max(const float a,const float b)               2
+tuple<typename ::cuda::std::__4::__unwrap_ref_decay<device_ptr<float> >::type, typename ::cuda::std::__4::__unwrap_ref_decay<device_ptr<float> >::type> thrust::make_tuple(class thrust::device_ptr<float> && __t,class thrust::device_ptr<float> && __t)               4
+zip_iterator<thrust::tuple<device_ptr<float>, device_ptr<float> > > thrust::make_zip_iterator(thrust::tuple<device_ptr<float>, device_ptr<float> > t)               4
+Error: dpct internal error. Migration rule causing the error skipped. Migration continues.

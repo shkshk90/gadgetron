@@ -19,9 +19,11 @@
 // Used Cuda host definitions if availble.
 // Otherwise we leave them empty (as no device code is compiled anyway).
 
-#ifdef __CUDACC__
-#include "cuda_runtime.h"
-//Here we bypass the CUDA 9 issues caused when CUDACC was deprecated
+#ifdef SYCL_LANGUAGE_VERSION
+#define ONEAPI_BACKEND_LEVEL_ZERO_EXT
+#include <sycl/sycl.hpp>
+#include <dpct/dpct.hpp>
+// Here we bypass the CUDA 9 issues caused when CUDACC was deprecated
 #ifdef __CUDACC_VER__
 #ifdef __CUDACC_VER_MAJOR__
 #undef __CUDACC_VER__

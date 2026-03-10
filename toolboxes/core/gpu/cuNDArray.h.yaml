@@ -4,7 +4,7 @@ Replacements:
   - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
     Offset:          93
     Length:          0
-    ReplacementText: "#include <oneapi/dpl/execution>\n#include <oneapi/dpl/algorithm>\n#define ONEAPI_BACKEND_LEVEL_ZERO_EXT\n#define DPCT_PROFILING_ENABLED\n#include <sycl/sycl.hpp>\n#include <dpct/dpct.hpp>\n"
+    ReplacementText: "#include <oneapi/dpl/execution>\n#include <oneapi/dpl/algorithm>\n#define ONEAPI_BACKEND_LEVEL_ZERO_EXT\n#include <sycl/sycl.hpp>\n#include <dpct/dpct.hpp>\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -110,27 +110,9 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
-    Offset:          3637
-    Length:          0
-    ReplacementText: ' try '
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
     Offset:          3687
     Length:          29
     ReplacementText: 'this->device_ = dpct::get_current_device_id()'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
-    Offset:          3855
-    Length:          0
-    ReplacementText: "            /*\n            DPCT1064:31: Migrated cudaMemcpy call is used in a macro/template definition and may not be valid for all macro/template uses. Adjust the code.\n            */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -148,7 +130,7 @@ Replacements:
   - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
     Offset:          4051
     Length:          0
-    ReplacementText: "            /*\n            DPCT1093:15: The \"a.device_\" device may be not the one intended for use. Adjust the selected device if needed.\n            */\n"
+    ReplacementText: "            /*\n            DPCT1093:16: The \"a.device_\" device may be not the one intended for use. Adjust the selected device if needed.\n            */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -166,7 +148,7 @@ Replacements:
   - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
     Offset:          4154
     Length:          0
-    ReplacementText: "            /*\n            DPCT1093:16: The \"this->device_\" device may be not the one intended for use. Adjust the selected device if needed.\n            */\n"
+    ReplacementText: "            /*\n            DPCT1093:17: The \"this->device_\" device may be not the one intended for use. Adjust the selected device if needed.\n            */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -202,7 +184,7 @@ Replacements:
   - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
     Offset:          4323
     Length:          0
-    ReplacementText: "            /*\n            DPCT1000:18: Error handling if-stmt was detected but could not be rewritten.\n            */\n"
+    ReplacementText: "            /*\n            DPCT1000:19: Error handling if-stmt was detected but could not be rewritten.\n            */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -220,25 +202,7 @@ Replacements:
   - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
     Offset:          4360
     Length:          0
-    ReplacementText: "                /*\n                DPCT1001:17: The statement could not be removed.\n                */\n"
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
-    Offset:          4541
-    Length:          0
-    ReplacementText: "\n    catch (sycl::exception const &exc) {\n      std::cerr << exc.what() << \"Exception caught at file:\" << __FILE__ << \", line:\" << __LINE__ << std::endl;\n      std::exit(1);\n    }"
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
-    Offset:          5009
-    Length:          0
-    ReplacementText: ' try '
+    ReplacementText: "                /*\n                DPCT1001:18: The statement could not be removed.\n                */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -266,15 +230,6 @@ Replacements:
     Offset:          5270
     Length:          11
     ReplacementText: '0'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
-    Offset:          5401
-    Length:          0
-    ReplacementText: "\n    catch (sycl::exception const &exc) {\n      std::cerr << exc.what() << \"Exception caught at file:\" << __FILE__ << \", line:\" << __LINE__ << std::endl;\n      std::exit(1);\n    }"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -398,15 +353,6 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
-    Offset:          9536
-    Length:          0
-    ReplacementText: "            /*\n            DPCT1064:32: Migrated cudaMemcpy call is used in a macro/template definition and may not be valid for all macro/template uses. Adjust the code.\n            */\n"
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
     Offset:          9558
     Length:          87
     ReplacementText: 'DPCT_CHECK_ERROR(dpct::get_in_order_queue().memcpy(this->data_, rhs.data_, this->elements_*sizeof(T)))'
@@ -418,7 +364,7 @@ Replacements:
   - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
     Offset:          9673
     Length:          0
-    ReplacementText: "            /*\n            DPCT1093:19: The \"this->device_\" device may be not the one intended for use. Adjust the selected device if needed.\n            */\n"
+    ReplacementText: "            /*\n            DPCT1093:20: The \"this->device_\" device may be not the one intended for use. Adjust the selected device if needed.\n            */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -463,7 +409,7 @@ Replacements:
   - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
     Offset:          10129
     Length:          0
-    ReplacementText: "                    /*\n                    DPCT1093:20: The \"cur_device\" device may be not the one intended for use. Adjust the selected device if needed.\n                    */\n"
+    ReplacementText: "                    /*\n                    DPCT1093:21: The \"cur_device\" device may be not the one intended for use. Adjust the selected device if needed.\n                    */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -481,7 +427,7 @@ Replacements:
   - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
     Offset:          10302
     Length:          0
-    ReplacementText: "                /*\n                DPCT1093:21: The \"rhs.device_\" device may be not the one intended for use. Adjust the selected device if needed.\n                */\n"
+    ReplacementText: "                /*\n                DPCT1093:22: The \"rhs.device_\" device may be not the one intended for use. Adjust the selected device if needed.\n                */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -517,7 +463,7 @@ Replacements:
   - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
     Offset:          10367
     Length:          0
-    ReplacementText: "                    /*\n                    DPCT1093:22: The \"cur_device\" device may be not the one intended for use. Adjust the selected device if needed.\n                    */\n"
+    ReplacementText: "                    /*\n                    DPCT1093:23: The \"cur_device\" device may be not the one intended for use. Adjust the selected device if needed.\n                    */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -535,7 +481,7 @@ Replacements:
   - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
     Offset:          10594
     Length:          0
-    ReplacementText: "                /*\n                DPCT1093:23: The \"this->device_\" device may be not the one intended for use. Adjust the selected device if needed.\n                */\n"
+    ReplacementText: "                /*\n                DPCT1093:24: The \"this->device_\" device may be not the one intended for use. Adjust the selected device if needed.\n                */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -571,7 +517,7 @@ Replacements:
   - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
     Offset:          10661
     Length:          0
-    ReplacementText: "                    /*\n                    DPCT1093:24: The \"cur_device\" device may be not the one intended for use. Adjust the selected device if needed.\n                    */\n"
+    ReplacementText: "                    /*\n                    DPCT1093:25: The \"cur_device\" device may be not the one intended for use. Adjust the selected device if needed.\n                    */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -607,7 +553,7 @@ Replacements:
   - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
     Offset:          10951
     Length:          0
-    ReplacementText: "                    /*\n                    DPCT1093:25: The \"cur_device\" device may be not the one intended for use. Adjust the selected device if needed.\n                    */\n"
+    ReplacementText: "                    /*\n                    DPCT1093:26: The \"cur_device\" device may be not the one intended for use. Adjust the selected device if needed.\n                    */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -625,7 +571,7 @@ Replacements:
   - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
     Offset:          11117
     Length:          0
-    ReplacementText: "            /*\n            DPCT1093:26: The \"cur_device\" device may be not the one intended for use. Adjust the selected device if needed.\n            */\n"
+    ReplacementText: "            /*\n            DPCT1093:27: The \"cur_device\" device may be not the one intended for use. Adjust the selected device if needed.\n            */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -686,15 +632,6 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
-    Offset:          11623
-    Length:          0
-    ReplacementText: "            /*\n            DPCT1064:33: Migrated cudaMemcpy call is used in a macro/template definition and may not be valid for all macro/template uses. Adjust the code.\n            */\n"
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
     Offset:          11645
     Length:          118
     ReplacementText: 'DPCT_CHECK_ERROR(dpct::get_in_order_queue().memcpy(this->get_data_ptr(), rhs.get_data_ptr(), this->get_number_of_elements()*sizeof(T)).wait())'
@@ -706,7 +643,7 @@ Replacements:
   - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
     Offset:          11791
     Length:          0
-    ReplacementText: "            /*\n            DPCT1093:27: The \"this->device_\" device may be not the one intended for use. Adjust the selected device if needed.\n            */\n"
+    ReplacementText: "            /*\n            DPCT1093:28: The \"this->device_\" device may be not the one intended for use. Adjust the selected device if needed.\n            */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -751,7 +688,7 @@ Replacements:
   - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
     Offset:          12254
     Length:          0
-    ReplacementText: "                    /*\n                    DPCT1093:28: The \"cur_device\" device may be not the one intended for use. Adjust the selected device if needed.\n                    */\n"
+    ReplacementText: "                    /*\n                    DPCT1093:29: The \"cur_device\" device may be not the one intended for use. Adjust the selected device if needed.\n                    */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -769,7 +706,7 @@ Replacements:
   - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
     Offset:          12402
     Length:          0
-    ReplacementText: "            /*\n            DPCT1093:29: The \"cur_device\" device may be not the one intended for use. Adjust the selected device if needed.\n            */\n"
+    ReplacementText: "            /*\n            DPCT1093:30: The \"cur_device\" device may be not the one intended for use. Adjust the selected device if needed.\n            */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -985,7 +922,7 @@ Replacements:
   - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
     Offset:          17881
     Length:          0
-    ReplacementText: "        /*\n        DPCT1093:4: The \"device_\" device may be not the one intended for use. Adjust the selected device if needed.\n        */\n"
+    ReplacementText: "        /*\n        DPCT1093:5: The \"device_\" device may be not the one intended for use. Adjust the selected device if needed.\n        */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -1021,7 +958,7 @@ Replacements:
   - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
     Offset:          18138
     Length:          0
-    ReplacementText: "        /*\n        DPCT1093:5: The \"device\" device may be not the one intended for use. Adjust the selected device if needed.\n        */\n"
+    ReplacementText: "        /*\n        DPCT1093:6: The \"device\" device may be not the one intended for use. Adjust the selected device if needed.\n        */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -1057,7 +994,7 @@ Replacements:
   - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
     Offset:          18190
     Length:          0
-    ReplacementText: "            /*\n            DPCT1093:6: The \"cur_device\" device may be not the one intended for use. Adjust the selected device if needed.\n            */\n"
+    ReplacementText: "            /*\n            DPCT1093:7: The \"cur_device\" device may be not the one intended for use. Adjust the selected device if needed.\n            */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -1093,7 +1030,7 @@ Replacements:
   - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
     Offset:          18503
     Length:          0
-    ReplacementText: "            /*\n            DPCT1093:7: The \"cur_device\" device may be not the one intended for use. Adjust the selected device if needed.\n            */\n"
+    ReplacementText: "            /*\n            DPCT1093:8: The \"cur_device\" device may be not the one intended for use. Adjust the selected device if needed.\n            */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -1111,7 +1048,7 @@ Replacements:
   - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
     Offset:          18629
     Length:          0
-    ReplacementText: "        /*\n        DPCT1093:8: The \"cur_device\" device may be not the one intended for use. Adjust the selected device if needed.\n        */\n"
+    ReplacementText: "        /*\n        DPCT1093:9: The \"cur_device\" device may be not the one intended for use. Adjust the selected device if needed.\n        */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -1218,8 +1155,8 @@ Replacements:
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
     Offset:          19459
-    Length:          18
-    ReplacementText: 'dpct::device_pointer'
+    Length:          65
+    ReplacementText: 'dpct::device_pointer<T>(this->data_)+this->get_number_of_elements()'
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -1262,27 +1199,9 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
-    Offset:          20109
-    Length:          0
-    ReplacementText: "        /*\n        DPCT1064:34: Migrated cudaMemcpy call is used in a macro/template definition and may not be valid for all macro/template uses. Adjust the code.\n        */\n"
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
     Offset:          20127
     Length:          79
     ReplacementText: 'DPCT_CHECK_ERROR(dpct::get_in_order_queue().memcpy(&res, &this->get_data_ptr()[idx], sizeof(T)).wait())'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
-    Offset:          20483
-    Length:          0
-    ReplacementText: "        /*\n        DPCT1064:35: Migrated cudaMemcpy call is used in a macro/template definition and may not be valid for all macro/template uses. Adjust the code.\n        */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -1327,7 +1246,7 @@ Replacements:
   - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
     Offset:          21279
     Length:          0
-    ReplacementText: "            /*\n            DPCT1093:9: The \"device_\" device may be not the one intended for use. Adjust the selected device if needed.\n            */\n"
+    ReplacementText: "            /*\n            DPCT1093:10: The \"device_\" device may be not the one intended for use. Adjust the selected device if needed.\n            */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -1381,7 +1300,7 @@ Replacements:
   - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
     Offset:          21559
     Length:          0
-    ReplacementText: "            /*\n            DPCT1106:30: 'cudaMemGetInfo' was migrated with the Intel extensions for device information which may not be supported by all compilers or runtimes. You may need to adjust the code.\n            */\n"
+    ReplacementText: "            /*\n            DPCT1106:31: 'cudaMemGetInfo' was migrated with the Intel extensions for device information which may not be supported by all compilers or runtimes. You may need to adjust the code.\n            */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -1399,7 +1318,7 @@ Replacements:
   - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
     Offset:          22122
     Length:          0
-    ReplacementText: "            /*\n            DPCT1093:10: The \"device_no_old\" device may be not the one intended for use. Adjust the selected device if needed.\n            */\n"
+    ReplacementText: "            /*\n            DPCT1093:11: The \"device_no_old\" device may be not the one intended for use. Adjust the selected device if needed.\n            */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -1462,7 +1381,7 @@ Replacements:
   - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
     Offset:          22542
     Length:          0
-    ReplacementText: "                /*\n                DPCT1093:13: The \"device_\" device may be not the one intended for use. Adjust the selected device if needed.\n                */\n"
+    ReplacementText: "                /*\n                DPCT1093:14: The \"device_\" device may be not the one intended for use. Adjust the selected device if needed.\n                */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -1487,15 +1406,6 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
-    Offset:          22608
-    Length:          0
-    ReplacementText: "            /*\n            DPCT1064:36: Migrated cudaFree call is used in a macro/template definition and may not be valid for all macro/template uses. Adjust the code.\n            */\n"
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
     Offset:          22630
     Length:          21
     ReplacementText: 'DPCT_CHECK_ERROR(dpct::dpct_free(this->data_, dpct::get_in_order_queue()))'
@@ -1507,7 +1417,7 @@ Replacements:
   - FilePath:        '/gadgetron/toolboxes/core/gpu/cuNDArray.h'
     Offset:          22698
     Length:          0
-    ReplacementText: "                /*\n                DPCT1093:14: The \"device_no_old\" device may be not the one intended for use. Adjust the selected device if needed.\n                */\n"
+    ReplacementText: "                /*\n                DPCT1093:15: The \"device_no_old\" device may be not the one intended for use. Adjust the selected device if needed.\n                */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -1570,8 +1480,8 @@ OptionMap:
     Value:           'false'
     Specified:       false
   CompilationsDir:
-    Value:           '/volume/cuda.build'
-    Specified:       true
+    Value:           ''
+    Specified:       false
   CtadEnabled:
     Value:           'false'
     Specified:       false

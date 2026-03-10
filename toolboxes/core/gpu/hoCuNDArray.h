@@ -9,7 +9,6 @@
 #pragma once
 
 #define ONEAPI_BACKEND_LEVEL_ZERO_EXT
-#define DPCT_PROFILING_ENABLED
 #include <sycl/sycl.hpp>
 #include <dpct/dpct.hpp>
 #include "cuNDArray.h"
@@ -128,10 +127,7 @@ namespace Gadgetron{
             this->create(rhs.get_dimensions());
         }
 
-          dpct::get_in_order_queue()
-              .memcpy(this->data_, rhs.get_data_ptr(),
-                      this->elements_ * sizeof(T))
-              .wait();
+          dpct::get_in_order_queue().memcpy(this->data_, rhs.get_data_ptr(), this->elements_ * sizeof(T)).wait();
         return *this;
     }
 #if __cplusplus > 199711L
@@ -161,22 +157,14 @@ namespace Gadgetron{
       }
 
       size_t size = this->elements_ * sizeof(T);
-      /*
-      DPCT1064:68: Migrated cudaMallocHost call is used in a macro/template
-      definition and may not be valid for all macro/template uses. Adjust the
-      code.
-      */
-      CUDA_CALL(DPCT_CHECK_ERROR(
-          (this->data_) =
-              (typename std::remove_reference<decltype(this->data_)>::type)
-                  sycl::malloc_host(size, dpct::get_in_order_queue())));
+      CUDA_CALL(DPCT_CHECK_ERROR((this->data_) = (typename std::remove_reference<decltype(this->data_)>::type)
+                                     sycl::malloc_host(size, dpct::get_in_order_queue())));
     }
 
     virtual void deallocate_memory()
     {
       if (this->data_) {
-        CUDA_CALL(DPCT_CHECK_ERROR(
-            sycl::free(this->data_, dpct::get_in_order_queue())));
+        CUDA_CALL(DPCT_CHECK_ERROR(sycl::free(this->data_, dpct::get_in_order_queue())));
         this->data_ = 0;
       }
     }

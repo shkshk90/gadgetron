@@ -1,6 +1,5 @@
 
 #define ONEAPI_BACKEND_LEVEL_ZERO_EXT
-#define DPCT_PROFILING_ENABLED
 #include <sycl/sycl.hpp>
 #include <dpct/dpct.hpp>
 #include "ConvolutionKernel.h"
@@ -80,7 +79,7 @@ namespace Gadgetron
     {
         double _tmp = 2.0 * u * one_over_W;
         double tmp = _tmp * _tmp;
-        double arg = beta * std::sqrt(1.0 - tmp);
+        double arg = beta * sycl::sqrt(1.0 - tmp);
         double bessi = bessi0(arg);
         double ret = matrix_size_os * bessi * one_over_W;
         return ret;
@@ -91,7 +90,7 @@ namespace Gadgetron
                        float one_over_W, float beta) {
         float _tmp = 2.0f * u * one_over_W;
         float tmp = _tmp * _tmp;
-        float arg = beta * std::sqrt(1.0f - tmp);
+        float arg = beta * sycl::sqrt(1.0f - tmp);
         float bessi = bessi0(arg);
         float ret = matrix_size_os * bessi * one_over_W;
         return ret;

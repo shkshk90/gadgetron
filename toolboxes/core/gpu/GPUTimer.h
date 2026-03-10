@@ -13,6 +13,7 @@
 #include <dpct/dpct.hpp>
 #include <iostream>
 #include <string>
+#include <cmath>
 
 namespace Gadgetron{
 
@@ -57,10 +58,8 @@ namespace Gadgetron{
             float time;
             dpct::sync_barrier(stop_event_, &dpct::get_in_order_queue());
             stop_event_->wait_and_throw();
-            time = (stop_event_->get_profiling_info<
-                        sycl::info::event_profiling::command_end>() -
-                    start_event_->get_profiling_info<
-                        sycl::info::event_profiling::command_start>()) /
+            time = (stop_event_->get_profiling_info<sycl::info::event_profiling::command_end>() -
+                    start_event_->get_profiling_info<sycl::info::event_profiling::command_start>()) /
                    1000000.0f;
             dpct::destroy_event(start_event_);
             dpct::destroy_event(stop_event_);

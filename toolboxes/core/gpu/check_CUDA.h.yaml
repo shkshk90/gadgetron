@@ -4,7 +4,7 @@ Replacements:
   - FilePath:        '/gadgetron/toolboxes/core/gpu/check_CUDA.h'
     Offset:          165
     Length:          0
-    ReplacementText: "#define ONEAPI_BACKEND_LEVEL_ZERO_EXT\n#define DPCT_PROFILING_ENABLED\n#include <sycl/sycl.hpp>\n#include <dpct/dpct.hpp>\n"
+    ReplacementText: "#define ONEAPI_BACKEND_LEVEL_ZERO_EXT\n#include <sycl/sycl.hpp>\n#include <dpct/dpct.hpp>\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -13,7 +13,7 @@ Replacements:
   - FilePath:        '/gadgetron/toolboxes/core/gpu/check_CUDA.h'
     Offset:          447
     Length:          0
-    ReplacementText: "    /*\n    DPCT1010:3: SYCL uses exceptions to report errors and does not use the error codes. The cudaGetLastError function call was replaced with 0. You need to rewrite this code.\n    */\n"
+    ReplacementText: "    /*\n    DPCT1010:4: SYCL uses exceptions to report errors and does not use the error codes. The cudaGetLastError function call was replaced with 0. You need to rewrite this code.\n    */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -40,7 +40,7 @@ Replacements:
   - FilePath:        '/gadgetron/toolboxes/core/gpu/check_CUDA.h'
     Offset:          495
     Length:          0
-    ReplacementText: "    /*\n    DPCT1000:2: Error handling if-stmt was detected but could not be rewritten.\n    */\n"
+    ReplacementText: "    /*\n    DPCT1000:3: Error handling if-stmt was detected but could not be rewritten.\n    */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -58,7 +58,7 @@ Replacements:
   - FilePath:        '/gadgetron/toolboxes/core/gpu/check_CUDA.h'
     Offset:          531
     Length:          0
-    ReplacementText: "      /*\n      DPCT1001:1: The statement could not be removed.\n      */\n"
+    ReplacementText: "      /*\n      DPCT1001:2: The statement could not be removed.\n      */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -67,7 +67,7 @@ Replacements:
   - FilePath:        '/gadgetron/toolboxes/core/gpu/check_CUDA.h'
     Offset:          1020
     Length:          0
-    ReplacementText: "/*\nDPCT1001:11: The statement could not be removed.\n*/\n/*\nDPCT1000:12: Error handling if-stmt was detected but could not be rewritten.\n*/\n"
+    ReplacementText: "/*\nDPCT1001:12: The statement could not be removed.\n*/\n/*\nDPCT1000:13: Error handling if-stmt was detected but could not be rewritten.\n*/\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -121,8 +121,8 @@ OptionMap:
     Value:           'false'
     Specified:       false
   CompilationsDir:
-    Value:           '/volume/cuda.build'
-    Specified:       true
+    Value:           ''
+    Specified:       false
   CtadEnabled:
     Value:           'false'
     Specified:       false

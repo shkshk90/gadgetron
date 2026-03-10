@@ -60,13 +60,19 @@ if(USE_SYCL)
         core/gpu/cudaDeviceManager.cpp.sycl.cpp
         core/gpu/cudaDeviceManager.h
         core/gpu/cuNDArray_blas.h
+        core/gpu/cuNDArray_blas.sycl.cpp
         core/gpu/cuNDArray_elemwise.h
+        core/gpu/cuNDArray_elemwise.sycl.cpp
         core/gpu/cuNDArray_fileio.h
         core/gpu/cuNDArray_operators.h
+        core/gpu/cuNDArray_operators.sycl.cpp
         core/gpu/cuNDArray_reductions.h
+        core/gpu/cuNDArray_reductions.sycl.cpp
         core/gpu/cuNDArray_utils.h
+        core/gpu/cuNDArray_utils.sycl.cpp
         core/gpu/cuNDArray.h
         core/gpu/cuSparseMatrix.h
+        core/gpu/cuSparseMatrix.sycl.cpp
         core/gpu/GadgetronCuException.h
         core/gpu/GPUTimer.h
         core/gpu/hoCuNDArray_blas.cpp.sycl.cpp
@@ -74,55 +80,84 @@ if(USE_SYCL)
         core/gpu/hoCuNDArray_utils.h
         core/gpu/hoCuNDArray.h
         core/gpu/radial_utilities.h
+        core/gpu/radial_utilities.sycl.cpp
         core/gpu/real_utilities_device.h
         core/gpu/setup_grid.h
         dwt/gpu/cuNDDWT.h
+        dwt/gpu/cuNDDWT.sycl.cpp
         fft/gpu/cuFFTPlan.h
         fft/gpu/cuFFTPlan.hpp
         fft/gpu/cuNDFFT.cpp.sycl.cpp
         fft/gpu/cuNDFFT.h
+        fft/gpu/cuNDFFT.sycl.cpp
         mri/hyper/CSI_utils.h
+        mri/hyper/CSI_utils.sycl.cpp
         mri/hyper/CSIOperator.cpp.sycl.cpp
         mri/hyper/CSIOperator.h
         mri/hyper/gadgetron_toolbox_hyper_export.h
         mri/pmri/gpu/b1_map.h
+        mri/pmri/gpu/b1_map.sycl.cpp
+        mri/pmri/gpu/b1_map_NIH_Souheil.sycl.cpp
         mri/pmri/gpu/cuBuffer.cpp
         mri/pmri/gpu/cuBuffer.h
         mri/pmri/gpu/cuCartesianSenseOperator.h
+        mri/pmri/gpu/cuCartesianSenseOperator.sycl.cpp
         mri/pmri/gpu/cuNonCartesianKtSenseOperator.h
+        mri/pmri/gpu/cuNonCartesianKtSenseOperator.sycl.cpp
         mri/pmri/gpu/cuNonCartesianSenseOperator.h
+        mri/pmri/gpu/cuNonCartesianSenseOperator.sycl.cpp
         mri/pmri/gpu/cuSenseBuffer.cpp
         mri/pmri/gpu/cuSenseBuffer.h
         mri/pmri/gpu/cuSenseBufferCg.cpp
         mri/pmri/gpu/cuSenseBufferCg.h
         mri/pmri/gpu/cuSenseOperator.h
+        mri/pmri/gpu/cuSenseOperator.sycl.cpp
         mri/pmri/gpu/cuSpiritBuffer.cpp
         mri/pmri/gpu/cuSpiritOperator.h
         mri/pmri/gpu/gpupmri_export.h
         mri/pmri/gpu/htgrappa.cpp.sycl.cpp
         mri/pmri/gpu/htgrappa.h
+        mri/pmri/gpu/htgrappa.sycl.cpp
         mri/pmri/gpu/sense_utilities.h
+        mri/pmri/gpu/sense_utilities.sycl.cpp
         mri/pmri/gpu/senseOperator.h
         mri/pmri/gpu/spirit_calibration.h
+        mri/pmri/gpu/spirit_calibration.sycl.cpp
         mri/pmri/gpu/trajectory_utils.h
+        mri/pmri/gpu/trajectory_utils.sycl.cpp
         mri/sdc/gpu/cuSDC.h
+        mri/sdc/gpu/cuSDC.sycl.cpp
         nfft/gpu/cuGriddingConvolution.h
+        nfft/gpu/cuGriddingConvolution.sycl.cpp
         nfft/gpu/cuNFFT.h
+        nfft/gpu/cuNFFT.sycl.cpp
         nfft/gpu/cuNFFTOperator.cpp
         operators/gpu/../generalOperator.h
         operators/gpu/../linearOperator.h
         operators/gpu/cuConvolutionOperator.h
+        operators/gpu/cuConvolutionOperator.sycl.cpp
         operators/gpu/cuLaplaceOperator.h
+        operators/gpu/cuLaplaceOperator.sycl.cpp
         operators/gpu/cuPartialDerivativeOperator.h
+        operators/gpu/cuPartialDerivativeOperator.sycl.cpp
         operators/gpu/cuPartialDerivativeOperator2.h
+        operators/gpu/cuPartialDerivativeOperator2.sycl.cpp
         operators/gpu/cuTv1dOperator.h
+        operators/gpu/cuTv1dOperator.sycl.cpp
         operators/gpu/cuTvOperator.h
+        operators/gpu/cuTvOperator.sycl.cpp
         registration/optical_flow/gpu/cuCKOpticalFlowSolver.h
+        registration/optical_flow/gpu/cuCKOpticalFlowSolver.sycl.cpp
         registration/optical_flow/gpu/cuHSOpticalFlowSolver.h
+        registration/optical_flow/gpu/cuHSOpticalFlowSolver.sycl.cpp
         registration/optical_flow/gpu/cuLinearResampleOperator.h
+        registration/optical_flow/gpu/cuLinearResampleOperator.sycl.cpp
         registration/optical_flow/gpu/cuOpticalFlowSolver.h
+        registration/optical_flow/gpu/cuOpticalFlowSolver.sycl.cpp
         registration/optical_flow/gpu/cuResampleOperator.h
+        registration/optical_flow/gpu/cuResampleOperator.sycl.cpp
         solvers/gpu/cuSolverUtils.h
+        solvers/gpu/cuSolverUtils.sycl.cpp
         solvers/gpu/gpusolvers_export.h
     )
 

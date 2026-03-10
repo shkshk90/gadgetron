@@ -23,7 +23,7 @@ class CUBLASContextProvider
 public:
 	static CUBLASContextProvider* instance();
 
-        dpct::blas::descriptor_ptr *getCublasHandle(int device_no = 0);
+        dpct::blas::descriptor_ptr* getCublasHandle(int device_no = 0);
 
 private:
 	CUBLASContextProvider() {}

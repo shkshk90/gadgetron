@@ -9,7 +9,6 @@
 #pragma once
 
 #define ONEAPI_BACKEND_LEVEL_ZERO_EXT
-#define DPCT_PROFILING_ENABLED
 #include <sycl/sycl.hpp>
 #include <dpct/dpct.hpp>
 #include "core_defines.h"
@@ -277,7 +276,7 @@ namespace Gadgetron {
 
     template<class T>
     __inline__ T abs(complext<T> comp) {
-        return sqrt(comp._real * comp._real + comp._imag * comp._imag);
+        return sycl::sqrt(comp._real * comp._real + comp._imag * comp._imag);
     }
 
     template<class T>

@@ -9,6 +9,7 @@
 #include <vector>
 #include <string.h>
 #include <boost/shared_ptr.hpp>
+#include <cmath>
 
 namespace Gadgetron{
 template<class T> int write_nd_array(const hoNDArray<T> *a, const char* filename)
