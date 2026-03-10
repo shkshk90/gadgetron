@@ -22,18 +22,19 @@
 
 // convert input trajectory in [-1/2;1/2] to [0;matrix_size_os+matrix_size_wrap]
 
+
 template<class REAL, unsigned int D> struct trajectory_scale
 {
-    typename reald<REAL,D>::Type matrix, bias;
+    typename Gadgetron::reald<REAL,D>::Type matrix, bias;
     
-    trajectory_scale( const typename reald<REAL,D>::Type &m, const typename reald<REAL,D>::Type &b )
+    trajectory_scale( const typename Gadgetron::reald<REAL,D>::Type &m, const typename Gadgetron::reald<REAL,D>::Type &b )
     {
         matrix = m;
         bias = b;
     }
     
     __host__ __device__
-    typename reald<REAL,D>::Type operator()(const typename reald<REAL,D>::Type &in) const { 
+    typename Gadgetron::reald<REAL,D>::Type operator()(const typename Gadgetron::reald<REAL,D>::Type &in) const { 
         return component_wise_mul<REAL,D>(in,matrix)+bias;
     }
 };
@@ -45,7 +46,7 @@ struct compute_num_cells_per_sample
     compute_num_cells_per_sample(REAL _half_W) : half_W(_half_W) {}
     
     __host__ __device__
-    unsigned int operator()(typename reald<REAL,D>::Type p) const
+    unsigned int operator()(typename Gadgetron::reald<REAL,D>::Type p) const
     {
         unsigned int num_cells = 1;
         for( unsigned int dim=0; dim<D; dim++ ){
@@ -61,7 +62,7 @@ struct compute_num_cells_per_sample
 
 template<class REAL> __inline__ __device__ void
 output_pairs( unsigned int sample_idx, unsigned int frame, 
-	      typename reald<REAL,1>::Type &p, typename uintd<1>::Type &matrix_size_os, typename uintd<1>::Type &matrix_size_wrap, 
+	      typename Gadgetron::reald<REAL,1>::Type &p, typename Gadgetron::uintd<1>::Type &matrix_size_os, typename Gadgetron::uintd<1>::Type &matrix_size_wrap, 
 	      REAL half_W, const unsigned int * __restrict__ write_offsets, unsigned int * __restrict__ tuples_first, unsigned int * __restrict__ tuples_last )
 {
     unsigned int lower_limit_x = (unsigned int)ceil(p.vec[0]-half_W);
@@ -71,7 +72,7 @@ output_pairs( unsigned int sample_idx, unsigned int frame,
     unsigned int write_offset = (sample_idx==0) ? 0 : write_offsets[sample_idx-1];
     unsigned int frame_offset = frame*prod(matrix_size_os+matrix_size_wrap);
     for( unsigned int x=lower_limit_x; x<=upper_limit_x; x++ ){
-        typename uintd<1>::Type co; co.vec[0] = x;
+        typename Gadgetron::uintd<1>::Type co; co.vec[0] = x;
         tuples_first[write_offset+pair_idx] = co_to_idx(co, matrix_size_os+matrix_size_wrap)+frame_offset;
         tuples_last[write_offset+pair_idx] = sample_idx;
         pair_idx++;
@@ -80,7 +81,7 @@ output_pairs( unsigned int sample_idx, unsigned int frame,
 
 template<class REAL> __inline__ __device__ void
 output_pairs( unsigned int sample_idx, unsigned int frame, 
-	      typename reald<REAL,2>::Type &p, typename uintd<2>::Type &matrix_size_os, typename uintd<2>::Type &matrix_size_wrap, 
+	      typename Gadgetron::reald<REAL,2>::Type &p, typename Gadgetron::uintd<2>::Type &matrix_size_os, typename Gadgetron::uintd<2>::Type &matrix_size_wrap, 
 	      REAL half_W, const unsigned int * __restrict__ write_offsets, unsigned int * __restrict__ tuples_first, unsigned int * __restrict__ tuples_last )
 {
     unsigned int lower_limit_x = (unsigned int)ceil(p.vec[0]-half_W);
@@ -93,7 +94,7 @@ output_pairs( unsigned int sample_idx, unsigned int frame,
     unsigned int frame_offset = frame*prod(matrix_size_os+matrix_size_wrap);
     for( unsigned int y=lower_limit_y; y<=upper_limit_y; y++ ){
         for( unsigned int x=lower_limit_x; x<=upper_limit_x; x++ ){
-            typename uintd<2>::Type co; co.vec[0] = x; co.vec[1] = y;
+            typename Gadgetron::uintd<2>::Type co; co.vec[0] = x; co.vec[1] = y;
             tuples_first[write_offset+pair_idx] = co_to_idx(co, matrix_size_os+matrix_size_wrap)+frame_offset;
             tuples_last[write_offset+pair_idx] = sample_idx;
             pair_idx++;
@@ -103,7 +104,7 @@ output_pairs( unsigned int sample_idx, unsigned int frame,
 
 template <class REAL> __inline__ __device__ void
 output_pairs( unsigned int sample_idx, unsigned int frame, 
-	      typename reald<REAL,3>::Type &p, typename uintd<3>::Type &matrix_size_os, typename uintd<3>::Type &matrix_size_wrap, 
+	      typename Gadgetron::reald<REAL,3>::Type &p, typename Gadgetron::uintd<3>::Type &matrix_size_os, typename Gadgetron::uintd<3>::Type &matrix_size_wrap, 
 	      REAL half_W, const unsigned int * __restrict__ write_offsets, unsigned int * __restrict__ tuples_first, unsigned int * __restrict__ tuples_last )
 {
     unsigned int lower_limit_x = (unsigned int)ceil(p.vec[0]-half_W);
@@ -119,7 +120,7 @@ output_pairs( unsigned int sample_idx, unsigned int frame,
     for( unsigned int z=lower_limit_z; z<=upper_limit_z; z++ ){
         for( unsigned int y=lower_limit_y; y<=upper_limit_y; y++ ){
             for( unsigned int x=lower_limit_x; x<=upper_limit_x; x++ ){
-                typename uintd<3>::Type co; co.vec[0] = x; co.vec[1] = y; co.vec[2] = z;
+                typename Gadgetron::uintd<3>::Type co; co.vec[0] = x; co.vec[1] = y; co.vec[2] = z;
                 tuples_first[write_offset+pair_idx] = co_to_idx(co, matrix_size_os+matrix_size_wrap)+frame_offset;
                 tuples_last[write_offset+pair_idx] = sample_idx;
                 pair_idx++;
@@ -130,7 +131,7 @@ output_pairs( unsigned int sample_idx, unsigned int frame,
 
 template <class REAL> __inline__ __device__ void
 output_pairs( unsigned int sample_idx, unsigned int frame, 
-	      typename reald<REAL,4>::Type &p, typename uintd<4>::Type &matrix_size_os, typename uintd<4>::Type &matrix_size_wrap, 
+	      typename Gadgetron::reald<REAL,4>::Type &p, typename Gadgetron::uintd<4>::Type &matrix_size_os, typename Gadgetron::uintd<4>::Type &matrix_size_wrap, 
 	      REAL half_W, const unsigned int * __restrict__ write_offsets, unsigned int * __restrict__ tuples_first, unsigned int * __restrict__ tuples_last )
 {
     unsigned int lower_limit_x = (unsigned int)ceil(p.vec[0]-half_W);
@@ -149,7 +150,7 @@ output_pairs( unsigned int sample_idx, unsigned int frame,
         for( unsigned int z=lower_limit_z; z<=upper_limit_z; z++ ){
             for( unsigned int y=lower_limit_y; y<=upper_limit_y; y++ ){
 	            for( unsigned int x=lower_limit_x; x<=upper_limit_x; x++ ){
-                    typename uintd<4>::Type co; co.vec[0] = x; co.vec[1] = y; co.vec[2] = z; co.vec[3] = w;
+                    typename Gadgetron::uintd<4>::Type co; co.vec[0] = x; co.vec[1] = y; co.vec[2] = z; co.vec[3] = w;
                     tuples_first[write_offset+pair_idx] = co_to_idx(co, matrix_size_os+matrix_size_wrap)+frame_offset;
                     tuples_last[write_offset+pair_idx] = sample_idx;
                     pair_idx++;
@@ -160,8 +161,8 @@ output_pairs( unsigned int sample_idx, unsigned int frame,
 }
 
 template<class REAL, unsigned int D> __global__ void
-write_pairs_kernel( typename uintd<D>::Type matrix_size_os, typename uintd<D>::Type matrix_size_wrap, unsigned int num_samples_per_frame, REAL half_W, 
-		   const typename reald<REAL,D>::Type * __restrict__ traj_positions, unsigned int * __restrict__ write_offsets, unsigned int * __restrict__ tuples_first, unsigned int * __restrict__ tuples_last )
+write_pairs_kernel( typename Gadgetron::uintd<D>::Type matrix_size_os, typename Gadgetron::uintd<D>::Type matrix_size_wrap, unsigned int num_samples_per_frame, REAL half_W, 
+		   const typename Gadgetron::reald<REAL,D>::Type * __restrict__ traj_positions, unsigned int * __restrict__ write_offsets, unsigned int * __restrict__ tuples_first, unsigned int * __restrict__ tuples_last )
 {
     // Get sample idx
     unsigned int sample_idx = blockIdx.x*blockDim.x + threadIdx.x;
@@ -170,14 +171,14 @@ write_pairs_kernel( typename uintd<D>::Type matrix_size_os, typename uintd<D>::T
     if( sample_idx<num_samples_per_frame ){
 
         sample_idx += frame*num_samples_per_frame;
-        typename reald<REAL,D>::Type p = traj_positions[sample_idx];
+        typename Gadgetron::reald<REAL,D>::Type p = traj_positions[sample_idx];
         output_pairs<REAL>( sample_idx, frame, p, matrix_size_os, matrix_size_wrap, half_W, write_offsets, tuples_first, tuples_last );
     }
 };
 
 template <class REAL, unsigned int D> void 
-write_pairs( typename uintd<D>::Type matrix_size_os, typename uintd<D>::Type matrix_size_wrap, unsigned int num_samples_per_frame, unsigned int num_frames, REAL W, 
-	     const typename reald<REAL,D>::Type * __restrict__ traj_positions, unsigned int * __restrict__ write_offsets, unsigned int * __restrict__ tuples_first, unsigned int * __restrict__ tuples_last )
+write_pairs( typename Gadgetron::uintd<D>::Type matrix_size_os, typename Gadgetron::uintd<D>::Type matrix_size_wrap, unsigned int num_samples_per_frame, unsigned int num_frames, REAL W, 
+	     const typename Gadgetron::reald<REAL,D>::Type * __restrict__ traj_positions, unsigned int * __restrict__ write_offsets, unsigned int * __restrict__ tuples_first, unsigned int * __restrict__ tuples_last )
 {  
     dim3 blockDim(256);
     dim3 gridDim((int)ceil((double)num_samples_per_frame/(double)blockDim.x), num_frames);
@@ -204,7 +205,7 @@ void NFFT_H_output(unsigned int number_of_batches, T* __restrict__ image,
 	       unsigned int warp_size_power, unsigned int number_of_domains, 
 	       unsigned int globalThreadId, unsigned int sharedMemFirstCellIdx)
 {
-    realType_t<T> *shared_mem = (realType_t<T>*) _shared_mem;
+    Gadgetron::realType_t<T> *shared_mem = (Gadgetron::realType_t<T>*) _shared_mem;
     
     for (unsigned int batch = 0; batch < number_of_batches; batch++)
     {
@@ -231,19 +232,19 @@ __inline__ __device__
 void NFFT_H_convolve(
     unsigned int number_of_samples, unsigned int number_of_batches,
     unsigned int number_of_domains,
-    const vector_td<realType_t<T>,D> * __restrict__ traj_positions, const  T* __restrict__ samples, const unsigned int * __restrict__ tuples_last,
+    const vector_td<Gadgetron::realType_t<T>,D> * __restrict__ traj_positions, const  T* __restrict__ samples, const unsigned int * __restrict__ tuples_last,
     const unsigned int * __restrict__ bucket_begin, const unsigned int * __restrict__ bucket_end,
     unsigned int warp_size_power,
     unsigned int globalThreadId, vector_td<unsigned int,D> domainPos,
     unsigned int sharedMemFirstCellIdx,
-    const ConvolutionKernel<realType_t<T>, D, K>* kernel)
+    const ConvolutionKernel<Gadgetron::realType_t<T>, D, K>* kernel)
 {
     using namespace thrust::cuda_cub;
 
-    realType_t<T> *shared_mem = (realType_t<T>*) _shared_mem;
+    Gadgetron::realType_t<T> *shared_mem = (Gadgetron::realType_t<T>*) _shared_mem;
 
     // Cell position as reald
-    vector_td<realType_t<T>,D> cell_pos = vector_td<realType_t<T>,D>( domainPos );
+    vector_td<Gadgetron::realType_t<T>,D> cell_pos = vector_td<Gadgetron::realType_t<T>,D>( domainPos );
     
     // Convolve samples onto the domain (shared memory)
     const unsigned int frame_offset = blockIdx.y*number_of_domains;
@@ -255,10 +256,10 @@ void NFFT_H_convolve(
         unsigned int sampleIdx = tuples_last[i];
 
         // Safety precaution. TODO
-        vector_td<realType_t<T>,D> sample_pos = traj_positions[sampleIdx];
+        vector_td<Gadgetron::realType_t<T>,D> sample_pos = traj_positions[sampleIdx];
         
         // Calculate the distance between the cell and the sample.
-        vector_td<realType_t<T>, D> delta = abs(sample_pos-cell_pos);
+        vector_td<Gadgetron::realType_t<T>, D> delta = abs(sample_pos-cell_pos);
         
         // Compute convolution weights.
         float weight = kernel->get(delta);      
@@ -299,13 +300,13 @@ template<class T, unsigned int D, template<class, unsigned int> class K>
 __global__
 void NFFT_H_convolve_kernel(vector_td<unsigned int,D> domain_count_grid,
     unsigned int number_of_samples, unsigned int number_of_batches,
-    const vector_td<realType_t<T>,D> * __restrict__ traj_positions,
+    const vector_td<Gadgetron::realType_t<T>,D> * __restrict__ traj_positions,
     T* __restrict__ image, const T* __restrict__ samples,
     const unsigned int * __restrict__ tuples_last,
     const unsigned int * __restrict__ bucket_begin,
     const unsigned int * __restrict__ bucket_end,
     unsigned int warp_size_power,
-    const ConvolutionKernel<realType_t<T>, D, K>* kernel)
+    const ConvolutionKernel<Gadgetron::realType_t<T>, D, K>* kernel)
 {
   
     // Global thread index.
@@ -337,11 +338,11 @@ void NFFT_H_convolve_kernel(vector_td<unsigned int,D> domain_count_grid,
     const unsigned int scatterSharedMemStartOffset = threadIdx.x&(warpSize-1); // a faster way of saying (threadIdx.x%warpSize)
     const unsigned int sharedMemFirstCellIdx = scatterSharedMemStart*num_reals + scatterSharedMemStartOffset;
 
-    realType_t<T> *shared_mem = (realType_t<T>*) _shared_mem;
+    Gadgetron::realType_t<T> *shared_mem = (Gadgetron::realType_t<T>*) _shared_mem;
 
     // Initialize shared memory.
     for (unsigned int i = 0; i < num_reals; i++)
-        shared_mem[sharedMemFirstCellIdx+warpSize*i] = realType_t<T>(0);
+        shared_mem[sharedMemFirstCellIdx+warpSize*i] = Gadgetron::realType_t<T>(0);
     
     // Compute NFFT using arbitrary sample trajectories.
     NFFT_H_convolve<T, D>
@@ -367,8 +368,8 @@ void wrap_image_kernel(const T* __restrict__ in,
     const unsigned int num_elements_per_image_src = prod(matrix_size_os + matrix_padding);
     const unsigned int image_offset_src = blockIdx.y * num_elements_per_image_src;
 
-    const typename uintd<D>::Type co = idx_to_co(idx, matrix_size_os);
-    const typename uintd<D>::Type half_wrap = matrix_padding >> 1;
+    const typename Gadgetron::uintd<D>::Type co = idx_to_co(idx, matrix_size_os);
+    const typename Gadgetron::uintd<D>::Type half_wrap = matrix_padding >> 1;
 
     // Make "boolean" vectors denoting whether wrapping needs to be
     // performed in a given direction (forwards/backwards).
@@ -460,7 +461,7 @@ void wrap_image_kernel(const T* __restrict__ in,
                         vector_td<int, D>(matrix_size_os);
                     typename intd<D>::Type co_offset_int =
                         src_co_int + component_wise_mul<int, D>(stride, matrix_size_os_int);
-                    typename uintd<D>::Type co_offset =
+                    typename Gadgetron::uintd<D>::Type co_offset =
                         vector_td<unsigned int, D>(co_offset_int);
                     result += in[co_to_idx(co_offset, matrix_size_os + matrix_padding) + image_offset_src];
                     break; // Only one stride per combination can contribute (e.g. one edge, one corner).
