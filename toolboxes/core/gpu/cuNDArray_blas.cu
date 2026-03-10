@@ -211,7 +211,7 @@ namespace Gadgetron{
     return ret;
   }
 
-  template <class T> void axpy(T a, cuNDArray<T>* x, cuNDArray<T>* y, size_t batchSize ) 
+  template <class T> void axpy(T a, cuNDArray<T>* x, cuNDArray<T>* y, size_t batchSize )
   {
     if (x == 0x0 || y == 0x0)
         throw std::runtime_error("Gadgetron::axpy(): Invalid input array");
@@ -227,10 +227,14 @@ namespace Gadgetron{
     int remainder = x->get_number_of_elements() - batchSize * (num_splits - 1);
     auto handle = cudaDeviceManager::Instance()->lockHandle(device);
 
+    // Ensure alpha is 16-byte aligned for cuBLAS (cuDoubleComplex requires alignof=16,
+    // but complext<double> only has alignof=8, causing segfault in SSE/AVX loads)
+    alignas(16) T a_aligned = a;
+
     for (int ii = 0; ii < num_splits; ii++) {
 
         CUBLAS_CALL(cublas_axpy(handle,
-                                (ii == num_splits - 1) ? remainder : batchSize, &a, x->get_data_ptr() + batchSize * ii, 1,
+                                (ii == num_splits - 1) ? remainder : batchSize, &a_aligned, x->get_data_ptr() + batchSize * ii, 1,
                                 y->get_data_ptr() + batchSize * ii, 1));
 
     }
