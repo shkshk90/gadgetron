@@ -16,7 +16,7 @@ set( gadgetron_mri_noncartesian_config_files
  )
 
 
-if(CUDA_FOUND)
+if(USE_SYCL)
 	list(APPEND gadgetron_mri_noncartesian_header_files GriddingReconGadget.h)
 	list(APPEND gadgetron_mri_noncartesian_src_files GriddingReconGadget.cpp)
 
@@ -47,7 +47,9 @@ target_link_libraries(gadgetron_mri_noncartesian
 
 
 )
-if(CUDA_FOUND)
+if(USE_SYCL)
+    target_compile_options(gadgetron_mri_noncartesian PRIVATE ${SYCL_COMPILE_FLAGS})
+    target_link_options(gadgetron_mri_noncartesian PRIVATE ${SYCL_LINK_FLAGS})
     target_link_libraries(gadgetron_mri_noncartesian
 	gadgetron_toolbox_gpu
 	)

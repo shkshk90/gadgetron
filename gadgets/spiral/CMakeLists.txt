@@ -3,9 +3,9 @@
 set(SPIRAL_HEADER_FILES SpiralToGenericGadget.h)
 set(SPIRAL_SRC_FILES SpiralToGenericGadget.cpp)
 
-if (CUDA_FOUND)
+if (USE_SYCL)
 set(SPIRAL_HEADER_FILES gpuSpiralSensePrepGadget.h gpuSpiralDeblurGadget.h ${SPIRAL_HEADER_FILES})
-set(SPIRAL_SRC_FILES  gpuSpiralSensePrepGadget.cpp gpuSpiralDeblurGadget.cpp ${SPIRAL_SRC_FILES})
+set(SPIRAL_SRC_FILES  gpuSpiralSensePrepGadget.cpp.sycl.cpp gpuSpiralDeblurGadget.cpp.sycl.cpp ${SPIRAL_SRC_FILES})
 endif()
 
 add_library(gadgetron_spiral SHARED ${SPIRAL_HEADER_FILES} ${SPIRAL_SRC_FILES})
@@ -20,7 +20,9 @@ target_link_libraries(gadgetron_spiral
 	gadgetron_toolbox_spiral
   gadgetron_toolbox_cpucore)
 
-if (CUDA_FOUND)
+if (USE_SYCL)
+    target_compile_options(gadgetron_spiral PRIVATE ${SYCL_COMPILE_FLAGS})
+    target_link_options(gadgetron_spiral PRIVATE ${SYCL_LINK_FLAGS})
     target_link_libraries(gadgetron_spiral
                                 gadgetron_gpuparallelmri
                                 gadgetron_toolbox_gpu

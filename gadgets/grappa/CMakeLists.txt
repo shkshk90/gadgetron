@@ -15,7 +15,7 @@ set(RTGRAPPA_SOURCES
         cpu/WeightsCore.cpp
         cpu/WeightsCore.h)
 
-if (CUDA_FOUND)
+if (USE_SYCL)
     set(RTGRAPPA_SOURCES ${RTGRAPPA_SOURCES}
             gpu/WeightsCore.cpp
             gpu/WeightsCore.h)
@@ -34,7 +34,9 @@ target_link_libraries(gadgetron_grappa
         gadgetron_toolbox_cpucore_math
         gadgetron_toolbox_cpufft)
 
-if (CUDA_FOUND)
+if (USE_SYCL)
+    target_compile_options(gadgetron_grappa PRIVATE ${SYCL_COMPILE_FLAGS})
+    target_link_options(gadgetron_grappa PRIVATE ${SYCL_LINK_FLAGS})
     target_link_libraries(gadgetron_grappa
             gadgetron_toolbox_gpu
     )

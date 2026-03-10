@@ -8,6 +8,6 @@ add_executable(denoise_TV denoise_TV.cpp)
 target_link_libraries(denoise_TV
         gadgetron_toolbox_gpu
         gadgetron_toolbox_hostutils
-        ${CUDA_LIBRARIES})
+       )
 
 install(TARGETS denoise_TV DESTINATION bin COMPONENT main)

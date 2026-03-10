@@ -1,9 +1,12 @@
-if (CUDA_FOUND)
+if (USE_SYCL)
 add_library(gadgetron_toolbox_deblur SHARED
         MFIOperator.h
         MFIOperator.cpp)
 
 set_target_properties(gadgetron_toolbox_deblur PROPERTIES VERSION ${GADGETRON_VERSION_STRING} SOVERSION ${GADGETRON_SOVERSION})
+
+target_compile_options(gadgetron_toolbox_deblur PRIVATE ${SYCL_COMPILE_FLAGS})
+target_link_options(gadgetron_toolbox_deblur PRIVATE ${SYCL_LINK_FLAGS})
 
 target_link_libraries(gadgetron_toolbox_deblur
         gadgetron_toolbox_cpucore

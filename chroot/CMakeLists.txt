@@ -18,7 +18,7 @@ configure_file("start-gadgetron-from-image.sh.in" ${CMAKE_CURRENT_BINARY_DIR}/st
 
 set (LIBRARY_PATHS ${ISMRMRD_LIB_DIR})
 
-foreach(_lib IN LISTS MKL_LIB_DIR CUDA_LIBRARIES CUDA_CUFFT_LIBRARIES CUDA_CUBLAS_LIBRARIES)
+foreach(_lib IN LISTS MKL_LIB_DIR)
   if (_lib)
     get_filename_component(_libdir ${_lib} PATH)
     set (LIBRARY_PATHS ${LIBRARY_PATHS}:${_libdir})
@@ -27,7 +27,7 @@ endforeach()
 list(REMOVE_DUPLICATES LIBRARY_PATHS )
 message(STATUS "LIBRARY_PATHS for chroot: ${LIBRARY_PATHS}")
 
-find_library( CUDA_LIBRARY NAMES libcuda.so )
+set(CUDA_LIBRARY "" CACHE FILEPATH "Not used in SYCL build")
 
 configure_file("copy-cuda-lib.sh.in" ${CMAKE_CURRENT_BINARY_DIR}/copy-cuda-lib.sh @ONLY)
 

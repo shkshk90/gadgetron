@@ -1,9 +1,10 @@
+#include <date/date.h>
+
 #include "StorageSetup.h"
 
 #include <iterator>
 
 #include <curl/curl.h>
-#include <date/date.h>
 #include <nlohmann/json.hpp>
 
 using json = nlohmann::json;

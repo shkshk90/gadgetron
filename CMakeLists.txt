@@ -116,6 +116,86 @@ if (DISABLE_FORK)
     add_definitions(-DGADGETRON_DISABLE_FORK)
 endif()
 
+# SYCL support option (defined early so it can influence OpenMP/MKL)
+option(USE_SYCL "Build with SYCL support (replaces CUDA)" Off)
+
+if (USE_SYCL)
+    # Force OpenMP, CUDA, and MKL off when using SYCL
+    set(USE_OPENMP OFF CACHE BOOL "Use OpenMP" FORCE)
+    set(USE_CUDA OFF CACHE BOOL "Build with CUDA support" FORCE)
+    set(USE_MKL OFF CACHE BOOL "Use MKL" FORCE)
+
+    # Check that compiler supports -fsycl
+    include(CheckCXXCompilerFlag)
+    check_cxx_compiler_flag(-fsycl COMPILER_SUPPORTS_FSYCL)
+    if (NOT COMPILER_SUPPORTS_FSYCL)
+        message(FATAL_ERROR "USE_SYCL is enabled but the compiler does not support -fsycl. Use a SYCL-capable compiler (e.g. Intel DPC++ / icpx).")
+    endif()
+
+    # Required SYCL variables
+    if (NOT DEFINED DPCT_INCLUDE_PATH)
+        message(FATAL_ERROR "USE_SYCL requires DPCT_INCLUDE_PATH to be set (e.g. -DDPCT_INCLUDE_PATH=/path/to/dpct/include)")
+    endif()
+    if (NOT DEFINED LIBSYCL)
+        message(FATAL_ERROR "USE_SYCL requires LIBSYCL to be set (e.g. -DLIBSYCL=/path/to/libsycl.so)")
+    endif()
+    if (NOT DEFINED ONEMKL_PATH)
+        message(FATAL_ERROR "USE_SYCL requires ONEMKL_PATH to be set (e.g. -DONEMKL_PATH=/path/to/onemkl)")
+    endif()
+    if (NOT DEFINED ZERO_LEVEL_INCLUDE_PATH)
+        message(FATAL_ERROR "USE_SYCL requires ZERO_LEVEL_INCLUDE_PATH to be set (e.g. -DZERO_LEVEL_INCLUDE_PATH=/path/to/level-zero/include)")
+    endif()
+    if (NOT DEFINED ONEAPI_DPL_INCLUDE_PATH)
+        message(FATAL_ERROR "USE_SYCL requires ONEAPI_DPL_INCLUDE_PATH to be set (e.g. -DONEAPI_DPL_INCLUDE_PATH=/path/to/oneapi/include)")
+    endif()
+    if (NOT DEFINED MKL_INCLUDE_PATH)
+        message(FATAL_ERROR "USE_SYCL requires MKL_INCLUDE_PATH to be set (e.g. -DMKL_INCLUDE_PATH=/path/to/mkl/include)")
+    endif()
+    if (NOT DEFINED SYCL_INCLUDE_PATH)
+        message(FATAL_ERROR "USE_SYCL requires SYCL_INCLUDE_PATH to be set (e.g. -DSYCL_INCLUDE_PATH=/path/to/sycl/include)")
+    endif()
+
+    # SYCL compile and link flags (applied per-target, NOT globally,
+    # to avoid SYCL's <cmath> wrapper breaking pure-CPU code)
+    set(SYCL_COMPILE_FLAGS
+        -fsycl -fsycl-targets=nvptx64-nvidia-cuda
+        -Xsycl-target-backend --cuda-gpu-arch=sm_80
+        -Wno-array-bounds -Wno-switch -Wno-dynamic-class-memaccess
+        -Wno-undefined-var-template -Wno-parentheses -Wno-inconsistent-missing-override
+        -Wno-unused-value -Wno-deprecated-declarations
+        -Wno-bitwise-op-parentheses -Wno-reorder-ctor
+    )
+    set(SYCL_LINK_FLAGS -fsycl -fsycl-targets=nvptx64-nvidia-cuda -Xsycl-target-backend --cuda-gpu-arch=sm_80)
+
+    add_definitions(-DUSE_SYCL)
+    add_definitions(-DSYCL_DISABLE_FSYCL_SYCLHPP_WARNING)
+
+    # DPCT and Level Zero include paths
+    include_directories(${DPCT_INCLUDE_PATH})
+    include_directories(${ZERO_LEVEL_INCLUDE_PATH})
+    include_directories(${ONEAPI_DPL_INCLUDE_PATH})
+    include_directories(${MKL_INCLUDE_PATH})
+    include_directories(${SYCL_INCLUDE_PATH})
+
+    # SYCL / oneMKL libraries (available globally via SYCL_LIBRARIES)
+    set(SYCL_LIBRARIES
+        ${LIBSYCL}
+        ${ONEMKL_PATH}/lib/libonemath.so
+        ${ONEMKL_PATH}/lib/libonemath_blas_cublas.so
+        ${ONEMKL_PATH}/lib/libonemath_sparse_blas_cusparse.so
+    )
+
+    message(STATUS "SYCL support enabled")
+    message(STATUS "  DPCT_INCLUDE_PATH: ${DPCT_INCLUDE_PATH}")
+    message(STATUS "  ZERO_LEVEL_INCLUDE_PATH: ${ZERO_LEVEL_INCLUDE_PATH}")
+    message(STATUS "  ONEAPI_DPL_INCLUDE_PATH: ${ONEAPI_DPL_INCLUDE_PATH}")
+    message(STATUS "  MKL_INCLUDE_PATH: ${MKL_INCLUDE_PATH}")
+    message(STATUS "  SYCL_INCLUDE_PATH: ${SYCL_INCLUDE_PATH}")
+    message(STATUS "  LIBSYCL: ${LIBSYCL}")
+    message(STATUS "  ONEMKL_PATH: ${ONEMKL_PATH}")
+    message(STATUS "  SYCL_LIBRARIES: ${SYCL_LIBRARIES}")
+endif()
+
 # build options for OpenMP support
 find_package(OpenMP)
 option(USE_OPENMP "Use OpenMP" On)
@@ -158,8 +238,8 @@ if (WIN32)
 else ()
     set(CMAKE_POSITION_INDEPENDENT_CODE ON)
     include(CheckCXXCompilerFlag)
-    if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-array-bounds -Wno-switch -Wno-dynamic-class-memaccess -Wno-undefined-var-template -Wno-parentheses -Wno-inconsistent-missing-override -Wno-unused-value")
+    if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang|IntelLLVM")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-array-bounds -Wno-switch -Wno-dynamic-class-memaccess -Wno-undefined-var-template -Wno-parentheses -Wno-inconsistent-missing-override -Wno-unused-value -Wno-deprecated-declarations -Wno-bitwise-op-parentheses -Wno-reorder-ctor")
     endif ()
     if (APPLE)
         if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
@@ -219,54 +299,10 @@ if (NOT DEFINED Boost_VERSION_STRING)
 endif()
 
 
-option(USE_CUDA "Build with CUDA support" On)
-
+option(USE_CUDA "Build with CUDA support" Off)
 if (USE_CUDA)
-    find_package(CUDA_advanced)
+    message(FATAL_ERROR "CUDA is not supported in gadgetron2. Use -DUSE_SYCL=ON instead.")
 endif()
-
-if (CUDA_FOUND AND USE_CUDA)
-
-    if (NOT CUDA_cublas_device_LIBRARY)
-        list(REMOVE_ITEM CUDA_CUBLAS_LIBRARIES CUDA_cublas_device_LIBRARY-NOTFOUND)
-    endif()
-
-    add_definitions(-DUSE_CUDA)
-    set( GADGETRON_CUDA_FOUND_BOOL 1 )
-    include_directories( ${CUDA_INCLUDE_DIRS} )
-    set(CUDA_PROPAGATE_HOST_FLAGS ON)
-    set(CUDA_HOST_COMPILER ${CMAKE_CXX_COMPILER})
-    set(CUDA_NVCC_FLAGS "${CUDA_NVCC_FLAGS} --std=c++17 -allow-unsupported-compiler -Xcompiler=-Wno-inconsistent-missing-override,-Wno-deprecated-builtins,-Wno-deprecated-declarations,-Wno-comment")
-    set(CMAKE_CUDA_STANDARD 17)
-    #  endif ()
-    #set(CUDA_VERBOSE_BUILD ON)
-
-
-    # Compile kernels for compute models 1.0 and 2.0 as default for Cuda 4.1
-    # Support compute model 3.0 from Cuda 4.2 and up
-    # Support compute model 3.5 from Cuda 5 and up
-
-    option(GADGETRON_CUDA_ALL_COMPUTE_MODEL "Build CUDA components for all computing models" OFF)
-    if (GADGETRON_CUDA_ALL_COMPUTE_MODEL)
-        message("Compiling CUDA components to support all compute model 3.5, 5.0, 5.2, 6.0, 6.1, 7.0")
-        set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} "-gencode arch=compute_35,code=sm_35")
-        set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} "-gencode arch=compute_50,code=sm_50")
-        set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} "-gencode arch=compute_52,code=sm_52")
-        set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} "-gencode arch=compute_60,code=sm_60")
-        set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} "-gencode arch=compute_61,code=sm_61")
-        set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} "-gencode arch=compute_70,code=sm_70")
-        set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} "-gencode arch=compute_75,code=sm_75")
-        set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} "-gencode arch=compute_80,code=sm_80")
-        set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} "-gencode arch=compute_86,code=sm_86")
-    endif ()
-
-    message("Compiling with ${CUDA_NVCC_FLAGS}")
-    message("CUDA libraries are ${CUDA_LIBRARIES}, ${CUDA_CUFFT_LIBRARIES}, ${CUDA_CUBLAS_LIBRARIES}, ${CUDA_CUSPARSE_LIBRARIES}")
-else ()
-    message("CUDA not found. CUDA components will not be compiled.")
-    set( GADGETRON_CUDA_FOUND_BOOL 0 )
-    set( CUDA_NVCC_FLAGS "NA")
-endif ()
 
 option(REQUIRE_SIGNED_CONFIG "Force Gadgetron to accept only signed config files." Off)
 if (REQUIRE_SIGNED_CONFIG)
@@ -285,8 +321,8 @@ find_package(CURL REQUIRED)
 find_package(PugiXML REQUIRED)
 find_package(ISMRMRD CONFIG REQUIRED)
 
-if (CUDA_FOUND AND USE_CUDA)
-    # bart needs cuda
+# BART requires CUDA (not available in SYCL build)
+if (NOT USE_SYCL)
     find_package(BART CONFIG QUIET)
 endif()
 

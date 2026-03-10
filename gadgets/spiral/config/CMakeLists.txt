@@ -1,4 +1,4 @@
-if (CUDA_FOUND)
+if (USE_SYCL)
     if (ARMADILLO_FOUND)
       install (FILES 
         spiral_flow_gpusense_cg.xml 

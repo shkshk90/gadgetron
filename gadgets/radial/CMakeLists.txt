@@ -2,18 +2,21 @@ if (WIN32)
   add_definitions(-D__BUILD_GADGETRON_RADIAL__)
 endif ()
 
-list(APPEND PHASE_GADGET RadialPhaseCorrectionGadget.h RadialPhaseCorrectionGadget.cpp)
+list(APPEND PHASE_GADGET RadialPhaseCorrectionGadget.h RadialPhaseCorrectionGadget.cpp.sycl.cpp)
 install (FILES  RadialPhaseCorrectionGadget.h DESTINATION ${GADGETRON_INSTALL_INCLUDE_PATH} COMPONENT main)
 
 add_library(gadgetron_gpuradial SHARED 
   gadgetron_radial_export.h
-  gpuRadialPrepGadget.h gpuRadialPrepGadget.cpp 
-  gpuRadialSensePrepGadget.h gpuRadialSensePrepGadget.cpp 
-  gpuRadialSpiritPrepGadget.h gpuRadialSpiritPrepGadget.cpp 
-  gpuRetroGatedSensePrepGadget.h gpuRetroGatedSensePrepGadget.cpp
+  gpuRadialPrepGadget.h gpuRadialPrepGadget.cpp.sycl.cpp
+  gpuRadialSensePrepGadget.h gpuRadialSensePrepGadget.cpp
+  gpuRadialSpiritPrepGadget.h gpuRadialSpiritPrepGadget.cpp
+  gpuRetroGatedSensePrepGadget.h gpuRetroGatedSensePrepGadget.cpp.sycl.cpp
   ${PHASE_GADGET})
 
 set_target_properties(gadgetron_gpuradial PROPERTIES VERSION ${GADGETRON_VERSION_STRING} SOVERSION ${GADGETRON_SOVERSION})
+
+target_compile_options(gadgetron_gpuradial PRIVATE ${SYCL_COMPILE_FLAGS})
+target_link_options(gadgetron_gpuradial PRIVATE ${SYCL_LINK_FLAGS})
 
 target_link_libraries(gadgetron_gpuradial
         gadgetron_core

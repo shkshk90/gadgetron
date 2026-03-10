@@ -8,6 +8,9 @@ add_library(gadgetron_gpugadget SHARED
 
 set_target_properties(gadgetron_gpugadget PROPERTIES VERSION ${GADGETRON_VERSION_STRING} SOVERSION ${GADGETRON_SOVERSION})
 
+target_compile_options(gadgetron_gpugadget PRIVATE ${SYCL_COMPILE_FLAGS})
+target_link_options(gadgetron_gpugadget PRIVATE ${SYCL_LINK_FLAGS})
+
 target_link_libraries(gadgetron_gpugadget
         gadgetron_core
         gadgetron_toolbox_gpu)

@@ -1,9 +1,13 @@
-include_directories( 
-	${CMAKE_SOURCE_DIR}/toolboxes/core 
+# SYCL compile/link flags for all GPU standalone apps
+add_compile_options(${SYCL_COMPILE_FLAGS})
+add_link_options(${SYCL_LINK_FLAGS})
+
+include_directories(
+	${CMAKE_SOURCE_DIR}/toolboxes/core
 	${CMAKE_SOURCE_DIR}/toolboxes/core/cpu
 	${CMAKE_SOURCE_DIR}/toolboxes/core/cpu/image
 	${CMAKE_SOURCE_DIR}/toolboxes/core/cpu/hostutils
-	${CMAKE_SOURCE_DIR}/toolboxes/core/gpu 
+	${CMAKE_SOURCE_DIR}/toolboxes/core/gpu
     ${CMAKE_SOURCE_DIR}/toolboxes/fft/gpu
 	${CMAKE_SOURCE_DIR}/toolboxes/nfft/gpu
 	${CMAKE_SOURCE_DIR}/toolboxes/operators
@@ -11,7 +15,7 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/toolboxes/solvers
 	${CMAKE_SOURCE_DIR}/toolboxes/solvers/gpu
 	${Boost_INCLUDE_DIR}
-	${ISMRMRD_INCLUDE_DIR} 
+	${ISMRMRD_INCLUDE_DIR}
 	)
 
 add_subdirectory(mri)

@@ -1,4 +1,4 @@
-if(CUDA_FOUND)
+if(USE_SYCL)
   if(CPU_REG)
     install (FILES 
       cpureg_cartesian_averaging.xml

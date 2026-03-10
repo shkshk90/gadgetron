@@ -13,19 +13,22 @@ add_library(gadgetron_gpuparallelmri SHARED
     gpuCgSpiritGadget.h
     gpuGenericSensePrepGadget.h
     gpuSbSenseGadget.h
-    gpuCgSenseGadget.cpp 
-    gpuCgKtSenseGadget.cpp 
-    gpuSbSenseGadget.cpp 
-    gpuGenericSensePrepGadget.cpp
-    gpuCgSpiritGadget.cpp 
-    gpuSenseGadget.cpp
+    gpuCgSenseGadget.cpp.sycl.cpp
+    gpuCgKtSenseGadget.cpp.sycl.cpp
+    gpuSbSenseGadget.cpp.sycl.cpp
+    gpuGenericSensePrepGadget.cpp.sycl.cpp
+    gpuCgSpiritGadget.cpp.sycl.cpp
+    gpuSenseGadget.cpp.sycl.cpp
     gpuBufferSensePrepGadget.cpp
-    gpuOsSenseGadget.cpp
-    gpuNlcgSenseGadget.cpp
-    gpuLALMSenseGadget.cpp
+    gpuOsSenseGadget.cpp.sycl.cpp
+    gpuNlcgSenseGadget.cpp.sycl.cpp
+    gpuLALMSenseGadget.cpp.sycl.cpp
   )
 
 set_target_properties(gadgetron_gpuparallelmri PROPERTIES VERSION ${GADGETRON_VERSION_STRING} SOVERSION ${GADGETRON_SOVERSION})
+
+target_compile_options(gadgetron_gpuparallelmri PRIVATE ${SYCL_COMPILE_FLAGS})
+target_link_options(gadgetron_gpuparallelmri PRIVATE ${SYCL_LINK_FLAGS})
 
 target_link_libraries(gadgetron_gpuparallelmri
   gadgetron_core

@@ -12,7 +12,7 @@ add_executable(gadgetron
         Connection.h
         initialization.cpp
         initialization.h
-        system_info.cpp
+        system_info.cpp.sycl.cpp
         connection/config/Config.cpp
         connection/config/Config.h
         connection/ConfigConnection.cpp
@@ -98,8 +98,10 @@ if (BUILD_PYTHON_SUPPORT)
     add_definitions("-DCOMPILING_WITH_PYTHON_SUPPORT")
 endif ()
 
-if (CUDA_FOUND)
-    target_link_libraries(gadgetron ${CUDA_LIBRARIES})
+if (USE_SYCL)
+    target_compile_options(gadgetron PRIVATE ${SYCL_COMPILE_FLAGS})
+    target_link_options(gadgetron PRIVATE ${SYCL_LINK_FLAGS})
+    target_link_libraries(gadgetron gadgetron_toolbox_gpu)
 endif ()
 
 if (GPERFTOOLS_PROFILER)

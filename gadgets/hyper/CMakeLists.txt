@@ -5,14 +5,17 @@ endif ()
 
 add_library(gadgetron_hyper SHARED 
   NFFT2DGadget.h NFFT2DGadget.cpp
-  CMRT3DGadget.h CMRT3DGadget.cpp
-  CMRTGadget.h CMRTGadget.cpp
-  CSIGadget.h CSIGadget.cpp
+  CMRT3DGadget.h CMRT3DGadget.cpp.sycl.cpp
+  CMRTGadget.h CMRTGadget.cpp.sycl.cpp
+  CSIGadget.h CSIGadget.cpp.sycl.cpp
   gpuCSICoilEstimationGadget.cpp
   
   )
 
 set_target_properties(gadgetron_hyper PROPERTIES VERSION ${GADGETRON_VERSION_STRING} SOVERSION ${GADGETRON_SOVERSION})
+
+target_compile_options(gadgetron_hyper PRIVATE ${SYCL_COMPILE_FLAGS})
+target_link_options(gadgetron_hyper PRIVATE ${SYCL_LINK_FLAGS})
 
 target_link_libraries(gadgetron_hyper
   gadgetron_core

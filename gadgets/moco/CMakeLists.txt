@@ -2,13 +2,13 @@ if (WIN32)
     add_definitions(-D__BUILD_GADGETRON_MOCO__)
 endif ()
 
-if (CUDA_FOUND)
+if (USE_SYCL)
     list(APPEND CPU_GADGETS cpuRegistrationAveragingGadget.cpp)
     list(APPEND CPU_LIBS gadgetron_toolbox_cpucore_math gadgetron_toolbox_cpureg)
 
 
-    list(APPEND GPU_GADGETS gpuRegistrationAveragingGadget.cpp gpuRegistrationScatteringGadget.cpp)
-    list(APPEND GPU_LIBS gadgetron_toolbox_gpu ${CUDA_LIBRARIES})
+    list(APPEND GPU_GADGETS gpuRegistrationAveragingGadget.cpp.sycl.cpp gpuRegistrationScatteringGadget.cpp.sycl.cpp)
+    list(APPEND GPU_LIBS gadgetron_toolbox_gpu)
 
 
     add_library(gadgetron_moco SHARED
@@ -23,6 +23,9 @@ if (CUDA_FOUND)
             )
 
     set_target_properties(gadgetron_moco PROPERTIES VERSION ${GADGETRON_VERSION_STRING} SOVERSION ${GADGETRON_SOVERSION})
+
+    target_compile_options(gadgetron_moco PRIVATE ${SYCL_COMPILE_FLAGS})
+    target_link_options(gadgetron_moco PRIVATE ${SYCL_LINK_FLAGS})
 
     target_link_libraries(gadgetron_moco
             gadgetron_core
@@ -47,7 +50,7 @@ if (CUDA_FOUND)
             DESTINATION ${GADGETRON_INSTALL_INCLUDE_PATH} COMPONENT main)
 
     add_subdirectory(config)
-elseif (CUDA_FOUND)
+elseif (USE_SYCL)
     message("Cuda not found, not compiling gpu-based registration gadgets")
 endif ()
 

@@ -8,7 +8,7 @@ set(operator_header_files
     ${CMAKE_SOURCE_DIR}/toolboxes/operators/diagonalSumOperator.h
     ${CMAKE_SOURCE_DIR}/toolboxes/operators/encodingOperatorContainer.h
     ${CMAKE_SOURCE_DIR}/toolboxes/operators/multiplicationOperatorContainer.h
-    ${CMAKE_SOURCE_DIR}/toolboxes/operators/FFTOperator.h
+#     ${CMAKE_SOURCE_DIR}/toolboxes/operators/FFTOperator.h
     ${CMAKE_SOURCE_DIR}/toolboxes/operators/imageOperator.h
     ${CMAKE_SOURCE_DIR}/toolboxes/operators/encodedImageOperator.h
     ${CMAKE_SOURCE_DIR}/toolboxes/operators/partialDerivativeOperator.h

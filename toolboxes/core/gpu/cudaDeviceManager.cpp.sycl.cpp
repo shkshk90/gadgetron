@@ -91,8 +91,7 @@ namespace Gadgetron
     _max_griddim = std::vector<int>(_num_devices, 0);
     _major = std::vector<int>(_num_devices, 0);
     _minor = std::vector<int>(_num_devices, 0);
-    _handle = std::vector<dpct::blas::descriptor_ptr>(_num_devices,
-                                                      (cublasContext *)0x0);
+    _handle = std::vector<dpct::blas::descriptor_ptr>(_num_devices, nullptr);
     _sparse_handle = std::vector<dpct::sparse::descriptor_ptr>(
         _num_devices, (dpct::sparse::descriptor_ptr)0x0);
 
