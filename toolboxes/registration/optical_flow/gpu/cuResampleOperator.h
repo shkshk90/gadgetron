@@ -31,7 +31,7 @@ namespace Gadgetron{
   
   protected:
     virtual unsigned int get_num_neighbors() = 0;
-    virtual void write_sort_arrays( thrust::device_vector<unsigned int> &sort_keys ) = 0;
+    virtual void write_sort_arrays( void *pSort_keys ) = 0;
     
   protected:
     thrust::device_vector<unsigned int> lower_bounds_;

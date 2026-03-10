@@ -4,13 +4,20 @@
 #include <cmath>
 #include <numeric>
 #include <set>
+#ifdef USE_OMP
 #include <omp.h>
+#endif
 
 #include "hoMatrix.h"
 #include "hoNDArray_elemwise.h"
 #include "hoNDArray_math.h"
 #include "hoNDFFT.h"
 #include <boost/container/flat_set.hpp>
+
+#ifndef USE_OMP
+#include <thread>
+unsigned int omp_get_max_threads() { return std::thread::hardware_concurrency(); }
+#endif
 
 namespace Gadgetron {
 

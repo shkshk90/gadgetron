@@ -14,7 +14,7 @@
 // Definition of Cuda availability passed to C++
 //
 
-#define GADGETRON_CUDA_IS_AVAILABLE @GADGETRON_CUDA_FOUND_BOOL@
+#define GADGETRON_CUDA_IS_AVAILABLE 1
 
 // Used Cuda host definitions if availble.
 // Otherwise we leave them empty (as no device code is compiled anyway).

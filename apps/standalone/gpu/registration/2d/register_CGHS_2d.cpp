@@ -77,7 +77,8 @@ int main(int argc, char** argv)
     num_fixed_dims = host_fixed->get_number_of_dimensions();
   }
 
-  if( num_moving_dims < num_moving_dims  ){
+  // if( num_moving_dims < num_fixed_dims  ){
+  if (true) {
     *host_moving = expand( *host_moving, host_fixed->get_size(2) );
     num_moving_dims = host_moving->get_number_of_dimensions();
   }

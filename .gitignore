@@ -19,7 +19,6 @@ lib/*.pyc
 build/
 build_debug/
 *.pyc
-toolboxes/core/core_defines.h
 prod/
 test/integration/test_cases.txt
 *.h5

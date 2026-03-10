@@ -5,10 +5,6 @@
 #include <boost/hana/at_key.hpp>
 #include "sfndam_serializable.h"
 
-template<class T>
-std::enable_if_t<std::is_base_of_v<Gadgetron::Core::IO::SfndamSerializable<T>, T>> Gadgetron::Core::IO::write(std::ostream &stream, const T &t) {
-    t.SerializeToSfndam(stream);
-}
 
 template<class T>
 void Gadgetron::Core::IO::write(std::ostream &ostream, const Core::optional<T> &val) {

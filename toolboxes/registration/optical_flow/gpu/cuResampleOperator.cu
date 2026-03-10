@@ -52,7 +52,7 @@ namespace Gadgetron{
     // Fill arrays
     //
 
-    write_sort_arrays(sort_keys);
+    write_sort_arrays(reinterpret_cast<void*>(&sort_keys));
     
     // Make copy of sort_keys before the sort modifies it
     //
