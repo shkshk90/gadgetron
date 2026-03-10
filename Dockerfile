@@ -188,6 +188,21 @@ RUN mkdir -p /downloads \
 
 COPY docker/install_mkl.sh /tmp/install_mkl.sh
 RUN chmod +x /tmp/install_mkl.sh 
+
+RUN DEBIAN_FRONTEND=noninteractive apt install -y \
+        libpfm4-dev python3-dev \
+        libbabeltrace-dev libcapstone-dev \
+        libtraceevent-dev systemtap-sdt-dev libslang2-dev \
+        libdebuginfod-dev libdw-dev build-essential flex bison libelf-dev \
+        gdb \
+    && apt-get autoremove -y && apt-get clean 
+RUN mkdir -p /downloads \
+    && curl --output /downloads/linux-6.16.1.tar.gz --silent --location https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.16.1.tar.gz \
+    && tar -xzf /downloads/linux-6.16.1.tar.gz -C /downloads \
+    && make -C /downloads/linux-6.16.1/tools/perf install \
+    && mv /downloads/linux-6.16.1/tools/perf /perf \
+    && rm -rf /downloads
+
     # && /tmp/install_mkl.sh \
     # && echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/install/lib"                     >> /etc/bash.bashrc     \
     # && echo "export LD_LIBRARY_PATH=/oneMKLwithCublas/lib:\$LD_LIBRARY_PATH"            >> /etc/bash.bashrc     \

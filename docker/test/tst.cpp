@@ -6017,22 +6017,16 @@ TYPED_TEST(cuNDArray_elemwise_TestReal,clamp_maxTest){
 }
 
 TYPED_TEST(cuNDArray_elemwise_TestReal,normalizeTest){
-  std::cout << "-- A " << std::endl;
   fill(&this->Array,TypeParam(50));
-  std::cout << "-- B " << std::endl;
   TypeParam tmp(-200);
-  std::cout << "-- C " << std::endl;
 /* DPCT_ORIG   CUDA_CALL(cudaMemcpy(&this->Array.get_data_ptr()[23], &tmp, sizeof(TypeParam),
  * cudaMemcpyHostToDevice));*/
   auto x = DPCT_CHECK_ERROR(
       dpct::get_in_order_queue().memcpy(&this->Array.get_data_ptr()[23], &tmp, sizeof(TypeParam)).wait());
-  std::cout << "-- Result :: " << x << std::endl;
   // CUDA_CALL(DPCT_CHECK_ERROR(
   //     dpct::get_in_order_queue().memcpy(&this->Array.get_data_ptr()[23], &tmp, sizeof(TypeParam)).wait()));
   normalize(&this->Array,110);
-  std::cout << "-- D :: " << std::endl;
   EXPECT_FLOAT_EQ(TypeParam(50)*TypeParam(110)/abs(TypeParam(-200)),this->Array[12345]);
-  std::cout << "-- E :: " << std::endl;
 }
 
 TYPED_TEST(cuNDArray_elemwise_TestReal,shrink1Test){

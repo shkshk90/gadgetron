@@ -8,7 +8,7 @@ if [ ! -d "/oneMKLwithCublas/lib" ]; then
 fi
 
 
-cmake --build /build/sycl.intel.clang.ii  -j16 # --verbose # --target test_all
+cmake --build /build/sycl.intel.clang.ii  -j16 --config Release # --verbose # --target test_all
 mkdir -p /install/new/sycl.intel.clang.ii
 cmake --install /build/sycl.intel.clang.ii --prefix /install/new/sycl.intel.clang.ii # --component test_all
 
