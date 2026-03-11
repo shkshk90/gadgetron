@@ -112,8 +112,6 @@ boost::shared_ptr<cuNDArray<T>> cuCKOpticalFlowSolver<T, D>::core_solver(cuNDArr
         sycl::is_device_copyable specialization has been added for this type. Please review the code.
         */
         {
-            auto exp_props =
-                sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
             dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
 
             dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
@@ -133,7 +131,7 @@ boost::shared_ptr<cuNDArray<T>> cuCKOpticalFlowSolver<T, D>::core_solver(cuNDArr
                 cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
                 cgh.parallel_for<dpct_kernel_name<class CorneliusKanade_kernel_330e0c, T, dpct_kernel_scalar<D>>>(
-                    sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                    sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {
                         CorneliusKanade_kernel<T, D>(
                             gradient_image_get_data_ptr_ct0, stencil_image_stencil_image_get_data_ptr_ct1,
                             ping_get_data_ptr_ct2, pong_get_data_ptr_ct3, vector_td_unsigned_int_D_matrix_size_ct4,

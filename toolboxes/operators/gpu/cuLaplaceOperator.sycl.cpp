@@ -77,7 +77,6 @@ namespace Gadgetron{
     info::device::max_work_group_size. Adjust the work-group size if needed.
     */
     {
-        auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
         dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
 
         dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
@@ -88,7 +87,7 @@ namespace Gadgetron{
 
             cgh.parallel_for<
                 dpct_kernel_name<class laplace_kernel_e20ef5, typename realType<T>::Type, T, dpct_kernel_scalar<D>>>(
-                sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), [=](sycl::nd_item<3> item_ct1) {
                     laplace_kernel<typename realType<T>::Type, T, D>(dims, in_get_data_ptr_ct1, out_get_data_ptr_ct2);
                 });
         });

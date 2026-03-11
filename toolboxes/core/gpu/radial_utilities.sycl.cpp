@@ -97,7 +97,6 @@ namespace Gadgetron{
       info::device::max_work_group_size. Adjust the work-group size if needed.
       */
     {
-        auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
         dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
 
         dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
@@ -107,7 +106,7 @@ namespace Gadgetron{
 
             cgh.parallel_for<dpct_kernel_name<class compute_radial_trajectory_golden_ratio_2d_kernel_971a5e, REAL,
                                               dpct_kernel_scalar<0>>>(
-                sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), [=](sycl::nd_item<3> item_ct1) {
                     compute_radial_trajectory_golden_ratio_2d_kernel<REAL, 0>(co_get_data_ptr_ct0,
                                                                               (REAL)profile_offset);
                 });
@@ -118,7 +117,6 @@ namespace Gadgetron{
     info::device::max_work_group_size. Adjust the work-group size if needed.
     */
     {
-        auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
         dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
 
         dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
@@ -128,7 +126,7 @@ namespace Gadgetron{
 
             cgh.parallel_for<dpct_kernel_name<class compute_radial_trajectory_golden_ratio_2d_kernel_4593f4, REAL,
                                               dpct_kernel_scalar<1>>>(
-                sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), [=](sycl::nd_item<3> item_ct1) {
                     compute_radial_trajectory_golden_ratio_2d_kernel<REAL, 1>(co_get_data_ptr_ct0,
                                                                               (REAL)profile_offset);
                 });
@@ -192,7 +190,6 @@ namespace Gadgetron{
     info::device::max_work_group_size. Adjust the work-group size if needed.
     */
     {
-        auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
 
         dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
             auto co_get_data_ptr_ct0 = co->get_data_ptr();
@@ -201,7 +198,7 @@ namespace Gadgetron{
             cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
             cgh.parallel_for<dpct_kernel_name<class compute_radial_trajectory_variable_angle_2d_kernel_ecf8ba, REAL>>(
-                sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), [=](sycl::nd_item<3> item_ct1) {
                     compute_radial_trajectory_variable_angle_2d_kernel<REAL>(
                         co_get_data_ptr_ct0, angles_get_data_ptr_ct1, REAL(1) / (REAL)num_profiles_per_frame,
                         REAL(1) / (REAL)num_frames);
@@ -274,7 +271,6 @@ namespace Gadgetron{
     info::device::max_work_group_size. Adjust the work-group size if needed.
     */
     {
-        auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
         dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
 
         dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
@@ -283,7 +279,7 @@ namespace Gadgetron{
             cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
             cgh.parallel_for<compute_radial_trajectory_fixed_angle_2d_kernel_name<REAL>>(
-                sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), [=](sycl::nd_item<3> item_ct1) {
                     compute_radial_trajectory_fixed_angle_2d_kernel<REAL>(co_get_data_ptr_ct0,
                                                                           REAL(1) / (REAL)num_profiles_per_frame,
                                                                           REAL(1) / (REAL)num_frames, angular_offset);
@@ -539,7 +535,6 @@ the code, or use smaller sub-group size to avoid high register pressure.
     info::device::max_work_group_size. Adjust the work-group size if needed.
     */
     {
-        auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
         dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
 
         dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
@@ -550,7 +545,7 @@ the code, or use smaller sub-group size to avoid high register pressure.
             cgh.parallel_for<
                 dpct_kernel_name<class compute_radial_dcw_2d_kernel_fb9473, REAL,
                                  dpct_kernel_scalar<GOLDEN_RATIO_ANGULAR_STEP_SIZE>, dpct_kernel_scalar<GR>>>(
-                sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), [=](sycl::nd_item<3> item_ct1) {
                     compute_radial_dcw_2d_kernel<REAL, GOLDEN_RATIO_ANGULAR_STEP_SIZE, GR>(
                         alpha, one_over_radial_oversampling_factor, REAL(1) / (REAL)num_profiles, (REAL)profile_offset,
                         dcw_get_data_ptr_ct4);

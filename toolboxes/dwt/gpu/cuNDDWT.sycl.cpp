@@ -157,8 +157,6 @@ template<class T, unsigned int D, unsigned int WD> void Gadgetron::DWT1( cuNDArr
         code.
         */
         {
-                auto exp_props =
-                    sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
 
                 dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
                         auto in_get_data_ptr_ct1 = in->get_data_ptr();
@@ -168,7 +166,7 @@ template<class T, unsigned int D, unsigned int WD> void Gadgetron::DWT1( cuNDArr
 
                         cgh.parallel_for<dpct_kernel_name<class dwt_kernel_443a8f, T, dpct_kernel_scalar<D>,
                                                           dpct_kernel_scalar<WD>>>(
-                            sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                            sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), [=](sycl::nd_item<3> item_ct1) {
                                     dwt_kernel<T, D, WD>(dims, in_get_data_ptr_ct1, out_get_data_ptr_ct2, dim, wavelet,
                                                          shift);
                             });
@@ -218,8 +216,6 @@ template<class T, unsigned int D, unsigned int WD> void Gadgetron::IDWT1( cuNDAr
         code.
         */
         {
-                auto exp_props =
-                    sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
 
                 dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
                         auto in_get_data_ptr_ct1 = in->get_data_ptr();
@@ -229,7 +225,7 @@ template<class T, unsigned int D, unsigned int WD> void Gadgetron::IDWT1( cuNDAr
 
                         cgh.parallel_for<dpct_kernel_name<class idwt_kernel_70206e, T, dpct_kernel_scalar<D>,
                                                           dpct_kernel_scalar<WD>>>(
-                            sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                            sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), [=](sycl::nd_item<3> item_ct1) {
                                     idwt_kernel<T, D, WD>(dims, in_get_data_ptr_ct1, out_get_data_ptr_ct2, dim, wavelet,
                                                           shift);
                             });

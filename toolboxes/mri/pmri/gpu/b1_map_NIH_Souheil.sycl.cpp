@@ -228,8 +228,6 @@ namespace Gadgetron{
         info::device::max_work_group_size. Adjust the work-group size if needed.
         */
         {
-                auto exp_props =
-                    sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
 
                 dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
                         auto data_get_data_ptr_ct0 = data->get_data_ptr();
@@ -239,7 +237,7 @@ namespace Gadgetron{
                         cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
                         cgh.parallel_for<dpct_kernel_name<class assemble_D_kernel_e604f3, T>>(
-                            sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                            sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {
                                     assemble_D_kernel<T>(data_get_data_ptr_ct0, D_get_data_ptr_ct1, RO, E1, N, CHA,
                                                          ks_ks_ct6, halfKs);
                             });
@@ -384,8 +382,6 @@ namespace Gadgetron{
             query info::device::max_work_group_size. Adjust the work-group size if needed.
             */
                 {
-                        auto exp_props =
-                            sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
                         dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
 
                         dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
@@ -398,7 +394,7 @@ namespace Gadgetron{
                                 cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
                                 cgh.parallel_for<dpct_kernel_name<class computeDH_D_kernel3_674389, T>>(
-                                    sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props,
+                                    sycl::nd_range<3>(gridDim * blockDim, blockDim),
                                     [=](sycl::nd_item<3> item_ct1) {
                                             computeDH_D_kernel3<T>(
                                                 D_get_data_ptr_ct0, DH_D_get_data_ptr_ct1, RO, E1, N, CHA, kss, ks,
@@ -434,8 +430,6 @@ namespace Gadgetron{
             query info::device::max_work_group_size. Adjust the work-group size if needed.
             */
                 {
-                        auto exp_props =
-                            sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
                         dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
 
                         dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
@@ -445,7 +439,7 @@ namespace Gadgetron{
                                 cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
                                 cgh.parallel_for<dpct_kernel_name<class computeDH_D_kernel_8dc8fd, T>>(
-                                    sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props,
+                                    sycl::nd_range<3>(gridDim * blockDim, blockDim),
                                     [=](sycl::nd_item<3> item_ct1) {
                                             computeDH_D_kernel<T>(D_get_data_ptr_ct0, DH_D_get_data_ptr_ct1, RO, E1, N,
                                                                   CHA, kss);
@@ -586,8 +580,6 @@ namespace Gadgetron{
         info::device::max_work_group_size. Adjust the work-group size if needed.
         */
         {
-                auto exp_props =
-                    sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
 
                 dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
                         auto D_get_data_ptr_ct0 = D->get_data_ptr();
@@ -596,7 +588,7 @@ namespace Gadgetron{
                         cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
                         cgh.parallel_for<dpct_kernel_name<class computeV1_kernel_7bcc94, T>>(
-                            sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                            sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {
                                     computeV1_kernel<T>(D_get_data_ptr_ct0, V1_get_data_ptr_ct1, RO, E1, N, CHA, kss);
                             });
                 });
@@ -611,8 +603,6 @@ namespace Gadgetron{
         info::device::max_work_group_size. Adjust the work-group size if needed.
         */
         {
-                auto exp_props =
-                    sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
                 dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
 
                 dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
@@ -623,7 +613,7 @@ namespace Gadgetron{
                         cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
                         cgh.parallel_for<dpct_kernel_name<class power_method_kernel_497832, T>>(
-                            sycl::nd_range<3>(gridDim2 * blockDim2, blockDim2), exp_props,
+                            sycl::nd_range<3>(gridDim2 * blockDim2, blockDim2),
                             [=](sycl::nd_item<3> item_ct1) {
                                     power_method_kernel<T>(DH_D_get_data_ptr_ct0, V1_get_data_ptr_ct1,
                                                            V_get_data_ptr_ct2, RO, E1, N, CHA, kss, power);
@@ -709,8 +699,6 @@ namespace Gadgetron{
         info::device::max_work_group_size. Adjust the work-group size if needed.
         */
         {
-                auto exp_props =
-                    sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
 
                 dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
                         auto D_get_data_ptr_ct0 = D->get_data_ptr();
@@ -720,7 +708,7 @@ namespace Gadgetron{
                         cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
                         cgh.parallel_for<dpct_kernel_name<class computeU1_kernel_160a70, T>>(
-                            sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                            sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {
                                     computeU1_kernel<T>(D_get_data_ptr_ct0, V1_get_data_ptr_ct1, U1_get_data_ptr_ct2,
                                                         RO, E1, N, CHA, kss);
                             });
@@ -790,8 +778,6 @@ namespace Gadgetron{
         info::device::max_work_group_size. Adjust the work-group size if needed.
         */
         {
-                auto exp_props =
-                    sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
                 dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
 
                 dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
@@ -802,7 +788,7 @@ namespace Gadgetron{
                         cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
                         cgh.parallel_for<dpct_kernel_name<class extract_csm_kernel_6c9282, T>>(
-                            sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                            sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {
                                     extract_csm_kernel<T>(V1_get_data_ptr_ct0, U1_get_data_ptr_ct1,
                                                           csm_get_data_ptr_ct2, RO, E1, N, CHA, kss);
                             });

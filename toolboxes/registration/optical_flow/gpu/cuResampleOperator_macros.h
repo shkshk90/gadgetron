@@ -146,7 +146,6 @@ sycl::is_device_copyable specialization has been added for this type. Please rev
   }                                                                                                                    \
                                                                                                                        \
   if (surplus == 1) {                                                                                                  \
-   auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};       \
    dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});                        \
                                                                                                                        \
    dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {                                                         \
@@ -159,13 +158,12 @@ sycl::is_device_copyable specialization has been added for this type. Please rev
     cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());                                      \
                                                                                                                        \
     cgh.parallel_for<dpct_kernel_name<class mult_M_kernel_batch_ffb871, T, dpct_kernel_scalar<D>>>(                    \
-        sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {                   \
+        sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {                   \
          mult_M_kernel_batch<T, D>(in_get_data_ptr_ct0, out_get_data_ptr_ct1, this_offsets__get_data_ptr_ct2,          \
                                    vector_td_unsigned_int_D_matrix_size_ct3, num_batches_ct4);                         \
         });                                                                                                            \
    });                                                                                                                 \
   } else {                                                                                                             \
-   auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};       \
    dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});                        \
                                                                                                                        \
    dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {                                                         \
@@ -179,7 +177,7 @@ sycl::is_device_copyable specialization has been added for this type. Please rev
     cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());                                      \
                                                                                                                        \
     cgh.parallel_for<dpct_kernel_name<class mult_M_kernel_extended_d16cbe, T, dpct_kernel_scalar<D>>>(                 \
-        sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {                   \
+        sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {                   \
          mult_M_kernel_extended<T, D>(in_get_data_ptr_ct0, out_get_data_ptr_ct1, this_offsets__get_data_ptr_ct2,       \
                                       vector_td_unsigned_int_D_matrix_size_ct3, in_get_number_of_elements_ct4,         \
                                       extended_dim_ct5);                                                               \
@@ -289,7 +287,6 @@ sycl::is_device_copyable specialization has been added for this type. Please rev
                                                                                                                        \
   setup_grid(num_elements, &blockDim, &gridDim, num_batches);                                                          \
   {                                                                                                                    \
-   auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};       \
    dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});                        \
                                                                                                                        \
    dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {                                                         \
@@ -305,7 +302,7 @@ sycl::is_device_copyable specialization has been added for this type. Please rev
     cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());                                      \
                                                                                                                        \
     cgh.parallel_for<dpct_kernel_name<class mult_MH_kernel_9d1801, T, dpct_kernel_scalar<D>>>(                         \
-        sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {                   \
+        sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {                   \
          mult_MH_kernel<T, D>(in_get_data_ptr_ct0, tmp_out_get_data_ptr_ct1, raw_pointer_cast_this_weights__ct2,       \
                               raw_pointer_cast_this_indices__ct3, raw_pointer_cast_this_lower_bounds__ct4,             \
                               raw_pointer_cast_this_upper_bounds__ct5, num_elements_ct6, num_batches_ct7);             \

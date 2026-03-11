@@ -98,8 +98,6 @@ namespace Gadgetron{
       sycl::is_device_copyable specialization has been added for this type. Please review the code.
       */
       {
-            auto exp_props =
-                sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
             dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
 
             dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
@@ -112,7 +110,7 @@ namespace Gadgetron{
 
                   cgh.parallel_for<
                       dpct_kernel_name<class first_order_partial_derivative_kernel_894512, T, dpct_kernel_scalar<D>>>(
-                      sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                      sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), [=](sycl::nd_item<3> item_ct1) {
                             first_order_partial_derivative_kernel<T, D>(
                                 vector_td_int_D_stride_ct0, vector_td_int_D_dims_ct1, in_get_data_ptr_i_prod_dims_ct2,
                                 out_get_data_ptr_i_prod_dims_ct3);
@@ -156,8 +154,6 @@ namespace Gadgetron{
       review the code.
       */
       {
-            auto exp_props =
-                sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
             dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
 
             dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
@@ -171,7 +167,7 @@ namespace Gadgetron{
 
                   cgh.parallel_for<
                       dpct_kernel_name<class second_order_partial_derivative_kernel_97579d, T, dpct_kernel_scalar<D>>>(
-                      sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                      sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), [=](sycl::nd_item<3> item_ct1) {
                             second_order_partial_derivative_kernel<T, D>(
                                 vector_td_int_D_forwards_stride_ct0, vector_td_int_D_adjoint_stride_ct1,
                                 vector_td_int_D_dims_ct2, in_get_data_ptr_i_prod_dims_ct3,

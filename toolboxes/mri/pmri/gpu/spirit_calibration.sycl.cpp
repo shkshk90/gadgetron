@@ -206,7 +206,6 @@ namespace Gadgetron {
     info::device::max_work_group_size. Adjust the work-group size if needed.
     */
     {
-        auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
 
         dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
             intd2 intd2_kspace_get_size_kspace_get_size_ct0 = intd2(kspace.get_size(0), kspace.get_size(1));
@@ -216,7 +215,7 @@ namespace Gadgetron {
             cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
             cgh.parallel_for<dpct_kernel_name<class compute_system_matrix_kernel_925b3c>>(
-                sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {
                     compute_system_matrix_kernel(intd2_kspace_get_size_kspace_get_size_ct0, num_coils, kernel_size,
                                                  kspace_get_data_ptr_ct3, A_get_data_ptr_ct4);
                 });
@@ -322,7 +321,6 @@ namespace Gadgetron {
     info::device::max_work_group_size. Adjust the work-group size if needed.
     */
     {
-        auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
 
         dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
             intd2 intd2_kernel_images_get_size_kernel_images_get_size_ct0 =
@@ -333,7 +331,7 @@ namespace Gadgetron {
             cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
             cgh.parallel_for<dpct_kernel_name<class write_convolution_masks_kernel_73623e>>(
-                sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {
                     write_convolution_masks_kernel(intd2_kernel_images_get_size_kernel_images_get_size_ct0, num_coils,
                                                    kernel_size, rhs_get_data_ptr_ct3, kernel_images_get_data_ptr_ct4);
                 });

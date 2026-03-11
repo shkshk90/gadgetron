@@ -237,7 +237,6 @@ code, or use smaller sub-group size to avoid high register pressure.
  sycl::is_device_copyable specialization has been added for this type. Please review the code.
  */
  {
-  auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
   dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
 
   dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
@@ -251,7 +250,7 @@ code, or use smaller sub-group size to avoid high register pressure.
 
    cgh.parallel_for<
        dpct_kernel_name<class write_sort_arrays_kernel_bd1c5d, T, dpct_kernel_scalar<D>>>(
-       sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+       sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {
         write_sort_arrays_kernel<typename realType<T>::Type, D>(
             vector_td_unsigned_int_D_matrix_size_ct0, extended_dim, this_offsets__get_data_ptr_ct2,
             raw_pointer_cast_sort_keys_ct3, raw_pointer_cast_this_indices__ct4, raw_pointer_cast_this_weights__ct5);

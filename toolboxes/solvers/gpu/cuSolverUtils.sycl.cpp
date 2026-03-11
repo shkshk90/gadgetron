@@ -49,8 +49,6 @@ template <class T> void EXPORTGPUSOLVERS Gadgetron::solver_non_negativity_filter
         info::device::max_work_group_size. Adjust the work-group size if needed.
         */
         {
-                auto exp_props =
-                    sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
                 dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
 
                 dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
@@ -60,7 +58,7 @@ template <class T> void EXPORTGPUSOLVERS Gadgetron::solver_non_negativity_filter
                         cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
                         cgh.parallel_for<dpct_kernel_name<class filter_kernel_2c7f8a, T>>(
-                            sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                            sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), [=](sycl::nd_item<3> item_ct1) {
                                     filter_kernel<typename realType<T>::Type>(x_get_data_ptr_ct0, g_get_data_ptr_ct1,
                                                                               elements);
                             });

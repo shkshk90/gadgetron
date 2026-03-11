@@ -171,7 +171,6 @@ namespace Gadgetron{
     info::device::max_work_group_size. Adjust the work-group size if needed.
     */
     {
-        auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
         dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
 
         dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
@@ -180,7 +179,7 @@ namespace Gadgetron{
             cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
             cgh.parallel_for<dpct_kernel_name<class rss_normalize_kernel_9b58d6, T>>(
-                sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {
                     rss_normalize_kernel<T>(in_out_get_data_ptr_ct0, stride, number_of_batches, number_of_elements);
                 });
         });
@@ -237,7 +236,6 @@ namespace Gadgetron{
     info::device::max_work_group_size. Adjust the work-group size if needed.
     */
     {
-        auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
         dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
 
         dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
@@ -247,7 +245,7 @@ namespace Gadgetron{
             cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
             cgh.parallel_for<dpct_kernel_name<class correlation_kernel_6b692e, REAL, T>>(
-                sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {
                     correlation_kernel<REAL, T>(in_get_data_ptr_ct0, out_get_data_ptr_ct1, number_of_batches,
                                                 number_of_elements);
                 });
@@ -681,7 +679,6 @@ namespace Gadgetron{
     info::device::max_work_group_size. Adjust the work-group size if needed.
     */
     {
-        auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
         dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
 
         dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
@@ -691,7 +688,7 @@ namespace Gadgetron{
             cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
             cgh.parallel_for<dpct_kernel_name<class smooth_correlation_matrices_kernel_48607b, REAL, dpct_kernel_scalar<D>>>(
-                sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {
                     smooth_correlation_matrices_kernel<REAL>(corrm_get_data_ptr_ct0, corrm_smooth_get_data_ptr_ct1,
                                                              image_dims);
                 });
@@ -708,7 +705,6 @@ namespace Gadgetron{
     info::device::max_work_group_size. Adjust the work-group size if needed.
     */
     {
-        auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
         dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
 
         dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
@@ -718,7 +714,7 @@ namespace Gadgetron{
             cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
             cgh.parallel_for<dpct_kernel_name<class smooth_correlation_matrices_border_kernel_37fc96, REAL, dpct_kernel_scalar<D>>>(
-                sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {
                     smooth_correlation_matrices_border_kernel<REAL>(
                         corrm_get_data_ptr_ct0, corrm_smooth_get_data_ptr_ct1, image_dims, number_of_border_threads);
                 });
@@ -857,7 +853,6 @@ namespace Gadgetron{
       info::device::max_work_group_size. Adjust the work-group size if needed.
       */
     {
-        auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
         dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
 
         dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
@@ -868,7 +863,7 @@ namespace Gadgetron{
             cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
             cgh.parallel_for<dpct_kernel_name<class extract_csm_kernel_80636f, REAL>>(
-                sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {
                     extract_csm_kernel<REAL>(corrm_in_get_data_ptr_ct0, out_get_data_ptr_ct1, number_of_batches,
                                              number_of_elements, tmp_v_get_data_ptr_ct4);
                 });
@@ -919,7 +914,6 @@ namespace Gadgetron{
     info::device::max_work_group_size. Adjust the work-group size if needed.
     */
     {
-        auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
         dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
 
         dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
@@ -928,7 +922,7 @@ namespace Gadgetron{
             cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
             cgh.parallel_for<set_phase_reference_kernel_name<REAL>>(
-                sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {
                     set_phase_reference_kernel<REAL>(csm_get_data_ptr_ct0, number_of_batches, number_of_elements);
                 });
         });

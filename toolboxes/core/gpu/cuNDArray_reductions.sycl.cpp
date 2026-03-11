@@ -77,7 +77,6 @@ namespace Gadgetron {
     info::device::max_work_group_size. Adjust the work-group size if needed.
     */
     {
-        auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
         dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
 
         dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
@@ -87,7 +86,7 @@ namespace Gadgetron {
             cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
             cgh.parallel_for<dpct_kernel_name<class sum_kernel_3a78db, T>>(
-                sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {
                     sum_kernel<T>(in_get_data_ptr_ct0, out_get_data_ptr_ct1, stride, number_of_batches,
                                   number_of_elements);
                 });

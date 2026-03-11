@@ -78,8 +78,6 @@ template<class T, unsigned int D> void cuTv1DOperator<T,D>::gradient (cuNDArray<
                 DPCT1049:0: The work-group size passed to the SYCL kernel may exceed the limit. To get the device limit,
                 query info::device::max_work_group_size. Adjust the work-group size if needed.
                 */
-                auto exp_props =
-                    sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
                 dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
 
                 dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
@@ -93,7 +91,7 @@ template<class T, unsigned int D> void cuTv1DOperator<T,D>::gradient (cuNDArray<
                         cgh.parallel_for<dpct_kernel_name<class tvGradient_kernel_4e6db0, REAL,
                                                           T,
                                                           dpct_kernel_scalar<D>>>(
-                            sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                            sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), [=](sycl::nd_item<3> item_ct1) {
                                     tvGradient_kernel(in_get_data_ptr_i_prod_dims_ct0, out_get_data_ptr_i_prod_dims_ct1,
                                                       dims, limit__ct3, this_weight__ct4);
                             });
@@ -132,8 +130,6 @@ template<class T, unsigned int D> typename realType<T>::Type cuTv1DOperator<T,D>
                 DPCT1049:1: The work-group size passed to the SYCL kernel may exceed the limit. To get the device limit,
                 query info::device::max_work_group_size. Adjust the work-group size if needed.
                 */
-                auto exp_props =
-                    sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
                 dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
 
                 dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
@@ -147,7 +143,7 @@ template<class T, unsigned int D> typename realType<T>::Type cuTv1DOperator<T,D>
                         cgh.parallel_for<dpct_kernel_name<class tvMagnitude_kernel_e957d5, REAL,
                                                           T,
                                                           dpct_kernel_scalar<D>>>(
-                            sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                            sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), [=](sycl::nd_item<3> item_ct1) {
                                     tvMagnitude_kernel(in_get_data_ptr_i_prod_dims_ct0,
                                                        out_get_data_ptr_i_prod_dims_ct1, dims, limit__ct3,
                                                        this_weight__ct4);

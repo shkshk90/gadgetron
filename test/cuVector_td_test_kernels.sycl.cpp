@@ -30,8 +30,6 @@ template<class T, unsigned int D> void Gadgetron::test_abs(cuNDArray< vector_td<
         info::device::max_work_group_size. Adjust the work-group size if needed.
         */
         {
-                auto exp_props =
-                    sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
                 dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
 
                 dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
@@ -46,7 +44,7 @@ template<class T, unsigned int D> void Gadgetron::test_abs(cuNDArray< vector_td<
                         */
                         cgh.parallel_for<
                             dpct_kernel_name<class abs_kernel_ae6448, T, dpct_kernel_scalar<D>>>(
-                            sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                            sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), [=](sycl::nd_item<3> item_ct1) {
                                     abs_kernel(data_get_data_ptr_ct0, data_get_number_of_elements_ct1);
                             });
                 });

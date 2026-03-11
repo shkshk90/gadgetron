@@ -79,8 +79,6 @@ void Gadgetron::CSI_dft(cuNDArray<complext<T> >* kspace,
                 query info::device::max_work_group_size. Adjust the work-group size if needed.
                 */
                 {
-                        auto exp_props =
-                            sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
 
                         dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
                                 auto kspace_get_data_ptr_i_elements_ct0 = kspace->get_data_ptr() + i * elements;
@@ -93,7 +91,7 @@ void Gadgetron::CSI_dft(cuNDArray<complext<T> >* kspace,
                                 cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
                                 cgh.parallel_for<dpct_kernel_name<class dft_kernel_314572, T>>(
-                                    sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props,
+                                    sycl::nd_range<3>(dimGrid * dimBlock, dimBlock),
                                     [=](sycl::nd_item<3> item_ct1) {
                                             dft_kernel<T>(kspace_get_data_ptr_i_elements_ct0,
                                                           tspace_get_data_ptr_i_t_elements_ct1, frequencies_data_ct2,
@@ -139,8 +137,6 @@ void Gadgetron::CSI_dftH(cuNDArray<complext<T> >* kspace,
                 query info::device::max_work_group_size. Adjust the work-group size if needed.
                 */
                 {
-                        auto exp_props =
-                            sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
 
                         dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
                                 auto kspace_get_data_ptr_i_k_elements_ct0 = kspace->get_data_ptr() + i * k_elements;
@@ -153,7 +149,7 @@ void Gadgetron::CSI_dftH(cuNDArray<complext<T> >* kspace,
                                 cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
                                 cgh.parallel_for<dpct_kernel_name<class dftH_kernel_c0eda0, T>>(
-                                    sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props,
+                                    sycl::nd_range<3>(dimGrid * dimBlock, dimBlock),
                                     [=](sycl::nd_item<3> item_ct1) {
                                             dftH_kernel<T>(kspace_get_data_ptr_i_k_elements_ct0,
                                                            tspace_get_data_ptr_i_elements_ct1, frequencies_data_ct2,
@@ -234,8 +230,6 @@ void Gadgetron::mult_freq(cuNDArray<complext<T> >* in_out, cuNDArray<complext<T>
         info::device::max_work_group_size. Adjust the work-group size if needed.
         */
         {
-                auto exp_props =
-                    sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
                 dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
 
                 dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
@@ -246,7 +240,7 @@ void Gadgetron::mult_freq(cuNDArray<complext<T> >* in_out, cuNDArray<complext<T>
 
                         cgh.parallel_for<dpct_kernel_name<class mult_freq_kernel_ae67d6,
                                                           T>>(
-                            sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                            sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), [=](sycl::nd_item<3> item_ct1) {
                                     mult_freq_kernel(in_out_get_data_ptr_ct0, freqs_get_data_ptr_ct1, conjugate);
                             });
                 });

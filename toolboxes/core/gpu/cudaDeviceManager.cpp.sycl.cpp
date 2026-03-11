@@ -137,12 +137,12 @@ namespace Gadgetron
       */
       _shared_mem_per_block[device] = deviceProp.get_local_mem_size();
       _warp_size[device] = deviceProp.get_max_sub_group_size();
-      _max_blockdim[device] = deviceProp.get_max_work_item_sizes<int *>()[0];
+      _max_blockdim[device] = deviceProp.get_max_work_group_size();
       /*
       DPCT1022:56: There is no exact match between the maxGridSize and the
       max_nd_range size. Verify the correctness of the code.
       */
-      _max_griddim[device] = deviceProp.get_max_nd_range_size<int *>()[0];
+      _max_griddim[device] = deviceProp.get_max_nd_range_size<int *>()[2];
       /*
       DPCT1005:57: The SYCL device version is different from CUDA Compute
       Compatibility. You may need to rewrite this code.

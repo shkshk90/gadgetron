@@ -241,8 +241,6 @@ namespace Gadgetron {
       info::device::max_work_group_size. Adjust the work-group size if needed.
       */
         {
-            auto exp_props =
-                sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
 
             dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
                 auto b1_get_data_ptr_ct0 = b1->get_data_ptr();
@@ -253,7 +251,7 @@ namespace Gadgetron {
                 cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
                 cgh.parallel_for<dpct_kernel_name<class conj_csm_coeffs_8dba88>>(
-                    sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                    sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {
                         conj_csm_coeffs(b1_get_data_ptr_ct0, out_mixing_coeff_get_data_ptr_ct1,
                                         out_mixing_coeff_get_number_of_elements_ct2, b1_get_number_of_elements_ct3);
                     });
@@ -272,8 +270,6 @@ namespace Gadgetron {
           info::device::max_work_group_size. Adjust the work-group size if needed.
           */
                 {
-                    auto exp_props =
-                        sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
 
                     dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
                         auto out_mixing_coeff_get_data_ptr_uncombined_channel_no_source_coils_elements_per_coil_ct0 =
@@ -283,7 +279,7 @@ namespace Gadgetron {
                         cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
                         cgh.parallel_for<dpct_kernel_name<class single_channel_coeffs_ab1451>>(
-                            sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                            sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {
                                 single_channel_coeffs(
                                     out_mixing_coeff_get_data_ptr_uncombined_channel_no_source_coils_elements_per_coil_ct0,
                                     it_ct1, (elements_per_coil));
@@ -417,8 +413,6 @@ namespace Gadgetron {
         info::device::max_work_group_size. Adjust the work-group size if needed.
         */
         {
-            auto exp_props =
-                sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
 
             dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
                 auto ref_data_get_data_ptr_ct0 = ref_data->get_data_ptr();
@@ -429,7 +423,7 @@ namespace Gadgetron {
 
                 cgh.parallel_for<dpct_kernel_name<class form_grappa_system_matrix_kernel_2d_77f215,
                                                   T>>(
-                    sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                    sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {
                         form_grappa_system_matrix_kernel_2d(ref_data_get_data_ptr_ct0, dims, source_coils, target_coils,
                                                             dros, dros_offset, dkernel_size, acceleration_factor, set,
                                                             system_matrix_get_data_ptr_ct9, b_get_data_ptr_ct10);
@@ -595,8 +589,6 @@ namespace Gadgetron {
         info::device::max_work_group_size. Adjust the work-group size if needed.
         */
         {
-            auto exp_props =
-                sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
 
             dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
                 auto AHrhs_get_data_ptr_ct0 = AHrhs.get_data_ptr();
@@ -606,7 +598,7 @@ namespace Gadgetron {
 
                 cgh.parallel_for<dpct_kernel_name<class copy_grappa_coefficients_to_kernel_2d_623b46,
                                                   T>>(
-                    sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                    sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {
                         copy_grappa_coefficients_to_kernel_2d(AHrhs_get_data_ptr_ct0, gkernel_get_data_ptr_ct1,
                                                               source_coils, target_coils, dkernel_size,
                                                               acceleration_factor, set);
@@ -673,8 +665,6 @@ namespace Gadgetron {
         info::device::max_work_group_size. Adjust the work-group size if needed.
         */
         {
-            auto exp_props =
-                sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
 
             dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
                 auto gkernel_get_data_ptr_c_kernel_elements_ct0 = (gkernel.get_data_ptr() + (c * kernel_elements));
@@ -684,7 +674,7 @@ namespace Gadgetron {
 
                 cgh.parallel_for<dpct_kernel_name<class copy_grappa_kernel_to_kspace_2d_e20147,
                                                   T>>(
-                    sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                    sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {
                         copy_grappa_kernel_to_kspace_2d(gkernel_get_data_ptr_c_kernel_elements_ct0,
                                                         tmp_mixing_get_data_ptr_ct1, dims, dkernel_size, source_coils);
                     });
@@ -723,8 +713,6 @@ namespace Gadgetron {
         info::device::max_work_group_size. Adjust the work-group size if needed.
         */
         {
-            auto exp_props =
-                sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
 
             dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
                 auto tmp_mixing_get_data_ptr_ct0 = tmp_mixing.get_data_ptr();
@@ -734,7 +722,7 @@ namespace Gadgetron {
                 cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
                 cgh.parallel_for<dpct_kernel_name<class scale_and_add_unmixing_coeffs_ae2ed4>>(
-                    sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                    sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {
                         scale_and_add_unmixing_coeffs(tmp_mixing_get_data_ptr_ct0, b1_get_data_ptr_c_total_elements_ct1,
                                                       out_mixing_coeff_get_data_ptr_ct2, total_elements, source_coils,
                                                       scale_factor);
@@ -772,8 +760,6 @@ namespace Gadgetron {
             query info::device::max_work_group_size. Adjust the work-group size if needed.
             */
                 {
-                    auto exp_props =
-                        sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
 
                     dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
                         auto tmp_mixing_get_data_ptr_ct0 = tmp_mixing.get_data_ptr();
@@ -784,7 +770,7 @@ namespace Gadgetron {
                         cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
                         cgh.parallel_for<dpct_kernel_name<class scale_and_copy_unmixing_coeffs_2c0fe3>>(
-                            sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                            sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {
                                 scale_and_copy_unmixing_coeffs(
                                     tmp_mixing_get_data_ptr_ct0,
                                     out_mixing_coeff_get_data_ptr_current_uncombined_index_total_elements_source_coils_ct1,

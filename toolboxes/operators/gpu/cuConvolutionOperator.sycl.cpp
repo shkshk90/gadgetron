@@ -74,7 +74,6 @@ namespace Gadgetron {
     sycl::is_device_copyable specialization has been added for this type. Please review the code.
     */
     {
-        auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
         dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
 
         dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
@@ -87,7 +86,7 @@ namespace Gadgetron {
 
             cgh.parallel_for<
                 dpct_kernel_name<class origin_mirror_kernel_a16b38, complext<REAL>, dpct_kernel_scalar<D>>>(
-                sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {
                     origin_mirror_kernel<complext<REAL>, D>(vector_td_unsigned_int_D_matrix_size_ct0,
                                                             vector_td_unsigned_int_D_matrix_size_ct1,
                                                             in_get_data_ptr_ct2, out_get_data_ptr_ct3, true);

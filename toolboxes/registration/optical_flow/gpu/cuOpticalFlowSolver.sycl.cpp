@@ -46,12 +46,8 @@ namespace Gadgetron{
       throw std::runtime_error("cuOpticalFlowSolver::setup_grid(): unable to query current device");
     }
 
-    int max_blockdim = deviceProp.get_max_work_item_sizes<int*>()[0];
-    /*
-    DPCT1022:34: There is no exact match between the maxGridSize and the max_nd_range size. Verify the correctness of
-    the code.
-    */
-    int max_griddim = deviceProp.get_max_nd_range_size<int*>()[0];
+    int max_blockdim = deviceProp.get_max_work_group_size();
+    int max_griddim = deviceProp.get_max_nd_range_size<int*>()[2];
     int warp_size = deviceProp.get_max_sub_group_size();
 
     // For small arrays we keep the block dimension fairly small
@@ -104,14 +100,13 @@ namespace Gadgetron{
     info::device::max_work_group_size. Adjust the work-group size if needed.
     */
     {
-        auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
         dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
 
         dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
             cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
             cgh.parallel_for<dpct_kernel_name<class spatial_grad_kernel_a7a181, T, dpct_kernel_scalar<D>>>(
-                sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {
                     spatial_grad_kernel<T, D>(fixed_image, moving_image, gradient_image, matrix_size_moving,
                                               number_of_batches_fixed, number_of_batches_moving);
                 });
@@ -138,14 +133,13 @@ namespace Gadgetron{
     info::device::max_work_group_size. Adjust the work-group size if needed.
     */
     {
-        auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
         dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
 
         dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
             cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
             cgh.parallel_for<dpct_kernel_name<class temporal_grad_kernel_93ddfd, T, dpct_kernel_scalar<D>>>(
-                sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {
                     temporal_grad_kernel<T, D>(fixed_image, moving_image, gradient_image, matrix_size_moving,
                                                number_of_batches_fixed, number_of_batches_moving);
                 });

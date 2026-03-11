@@ -59,7 +59,6 @@ namespace Gadgetron{
     info::device::max_work_group_size. Adjust the work-group size if needed.
     */
     {
-        auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
         dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
 
         dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
@@ -71,7 +70,7 @@ namespace Gadgetron{
             cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
             cgh.parallel_for<dpct_kernel_name<class mult_csm_kernel_3fe95a, REAL, dpct_kernel_scalar<D>>>(
-                sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {
                     mult_csm_kernel<REAL>(in_get_data_ptr_ct0, out_get_data_ptr_ct1, csm_get_data_ptr_ct2,
                                           num_image_elements, num_frames, csm_get_size_D_ct5);
                 });
@@ -159,7 +158,6 @@ namespace Gadgetron{
     info::device::max_work_group_size. Adjust the work-group size if needed.
     */
     {
-        auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
         dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
 
         dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
@@ -171,7 +169,7 @@ namespace Gadgetron{
             cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
             cgh.parallel_for<dpct_kernel_name<class mult_csm_conj_sum_kernel_8aa13b, REAL, dpct_kernel_scalar<D>>>(
-                sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {
                     mult_csm_conj_sum_kernel<REAL>(in_get_data_ptr_ct0, out_get_data_ptr_ct1, csm_get_data_ptr_ct2,
                                                    num_image_elements, num_frames, csm_get_size_D_ct5);
                 });
