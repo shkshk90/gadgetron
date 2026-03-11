@@ -1692,8 +1692,9 @@ void send_ismrmrd_acq(GadgetronClientConnector& con, ISMRMRD::Acquisition& acq_t
             con.send_ismrmrd_acquisition(acq_tmp);
         }
     }
-    catch(...)
+    catch(const std::exception& e)
     {
+        std::cerr << "send_ismrmrd_acq failed ... " << e.what() << std::endl;
         throw GadgetronClientException("send_ismrmrd_acq failed ... ");
     }
 }
