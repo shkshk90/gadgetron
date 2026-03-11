@@ -11,14 +11,18 @@
 #define ONEAPI_BACKEND_LEVEL_ZERO_EXT
 #include <sycl/sycl.hpp>
 #include <dpct/dpct.hpp>
-#include <dpct/sparse_utils.hpp>
 #include <dpct/dpl_utils.hpp>
 #include "cuNDArray.h"
 #include "cudaDeviceManager.h"
+#include <oneapi/math/sparse_blas.hpp>
 
 namespace Gadgetron
 {
 
+	// Map complext<T> to std::complex<T> for oneMath API
+	template <class T> struct to_std_type { using type = T; };
+	template <class T> struct to_std_type<complext<T>> { using type = std::complex<T>; };
+	template <class T> using to_std_type_t = typename to_std_type<T>::type;
 
 	template <class T>
 	struct cuCsrMatrix
@@ -27,19 +31,24 @@ namespace Gadgetron
                 cuCsrMatrix(size_t rows, size_t cols, dpct::device_vector<int> csrRow,
                             dpct::device_vector<int> csrColdnd, dpct::device_vector<T> data)
                     : csrRow{std::move(csrRow)}, csrColdnd{std::move(csrColdnd)}, data{std::move(data)}, rows{rows},
-                      cols{cols}
+                      cols{cols}, descr{nullptr}
                 {
-                        cusparseCreateCsr(
-                            &descr, rows, cols, this->data.size(), dpct::get_raw_pointer(this->csrRow.data()),
-                            dpct::get_raw_pointer(this->csrColdnd.data()), dpct::get_raw_pointer(this->data.data()),
-                            dpct::library_data_t::real_int32, dpct::library_data_t::real_int32,
-                            oneapi::mkl::index_base::zero, Gadgetron::cuda_datatype<T>());
+                        using stdT = to_std_type_t<T>;
+                        oneapi::math::sparse::init_csr_matrix(
+                            dpct::get_in_order_queue(), &descr,
+                            static_cast<std::int64_t>(rows),
+                            static_cast<std::int64_t>(cols),
+                            static_cast<std::int64_t>(this->data.size()),
+                            oneapi::math::index_base::zero,
+                            dpct::get_raw_pointer(this->csrRow.data()),
+                            dpct::get_raw_pointer(this->csrColdnd.data()),
+                            reinterpret_cast<stdT*>(dpct::get_raw_pointer(this->data.data())));
                 }
 
 		~cuCsrMatrix()
 		{
 			if (this->descr)
-                                (this->descr).reset();
+                                oneapi::math::sparse::release_sparse_matrix(dpct::get_in_order_queue(), this->descr);
                 }
 
 		cuCsrMatrix(cuCsrMatrix &&other)
@@ -53,14 +62,16 @@ namespace Gadgetron
 			other.descr = nullptr;
 			this->csrColdnd = std::move(other.csrColdnd);
 			this->csrRow = std::move(other.csrRow);
-			this->data = std::move(this->data);
+			this->data = std::move(other.data);
+			this->rows = other.rows;
+			this->cols = other.cols;
 			return *this;
 		}
 
 		size_t rows, cols;
                 dpct::device_vector<int> csrRow, csrColdnd;
                 dpct::device_vector<T> data;
-                dpct::sparse::sparse_matrix_desc_t descr;
+                oneapi::math::sparse::matrix_handle_t descr;
         };
 
 	/**

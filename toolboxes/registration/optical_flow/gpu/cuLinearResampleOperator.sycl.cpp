@@ -24,7 +24,7 @@ namespace Gadgetron{
     return false;
   }
 
-  template <unsigned int D> SYCL_EXTERNAL static __inline__ unsigned int _get_num_neighbors()
+  template <unsigned int D> static __inline__ unsigned int _get_num_neighbors()
   {
     return 1 << D;
   }
@@ -244,13 +244,13 @@ code, or use smaller sub-group size to avoid high register pressure.
    auto vector_td_unsigned_int_D_matrix_size_ct0 = vector_td<unsigned int, D>(matrix_size);
    auto this_offsets__get_data_ptr_ct2 = this->offsets_->get_data_ptr();
    auto raw_pointer_cast_sort_keys_ct3 = dpct::get_raw_pointer(&(sort_keys[0]));
-   auto raw_pointer_cast_this_indices__ct4 = raw_pointer_cast(&(this->indices_)[0]);
-   auto raw_pointer_cast_this_weights__ct5 = raw_pointer_cast(&(this->weights_)[0]);
+   auto raw_pointer_cast_this_indices__ct4 = dpct::get_raw_pointer(&(this->indices_)[0]);
+   auto raw_pointer_cast_this_weights__ct5 = dpct::get_raw_pointer(&(this->weights_)[0]);
 
    cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
    cgh.parallel_for<
-       dpct_kernel_name<class write_sort_arrays_kernel_bd1c5d, typename realType<T>::Type, dpct_kernel_scalar<D>>>(
+       dpct_kernel_name<class write_sort_arrays_kernel_bd1c5d, T, dpct_kernel_scalar<D>>>(
        sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
         write_sort_arrays_kernel<typename realType<T>::Type, D>(
             vector_td_unsigned_int_D_matrix_size_ct0, extended_dim, this_offsets__get_data_ptr_ct2,
@@ -268,7 +268,7 @@ code, or use smaller sub-group size to avoid high register pressure.
   // 'cu' is automatically appendex to the macro argument (a workaround for the workaround).
   //
 
-  SYCL_EXTERNAL DECLARE_CU_RESAMPLE_OPERATOR_SUPPORT(LinearResampleOperator)
+  DECLARE_CU_RESAMPLE_OPERATOR_SUPPORT(LinearResampleOperator)
 
       //
       // Instantiation

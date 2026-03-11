@@ -295,10 +295,10 @@ sycl::is_device_copyable specialization has been added for this type. Please rev
    dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {                                                         \
     auto in_get_data_ptr_ct0 = in->get_data_ptr();                                                                     \
     auto tmp_out_get_data_ptr_ct1 = tmp_out->get_data_ptr();                                                           \
-    auto raw_pointer_cast_this_weights__ct2 = raw_pointer_cast(&this->weights_[0]);                                    \
-    auto raw_pointer_cast_this_indices__ct3 = raw_pointer_cast(&this->indices_[0]);                                    \
-    auto raw_pointer_cast_this_lower_bounds__ct4 = raw_pointer_cast(&this->lower_bounds_[0]);                          \
-    auto raw_pointer_cast_this_upper_bounds__ct5 = raw_pointer_cast(&this->upper_bounds_[0]);                          \
+    auto raw_pointer_cast_this_weights__ct2 = dpct::get_raw_pointer(&this->weights_[0]);                                    \
+    auto raw_pointer_cast_this_indices__ct3 = dpct::get_raw_pointer(&this->indices_[0]);                                    \
+    auto raw_pointer_cast_this_lower_bounds__ct4 = dpct::get_raw_pointer(&this->lower_bounds_[0]);                          \
+    auto raw_pointer_cast_this_upper_bounds__ct5 = dpct::get_raw_pointer(&this->upper_bounds_[0]);                          \
     auto num_elements_ct6 = num_elements;                                                                              \
     auto num_batches_ct7 = num_batches;                                                                                \
                                                                                                                        \

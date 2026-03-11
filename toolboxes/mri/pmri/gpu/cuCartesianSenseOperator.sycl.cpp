@@ -86,7 +86,7 @@ cuCartesianSenseOperator<REAL,D>::mult_M( cuNDArray< complext<REAL> > *in, cuNDA
 
       cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
-      cgh.parallel_for<dpct_kernel_name<class sample_array_kernel_20d023, REAL>>(
+      cgh.parallel_for<dpct_kernel_name<class sample_array_kernel_20d023, REAL, dpct_kernel_scalar<D>>>(
           sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
             sample_array_kernel<REAL>(tmp_get_data_ptr_ct0, out_get_data_ptr_ct1, idx__get_data_ptr_ct2,
                                       in_get_number_of_elements_ct3, idx__get_number_of_elements_ct4, this_ncoils__ct5);
@@ -151,7 +151,7 @@ cuCartesianSenseOperator<REAL,D>::mult_MH(cuNDArray< complext<REAL> > *in, cuNDA
 
       cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
-      cgh.parallel_for<dpct_kernel_name<class insert_samples_kernel_58879d, REAL>>(
+      cgh.parallel_for<dpct_kernel_name<class insert_samples_kernel_58879d, REAL, dpct_kernel_scalar<D>>>(
           sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
             insert_samples_kernel<REAL>(in_get_data_ptr_ct0, tmp_get_data_ptr_ct1, idx__get_data_ptr_ct2,
                                         out_get_number_of_elements_ct3, idx__get_number_of_elements_ct4,
@@ -199,14 +199,16 @@ cuCartesianSenseOperator<REAL,D>::mult_MH(cuNDArray< complext<REAL> > *in, cuNDA
 //
 // Instantiations
 //
+namespace Gadgetron {
 
-template class EXPORTGPUPMRI cuCartesianSenseOperator<float,1>;
-template class EXPORTGPUPMRI cuCartesianSenseOperator<float,2>;
-template class EXPORTGPUPMRI cuCartesianSenseOperator<float,3>;
-template class EXPORTGPUPMRI cuCartesianSenseOperator<float,4>;
-
-template class EXPORTGPUPMRI cuCartesianSenseOperator<double,1>;
-template class EXPORTGPUPMRI cuCartesianSenseOperator<double,2>;
-template class EXPORTGPUPMRI cuCartesianSenseOperator<double,3>;
-template class EXPORTGPUPMRI cuCartesianSenseOperator<double,4>;
+  template class EXPORTGPUPMRI cuCartesianSenseOperator<float,1>;
+  template class EXPORTGPUPMRI cuCartesianSenseOperator<float,2>;
+  template class EXPORTGPUPMRI cuCartesianSenseOperator<float,3>;
+  template class EXPORTGPUPMRI cuCartesianSenseOperator<float,4>;
+  
+  template class EXPORTGPUPMRI cuCartesianSenseOperator<double,1>;
+  template class EXPORTGPUPMRI cuCartesianSenseOperator<double,2>;
+  template class EXPORTGPUPMRI cuCartesianSenseOperator<double,3>;
+  template class EXPORTGPUPMRI cuCartesianSenseOperator<double,4>;
+}
 

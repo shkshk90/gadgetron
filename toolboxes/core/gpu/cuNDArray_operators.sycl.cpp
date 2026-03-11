@@ -46,11 +46,9 @@ using namespace Gadgetron;
     } else if (compatible_dimensions(x,y))
       {
         if (y.get_number_of_elements() < x.get_number_of_elements()) {
-          typedef oneapi::dpl::transform_iterator<cuNDA_modulus<int>, oneapi::dpl::counting_iterator<int>, int>
-              transform_it;
-          transform_it indices = oneapi::dpl::make_transform_iterator(dpct::make_counting_iterator(0),
+          auto indices = oneapi::dpl::make_transform_iterator(dpct::make_counting_iterator(0),
                                                                       cuNDA_modulus<int>(y.get_number_of_elements()));
-          oneapi::dpl::permutation_iterator<dpct::device_pointer<S>, transform_it> p =
+          auto p =
               oneapi::dpl::make_permutation_iterator(y.begin(), indices);
           std::transform(oneapi::dpl::execution::make_device_policy(dpct::get_in_order_queue()), x.begin(), x.end(), p,
                          x.begin(), F());

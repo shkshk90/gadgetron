@@ -23,7 +23,7 @@ DPCT1044:31: thrust::unary_function was removed because std::unary_function has 
  * need to remove references to typedefs from thrust::unary_function in the class definition.
 */
 template <typename T> struct cuNDA_abs {
-  typename Gadgetron::realType<T>::Type operator()(const T& x) const { return sycl::fabs(x); }
+  typename Gadgetron::realType<T>::Type operator()(const T& x) const { return abs(x); }
 };
 
 template<class T> boost::shared_ptr< cuNDArray<typename realType<T>::Type> > 
@@ -59,7 +59,7 @@ DPCT1044:32: thrust::unary_function was removed because std::unary_function has 
 template <typename T> struct cuNDA_abs_square {
   typename Gadgetron::realType<T>::Type operator()(const T &x) const 
   {
-    typename realType<T>::Type tmp = sycl::fabs(x);
+    typename realType<T>::Type tmp = abs(x);
     return tmp*tmp;
   }
 };
@@ -84,11 +84,7 @@ DPCT1044:33: thrust::unary_function was removed because std::unary_function has 
  * need to remove references to typedefs from thrust::unary_function in the class definition.
 */
 template <typename T> struct cuNDA_sqrt {
-  /*
-  DPCT1064:34: Migrated sqrt call is used in a macro/template definition and may not be valid for all
-   * macro/template uses. Adjust the code.
-  */
-  T operator()(const T& x) const { return sycl::sqrt((double)x); }
+  T operator()(const T& x) const { using Gadgetron::sqrt; return sqrt(x); }
 };
 
 template<class T> boost::shared_ptr< cuNDArray<T> > 
@@ -188,11 +184,7 @@ DPCT1044:37: thrust::unary_function was removed because std::unary_function has 
  * need to remove references to typedefs from thrust::unary_function in the class definition.
 */
 template <typename T> struct cuNDA_reciprocal_sqrt {
-  /*
-  DPCT1064:38: Migrated sqrt call is used in a macro/template definition and may not be valid for all
-   * macro/template uses. Adjust the code.
-  */
-  T operator()(const T& x) const { return T(1) / sycl::sqrt((double)x); }
+  T operator()(const T& x) const { using Gadgetron::sqrt; return T(1) / sqrt(x); }
 };
 
 template<class T> boost::shared_ptr< cuNDArray<T> > Gadgetron::reciprocal_sqrt( const cuNDArray<T> *x )
@@ -546,7 +538,7 @@ Gadgetron::normalize( cuNDArray<T> *x, typename realType<T>::Type val )
   T max_val_before;
   CUDA_CALL(DPCT_CHECK_ERROR(
       dpct::get_in_order_queue().memcpy(&max_val_before, &x->get_data_ptr()[max_idx], sizeof(T)).wait()));
-  typename realType<T>::Type scale = val/abs(max_val_before);
+  typename realType<T>::Type scale = val/Gadgetron::abs(max_val_before);
   *x *= scale;
 }
 
@@ -557,7 +549,7 @@ DPCT1044:52: thrust::unary_function was removed because std::unary_function has 
 template <typename T> struct cuNDA_shrink1 {
   cuNDA_shrink1( typename realType<T>::Type _gamma ) : gamma(_gamma) {}
   T operator()(const T &x) const {
-    typename realType<T>::Type absX = sycl::fabs(x);
+    typename realType<T>::Type absX = abs(x);
     T sgnX = (absX <= typename realType<T>::Type(0)) ? T(0) : x/absX;
     return sgnX * dpct::max(absX - gamma, typename realType<T>::Type(0));
   }
@@ -583,7 +575,7 @@ DPCT1044:53: thrust::unary_function was removed because std::unary_function has 
 template <typename T> struct cuNDA_pshrink {
   cuNDA_pshrink( typename realType<T>::Type _gamma, typename realType<T>::Type _p ) : gamma(_gamma),p(_p) {}
   T operator()(const T &x) const {
-    typename realType<T>::Type absX = sycl::fabs(x);
+    typename realType<T>::Type absX = abs(x);
     T sgnX = (absX <= typename realType<T>::Type(0)) ? T(0) : x/absX;
     /*
     DPCT1064:54: Migrated pow call is used in a macro/template definition and may not be valid for all

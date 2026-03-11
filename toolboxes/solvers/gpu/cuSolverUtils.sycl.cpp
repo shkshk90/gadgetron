@@ -10,7 +10,8 @@
 #include "cuNDArray_math.h"
 #include <cmath>
 
-#include <sycl/ext/intel/math.hpp>
+// #include <sycl/ext/intel/math.hpp>
+#include <oneapi/math.hpp>
 
 #define MAX_THREADS_PER_BLOCK 512
 
@@ -58,7 +59,7 @@ template <class T> void EXPORTGPUSOLVERS Gadgetron::solver_non_negativity_filter
 
                         cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
-                        cgh.parallel_for<dpct_kernel_name<class filter_kernel_2c7f8a, typename realType<T>::Type>>(
+                        cgh.parallel_for<dpct_kernel_name<class filter_kernel_2c7f8a, T>>(
                             sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
                                     filter_kernel<typename realType<T>::Type>(x_get_data_ptr_ct0, g_get_data_ptr_ct1,
                                                                               elements);
@@ -82,7 +83,7 @@ template<class T> struct updateF_functor{
                 DPCT1064:32: Migrated max call is used in a macro/template definition and may not be valid for all
                 macro/template uses. Adjust the code.
                 */
-                return val / (1 + alpha * sigma) / dpct::max(REAL(1), sycl::fabs(val / (1 + alpha * sigma)));
+                return val / (1 + alpha * sigma) / dpct::max(REAL(1), abs(val / (1 + alpha * sigma)));
         }
 	typename realType<T>::Type alpha, sigma;
 };

@@ -164,6 +164,7 @@ if (USE_SYCL)
         -Wno-undefined-var-template -Wno-parentheses -Wno-inconsistent-missing-override
         -Wno-unused-value -Wno-deprecated-declarations
         -Wno-bitwise-op-parentheses -Wno-reorder-ctor
+        -Wno-comment -Wno-switch-bool
     )
     set(SYCL_LINK_FLAGS -fsycl -fsycl-targets=nvptx64-nvidia-cuda -Xsycl-target-backend --cuda-gpu-arch=sm_80)
 

@@ -74,9 +74,6 @@ namespace {
     info::device::max_work_group_size. Adjust the work-group size if needed.
     */
     {
-        auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
-        dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
-
         dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
             auto in_get_data_ptr_ct0 = in.get_data_ptr();
             auto out_get_data_ptr_ct1 = out.get_data_ptr();
@@ -87,13 +84,9 @@ namespace {
 
             cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
-            /*
-            DPCT1050:47: The template argument of the dpct_kernel_name could not be deduced. You need to update this
-            code.
-            */
             cgh.parallel_for<
-                dpct_kernel_name<class cuNDArray_permute_kernel_7b02c3, dpct_placeholder /*Fix the type mannually*/>>(
-                sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                dpct_kernel_name<class cuNDArray_permute_kernel_7b02c3, T>>(
+                sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {
                     cuNDArray_permute_kernel(in_get_data_ptr_ct0, out_get_data_ptr_ct1, in_get_number_of_dimensions_ct2,
                                              thrust_raw_pointer_cast_dims_dev_data_ct3,
                                              thrust_raw_pointer_cast_strides_out_dev_data_ct4,
@@ -239,8 +232,8 @@ namespace {
     info::device::max_work_group_size. Adjust the work-group size if needed.
     */
     {
-        auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
-        dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
+
+
 
         dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
             auto in_get_data_ptr_ct0 = in.get_data_ptr();
@@ -250,7 +243,7 @@ namespace {
             cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
             cgh.parallel_for<dpct_kernel_name<class expand_kernel_5fffa0, T>>(
-                sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {
                     expand_kernel<T>(in_get_data_ptr_ct0, out_get_data_ptr_ct1, in_get_number_of_elements_ct2,
                                      number_of_elements_out);
                 });
@@ -316,8 +309,8 @@ namespace {
     The sycl::is_device_copyable specialization has been added for this type. Please review the code.
     */
     {
-        auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
-        dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
+
+
 
         dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
             auto in_get_data_ptr_ct3 = in.get_data_ptr();
@@ -327,7 +320,7 @@ namespace {
             cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
             cgh.parallel_for<dpct_kernel_name<class crop_kernel_193c5b, T, dpct_kernel_scalar<D>>>(
-                sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {
                     crop_kernel<T, D>(vector_td<unsigned int, D>(offset), vector_td<unsigned int, D>(matrix_size_in),
                                       vector_td<unsigned int, D>(matrix_size_out), in_get_data_ptr_ct3,
                                       out_get_data_ptr_ct4, number_of_batches, prod_matrix_size_out_ct6);
@@ -339,7 +332,7 @@ namespace {
   }
 
   template<class T, unsigned int D> cuNDArray<T>
-  crop<T,D>( const vector_td<size_t,D>& offset, const vector_td<size_t,D>& size, const cuNDArray<T>& in )
+  crop( const vector_td<size_t,D>& offset, const vector_td<size_t,D>& size, const cuNDArray<T>& in )
   {
     cuNDArray<T>  result;
     crop<T,D>(offset,size, in, result);
@@ -417,8 +410,8 @@ namespace {
     sycl::is_device_copyable specialization has been added for this type. Please review the code.
     */
     {
-        auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
-        dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
+
+
 
         dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
             auto in_get_data_ptr_ct2 = in.get_data_ptr();
@@ -428,7 +421,7 @@ namespace {
             cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
             cgh.parallel_for<dpct_kernel_name<class pad_kernel_9db098, T, dpct_kernel_scalar<D>>>(
-                sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {
                     pad_kernel<T, D>(vector_td<unsigned int, D>(matrix_size_in),
                                      vector_td<unsigned int, D>(matrix_size_out), in_get_data_ptr_ct2,
                                      out_get_data_ptr_ct3, number_of_batches, prod_matrix_size_out_ct5, val);
@@ -440,7 +433,7 @@ namespace {
   }
 
   template<class T, unsigned int D> cuNDArray<T>
-  pad<T,D>( const vector_td<size_t,D>& size, const cuNDArray<T>&in, T val )
+  pad( const vector_td<size_t,D>& size, const cuNDArray<T>&in, T val )
   {
     std::vector<size_t> dims = to_std_vector(size);
     for( unsigned int d=D; d<in.get_number_of_dimensions(); d++ ){
@@ -501,8 +494,8 @@ namespace {
     sycl::is_device_copyable specialization has been added for this type. Please review the code.
     */
     {
-        auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
-        dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
+
+
 
         dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
             auto in_out_get_data_ptr_ct2 = in_out.get_data_ptr();
@@ -511,7 +504,7 @@ namespace {
             cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
             cgh.parallel_for<dpct_kernel_name<class fill_border_kernel_7b86fc, T, dpct_kernel_scalar<D>>>(
-                sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {
                     fill_border_kernel<T, D>(vector_td<unsigned int, D>(matrix_size_in),
                                              vector_td<unsigned int, D>(matrix_size_out), in_out_get_data_ptr_ct2,
                                              number_of_batches, prod_matrix_size_out_ct4, val);
@@ -569,8 +562,8 @@ namespace {
     sycl::is_device_copyable specialization has been added for this type. Please review the code.
     */
     {
-        auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
-        dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
+
+
 
         dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
             auto in_out_get_data_ptr_ct2 = in_out.get_data_ptr();
@@ -579,7 +572,7 @@ namespace {
             cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
             cgh.parallel_for<dpct_kernel_name<class fill_border_kernel_e655f9, T, dpct_kernel_scalar<D>>>(
-                sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {
                     fill_border_kernel<T, D>(radius, vector_td<int, D>(matrix_size_out), in_out_get_data_ptr_ct2,
                                              number_of_batches, prod_matrix_size_out_ct4, val);
                 });
@@ -678,8 +671,8 @@ or use smaller sub-group size to avoid high register pressure.
     sycl::is_device_copyable specialization has been added for this type. Please review the code.
     */
     {
-        auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
-        dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
+
+
 
         dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
             auto in_get_data_ptr_ct3 = in.get_data_ptr();
@@ -688,7 +681,7 @@ or use smaller sub-group size to avoid high register pressure.
             cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
             cgh.parallel_for<dpct_kernel_name<class upsample_kernel_722048, T, dpct_kernel_scalar<D>>>(
-                sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {
                     upsample_kernel<T, D>(vector_td<unsigned int, D>(matrix_size_in),
                                           vector_td<unsigned int, D>(matrix_size_out), number_of_batches,
                                           in_get_data_ptr_ct3, out_get_data_ptr_ct4);
@@ -804,8 +797,8 @@ or use smaller sub-group size to avoid high register pressure.
     sycl::is_device_copyable specialization has been added for this type. Please review the code.
     */
     {
-        auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
-        dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
+
+
 
         dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
             auto in_get_data_ptr_ct3 = in.get_data_ptr();
@@ -814,7 +807,7 @@ or use smaller sub-group size to avoid high register pressure.
             cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
             cgh.parallel_for<dpct_kernel_name<class downsample_kernel_d15b8d, T, dpct_kernel_scalar<D>>>(
-                sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                sycl::nd_range<3>(gridDim * blockDim, blockDim), [=](sycl::nd_item<3> item_ct1) {
                     downsample_kernel<T, D>(vector_td<int, D>(matrix_size_in), vector_td<int, D>(matrix_size_out),
                                             (int)number_of_batches, in_get_data_ptr_ct3, out_get_data_ptr_ct4);
                 });

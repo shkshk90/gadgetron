@@ -15,6 +15,7 @@
 #include "ConvolverNC2C_atomic.sycl.hpp"
 #include "ConvolverNC2C_sparse.sycl.hpp"
 #include "ConvolverNC2C_standard.sycl.hpp"
+#include <cmath>
 
 #define CUDA_CONV_MAX_COILS             (16)
 #define CUDA_CONV_THREADS_PER_KERNEL    (192)
@@ -51,15 +52,13 @@ namespace Gadgetron
     cuGriddingConvolution<T, D, K>::~cuGriddingConvolution()
     {
         // Release kernel on device.
-        cudaFree(this->d_kernel_);
+        dpct::dpct_free(this->d_kernel_, dpct::get_in_order_queue());
     }
 
-
-    template<class T, unsigned int D, template<class, unsigned int> class K>
-    void cuGriddingConvolution<T, D, K>::initialize(ConvolutionType conv_type)
-    {
+    template <class T, unsigned int D, template <class, unsigned int> class K>
+    void cuGriddingConvolution<T, D, K>::initialize(ConvolutionType conv_type) try {
         // Get device number.
-        if (cudaGetDevice(&this->device_) != cudaSuccess)
+        if (DPCT_CHECK_ERROR(this->device_ = dpct::get_current_device_id()) != 0)
         {
             throw cuda_error("Could not get device number.");
         }
@@ -98,9 +97,8 @@ namespace Gadgetron
         this->warp_size_power_ = warp_size_power;
 
         // Copy kernel to device.
-        cudaMalloc((void**)&this->d_kernel_, sizeof(K<REAL, D>));
-        cudaMemcpy((void*)this->d_kernel_, (const void*)&this->kernel_,
-                   sizeof(K<REAL, D>), cudaMemcpyHostToDevice);
+        this->d_kernel_ = (K<REAL, D>*)sycl::malloc_device(sizeof(K<REAL, D>), dpct::get_in_order_queue());
+        dpct::get_in_order_queue().memcpy((void*)this->d_kernel_, (const void*)&this->kernel_, sizeof(K<REAL, D>)).wait();
 
         // Set up convolvers.
         switch (conv_type)
@@ -125,7 +123,10 @@ namespace Gadgetron
             }
         }
     }
-
+    catch (sycl::exception const& exc) {
+      std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
+      std::exit(1);
+    }
 
     template<class T, unsigned int D, template<class, unsigned int> class K>
     void cuGriddingConvolution<T, D, K>::preprocess(
@@ -135,57 +136,60 @@ namespace Gadgetron
         // Call base class method.
         GriddingConvolutionBase<cuNDArray, T, D, K>::preprocess(
             trajectory, prep_mode);
-    
+
         // Make sure that the trajectory values are within range [-1/2, 1/2].
         cuNDArray<REAL> traj_view(
             std::vector<size_t>{trajectory.get_number_of_elements() * D},
             (REAL*) trajectory.get_data_ptr());
 
-        thrust::pair<thrust::device_ptr<REAL>, thrust::device_ptr<REAL>> mm_pair =
-            thrust::minmax_element(traj_view.begin(), traj_view.end());
-        
-        if (*mm_pair.first < REAL(-0.5) || *mm_pair.second > REAL(0.5))
+        std::pair<dpct::device_pointer<REAL>, dpct::device_pointer<REAL>> mm_pair = oneapi::dpl::minmax_element(
+            oneapi::dpl::execution::make_device_policy(dpct::get_in_order_queue()), traj_view.begin(), traj_view.end());
+
+        // Copy min/max values from device to host explicitly
+        // (dereferencing dpct::device_pointer directly can segfault).
+        REAL min_val, max_val;
+        dpct::get_in_order_queue().memcpy(&min_val, dpct::get_raw_pointer(mm_pair.first), sizeof(REAL)).wait();
+        dpct::get_in_order_queue().memcpy(&max_val, dpct::get_raw_pointer(mm_pair.second), sizeof(REAL)).wait();
+
+        if (min_val < REAL(-0.5) || max_val > REAL(0.5))
         {
             std::stringstream ss;
             ss << "Error: cuGriddingConvolution::preprocess: trajectory [" <<
-                *mm_pair.first << ", " << *mm_pair.second <<
+                min_val << ", " << max_val <<
                 "] out of range [-1/2, 1/2].";
             throw std::runtime_error(ss.str());
         }
-        
+
         // Allocate trajectory.
-        this->trajectory_ = thrust::device_vector<vector_td<REAL, D>>(
-            trajectory.get_number_of_elements());
+        this->trajectory_ = dpct::device_vector<vector_td<REAL, D>>(trajectory.get_number_of_elements());
 
         CHECK_FOR_CUDA_ERROR();
-        
+
         // Cast matrix size values to floating-point type.
         vector_td<REAL, D> matrix_size_os_fp =
             vector_td<REAL, D>(this->matrix_size_os_);
         vector_td<REAL, D> matrix_size_os_padded_fp =
             vector_td<REAL, D>((this->matrix_size_os_ + this->matrix_padding_) >> 1);
-    
+
         // Convert input trajectory from range [-1/2, 1/2] to
         // [0, this->matrix_size_os_], and copy to class member.
-        thrust::transform(trajectory.begin(),
-                          trajectory.end(),
-                          this->trajectory_.begin(),
-                          trajectory_scale<REAL, D>(matrix_size_os_fp,
-                                                    matrix_size_os_padded_fp));
-        
+        std::transform(oneapi::dpl::execution::make_device_policy(dpct::get_in_order_queue()), trajectory.begin(),
+                       trajectory.end(), this->trajectory_.begin(),
+                       trajectory_scale<REAL, D>(matrix_size_os_fp, matrix_size_os_padded_fp));
+
         // Prepare convolution.
         if (prep_mode == GriddingConvolutionPrepMode::C2NC ||
             prep_mode == GriddingConvolutionPrepMode::ALL)
         {
             this->conv_C2NC_->prepare(this->trajectory_);
-            CHECK_FOR_CUDA_ERROR(); 
+            CHECK_FOR_CUDA_ERROR();
         }
 
         if (prep_mode == GriddingConvolutionPrepMode::NC2C ||
             prep_mode == GriddingConvolutionPrepMode::ALL)
         {
             this->conv_NC2C_->prepare(this->trajectory_);
-            CHECK_FOR_CUDA_ERROR(); 
+            CHECK_FOR_CUDA_ERROR();
         }
     }
 
@@ -269,15 +273,15 @@ namespace Gadgetron
         }   
     }
 
-
-    template<class T, unsigned int D, template<class, unsigned int> class K, ConvolutionType C>
-    void ConvolverC2NC<T, D, K, C>::prepare(
-        const thrust::device_vector<vector_td<REAL, D>>& trajectory)
+    template <class T, unsigned int D, template <class, unsigned int> class K, ConvolutionType C>
+    void ConvolverC2NC<T, D, K, C>::prepare(const dpct::device_vector<vector_td<REAL, D>>& trajectory)
     {
         // No need to do anything here.
         // Defined for completeness.
     }
 
+    template<class T, unsigned int D, template<class, unsigned int> class K, ConvolutionType C>
+    struct NFFT_convolve_kernel_name {};
 
     template<class T, unsigned int D, template<class, unsigned int> class K, ConvolutionType C>
     void ConvolverC2NC<T, D, K, C>::compute(
@@ -305,14 +309,17 @@ namespace Gadgetron
             domain_size_coils_desired - (num_repetitions - 1) * domain_size_coils;
 
         // Block and grid dimensions.
-        dim3 dimBlock(threads_per_block);
-        dim3 dimGrid((this->plan_.num_samples_ + dimBlock.x - 1) / dimBlock.x,
-                     this->plan_.num_frames_);
+        dpct::dim3 dimBlock(threads_per_block);
+        dpct::dim3 dimGrid((this->plan_.num_samples_ + dimBlock.x - 1) / dimBlock.x, this->plan_.num_frames_);
 
         // Calculate how much shared memory to use per thread.
         size_t bytes_per_thread = domain_size_coils * sizeof(T);
+        /*
+        DPCT1083:3: The size of local memory in the migrated code may be different from the original code. Check that
+        the allocated memory size in the migrated code is correct.
+        */
         size_t bytes_per_thread_tail = domain_size_coils_tail * sizeof(T);
-        
+
         // Image view dimensions.
         auto view_dims = to_std_vector(this->plan_.matrix_size_os_);
         view_dims.push_back(this->plan_.num_frames_);
@@ -341,88 +348,118 @@ namespace Gadgetron
                 dimBlock.x * bytes_per_thread;
 
             // Launch CUDA kernel.
-            NFFT_convolve_kernel<T, D, K>
-                <<<dimGrid, dimBlock, sharedMemSize>>>(
-                vector_td<unsigned int, D>(this->plan_.matrix_size_os_),
-                vector_td<unsigned int, D>(this->plan_.matrix_padding_),
-                this->plan_.num_samples_,
-                num_coils,
-                raw_pointer_cast(&this->plan_.trajectory_[0]),
-                image_permuted.get_data_ptr(),
-                samples.get_data_ptr() + repetition * this->plan_.num_samples_ *
-                    this->plan_.num_frames_ * domain_size_coils,
-                this->plan_.warp_size_power_,
-                accumulate,
-                this->plan_.d_kernel_);
+            /*
+            DPCT1049:13: The work-group size passed to the SYCL kernel may exceed the limit. To get the device limit,
+            query info::device::max_work_group_size. Adjust the work-group size if needed.
+            */
+            /*
+            DPCT1129:12: The type "vector_td<unsigned int, D>" is used in the SYCL kernel, but it is not device
+            copyable. The sycl::is_device_copyable specialization has been added for this type. Please review the code.
+            */
+            {
+                  dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
+                        sycl::local_accessor<char, 1> _shared_mem_acc_ct1(sycl::range<1>(sharedMemSize), cgh);
+
+                        auto vector_td_unsigned_int_D_this_plan__matrix_size_os__ct0 =
+                            vector_td<unsigned int, D>(this->plan_.matrix_size_os_);
+                        auto vector_td_unsigned_int_D_this_plan__matrix_padding__ct1 =
+                            vector_td<unsigned int, D>(this->plan_.matrix_padding_);
+                        auto this_plan__num_samples__ct2 = this->plan_.num_samples_;
+                        auto raw_pointer_cast_this_plan__trajectory__ct4 =
+                            dpct::get_raw_pointer(&this->plan_.trajectory_[0]);
+                        auto image_permuted_get_data_ptr_ct5 = image_permuted.get_data_ptr();
+                        auto
+                            samples_get_data_ptr_repetition_this_plan__num_samples__this_plan__num_frames__domain_size_coils_ct6 =
+                                samples.get_data_ptr() +
+                                repetition * this->plan_.num_samples_ * this->plan_.num_frames_ * domain_size_coils;
+                        auto this_plan__warp_size_power__ct7 = this->plan_.warp_size_power_;
+                        auto this_plan__d_kernel__ct9 = this->plan_.d_kernel_;
+
+                        cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
+
+                        cgh.parallel_for<NFFT_convolve_kernel_name<T, D, K, C>>(
+                            sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), [=](sycl::nd_item<3> item_ct1) {
+                                  NFFT_convolve_kernel<T, D, K>(
+                                      vector_td_unsigned_int_D_this_plan__matrix_size_os__ct0,
+                                      vector_td_unsigned_int_D_this_plan__matrix_padding__ct1,
+                                      this_plan__num_samples__ct2, num_coils,
+                                      raw_pointer_cast_this_plan__trajectory__ct4, image_permuted_get_data_ptr_ct5,
+                                      samples_get_data_ptr_repetition_this_plan__num_samples__this_plan__num_frames__domain_size_coils_ct6,
+                                      this_plan__warp_size_power__ct7, accumulate, this_plan__d_kernel__ct9,
+                                      _shared_mem_acc_ct1.get_multi_ptr<sycl::access::decorated::no>().get());
+                            });
+                  });
+            }
 
             CHECK_FOR_CUDA_ERROR();
         }
     }
 
-
-    template<class T, unsigned int D, template<class, unsigned int> class K>
+    template <class T, unsigned int D, template <class, unsigned int> class K>
     void ConvolverNC2C<T, D, K, ConvolutionType::STANDARD>::prepare(
-        const thrust::device_vector<vector_td<REAL, D>>& trajectory)
+        const dpct::device_vector<vector_td<REAL, D>>& trajectory)
     {
         // Allocate storage for and compute temporary prefix-sum variable
         // (#cells influenced per sample).
-        thrust::device_vector<unsigned int> c_p_s(trajectory.size());
-        thrust::device_vector<unsigned int> c_p_s_ps(trajectory.size());
+        dpct::device_vector<unsigned int> c_p_s(trajectory.size());
+        dpct::device_vector<unsigned int> c_p_s_ps(trajectory.size());
         CHECK_FOR_CUDA_ERROR();
 
         REAL radius = this->plan_.kernel_.get_radius();
-        transform(trajectory.begin(), trajectory.end(),
-                  c_p_s.begin(), compute_num_cells_per_sample<REAL, D>(radius));
+        std::transform(oneapi::dpl::execution::make_device_policy(dpct::get_in_order_queue()), trajectory.begin(),
+                       trajectory.end(), c_p_s.begin(), compute_num_cells_per_sample<REAL, D>(radius));
         inclusive_scan(c_p_s.begin(), c_p_s.end(), c_p_s_ps.begin(),
-                       thrust::plus<unsigned int>()); // Prefix sum.
+                   std::plus<unsigned int>()); // Prefix sum.
 
         // Build the vector of (grid_idx, sample_idx) tuples. Actually kept in
         // two separate vectors.
         unsigned int num_pairs = c_p_s_ps.back();
         c_p_s.clear();
 
-        tuples_first = thrust::device_vector<unsigned int>(num_pairs);
-        tuples_last = thrust::device_vector<unsigned int>(num_pairs);
+        tuples_first = dpct::device_vector<unsigned int>(num_pairs);
+        tuples_last = dpct::device_vector<unsigned int>(num_pairs);
 
         CHECK_FOR_CUDA_ERROR();
 
         // Fill tuple vector.
         write_pairs<REAL, D>(vector_td<unsigned int, D>(this->plan_.matrix_size_os_),
-                             vector_td<unsigned int, D>(this->plan_.matrix_padding_),
-                             this->plan_.num_samples_, this->plan_.num_frames_,
-                             this->plan_.kernel_.get_width(),
-                             raw_pointer_cast(&trajectory[0]),
-                             raw_pointer_cast(&c_p_s_ps[0]),
-                             raw_pointer_cast(&tuples_first[0]),
-                             raw_pointer_cast(&tuples_last[0]));
+                             vector_td<unsigned int, D>(this->plan_.matrix_padding_), this->plan_.num_samples_,
+                             this->plan_.num_frames_, this->plan_.kernel_.get_width(),
+                             dpct::get_raw_pointer(&trajectory[0]), dpct::get_raw_pointer(&c_p_s_ps[0]),
+                             dpct::get_raw_pointer(&tuples_first[0]), dpct::get_raw_pointer(&tuples_last[0]));
         c_p_s_ps.clear();
 
         // Sort by grid indices.
-        sort_by_key(tuples_first.begin(), tuples_first.end(), tuples_last.begin());
+        dpct::sort(oneapi::dpl::execution::make_device_policy(dpct::get_in_order_queue()), tuples_first.begin(),
+                   tuples_first.end(), tuples_last.begin());
 
         // Each bucket_begin[i] indexes the first element of bucket i's list of points.
         // Each bucket_end[i] indexes one past the last element of bucket i's list of points.
-        bucket_begin = thrust::device_vector<unsigned int>(
+        bucket_begin = dpct::device_vector<unsigned int>(
             this->plan_.num_frames_ * prod(this->plan_.matrix_size_os_ + this->plan_.matrix_padding_));
-        bucket_end = thrust::device_vector<unsigned int>(
-            this->plan_.num_frames_ * prod(this->plan_.matrix_size_os_ + this->plan_.matrix_padding_));
+        bucket_end = dpct::device_vector<unsigned int>(this->plan_.num_frames_ *
+                                                       prod(this->plan_.matrix_size_os_ + this->plan_.matrix_padding_));
 
         CHECK_FOR_CUDA_ERROR();
 
         // Find the beginning of each bucket's list of points.
-        thrust::counting_iterator<unsigned int> search_begin(0);
-        thrust::lower_bound(tuples_first.begin(), tuples_first.end(),
-                            search_begin, search_begin + this->plan_.num_frames_ *
-                            prod(this->plan_.matrix_size_os_ + this->plan_.matrix_padding_),
-                            bucket_begin.begin());
+        oneapi::dpl::counting_iterator<unsigned int> search_begin(0);
+        oneapi::dpl::lower_bound(oneapi::dpl::execution::make_device_policy(dpct::get_in_order_queue()),
+                                 tuples_first.begin(), tuples_first.end(), search_begin,
+                                 search_begin + this->plan_.num_frames_ *
+                                                    prod(this->plan_.matrix_size_os_ + this->plan_.matrix_padding_),
+                                 bucket_begin.begin());
 
         // Find the end of each bucket's list of points.
-        thrust::upper_bound(tuples_first.begin(), tuples_first.end(),
-                            search_begin, search_begin + this->plan_.num_frames_ *
-                            prod(this->plan_.matrix_size_os_ + this->plan_.matrix_padding_),
-                            bucket_end.begin());
+        oneapi::dpl::upper_bound(oneapi::dpl::execution::make_device_policy(dpct::get_in_order_queue()),
+                                 tuples_first.begin(), tuples_first.end(), search_begin,
+                                 search_begin + this->plan_.num_frames_ *
+                                                    prod(this->plan_.matrix_size_os_ + this->plan_.matrix_padding_),
+                                 bucket_end.begin());
     }
 
+    template<class T, unsigned int D, template<class, unsigned int> class K>
+    struct NFFT_H_convolve_kernel_name {};
 
     template<class T, unsigned int D, template<class, unsigned int> class K>
     void ConvolverNC2C<T, D, K, ConvolutionType::STANDARD>::compute(
@@ -459,12 +496,17 @@ namespace Gadgetron
             domain_size_coils_desired - (num_repetitions - 1) * domain_size_coils;
 
         // Block and grid dimensions.
-        dim3 dimBlock(threads_per_block);
-        dim3 dimGrid((prod(this->plan_.matrix_size_os_ + this->plan_.matrix_padding_) +
-                      dimBlock.x - 1) / dimBlock.x, this->plan_.num_frames_);
+        dpct::dim3 dimBlock(threads_per_block);
+        dpct::dim3 dimGrid((prod(this->plan_.matrix_size_os_ + this->plan_.matrix_padding_) + dimBlock.x - 1) /
+                               dimBlock.x,
+                           this->plan_.num_frames_);
 
         // Calculate how much shared memory to use per thread.
         size_t bytes_per_thread = domain_size_coils * sizeof(T);
+        /*
+        DPCT1083:4: The size of local memory in the migrated code may be different from the original code. Check that
+        the allocated memory size in the migrated code is correct.
+        */
         size_t bytes_per_thread_tail = domain_size_coils_tail * sizeof(T);
 
         // Define temporary image that includes padding.
@@ -477,9 +519,11 @@ namespace Gadgetron
         cuNDArray<T> padded_image(padded_image_dims);
         
         // Prioritise shared memory over L1 cache.
-        cudaFuncSetCacheConfig(NFFT_H_convolve_kernel<T, D, K>,
-                               cudaFuncCachePreferShared);
-        
+        /*
+        DPCT1026:60: The call to cudaFuncSetCacheConfig was removed because SYCL currently does not support configuring
+        shared memory on devices.
+        */
+
         // Samples view dimensions.
         std::vector<size_t> view_dims = {
             this->plan_.num_samples_,
@@ -507,30 +551,60 @@ namespace Gadgetron
                 dimBlock.x * bytes_per_thread;
 
             // Launch CUDA kernel.
-            NFFT_H_convolve_kernel<T, D, K>
-                <<<dimGrid, dimBlock, sharedMemSize>>>(
-                vector_td<unsigned int, D>(this->plan_.matrix_size_os_ +
-                                           this->plan_.matrix_padding_),
-                this->plan_.num_samples_,
-                num_coils,
-                raw_pointer_cast(&this->plan_.trajectory_[0]),
-                padded_image.get_data_ptr() + repetition *
-                    prod(this->plan_.matrix_size_os_ +
-                         this->plan_.matrix_padding_) *
-                    this->plan_.num_frames_ *
-                    domain_size_coils,
-                samples_permuted.get_data_ptr(),
-                raw_pointer_cast(&tuples_last[0]),
-                raw_pointer_cast(&bucket_begin[0]),
-                raw_pointer_cast(&bucket_end[0]),
-                this->plan_.warp_size_power_,
-                this->plan_.d_kernel_);
+            /*
+            DPCT1049:15: The work-group size passed to the SYCL kernel may exceed the limit. To get the device limit,
+            query info::device::max_work_group_size. Adjust the work-group size if needed.
+            */
+            /*
+            DPCT1129:14: The type "vector_td<unsigned int, D>" is used in the SYCL kernel, but it is not device
+            copyable. The sycl::is_device_copyable specialization has been added for this type. Please review the code.
+            */
+            {
+                  dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
+                        sycl::local_accessor<char, 1> _shared_mem_acc_ct1(sycl::range<1>(sharedMemSize), cgh);
+
+                        auto vector_td_unsigned_int_D_this_plan__matrix_size_os__this_plan__matrix_padding__ct0 =
+                            vector_td<unsigned int, D>(this->plan_.matrix_size_os_ + this->plan_.matrix_padding_);
+                        auto this_plan__num_samples__ct1 = this->plan_.num_samples_;
+                        auto raw_pointer_cast_this_plan__trajectory__ct3 =
+                            dpct::get_raw_pointer(&this->plan_.trajectory_[0]);
+                        auto
+                            padded_image_get_data_ptr_repetition_prod_this_plan__matrix_size_os__this_plan__matrix_padding__this_plan__num_frames__domain_size_coils_ct4 =
+                                padded_image.get_data_ptr() +
+                                repetition * prod(this->plan_.matrix_size_os_ + this->plan_.matrix_padding_) *
+                                    this->plan_.num_frames_ * domain_size_coils;
+                        auto samples_permuted_get_data_ptr_ct5 = samples_permuted.get_data_ptr();
+                        auto raw_pointer_cast_tuples_last_ct6 = dpct::get_raw_pointer(&tuples_last[0]);
+                        auto raw_pointer_cast_bucket_begin_ct7 = dpct::get_raw_pointer(&bucket_begin[0]);
+                        auto raw_pointer_cast_bucket_end_ct8 = dpct::get_raw_pointer(&bucket_end[0]);
+                        auto this_plan__warp_size_power__ct9 = this->plan_.warp_size_power_;
+                        auto this_plan__d_kernel__ct10 = this->plan_.d_kernel_;
+
+                        cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
+
+                        cgh.parallel_for<NFFT_H_convolve_kernel_name<T, D, K>>(
+                            sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), [=](sycl::nd_item<3> item_ct1) {
+                                  NFFT_H_convolve_kernel<T, D, K>(
+                                      vector_td_unsigned_int_D_this_plan__matrix_size_os__this_plan__matrix_padding__ct0,
+                                      this_plan__num_samples__ct1, num_coils,
+                                      raw_pointer_cast_this_plan__trajectory__ct3,
+                                      padded_image_get_data_ptr_repetition_prod_this_plan__matrix_size_os__this_plan__matrix_padding__this_plan__num_frames__domain_size_coils_ct4,
+                                      samples_permuted_get_data_ptr_ct5, raw_pointer_cast_tuples_last_ct6,
+                                      raw_pointer_cast_bucket_begin_ct7, raw_pointer_cast_bucket_end_ct8,
+                                      this_plan__warp_size_power__ct9, this_plan__d_kernel__ct10,
+                                      _shared_mem_acc_ct1.get_multi_ptr<sycl::access::decorated::no>().get());
+                            });
+                  });
+            }
         }
 
         CHECK_FOR_CUDA_ERROR();
 
         this->wrap_image(padded_image, image, accumulate);
     }
+
+    template<class T, unsigned int D, template<class, unsigned int> class K>
+    struct wrap_image_kernel_name {};
 
 
     template<class T, unsigned int D, template<class, unsigned int> class K>
@@ -547,9 +621,8 @@ namespace Gadgetron
 
         // Set dimensions of grid/blocks.
         unsigned int bdim = 256;
-        dim3 dimBlock(bdim);
-        dim3 dimGrid(prod(this->plan_.matrix_size_os_) / bdim,
-                          this->plan_.num_frames_ * num_batches);
+        dpct::dim3 dimBlock(bdim);
+        dpct::dim3 dimGrid(prod(this->plan_.matrix_size_os_) / bdim, this->plan_.num_frames_ * num_batches);
 
         // Safety check.
         if ((prod(this->plan_.matrix_size_os_) % bdim) != 0)
@@ -561,26 +634,48 @@ namespace Gadgetron
         }
 
         // Invoke kernel.
-        wrap_image_kernel<T, D>
-            <<<dimGrid, dimBlock>>>(
-            source.get_data_ptr(),
-            target.get_data_ptr(),
-            vector_td<unsigned int, D>(this->plan_.matrix_size_os_),
-            vector_td<unsigned int, D>(this->plan_.matrix_padding_),
-            accumulate);
+        /*
+        DPCT1049:17: The work-group size passed to the SYCL kernel may exceed the limit. To get the device limit, query
+        info::device::max_work_group_size. Adjust the work-group size if needed.
+        */
+      /*
+      DPCT1129:16: The type "vector_td<unsigned int, D>" is used in the SYCL kernel, but it is not device copyable.
+      The sycl::is_device_copyable specialization has been added for this type. Please review the code.
+      */
+      {
+            dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
+                  auto source_get_data_ptr_ct0 = source.get_data_ptr();
+                  auto target_get_data_ptr_ct1 = target.get_data_ptr();
+                  auto vector_td_unsigned_int_D_this_plan__matrix_size_os__ct2 =
+                      vector_td<unsigned int, D>(this->plan_.matrix_size_os_);
+                  auto vector_td_unsigned_int_D_this_plan__matrix_padding__ct3 =
+                      vector_td<unsigned int, D>(this->plan_.matrix_padding_);
+
+                  cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
+
+                  cgh.parallel_for<wrap_image_kernel_name<T, D, K>>(
+                      sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), [=](sycl::nd_item<3> item_ct1) {
+                            wrap_image_kernel<T, D>(source_get_data_ptr_ct0, target_get_data_ptr_ct1,
+                                                    vector_td_unsigned_int_D_this_plan__matrix_size_os__ct2,
+                                                    vector_td_unsigned_int_D_this_plan__matrix_padding__ct3,
+                                                    accumulate);
+                      });
+            });
+      }
 
         CHECK_FOR_CUDA_ERROR();
     }
 
-
-    template<class T, unsigned int D, template<class, unsigned int> class K>
-    void ConvolverNC2C<T, D, K, ConvolutionType::ATOMIC>::prepare(
-        const thrust::device_vector<vector_td<REAL, D>>& trajectory)
+    template <class T, unsigned int D, template <class, unsigned int> class K>
+    void
+    ConvolverNC2C<T, D, K, ConvolutionType::ATOMIC>::prepare(const dpct::device_vector<vector_td<REAL, D>>& trajectory)
     {
         // No need to do anything here.
         // Defined for completeness.
     }
 
+    template<class T, unsigned int D, template<class, unsigned int> class K>
+    struct NFFT_H_atomic_convolve_kernel_name {};
 
     template<class T, unsigned int D, template<class, unsigned int> class K>
     void ConvolverNC2C<T, D, K, ConvolutionType::ATOMIC>::compute(
@@ -624,14 +719,17 @@ namespace Gadgetron
             domain_size_coils_desired - (num_repetitions - 1) * domain_size_coils;
 
         // Block and grid dimensions.
-        dim3 dimBlock(threads_per_block);
-        dim3 dimGrid((this->plan_.num_samples_ + dimBlock.x - 1) / dimBlock.x,
-                     this->plan_.num_frames_);
+        dpct::dim3 dimBlock(threads_per_block);
+        dpct::dim3 dimGrid((this->plan_.num_samples_ + dimBlock.x - 1) / dimBlock.x, this->plan_.num_frames_);
 
         // Calculate how much shared memory to use per thread.
         size_t bytes_per_thread =
             domain_size_coils * sizeof(vector_td<REAL, D>);
         size_t bytes_per_thread_tail =
+            /*
+            DPCT1083:5: The size of local memory in the migrated code may be different from the original code. Check
+            that the allocated memory size in the migrated code is correct.
+            */
             domain_size_coils_tail * sizeof(vector_td<REAL, D>);
 
         // Clear image if not accumulating.
@@ -650,27 +748,56 @@ namespace Gadgetron
                 dimBlock.x * bytes_per_thread;
 
             // Launch CUDA kernel.
-            NFFT_H_atomic_convolve_kernel<T, D, K>
-                <<<dimGrid, dimBlock, sharedMemSize>>>(
-                vector_td<unsigned int, D>(this->plan_.matrix_size_os_),
-                vector_td<unsigned int, D>(this->plan_.matrix_padding_),
-                this->plan_.num_samples_,
-                num_coils,
-                raw_pointer_cast(&this->plan_.trajectory_[0]),
-                samples.get_data_ptr() + repetition * this->plan_.num_samples_ *
-                    this->plan_.num_frames_ * domain_size_coils,
-                image.get_data_ptr() + repetition * prod(this->plan_.matrix_size_os_) *
-                    this->plan_.num_frames_ * domain_size_coils,
-                this->plan_.d_kernel_);
+            /*
+            DPCT1049:19: The work-group size passed to the SYCL kernel may exceed the limit. To get the device limit,
+            query info::device::max_work_group_size. Adjust the work-group size if needed.
+            */
+            /*
+            DPCT1129:18: The type "vector_td<unsigned int, D>" is used in the SYCL kernel, but it is not device
+            copyable. The sycl::is_device_copyable specialization has been added for this type. Please review the code.
+            */
+            {
+                  dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
+                        auto vector_td_unsigned_int_D_this_plan__matrix_size_os__ct0 =
+                            vector_td<unsigned int, D>(this->plan_.matrix_size_os_);
+                        auto vector_td_unsigned_int_D_this_plan__matrix_padding__ct1 =
+                            vector_td<unsigned int, D>(this->plan_.matrix_padding_);
+                        auto this_plan__num_samples__ct2 = this->plan_.num_samples_;
+                        auto raw_pointer_cast_this_plan__trajectory__ct4 =
+                            dpct::get_raw_pointer(&this->plan_.trajectory_[0]);
+                        auto
+                            samples_get_data_ptr_repetition_this_plan__num_samples__this_plan__num_frames__domain_size_coils_ct5 =
+                                samples.get_data_ptr() +
+                                repetition * this->plan_.num_samples_ * this->plan_.num_frames_ * domain_size_coils;
+                        auto
+                            image_get_data_ptr_repetition_prod_this_plan__matrix_size_os__this_plan__num_frames__domain_size_coils_ct6 =
+                                image.get_data_ptr() + repetition * prod(this->plan_.matrix_size_os_) *
+                                                           this->plan_.num_frames_ * domain_size_coils;
+                        auto this_plan__d_kernel__ct7 = this->plan_.d_kernel_;
+
+                        cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
+
+                        cgh.parallel_for<NFFT_H_atomic_convolve_kernel_name<T, D, K>>(
+                            sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), [=](sycl::nd_item<3> item_ct1) {
+                                  NFFT_H_atomic_convolve_kernel<T, D, K>(
+                                      vector_td_unsigned_int_D_this_plan__matrix_size_os__ct0,
+                                      vector_td_unsigned_int_D_this_plan__matrix_padding__ct1,
+                                      this_plan__num_samples__ct2, num_coils,
+                                      raw_pointer_cast_this_plan__trajectory__ct4,
+                                      samples_get_data_ptr_repetition_this_plan__num_samples__this_plan__num_frames__domain_size_coils_ct5,
+                                      image_get_data_ptr_repetition_prod_this_plan__matrix_size_os__this_plan__num_frames__domain_size_coils_ct6,
+                                      this_plan__d_kernel__ct7);
+                            });
+                  });
+            }
         }
 
         CHECK_FOR_CUDA_ERROR();
     }
 
-
-    template<class T, unsigned int D, template<class, unsigned int> class K>
+    template <class T, unsigned int D, template <class, unsigned int> class K>
     void ConvolverNC2C<T, D, K, ConvolutionType::SPARSE_MATRIX>::prepare(
-        const thrust::device_vector<vector_td<REAL, D>>& trajectory)
+        const dpct::device_vector<vector_td<REAL, D>>& trajectory)
     {
         this->conv_matrix_ = std::make_unique<cuCsrMatrix<T>>(
             make_conv_matrix<T, D, K>(

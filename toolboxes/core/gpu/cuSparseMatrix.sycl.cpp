@@ -7,78 +7,85 @@
 #include <dpct/dpl_utils.hpp>
 
 #include "cuNDArray_math.h"
-#include <dpct/sparse_utils.hpp>
+#include <oneapi/math/sparse_blas.hpp>
 
 using namespace Gadgetron;
 
-template <class T> static auto create_DnVec(cuNDArray<T>& vec) try {
-
-        std::shared_ptr<dpct::sparse::dense_vector_desc> dnvec;
-        dnvec = std::make_shared<dpct::sparse::dense_vector_desc>(vec.size(), vec.data(), cuda_datatype<T>());
-        auto deleter = [](std::shared_ptr<dpct::sparse::dense_vector_desc> val) {
-                                                                                val.reset();
-        };
-
-        return std::unique_ptr<std::decay_t<decltype(*dnvec)>,decltype(deleter)>(dnvec,deleter);
-}
-catch (sycl::exception const& exc) {
-  std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-  std::exit(1);
-}
 
 template <class T>
 void Gadgetron::sparseMV(T alpha, T beta, const cuCsrMatrix<T>& mat, const cuNDArray<T>& vec_in, cuNDArray<T>& vec_out,
-                         bool adjoint) try {
+                         bool adjoint) {
 
         if (vec_in.get_number_of_elements() != (adjoint ? mat.rows : mat.cols))
 		throw std::runtime_error("Matrix and input vector have mismatching dimensions");
 	if (vec_out.get_number_of_elements() != (adjoint ? mat.rows : mat.cols))
 		throw std::runtime_error("Matrix and output vector have mismatching dimensions");
 
-        oneapi::mkl::transpose trans = adjoint ? oneapi::mkl::transpose::conjtrans : oneapi::mkl::transpose::nontrans;
-        //cusparseStatus_t status = sparseCSRMV(cudaDeviceManager::Instance()->lockSparseHandle(),trans,mat.m,mat.n,mat.nnz,&alpha, mat.descr,
-	//		thrust::raw_pointer_cast(&mat.data[0]),thrust::raw_pointer_cast(&mat.csrRow[0]),thrust::raw_pointer_cast(&mat.csrColdnd[0]),vec_in.get_data_ptr(),&beta,vec_out.get_data_ptr());
+        using stdT = to_std_type_t<T>;
+        oneapi::math::transpose trans = adjoint ? oneapi::math::transpose::conjtrans : oneapi::math::transpose::nontrans;
 
+        auto& queue = dpct::get_in_order_queue();
 
-	auto dnvec_in = create_DnVec(const_cast<cuNDArray<T>&>(vec_in));
-	auto dnvec_out = create_DnVec(vec_out);
+        // Create sparse matrix handle from CSR data
+        oneapi::math::sparse::matrix_handle_t A_handle = nullptr;
+        oneapi::math::sparse::init_csr_matrix(queue, &A_handle,
+                static_cast<std::int64_t>(mat.rows),
+                static_cast<std::int64_t>(mat.cols),
+                static_cast<std::int64_t>(mat.data.size()),
+                oneapi::math::index_base::zero,
+                const_cast<int*>(dpct::get_raw_pointer(mat.csrRow.data())),
+                const_cast<int*>(dpct::get_raw_pointer(mat.csrColdnd.data())),
+                reinterpret_cast<stdT*>(const_cast<T*>(dpct::get_raw_pointer(mat.data.data()))));
 
-	size_t bufferSize;
-	auto handle =  cudaDeviceManager::Instance()->lockSparseHandle();
-        dpct::sparse::spmv(handle->get_queue(), trans, &alpha, mat.descr, dnvec_in.get(), &beta, dnvec_out.get(),
-                           cuda_datatype<T>());
-        cuNDArray<char> buffer(bufferSize);
+        // Create dense vector handles
+        oneapi::math::sparse::dense_vector_handle_t x_handle = nullptr;
+        oneapi::math::sparse::init_dense_vector(queue, &x_handle,
+                static_cast<std::int64_t>(vec_in.get_number_of_elements()),
+                reinterpret_cast<stdT*>(const_cast<T*>(vec_in.get_data_ptr())));
 
-        int status = DPCT_CHECK_ERROR(dpct::sparse::spmv(handle->get_queue(), trans, &alpha, mat.descr, dnvec_in.get(),
-                                                         &beta, dnvec_out.get(), cuda_datatype<T>()));
+        oneapi::math::sparse::dense_vector_handle_t y_handle = nullptr;
+        oneapi::math::sparse::init_dense_vector(queue, &y_handle,
+                static_cast<std::int64_t>(vec_out.get_number_of_elements()),
+                reinterpret_cast<stdT*>(vec_out.get_data_ptr()));
 
-        cudaDeviceManager::Instance()->unlockSparseHandle();
-        if (status != 0) {
-                std::stringstream ss;
-		ss << "Sparse Matrix Vector multiplication failed. Error: ";
-		ss << gadgetron_getCusparseErrorString(status);
-		throw cuda_error(ss.str());
-	}
-}
-catch (sycl::exception const& exc) {
-  std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-  std::exit(1);
-}
-template <class T> static auto create_DnMat(cuNDArray<T>& mat) try {
+        // Create spmv descriptor
+        oneapi::math::sparse::spmv_descr_t spmv_descr = nullptr;
+        oneapi::math::sparse::init_spmv_descr(queue, &spmv_descr);
 
-        std::shared_ptr<dpct::sparse::dense_matrix_desc> dnmat;
-        dnmat = std::make_shared<dpct::sparse::dense_matrix_desc>(mat.get_size(0), mat.get_size(1), mat.get_size(0),
-                                                                  mat.data(), cuda_datatype<T>(),
-                                                                  oneapi::mkl::layout::col_major);
-        auto deleter = [](std::shared_ptr<dpct::sparse::dense_matrix_desc> val) {
-                                                                                val.reset();
-        };
-        return std::unique_ptr<std::decay_t<decltype(*dnmat)>,decltype(deleter)>(dnmat,deleter);
-	//return std::unique_ptr<std::decay_t<decltype(*dnmat)>,decltype(&cusparseDestroyDnMat)>(dnmat);
-}
-catch (sycl::exception const& exc) {
-  std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
-  std::exit(1);
+        auto alg = oneapi::math::sparse::spmv_alg::default_alg;
+        auto A_view = oneapi::math::sparse::matrix_view();
+
+        stdT std_alpha = reinterpret_cast<const stdT&>(alpha);
+        stdT std_beta = reinterpret_cast<const stdT&>(beta);
+
+        // Query buffer size
+        std::size_t workspace_size = 0;
+        oneapi::math::sparse::spmv_buffer_size(queue, trans, &std_alpha,
+                A_view, A_handle, x_handle, &std_beta, y_handle,
+                alg, spmv_descr, workspace_size);
+
+        // Allocate workspace and optimize
+        void* workspace = nullptr;
+        if (workspace_size > 0)
+                workspace = sycl::malloc_device(workspace_size, queue);
+
+        auto optimize_ev = oneapi::math::sparse::spmv_optimize(queue, trans, &std_alpha,
+                A_view, A_handle, x_handle, &std_beta, y_handle,
+                alg, spmv_descr, workspace);
+
+        // Execute spmv
+        auto spmv_ev = oneapi::math::sparse::spmv(queue, trans, &std_alpha,
+                A_view, A_handle, x_handle, &std_beta, y_handle,
+                alg, spmv_descr, {optimize_ev});
+        spmv_ev.wait();
+
+        // Cleanup
+        oneapi::math::sparse::release_spmv_descr(queue, spmv_descr);
+        oneapi::math::sparse::release_dense_vector(queue, x_handle);
+        oneapi::math::sparse::release_dense_vector(queue, y_handle);
+        oneapi::math::sparse::release_sparse_matrix(queue, A_handle);
+        if (workspace)
+                sycl::free(workspace, queue);
 }
 
 template<class T> void Gadgetron::sparseMM(T alpha,T beta, const cuCsrMatrix<T> & mat, const cuNDArray<T> & mat_in, cuNDArray<T>& mat_out, bool adjoint) {
@@ -87,20 +94,77 @@ template<class T> void Gadgetron::sparseMM(T alpha,T beta, const cuCsrMatrix<T> 
 	if (mat_in.get_size(0) != mat.rows) throw std::runtime_error("Input matrix and sparse matrix have mismatched dimensions");
 	if (mat_out.get_size(0) != mat.cols) throw std::runtime_error("Output matrix and sparse matrix have mismatched dimensions");
 
-        oneapi::mkl::transpose trans = adjoint ? oneapi::mkl::transpose::conjtrans : oneapi::mkl::transpose::nontrans;
-        auto handle = cudaDeviceManager::Instance()->lockSparseHandle();
+        using stdT = to_std_type_t<T>;
+        oneapi::math::transpose trans = adjoint ? oneapi::math::transpose::conjtrans : oneapi::math::transpose::nontrans;
 
-	auto dnmat_in = create_DnMat(const_cast<cuNDArray<T>&>(mat_in));
-	auto dnmat_out = create_DnMat(mat_out);
-	size_t bufferSize;
-        CUSPARSE_CALL(DPCT_CHECK_ERROR(bufferSize = 0));
-        cuNDArray<char> buffer(bufferSize);
+        auto& queue = dpct::get_in_order_queue();
 
-        CUSPARSE_CALL(DPCT_CHECK_ERROR(dpct::sparse::spmm(handle->get_queue(), trans, oneapi::mkl::transpose::nontrans,
-                                                          &alpha, mat.descr, dnmat_in.get(), &beta, dnmat_out.get(),
-                                                          cuda_datatype<T>())));
-        cudaDeviceManager::Instance()->unlockSparseHandle();
+        // Create sparse matrix handle
+        oneapi::math::sparse::matrix_handle_t A_handle = nullptr;
+        oneapi::math::sparse::init_csr_matrix(queue, &A_handle,
+                static_cast<std::int64_t>(mat.rows),
+                static_cast<std::int64_t>(mat.cols),
+                static_cast<std::int64_t>(mat.data.size()),
+                oneapi::math::index_base::zero,
+                const_cast<int*>(dpct::get_raw_pointer(mat.csrRow.data())),
+                const_cast<int*>(dpct::get_raw_pointer(mat.csrColdnd.data())),
+                reinterpret_cast<stdT*>(const_cast<T*>(dpct::get_raw_pointer(mat.data.data()))));
 
+        // Create dense matrix handles (column-major)
+        oneapi::math::sparse::dense_matrix_handle_t B_handle = nullptr;
+        oneapi::math::sparse::init_dense_matrix(queue, &B_handle,
+                static_cast<std::int64_t>(mat_in.get_size(0)),
+                static_cast<std::int64_t>(mat_in.get_size(1)),
+                static_cast<std::int64_t>(mat_in.get_size(0)),
+                oneapi::math::layout::col_major,
+                reinterpret_cast<stdT*>(const_cast<T*>(mat_in.get_data_ptr())));
+
+        oneapi::math::sparse::dense_matrix_handle_t C_handle = nullptr;
+        oneapi::math::sparse::init_dense_matrix(queue, &C_handle,
+                static_cast<std::int64_t>(mat_out.get_size(0)),
+                static_cast<std::int64_t>(mat_out.get_size(1)),
+                static_cast<std::int64_t>(mat_out.get_size(0)),
+                oneapi::math::layout::col_major,
+                reinterpret_cast<stdT*>(mat_out.get_data_ptr()));
+
+        // Create spmm descriptor
+        oneapi::math::sparse::spmm_descr_t spmm_descr = nullptr;
+        oneapi::math::sparse::init_spmm_descr(queue, &spmm_descr);
+
+        auto alg = oneapi::math::sparse::spmm_alg::default_alg;
+        auto A_view = oneapi::math::sparse::matrix_view();
+
+        stdT std_alpha = reinterpret_cast<const stdT&>(alpha);
+        stdT std_beta = reinterpret_cast<const stdT&>(beta);
+
+        // Query buffer size
+        std::size_t workspace_size = 0;
+        oneapi::math::sparse::spmm_buffer_size(queue, trans, oneapi::math::transpose::nontrans,
+                &std_alpha, A_view, A_handle, B_handle, &std_beta, C_handle,
+                alg, spmm_descr, workspace_size);
+
+        // Allocate workspace and optimize
+        void* workspace = nullptr;
+        if (workspace_size > 0)
+                workspace = sycl::malloc_device(workspace_size, queue);
+
+        auto optimize_ev = oneapi::math::sparse::spmm_optimize(queue, trans, oneapi::math::transpose::nontrans,
+                &std_alpha, A_view, A_handle, B_handle, &std_beta, C_handle,
+                alg, spmm_descr, workspace);
+
+        // Execute spmm
+        auto spmm_ev = oneapi::math::sparse::spmm(queue, trans, oneapi::math::transpose::nontrans,
+                &std_alpha, A_view, A_handle, B_handle, &std_beta, C_handle,
+                alg, spmm_descr, {optimize_ev});
+        spmm_ev.wait();
+
+        // Cleanup
+        oneapi::math::sparse::release_spmm_descr(queue, spmm_descr);
+        oneapi::math::sparse::release_dense_matrix(queue, B_handle);
+        oneapi::math::sparse::release_dense_matrix(queue, C_handle);
+        oneapi::math::sparse::release_sparse_matrix(queue, A_handle);
+        if (workspace)
+                sycl::free(workspace, queue);
 }
 
 

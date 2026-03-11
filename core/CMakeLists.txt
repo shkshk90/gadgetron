@@ -68,7 +68,6 @@ install(FILES
         PropertyMixin.h
         GadgetContainerMessage.h
         ChannelAlgorithms.h
-        variant.hpp
         MessageID.h
         StorageSetup.h
         IsmrmrdContextVariables.h

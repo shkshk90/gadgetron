@@ -28,7 +28,7 @@ realType_t<T> ndim_loop(const vector_td<realType_t<T>,D> point, unsigned int & l
 {
 	realType_t<T> wsum = 0;
 	realType_t<T> radius = kernel->get_radius();
-        for (int i = sycl::ceil(point[N] - radius); i <= ::floor(point[N] + radius); i++)
+        for (int i = sycl::ceil(point[N] - radius); i <= sycl::floor(point[N] + radius); i++)
         {
 		grid_point[N] = i;
 		wsum += ndim_loop(point,loop_counter,weights,column_indices,grid_point,
@@ -48,7 +48,7 @@ realType_t<T> ndim_loop(const vector_td<realType_t<T>,D> point, unsigned int & l
 {
 	realType_t<T> wsum =0;
 	realType_t<T> radius = kernel->get_radius();
-        for (int i = sycl::ceil(point[0] - radius); i <= ::floor(point[0] + radius); i++)
+        for (int i = sycl::ceil(point[0] - radius); i <= sycl::floor(point[0] + radius); i++)
         {
 		grid_point[0] = i;
 		realType_t<T> weight = kernel->get(abs(point-vector_td<realType_t<T>,D>(grid_point)));
@@ -161,71 +161,68 @@ void check_csrMatrix(cuCsrMatrix<T > &matrix)
 
 }
 
-template<class T, unsigned int D, template<class, unsigned int> class K>
-cuCsrMatrix<T> make_conv_matrix(
-	const thrust::device_vector<vector_td<realType_t<T>,D>> &points, 
-	const vector_td<size_t,D>& image_dims, 
-	const ConvolutionKernel<realType_t<T>, D, K>* kernel)
+template <class T, unsigned int D, template <class, unsigned int> class K>
+cuCsrMatrix<T> make_conv_matrix(const dpct::device_vector<vector_td<realType_t<T>, D>>& points,
+                                const vector_td<size_t, D>& image_dims,
+                                const ConvolutionKernel<realType_t<T>, D, K>* kernel)
 {
-	auto csrRow = thrust::device_vector<int>(points.size()+1);
-	csrRow[0] = 0;
+        auto csrRow = dpct::device_vector<int>(points.size() + 1);
+        csrRow[0] = 0;
 	CHECK_FOR_CUDA_ERROR();
 
 	realType_t<T> radius = kernel->get_radius();
 	{
-		thrust::device_vector<int> c_p_s(points.size());
-		thrust::transform(points.begin(), points.end(), c_p_s.begin(),
-			compute_num_cells_per_sample<realType_t<T>,D>(kernel->get_radius()));
+                dpct::device_vector<int> c_p_s(points.size());
+                std::transform(oneapi::dpl::execution::make_device_policy(dpct::get_in_order_queue()), points.begin(),
+                               points.end(), c_p_s.begin(),
+                               compute_num_cells_per_sample<realType_t<T>, D>(kernel->get_radius()));
 
                 oneapi::dpl::inclusive_scan(oneapi::dpl::execution::make_device_policy(dpct::get_in_order_queue()),
                                             c_p_s.begin(), c_p_s.end(), csrRow.begin() + 1,
-                                            thrust::plus<int>()); // prefix sum
+                                            std::plus<int>()); // prefix sum
         }
 	unsigned int num_pairs = csrRow.back();
 	//cuNDArray<int> row_indices(ind_dims);
-	auto csrColdnd = thrust::device_vector<int>(num_pairs);
-	auto data = thrust::device_vector<T >(num_pairs);
-	//cuNDArray<T > values(ind_dims);
+        auto csrColdnd = dpct::device_vector<int>(num_pairs);
+        auto data = dpct::device_vector<T>(num_pairs);
+        //cuNDArray<T > values(ind_dims);
 
         dpct::dim3 dimBlock;
         dpct::dim3 dimGrid;
         setup_grid(points.size(),&dimBlock,&dimGrid);
 
         /*
-        DPCT1049:2: The work-group size passed to the SYCL kernel may exceed the limit. To get the device limit, query
+        DPCT1049:11: The work-group size passed to the SYCL kernel may exceed the limit. To get the device limit, query
         info::device::max_work_group_size. Adjust the work-group size if needed.
         */
-    /*
-    DPCT1129:1: The type "vector_td<int, D>" is used in the SYCL kernel, but it is not device copyable. The
-    sycl::is_device_copyable specialization has been added for this type. Please review the code.
-    */
-    {
-        auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
+      /*
+      DPCT1129:10: The type "vector_td<int, D>" is used in the SYCL kernel, but it is not device copyable. The
+      sycl::is_device_copyable specialization has been added for this type. Please review the code.
+      */
+      {
+            dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
+                  auto thrust_raw_pointer_cast_points_data_ct0 = dpct::get_raw_pointer(points.data());
+                  auto thrust_raw_pointer_cast_csrRow_data_ct1 = dpct::get_raw_pointer(csrRow.data());
+                  auto thrust_raw_pointer_cast_data_data_ct2 = dpct::get_raw_pointer(data.data());
+                  auto thrust_raw_pointer_cast_csrColdnd_data_ct3 = dpct::get_raw_pointer(csrColdnd.data());
+                  auto points_size_ct5 = points.size();
 
-        dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
-            auto thrust_raw_pointer_cast_points_data_ct0 = dpct::get_raw_pointer(points.data());
-            auto thrust_raw_pointer_cast_csrRow_data_ct1 = dpct::get_raw_pointer(csrRow.data());
-            auto thrust_raw_pointer_cast_data_data_ct2 = dpct::get_raw_pointer(data.data());
-            auto thrust_raw_pointer_cast_csrColdnd_data_ct3 = dpct::get_raw_pointer(csrColdnd.data());
-            auto points_size_ct5 = points.size();
+                  cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
-            cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
-
-            /*
-            DPCT1050:34: The template argument of the dpct_kernel_name could not be deduced. You need to update this
-            code.
-            */
-            cgh.parallel_for<
-                dpct_kernel_name<class make_conv_matrix_kernel_3d6454, dpct_placeholder /*Fix the type mannually*/,
-                                 dpct_kernel_scalar<D>, dpct_placeholder /*Fix the type mannually*/>>(
-                sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
-                    make_conv_matrix_kernel(
-                        thrust_raw_pointer_cast_points_data_ct0, thrust_raw_pointer_cast_csrRow_data_ct1,
-                        thrust_raw_pointer_cast_data_data_ct2, thrust_raw_pointer_cast_csrColdnd_data_ct3,
-                        vector_td<int, D>(image_dims), points_size_ct5, kernel);
-                });
-        });
-    }
+                  /*
+                  DPCT1050:63: The template argument of the dpct_kernel_name could not be deduced. You need to update
+                  this code.
+                  */
+                  cgh.parallel_for<dpct_kernel_name<class make_conv_matrix_kernel_3d6454, T,
+                                 dpct_kernel_scalar<D>, K<realType_t<T>, D>>>(
+                      sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), [=](sycl::nd_item<3> item_ct1) {
+                            make_conv_matrix_kernel(
+                                thrust_raw_pointer_cast_points_data_ct0, thrust_raw_pointer_cast_csrRow_data_ct1,
+                                thrust_raw_pointer_cast_data_data_ct2, thrust_raw_pointer_cast_csrColdnd_data_ct3,
+                                vector_td<int, D>(image_dims), points_size_ct5, kernel);
+                      });
+            });
+      }
         dpct::get_current_device().queues_wait_and_throw();
         CHECK_FOR_CUDA_ERROR();
 

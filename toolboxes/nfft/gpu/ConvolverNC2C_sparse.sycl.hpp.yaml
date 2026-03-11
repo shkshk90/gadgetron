@@ -1,5 +1,5 @@
 ---
-MainSourceFile:  '/gadgetron2/toolboxes/nfft/gpu/ConvolverNC2C_sparse.sycl.hpp'
+MainSourceFile:  '/volume/gadgetron2/toolboxes/nfft/gpu/ConvolverNC2C_sparse.sycl.hpp'
 Replacements:
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_sparse.cuh'
     Offset:          13
@@ -65,6 +65,15 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_sparse.cuh'
+    Offset:          799
+    Length:          26
+    ReplacementText: 'sycl::floor(point[N] + radius)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_sparse.cuh'
     Offset:          1071
     Length:          11
     ReplacementText: ''
@@ -77,6 +86,15 @@ Replacements:
     Offset:          1488
     Length:          25
     ReplacementText: 'sycl::ceil(point[0] - radius)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_sparse.cuh'
+    Offset:          1520
+    Length:          26
+    ReplacementText: 'sycl::floor(point[0] + radius)'
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -209,9 +227,63 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_sparse.cuh'
+    Offset:          5371
+    Length:          21
+    ReplacementText: 'dpct::device_vector'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_sparse.cuh'
+    Offset:          5544
+    Length:          21
+    ReplacementText: 'dpct::device_vector'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_sparse.cuh'
+    Offset:          5682
+    Length:          21
+    ReplacementText: 'dpct::device_vector'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_sparse.cuh'
+    Offset:          5733
+    Length:          134
+    ReplacementText: 'std::transform(oneapi::dpl::execution::make_device_policy(dpct::get_in_order_queue()), points.begin(), points.end(), c_p_s.begin(), compute_num_cells_per_sample<realType_t<T>,D>(kernel->get_radius()))'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_sparse.cuh'
     Offset:          5872
     Length:          90
-    ReplacementText: 'oneapi::dpl::inclusive_scan(oneapi::dpl::execution::make_device_policy(dpct::get_in_order_queue()), c_p_s.begin(), c_p_s.end(), csrRow.begin()+1, thrust::plus<int>())'
+    ReplacementText: 'oneapi::dpl::inclusive_scan(oneapi::dpl::execution::make_device_policy(dpct::get_in_order_queue()), c_p_s.begin(), c_p_s.end(), csrRow.begin()+1, std::plus<int>())'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_sparse.cuh'
+    Offset:          6083
+    Length:          21
+    ReplacementText: 'dpct::device_vector'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_sparse.cuh'
+    Offset:          6135
+    Length:          21
+    ReplacementText: 'dpct::device_vector'
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -238,7 +310,7 @@ Replacements:
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_sparse.cuh'
     Offset:          6289
     Length:          0
-    ReplacementText: "\t/*\n\tDPCT1049:2: The work-group size passed to the SYCL kernel may exceed the limit. To get the device limit, query info::device::max_work_group_size. Adjust the work-group size if needed.\n\t*/\n"
+    ReplacementText: "\t/*\n\tDPCT1049:11: The work-group size passed to the SYCL kernel may exceed the limit. To get the device limit, query info::device::max_work_group_size. Adjust the work-group size if needed.\n\t*/\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -247,7 +319,7 @@ Replacements:
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_sparse.cuh'
     Offset:          6290
     Length:          273
-    ReplacementText: "/*\n\tDPCT1129:1: The type \"vector_td<int, D>\" is used in the SYCL kernel, but it is not device copyable. The sycl::is_device_copyable specialization has been added for this type. Please review the code.\n\t*/\n\t{\n\t  auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};\n\n\t  dpct::get_in_order_queue().submit(\n\t    [&](sycl::handler &cgh) {\n\t      auto thrust_raw_pointer_cast_points_data_ct0 = dpct::get_raw_pointer(points.data());\n\t      auto thrust_raw_pointer_cast_csrRow_data_ct1 = dpct::get_raw_pointer(csrRow.data());\n\t      auto thrust_raw_pointer_cast_data_data_ct2 = dpct::get_raw_pointer(data.data());\n\t      auto thrust_raw_pointer_cast_csrColdnd_data_ct3 = dpct::get_raw_pointer(csrColdnd.data());\n\t      auto points_size_ct5 = points.size();\n\n\t      cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());\n\n\t      /*\n\t      DPCT1050:34: The template argument of the dpct_kernel_name could not be deduced. You need to update this code.\n\t      */\n\t      cgh.parallel_for<dpct_kernel_name<class make_conv_matrix_kernel_3d6454, dpct_placeholder/*Fix the type mannually*/, dpct_kernel_scalar<D>, dpct_placeholder/*Fix the type mannually*/>>(\n\t        sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), \nexp_props, \t        [=](sycl::nd_item<3> item_ct1) {\n\t          make_conv_matrix_kernel(thrust_raw_pointer_cast_points_data_ct0, thrust_raw_pointer_cast_csrRow_data_ct1, thrust_raw_pointer_cast_data_data_ct2, thrust_raw_pointer_cast_csrColdnd_data_ct3, vector_td<int,D>(image_dims), points_size_ct5, kernel);\n\t        });\n\t    });\n\t}"
+    ReplacementText: "/*\n\tDPCT1129:10: The type \"vector_td<int, D>\" is used in the SYCL kernel, but it is not device copyable. The sycl::is_device_copyable specialization has been added for this type. Please review the code.\n\t*/\n\t{\n\t  auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};\n\t  dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});\n\n\t  dpct::get_in_order_queue().submit(\n\t    [&](sycl::handler &cgh) {\n\t      auto thrust_raw_pointer_cast_points_data_ct0 = dpct::get_raw_pointer(points.data());\n\t      auto thrust_raw_pointer_cast_csrRow_data_ct1 = dpct::get_raw_pointer(csrRow.data());\n\t      auto thrust_raw_pointer_cast_data_data_ct2 = dpct::get_raw_pointer(data.data());\n\t      auto thrust_raw_pointer_cast_csrColdnd_data_ct3 = dpct::get_raw_pointer(csrColdnd.data());\n\t      auto points_size_ct5 = points.size();\n\n\t      cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());\n\n\t      /*\n\t      DPCT1050:63: The template argument of the dpct_kernel_name could not be deduced. You need to update this code.\n\t      */\n\t      cgh.parallel_for<dpct_kernel_name<class make_conv_matrix_kernel_3d6454, dpct_placeholder/*Fix the type mannually*/, dpct_kernel_scalar<D>, dpct_placeholder/*Fix the type mannually*/>>(\n\t        sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), \nexp_props, \t        [=](sycl::nd_item<3> item_ct1) {\n\t          make_conv_matrix_kernel(thrust_raw_pointer_cast_points_data_ct0, thrust_raw_pointer_cast_csrRow_data_ct1, thrust_raw_pointer_cast_data_data_ct2, thrust_raw_pointer_cast_csrColdnd_data_ct3, vector_td<int,D>(image_dims), points_size_ct5, kernel);\n\t        });\n\t    });\n\t}"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''

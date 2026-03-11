@@ -1,5 +1,5 @@
 ---
-MainSourceFile:  '/gadgetron2/toolboxes/nfft/gpu/cuNFFT.h'
+MainSourceFile:  '/volume/gadgetron2/toolboxes/nfft/gpu/cuNFFT.h'
 Replacements:
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/cuNFFT.h'
     Offset:          676

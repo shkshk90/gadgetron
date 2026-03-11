@@ -19,12 +19,26 @@
 
 namespace Gadgetron {
 
-    using std::abs; // workaround for nvcc
+    // Scalar math wrappers that work on both host and device.
+    // std:: versions are always available; on device, sycl:: builtins are also
+    // pulled in so that unqualified calls from device code resolve correctly.
+    using std::abs;
     using std::sin;
     using std::cos;
     using std::exp;
     using std::sqrt;
     using std::atan2;
+    using std::cosh;
+    using std::sinh;
+#ifdef __SYCL_DEVICE_ONLY__
+    using sycl::sin;
+    using sycl::cos;
+    using sycl::exp;
+    using sycl::sqrt;
+    using sycl::atan2;
+    using sycl::cosh;
+    using sycl::sinh;
+#endif
 
     /**
      * \class complext
@@ -265,23 +279,23 @@ namespace Gadgetron {
 
     template<class T>
     __inline__ complext<T> polar(const T &rho, const T &theta = 0) {
-        return complext<T>(rho * std::cos(theta), rho * std::sin(theta));
+        return complext<T>(rho * cos(theta), rho * sin(theta));
     }
 
     template<class T>
     __inline__ complext<T> sqrt(complext<T> x) {
         T r = abs(x);
-        return complext<T>(::sqrt((r + x.real()) / 2), sgn(x.imag()) * ::sqrt((r - x.real()) / 2));
+        return complext<T>(sqrt((r + x.real()) / 2), sgn(x.imag()) * sqrt((r - x.real()) / 2));
     }
 
     template<class T>
     __inline__ T abs(complext<T> comp) {
-        return sycl::sqrt(comp._real * comp._real + comp._imag * comp._imag);
+        return sqrt(comp._real * comp._real + comp._imag * comp._imag);
     }
 
     template<class T>
     __inline__ complext<T> sin(complext<T> comp) {
-        return complext<T>(sin(comp._real) * std::cosh(comp._imag), std::cos(comp._real) * std::sinh(comp._imag));
+        return complext<T>(sin(comp._real) * cosh(comp._imag), cos(comp._real) * sinh(comp._imag));
     }
 
     template<class T>

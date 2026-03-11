@@ -427,12 +427,8 @@ namespace Gadgetron {
 
                 cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
-                /*
-                DPCT1050:54: The template argument of the dpct_kernel_name could not be deduced. You need to update this
-                code.
-                */
                 cgh.parallel_for<dpct_kernel_name<class form_grappa_system_matrix_kernel_2d_77f215,
-                                                  dpct_placeholder /*Fix the type mannually*/>>(
+                                                  T>>(
                     sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
                         form_grappa_system_matrix_kernel_2d(ref_data_get_data_ptr_ct0, dims, source_coils, target_coils,
                                                             dros, dros_offset, dkernel_size, acceleration_factor, set,
@@ -608,12 +604,8 @@ namespace Gadgetron {
 
                 cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
-                /*
-                DPCT1050:55: The template argument of the dpct_kernel_name could not be deduced. You need to update this
-                code.
-                */
                 cgh.parallel_for<dpct_kernel_name<class copy_grappa_coefficients_to_kernel_2d_623b46,
-                                                  dpct_placeholder /*Fix the type mannually*/>>(
+                                                  T>>(
                     sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
                         copy_grappa_coefficients_to_kernel_2d(AHrhs_get_data_ptr_ct0, gkernel_get_data_ptr_ct1,
                                                               source_coils, target_coils, dkernel_size,
@@ -690,12 +682,8 @@ namespace Gadgetron {
 
                 cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
-                /*
-                DPCT1050:56: The template argument of the dpct_kernel_name could not be deduced. You need to update this
-                code.
-                */
                 cgh.parallel_for<dpct_kernel_name<class copy_grappa_kernel_to_kspace_2d_e20147,
-                                                  dpct_placeholder /*Fix the type mannually*/>>(
+                                                  T>>(
                     sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
                         copy_grappa_kernel_to_kspace_2d(gkernel_get_data_ptr_c_kernel_elements_ct0,
                                                         tmp_mixing_get_data_ptr_ct1, dims, dkernel_size, source_coils);

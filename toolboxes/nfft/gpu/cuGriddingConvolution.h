@@ -1,7 +1,6 @@
 #pragma once
 
 #define ONEAPI_BACKEND_LEVEL_ZERO_EXT
-#define DPCT_PROFILING_ENABLED
 #include <sycl/sycl.hpp>
 #include <dpct/dpct.hpp>
 #include "GriddingConvolution.h"
@@ -203,8 +202,7 @@ namespace Gadgetron
         
         virtual ~Convolver() { };
 
-        virtual void
-        prepare(const dpct::device_vector<vector_td<REAL, D>> &trajectory) = 0;
+        virtual void prepare(const dpct::device_vector<vector_td<REAL, D>>& trajectory) = 0;
 
         virtual void compute(
             const cuNDArray<T>& input,
@@ -228,8 +226,7 @@ namespace Gadgetron
         ConvolverC2NC(cuGriddingConvolution<T, D, K>& plan)
           : Convolver<T, D, K>(plan) { };
 
-        void prepare(
-            const dpct::device_vector<vector_td<REAL, D>> &trajectory) override;
+        void prepare(const dpct::device_vector<vector_td<REAL, D>>& trajectory) override;
 
         void compute(
             const cuNDArray<T>& image,
@@ -249,8 +246,7 @@ namespace Gadgetron
         ConvolverNC2C(cuGriddingConvolution<T, D, K>& plan)
           : Convolver<T, D, K>(plan) { };
 
-        void prepare(
-            const dpct::device_vector<vector_td<REAL, D>> &trajectory) override;
+        void prepare(const dpct::device_vector<vector_td<REAL, D>>& trajectory) override;
 
         void compute(
             const cuNDArray<T>& samples,
@@ -280,8 +276,7 @@ namespace Gadgetron
         ConvolverNC2C(cuGriddingConvolution<T, D, K>& plan)
           : Convolver<T, D, K>(plan) { };
 
-        void prepare(
-            const dpct::device_vector<vector_td<REAL, D>> &trajectory) override;
+        void prepare(const dpct::device_vector<vector_td<REAL, D>>& trajectory) override;
 
         void compute(
             const cuNDArray<T>& samples,
@@ -301,8 +296,7 @@ namespace Gadgetron
         ConvolverNC2C(cuGriddingConvolution<T, D, K>& plan)
           : Convolver<T, D, K>(plan) { };
 
-        void prepare(
-            const dpct::device_vector<vector_td<REAL, D>> &trajectory) override;
+        void prepare(const dpct::device_vector<vector_td<REAL, D>>& trajectory) override;
 
         void compute(
             const cuNDArray<T>& samples,

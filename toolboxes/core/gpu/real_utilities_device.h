@@ -17,8 +17,8 @@ template<class REAL> __inline__ REAL gad_rsqrt( REAL val );
 // Implementation
 //
 
-template<> __inline__ void gad_sincos<float>( float angle, float *a, float *b ){ sincosf(angle, a,b); }
-template<> __inline__ void gad_sincos<double>( double angle, double *a, double *b ){ sincos(angle, a,b); }
+template<> __inline__ void gad_sincos<float>( float angle, float *a, float *b ){ *a = sycl::sin(angle); *b = sycl::cos(angle); }
+template<> __inline__ void gad_sincos<double>( double angle, double *a, double *b ){ *a = sycl::sin(angle); *b = sycl::cos(angle); }
 
 template <> __inline__ float gad_rsqrt<float>(float val) { return sycl::rsqrt(val); }
 template <> __inline__ double gad_rsqrt<double>(double val) { return sycl::rsqrt(val); }

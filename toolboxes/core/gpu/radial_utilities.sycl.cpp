@@ -30,11 +30,11 @@ namespace Gadgetron{
   } // GR_ORIGINAL
   template <>
   __inline__ double get_angle_step_GR<double, 0>() {
-      return CUDART_PI * (3.0 - sycl::sqrt(5.0)) * 0.5;
+      return M_PI * (3.0 - sycl::sqrt(5.0)) * 0.5;
   } // GR_SMALLEST
   template <>
   __inline__ double get_angle_step_GR<double, 1>() {
-      return CUDART_PI / ((sycl::sqrt(5.0) + 1.0) * 0.5);
+      return M_PI / ((sycl::sqrt(5.0) + 1.0) * 0.5);
   } // GR_ORIGINAL
 
   template<class REAL, unsigned int GOLDEN_RATIO_ANGULAR_STEP_SIZE> void
@@ -237,6 +237,8 @@ namespace Gadgetron{
     co[index] = sample_pos;
   }
 
+  template <typename T>
+  struct compute_radial_trajectory_fixed_angle_2d_kernel_name {};
 
   template<class REAL> boost::shared_ptr< cuNDArray< typename reald<REAL,2>::Type > > 
   compute_radial_trajectory_fixed_angle_2d( unsigned int num_samples_per_profile, unsigned int num_profiles_per_frame, unsigned int num_frames, REAL angular_offset )
@@ -280,7 +282,7 @@ namespace Gadgetron{
 
             cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
-            cgh.parallel_for<dpct_kernel_name<class compute_radial_trajectory_fixed_angle_2d_kernel_e4ad4a, REAL>>(
+            cgh.parallel_for<compute_radial_trajectory_fixed_angle_2d_kernel_name<REAL>>(
                 sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
                     compute_radial_trajectory_fixed_angle_2d_kernel<REAL>(co_get_data_ptr_ct0,
                                                                           REAL(1) / (REAL)num_profiles_per_frame,

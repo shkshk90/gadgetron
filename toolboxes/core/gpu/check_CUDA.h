@@ -56,4 +56,4 @@ DPCT1000:13: Error handling if-stmt was detected but could not be rewritten.
 */
 #define CUDA_CALL(res) { dpct::err0 errorCode = res; if (errorCode != 0) { throw cuda_error(errorCode); } }
 
-#define CUSPARSE_CALL(res) {cusparseStatus_t errorCode = res; if (errorCode != CUSPARSE_STATUS_SUCCESS){ std::stringstream ss; ss << "CUSPARSE failed with error: " <<  gadgetron_getCusparseErrorString(errorCode); throw cuda_error(ss.str());}}
+#define CUSPARSE_CALL(res) {int errorCode = res; if (errorCode != 0){ std::stringstream ss; ss << "CUSPARSE failed with error: " <<  gadgetron_getCusparseErrorString(errorCode); throw cuda_error(ss.str());}}

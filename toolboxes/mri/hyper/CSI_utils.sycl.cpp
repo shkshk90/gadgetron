@@ -244,12 +244,8 @@ void Gadgetron::mult_freq(cuNDArray<complext<T> >* in_out, cuNDArray<complext<T>
 
                         cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
-                        /*
-                        DPCT1050:36: The template argument of the dpct_kernel_name could not be deduced. You need to
-                        update this code.
-                        */
                         cgh.parallel_for<dpct_kernel_name<class mult_freq_kernel_ae67d6,
-                                                          dpct_placeholder /*Fix the type mannually*/>>(
+                                                          T>>(
                             sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
                                     mult_freq_kernel(in_out_get_data_ptr_ct0, freqs_get_data_ptr_ct1, conjugate);
                             });

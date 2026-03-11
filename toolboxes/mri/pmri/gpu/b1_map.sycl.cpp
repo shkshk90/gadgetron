@@ -690,7 +690,7 @@ namespace Gadgetron{
 
             cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
-            cgh.parallel_for<dpct_kernel_name<class smooth_correlation_matrices_kernel_48607b, REAL>>(
+            cgh.parallel_for<dpct_kernel_name<class smooth_correlation_matrices_kernel_48607b, REAL, dpct_kernel_scalar<D>>>(
                 sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
                     smooth_correlation_matrices_kernel<REAL>(corrm_get_data_ptr_ct0, corrm_smooth_get_data_ptr_ct1,
                                                              image_dims);
@@ -717,7 +717,7 @@ namespace Gadgetron{
 
             cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
-            cgh.parallel_for<dpct_kernel_name<class smooth_correlation_matrices_border_kernel_37fc96, REAL>>(
+            cgh.parallel_for<dpct_kernel_name<class smooth_correlation_matrices_border_kernel_37fc96, REAL, dpct_kernel_scalar<D>>>(
                 sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
                     smooth_correlation_matrices_border_kernel<REAL>(
                         corrm_get_data_ptr_ct0, corrm_smooth_get_data_ptr_ct1, image_dims, number_of_border_threads);
@@ -903,6 +903,9 @@ namespace Gadgetron{
       }
     }
   }
+
+  template <typename T>
+  struct set_phase_reference_kernel_name {};
   
   // Set reference phase
   template<class REAL> static
@@ -924,7 +927,7 @@ namespace Gadgetron{
 
             cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
-            cgh.parallel_for<dpct_kernel_name<class set_phase_reference_kernel_55a22b, REAL>>(
+            cgh.parallel_for<set_phase_reference_kernel_name<REAL>>(
                 sycl::nd_range<3>(gridDim * blockDim, blockDim), exp_props, [=](sycl::nd_item<3> item_ct1) {
                     set_phase_reference_kernel<REAL>(csm_get_data_ptr_ct0, number_of_batches, number_of_elements);
                 });

@@ -23,7 +23,7 @@
 #include "cuNDFFT.h"
 
 #include "NFFT.hpp"
-#include <cmath>
+
 
 using namespace Gadgetron;
 
@@ -121,7 +121,7 @@ void Gadgetron::cuNFFT_impl<REAL, D, CONV>::initialize(int device) try {
 
     if (this->device_ != device_no_old &&
         /*
-        DPCT1093:34: The "this->device_" device may be not the one intended for use. Adjust the selected
+        DPCT1093:51: The "this->device_" device may be not the one intended for use. Adjust the selected
            device if needed.
         */
         DPCT_CHECK_ERROR(dpct::select_device(this->device_)) != 0)
@@ -129,7 +129,7 @@ void Gadgetron::cuNFFT_impl<REAL, D, CONV>::initialize(int device) try {
 
     if (this->device_ != device_no_old &&
         /*
-        DPCT1093:35: The "device_no_old" device may be not the one intended for use. Adjust the selected
+        DPCT1093:52: The "device_no_old" device may be not the one intended for use. Adjust the selected
            device if needed.
         */
         DPCT_CHECK_ERROR(dpct::select_device(device_no_old)) != 0)
@@ -166,7 +166,7 @@ compute_deapodization_filter_kernel(typename uintd<D>::Type matrix_size_os,
         // Calculate the distance between the cell and the sample
         vector_td<REAL, D>
         cell_pos_real = vector_td<REAL, D>(cell_pos);
-        const typename reald<REAL, D>::Type delta = sycl::fabs(sample_pos - cell_pos_real);
+        const typename reald<REAL, D>::Type delta = abs(sample_pos - cell_pos_real);
 
         // Compute convolution weight.
         REAL weight = kernel->get(delta);
@@ -198,38 +198,38 @@ Gadgetron::cuNFFT_impl<REAL, D, CONV>::compute_deapodization_filter(bool FFTed) 
     DPCT1049:2: The work-group size passed to the SYCL kernel may exceed the limit. To get the device limit,
      * query info::device::max_work_group_size. Adjust the work-group size if needed.
     */
-    /*
-    DPCT1129:0: The type "vector_td<unsigned int, D>" is used in the SYCL kernel, but it is not device copyable.
-     * The sycl::is_device_copyable specialization has been added for this type. Please review the code.
-    */
-    /*
+      /*
+    DPCT1129:0: The type "vector_td<unsigned int, D>" is used in the SYCL kernel, but it is not device
+       * copyable. The sycl::is_device_copyable specialization has been added for this type. Please review the code.
+ */
+      /*
     DPCT1129:1: The type "vector_td<REAL, D>" is used in the SYCL kernel, but it is not device copyable. The
-     * sycl::is_device_copyable specialization has been added for this type. Please review the code.
+       * sycl::is_device_copyable specialization has been added for this type. Please review the code.
     */
-    {
-        auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
-        dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});
+      {
+            dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
+                  auto vector_td_unsigned_int_D_this_matrix_size_os__ct0 =
+                      vector_td<unsigned int, D>(this->matrix_size_os_);
+                  auto filter_get_data_ptr_ct2 = filter->get_data_ptr();
+                  auto
+                      dynamic_cast_const_cuGriddingConvolution_complext_REAL_D_KaiserKernel_this_conv__get_get_kernel_d_ct3 =
+                          dynamic_cast<const cuGriddingConvolution<complext<REAL>, D, KaiserKernel>*>(this->conv_.get())
+                              ->get_kernel_d();
 
-        dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
-            auto vector_td_unsigned_int_D_this_matrix_size_os__ct0 = vector_td<unsigned int, D>(this->matrix_size_os_);
-            auto filter_get_data_ptr_ct2 = filter->get_data_ptr();
-          auto this_conv__get_get_kernel_d_ct3 = this->conv_.get())->get_kernel_d();
+                  cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
-            cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
-            /*
-          DPCT1050:36: The template argument of the dpct_kernel_name could not be deduced. You need to
-             * update this code.
-          */
-            cgh.parallel_for<dpct_kernel_name<class compute_deapodization_filter_kernel_f5514e, REAL,
-                                              dpct_kernel_scalar<D>, dpct_placeholder /*Fix the type mannually*/>>(
-                sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
-                    compute_deapodization_filter_kernel<REAL, D>(vector_td_unsigned_int_D_this_matrix_size_os__ct0,
-                                                                 matrix_size_os_real, filter_get_data_ptr_ct2,
-                                                                 this_conv__get_get_kernel_d_ct3);
-                });
-        });
-    }
+                  cgh.parallel_for<
+                      dpct_kernel_name<class compute_deapodization_filter_kernel_f5514e, REAL, dpct_kernel_scalar<D>,
+                                       dpct_kernel_scalar<(int)CONV>>>(
+                      sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), [=](sycl::nd_item<3> item_ct1) {
+                            compute_deapodization_filter_kernel<REAL, D>(
+                                vector_td_unsigned_int_D_this_matrix_size_os__ct0, matrix_size_os_real,
+                                filter_get_data_ptr_ct2,
+                                dynamic_cast_const_cuGriddingConvolution_complext_REAL_D_KaiserKernel_this_conv__get_get_kernel_d_ct3);
+                      });
+            });
+      }
 
     CHECK_FOR_CUDA_ERROR();
 

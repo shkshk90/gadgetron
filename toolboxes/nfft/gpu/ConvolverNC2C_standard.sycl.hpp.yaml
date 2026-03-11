@@ -1,5 +1,5 @@
 ---
-MainSourceFile:  '/gadgetron2/toolboxes/nfft/gpu/ConvolverNC2C_standard.sycl.hpp'
+MainSourceFile:  '/volume/gadgetron2/toolboxes/nfft/gpu/ConvolverNC2C_standard.sycl.hpp'
 Replacements:
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
     Offset:          536
@@ -20,7 +20,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          984
+    Offset:          1019
     Length:          9
     ReplacementText: ''
     ConstantFlag:    ''
@@ -29,7 +29,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          993
+    Offset:          1028
     Length:          11
     ReplacementText: ''
     ConstantFlag:    ''
@@ -38,7 +38,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          1254
+    Offset:          1311
     Length:          9
     ReplacementText: ''
     ConstantFlag:    ''
@@ -47,7 +47,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          1263
+    Offset:          1320
     Length:          11
     ReplacementText: ''
     ConstantFlag:    ''
@@ -56,7 +56,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          1354
+    Offset:          1411
     Length:          9
     ReplacementText: ''
     ConstantFlag:    ''
@@ -65,7 +65,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          1363
+    Offset:          1420
     Length:          11
     ReplacementText: ''
     ConstantFlag:    ''
@@ -74,7 +74,16 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          1873
+    Offset:          1657
+    Length:          33
+    ReplacementText: 'sycl::floor((((float*)&p)[dim])+half_W)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          1941
     Length:          11
     ReplacementText: ''
     ConstantFlag:    ''
@@ -83,7 +92,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          2281
+    Offset:          2382
     Length:          21
     ReplacementText: 'sycl::ceil(p.vec[0]-half_W)'
     ConstantFlag:    ''
@@ -92,7 +101,16 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          2921
+    Offset:          2453
+    Length:          22
+    ReplacementText: 'sycl::floor(p.vec[0]+half_W)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          3033
     Length:          11
     ReplacementText: ''
     ConstantFlag:    ''
@@ -101,7 +119,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          3329
+    Offset:          3474
     Length:          21
     ReplacementText: 'sycl::ceil(p.vec[0]-half_W)'
     ConstantFlag:    ''
@@ -110,7 +128,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          3400
+    Offset:          3545
     Length:          21
     ReplacementText: 'sycl::ceil(p.vec[1]-half_W)'
     ConstantFlag:    ''
@@ -119,7 +137,25 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          4224
+    Offset:          3616
+    Length:          22
+    ReplacementText: 'sycl::floor(p.vec[0]+half_W)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          3688
+    Length:          22
+    ReplacementText: 'sycl::floor(p.vec[1]+half_W)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          4380
     Length:          11
     ReplacementText: ''
     ConstantFlag:    ''
@@ -128,7 +164,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          4632
+    Offset:          4821
     Length:          21
     ReplacementText: 'sycl::ceil(p.vec[0]-half_W)'
     ConstantFlag:    ''
@@ -137,7 +173,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          4703
+    Offset:          4892
     Length:          21
     ReplacementText: 'sycl::ceil(p.vec[1]-half_W)'
     ConstantFlag:    ''
@@ -146,7 +182,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          4774
+    Offset:          4963
     Length:          21
     ReplacementText: 'sycl::ceil(p.vec[2]-half_W)'
     ConstantFlag:    ''
@@ -155,7 +191,34 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          5789
+    Offset:          5034
+    Length:          22
+    ReplacementText: 'sycl::floor(p.vec[0]+half_W)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          5106
+    Length:          22
+    ReplacementText: 'sycl::floor(p.vec[1]+half_W)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          5178
+    Length:          22
+    ReplacementText: 'sycl::floor(p.vec[2]+half_W)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          5989
     Length:          11
     ReplacementText: ''
     ConstantFlag:    ''
@@ -164,7 +227,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          6197
+    Offset:          6430
     Length:          21
     ReplacementText: 'sycl::ceil(p.vec[0]-half_W)'
     ConstantFlag:    ''
@@ -173,7 +236,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          6268
+    Offset:          6501
     Length:          21
     ReplacementText: 'sycl::ceil(p.vec[1]-half_W)'
     ConstantFlag:    ''
@@ -182,7 +245,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          6339
+    Offset:          6572
     Length:          21
     ReplacementText: 'sycl::ceil(p.vec[2]-half_W)'
     ConstantFlag:    ''
@@ -191,7 +254,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          6410
+    Offset:          6643
     Length:          21
     ReplacementText: 'sycl::ceil(p.vec[3]-half_W)'
     ConstantFlag:    ''
@@ -200,7 +263,43 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          7622
+    Offset:          6714
+    Length:          22
+    ReplacementText: 'sycl::floor(p.vec[0]+half_W)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          6786
+    Length:          22
+    ReplacementText: 'sycl::floor(p.vec[1]+half_W)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          6858
+    Length:          22
+    ReplacementText: 'sycl::floor(p.vec[2]+half_W)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          6930
+    Length:          22
+    ReplacementText: 'sycl::floor(p.vec[3]+half_W)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          7866
     Length:          11
     ReplacementText: ''
     ConstantFlag:    ''
@@ -209,7 +308,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          8021
+    Offset:          8298
     Length:          0
     ReplacementText: "auto item_ct1 = sycl::ext::oneapi::this_work_item::get_nd_item<3>();\n    "
     ConstantFlag:    ''
@@ -218,7 +317,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          8047
+    Offset:          8324
     Length:          10
     ReplacementText: 'item_ct1.get_group(2)'
     ConstantFlag:    ''
@@ -227,7 +326,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          8058
+    Offset:          8335
     Length:          10
     ReplacementText: 'item_ct1.get_local_range(2)'
     ConstantFlag:    ''
@@ -236,7 +335,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          8071
+    Offset:          8348
     Length:          11
     ReplacementText: 'item_ct1.get_local_id(2)'
     ConstantFlag:    ''
@@ -245,7 +344,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          8110
+    Offset:          8387
     Length:          10
     ReplacementText: 'item_ct1.get_group(1)'
     ConstantFlag:    ''
@@ -254,7 +353,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          8864
+    Offset:          9185
     Length:          4
     ReplacementText: 'dpct::dim3'
     ConstantFlag:    ''
@@ -263,7 +362,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          8889
+    Offset:          9210
     Length:          4
     ReplacementText: 'dpct::dim3'
     ConstantFlag:    ''
@@ -272,25 +371,25 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          9011
+    Offset:          9332
     Length:          0
-    ReplacementText: "    /*\n    DPCT1049:0: The work-group size passed to the SYCL kernel may exceed the limit. To get the device limit, query info::device::max_work_group_size. Adjust the work-group size if needed.\n    */\n"
+    ReplacementText: "    /*\n    DPCT1049:7: The work-group size passed to the SYCL kernel may exceed the limit. To get the device limit, query info::device::max_work_group_size. Adjust the work-group size if needed.\n    */\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          9015
+    Offset:          9336
     Length:          186
-    ReplacementText: "{\n      auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};\n\n      dpct::get_in_order_queue().submit(\n        [&](sycl::handler &cgh) {\n          cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());\n\n          cgh.parallel_for<dpct_kernel_name<class write_pairs_kernel_d8cd2f, REAL, dpct_kernel_scalar<D>>>(\n            sycl::nd_range<3>(gridDim * blockDim, blockDim), \nexp_props,             [=](sycl::nd_item<3> item_ct1) {\n              write_pairs_kernel<REAL, D>(matrix_size_os, matrix_size_wrap, num_samples_per_frame, half_W, traj_positions, write_offsets, tuples_first, tuples_last);\n            });\n        });\n    }"
+    ReplacementText: "{\n      auto exp_props = sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};\n      dpct::has_capability_or_fail(dpct::get_in_order_queue().get_device(), {sycl::aspect::fp64});\n\n      dpct::get_in_order_queue().submit(\n        [&](sycl::handler &cgh) {\n          cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());\n\n          cgh.parallel_for<dpct_kernel_name<class write_pairs_kernel_7d5832, REAL, dpct_kernel_scalar<D>>>(\n            sycl::nd_range<3>(gridDim * blockDim, blockDim), \nexp_props,             [=](sycl::nd_item<3> item_ct1) {\n              write_pairs_kernel<REAL, D>(matrix_size_os, matrix_size_wrap, num_samples_per_frame, half_W, traj_positions, write_offsets, tuples_first, tuples_last);\n            });\n        });\n    }"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: true
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          9201
+    Offset:          9522
     Length:          1
     ReplacementText: ''
     ConstantFlag:    ''
@@ -299,7 +398,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          9473
+    Offset:          9794
     Length:          11
     ReplacementText: ''
     ConstantFlag:    ''
@@ -308,7 +407,16 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          9713
+    Offset:          10024
+    Length:          0
+    ReplacementText: ', char *_shared_mem'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          10034
     Length:          0
     ReplacementText: "auto item_ct1 = sycl::ext::oneapi::this_work_item::get_nd_item<3>();\n    "
     ConstantFlag:    ''
@@ -317,7 +425,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          10177
+    Offset:          10520
     Length:          8
     ReplacementText: 'sycl::ext::oneapi::this_work_item::get_sub_group().get_local_range().get(0)'
     ConstantFlag:    ''
@@ -326,7 +434,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          10353
+    Offset:          10696
     Length:          9
     ReplacementText: 'item_ct1.get_group_range(1)'
     ConstantFlag:    ''
@@ -335,7 +443,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          10363
+    Offset:          10706
     Length:          10
     ReplacementText: 'item_ct1.get_group(1)'
     ConstantFlag:    ''
@@ -344,7 +452,16 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          10546
+    Offset:          10878
+    Length:          0
+    ReplacementText: "/*\nDPCT1110:8: The total declared local variable size in device function NFFT_H_convolve exceeds 128 bytes and may cause high register pressure. Consult with your hardware vendor to find the total register size available and adjust the code, or use smaller sub-group size to avoid high register pressure.\n*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          10889
     Length:          11
     ReplacementText: ''
     ConstantFlag:    ''
@@ -353,7 +470,16 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          11465
+    Offset:          11502
+    Length:          0
+    ReplacementText: ', char *_shared_mem'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          11874
     Length:          10
     ReplacementText: 'sycl::ext::oneapi::this_work_item::get_nd_item<3>().get_group(1)'
     ConstantFlag:    ''
@@ -362,16 +488,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          11969
-    Length:          24
-    ReplacementText: 'sycl::fabs(sample_pos-cell_pos)'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          12140
+    Offset:          12571
     Length:          16
     ReplacementText: 'sycl::isfinite(weight)'
     ConstantFlag:    ''
@@ -380,7 +497,16 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          12807
+    Offset:          12902
+    Length:          44
+    ReplacementText: '*(samples + idx)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          13238
     Length:          8
     ReplacementText: 'sycl::ext::oneapi::this_work_item::get_sub_group().get_local_range().get(0)'
     ConstantFlag:    ''
@@ -389,7 +515,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          13184
+    Offset:          13615
     Length:          11
     ReplacementText: ''
     ConstantFlag:    ''
@@ -398,7 +524,16 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          13757
+    Offset:          14167
+    Length:          0
+    ReplacementText: ', char *_shared_mem'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          14210
     Length:          0
     ReplacementText: "auto item_ct1 = sycl::ext::oneapi::this_work_item::get_nd_item<3>();\n    "
     ConstantFlag:    ''
@@ -407,7 +542,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          13784
+    Offset:          14237
     Length:          10
     ReplacementText: 'item_ct1.get_group(2)'
     ConstantFlag:    ''
@@ -416,7 +551,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          13795
+    Offset:          14248
     Length:          10
     ReplacementText: 'item_ct1.get_local_range(2)'
     ConstantFlag:    ''
@@ -425,7 +560,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          13808
+    Offset:          14261
     Length:          11
     ReplacementText: 'item_ct1.get_local_id(2)'
     ConstantFlag:    ''
@@ -434,7 +569,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          14755
+    Offset:          15208
     Length:          11
     ReplacementText: 'item_ct1.get_local_id(2)'
     ConstantFlag:    ''
@@ -443,7 +578,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          14767
+    Offset:          15220
     Length:          8
     ReplacementText: 'sycl::ext::oneapi::this_work_item::get_sub_group().get_local_range().get(0)'
     ConstantFlag:    ''
@@ -452,7 +587,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          14777
+    Offset:          15230
     Length:          8
     ReplacementText: 'sycl::ext::oneapi::this_work_item::get_sub_group().get_local_range().get(0)'
     ConstantFlag:    ''
@@ -461,7 +596,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          14841
+    Offset:          15294
     Length:          11
     ReplacementText: 'item_ct1.get_local_id(2)'
     ConstantFlag:    ''
@@ -470,7 +605,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          14854
+    Offset:          15307
     Length:          8
     ReplacementText: 'sycl::ext::oneapi::this_work_item::get_sub_group().get_local_range().get(0)'
     ConstantFlag:    ''
@@ -479,45 +614,27 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          15779
-    Length:          11
-    ReplacementText: ''
+    Offset:          15695
+    Length:          8
+    ReplacementText: 'sycl::ext::oneapi::this_work_item::get_sub_group().get_local_range().get(0)'
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          16072
+    Offset:          16049
     Length:          0
-    ReplacementText: "auto item_ct1 = sycl::ext::oneapi::this_work_item::get_nd_item<3>();\n    "
+    ReplacementText: ', _shared_mem'
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          16091
-    Length:          10
-    ReplacementText: 'item_ct1.get_group(2)'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          16104
-    Length:          10
-    ReplacementText: 'item_ct1.get_local_range(2)'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          16117
-    Length:          11
-    ReplacementText: 'item_ct1.get_local_id(2)'
+    Offset:          16218
+    Length:          0
+    ReplacementText: ', _shared_mem'
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -525,6 +642,51 @@ Replacements:
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
     Offset:          16265
+    Length:          11
+    ReplacementText: "/*\nDPCT1110:9: The total declared local variable size in device function wrap_image_kernel exceeds 128 bytes and may cause high register pressure. Consult with your hardware vendor to find the total register size available and adjust the code, or use smaller sub-group size to avoid high register pressure.\n*/\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          16558
+    Length:          0
+    ReplacementText: "auto item_ct1 = sycl::ext::oneapi::this_work_item::get_nd_item<3>();\n    "
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          16577
+    Length:          10
+    ReplacementText: 'item_ct1.get_group(2)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          16590
+    Length:          10
+    ReplacementText: 'item_ct1.get_local_range(2)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          16603
+    Length:          11
+    ReplacementText: 'item_ct1.get_local_id(2)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
+    Offset:          16751
     Length:          10
     ReplacementText: 'item_ct1.get_group(1)'
     ConstantFlag:    ''
@@ -533,7 +695,7 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_standard.cuh'
-    Offset:          20827
+    Offset:          21346
     Length:          10
     ReplacementText: 'item_ct1.get_group(1)'
     ConstantFlag:    ''

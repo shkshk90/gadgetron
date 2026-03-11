@@ -1,10 +1,10 @@
 ---
-MainSourceFile:  '/gadgetron2/toolboxes/nfft/gpu/ConvolverNC2C_atomic.sycl.hpp'
+MainSourceFile:  '/volume/gadgetron2/toolboxes/nfft/gpu/ConvolverNC2C_atomic.sycl.hpp'
 Replacements:
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_atomic.cuh'
     Offset:          0
     Length:          0
-    ReplacementText: "#define ONEAPI_BACKEND_LEVEL_ZERO_EXT\n#include <sycl/sycl.hpp>\n#include <dpct/dpct.hpp>\n#include <cmath>\n"
+    ReplacementText: "#define ONEAPI_BACKEND_LEVEL_ZERO_EXT\n#include <sycl/sycl.hpp>\n#include <dpct/dpct.hpp>\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -38,6 +38,24 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_atomic.cuh'
+    Offset:          1796
+    Length:          50
+    ReplacementText: 'dpct::atomic_fetch_add<sycl::access::address_space::generic_space>(reinterpret_cast<T*>(address), real(val))'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_atomic.cuh'
+    Offset:          1852
+    Length:          52
+    ReplacementText: 'dpct::atomic_fetch_add<sycl::access::address_space::generic_space>(reinterpret_cast<T*>(address)+1, imag(val))'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_atomic.cuh'
     Offset:          1993
     Length:          10
     ReplacementText: ''
@@ -47,9 +65,27 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_atomic.cuh'
-    Offset:          2656
-    Length:          41
-    ReplacementText: 'sycl::fabs(sample_position - grid_position_real)'
+    Offset:          2812
+    Length:          0
+    ReplacementText: "    /*\n    DPCT1064:62: Migrated isfinite call is used in a macro/template definition and may not be valid for all macro/template uses. Adjust the code.\n    */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_atomic.cuh'
+    Offset:          2821
+    Length:          16
+    ReplacementText: 'sycl::isfinite((double)weight)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_atomic.cuh'
+    Offset:          3412
+    Length:          50
+    ReplacementText: 'dpct::atomic_fetch_add<sycl::access::address_space::generic_space>(&(image[grid_idx]), weight*sample_value)'
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -94,7 +130,7 @@ Replacements:
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_atomic.cuh'
     Offset:          8397
     Length:          11
-    ReplacementText: ''
+    ReplacementText: "/*\nDPCT1110:6: The total declared local variable size in device function NFFT_H_atomic_convolve_kernel exceeds 128 bytes and may cause high register pressure. Consult with your hardware vendor to find the total register size available and adjust the code, or use smaller sub-group size to avoid high register pressure.\n*/\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -149,15 +185,6 @@ Replacements:
     Offset:          9084
     Length:          9
     ReplacementText: 'item_ct1.get_group_range(1)'
-    ConstantFlag:    ''
-    ConstantOffset:  0
-    InitStr:         ''
-    NewHostVarName:  ''
-    BlockLevelFormatFlag: false
-  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverNC2C_atomic.cuh'
-    Offset:          9786
-    Length:          34
-    ReplacementText: 'sycl::ceil(sample_position - radius_vec)'
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''

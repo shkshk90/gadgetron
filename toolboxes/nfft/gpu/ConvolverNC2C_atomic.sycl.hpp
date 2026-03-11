@@ -1,7 +1,6 @@
 #define ONEAPI_BACKEND_LEVEL_ZERO_EXT
 #include <sycl/sycl.hpp>
 #include <dpct/dpct.hpp>
-#include <cmath>
 #pragma once
 /*
   CUDA implementation of the NFFT.
@@ -52,11 +51,18 @@ __device__ double atomicAdd(double* address, double val)
 }
 #endif
 
+
+double atomicAdd(double* __restrict__ address, double val) {
+    return dpct::atomic_fetch_add<sycl::access::address_space::generic_space>(address, val);
+}
+float atomicAdd(float* __restrict__ address, float val) {
+    return dpct::atomic_fetch_add<sycl::access::address_space::generic_space>(address, val);
+}
 //This function does not return a value. Why? Because why we can atomically add things, we cannot atomically get the result back.
 template<class T>
 void atomicAdd(complext<T>* __restrict__ address, complext<T> val){
-    atomicAdd(reinterpret_cast<T*>(address),real(val));
-    atomicAdd(reinterpret_cast<T*>(address)+1,imag(val));
+    dpct::atomic_fetch_add<sycl::access::address_space::generic_space>(reinterpret_cast<T*>(address), real(val));
+    dpct::atomic_fetch_add<sycl::access::address_space::generic_space>(reinterpret_cast<T*>(address) + 1, imag(val));
 }
 
 template<class T, unsigned int D, template<class, unsigned int> class K>
@@ -70,13 +76,17 @@ static void NFFT_iterate_body(vector_td<unsigned int, D> matrix_size_os,
 {
     // Calculate the distance between current sample and the grid cell.
     vector_td<realType_t<T>,D> grid_position_real = vector_td<realType_t<T>,D>(grid_position);
-    const vector_td<realType_t<T>, D> delta = sycl::fabs(sample_position - grid_position_real);
+    const vector_td<realType_t<T>,D> delta = abs(sample_position - grid_position_real);
 
     // Compute convolution weight.
     const realType_t<T> weight = kernel->get(delta);
 
     // Safety measure.
-    if (!isfinite(weight))
+    /*
+    DPCT1064:62: Migrated isfinite call is used in a macro/template definition and may not be valid for all
+    macro/template uses. Adjust the code.
+    */
+    if (!sycl::isfinite((double)weight))
         return;
 
     // Resolve wrapping of grid position
@@ -92,7 +102,7 @@ static void NFFT_iterate_body(vector_td<unsigned int, D> matrix_size_os,
             (batch*num_frames+frame)*prod(matrix_size_os) + co_to_idx( vector_td<unsigned int, D>(grid_position), matrix_size_os );
 
         // Atomic update.
-        atomicAdd(&(image[grid_idx]), weight*sample_value);
+        atomicAdd(&(image[grid_idx]), weight * sample_value);
     }
 }
 
@@ -216,12 +226,18 @@ void NFFT_iterate(vector_td<unsigned int,4> matrix_size_os,
 // kernel main
 //
 
-template<class T, unsigned int D, template<class, unsigned int> class K>
-void
-NFFT_H_atomic_convolve_kernel(vector_td<unsigned int, D> matrix_size_os, vector_td<unsigned int, D> matrix_size_wrap,
-			       unsigned int num_samples_per_frame, unsigned int num_batches, 
-			       const vector_td<realType_t<T>,D> * __restrict__ traj_positions, const T * __restrict__ samples, T * __restrict__ image,
-             const ConvolutionKernel<realType_t<T>, D, K>* kernel)
+template <class T, unsigned int D, template <class, unsigned int> class K>
+/*
+DPCT1110:6: The total declared local variable size in device function NFFT_H_atomic_convolve_kernel exceeds 128 bytes
+and may cause high register pressure. Consult with your hardware vendor to find the total register size available and
+adjust the code, or use smaller sub-group size to avoid high register pressure.
+*/
+void NFFT_H_atomic_convolve_kernel(vector_td<unsigned int, D> matrix_size_os,
+                                   vector_td<unsigned int, D> matrix_size_wrap, unsigned int num_samples_per_frame,
+                                   unsigned int num_batches,
+                                   const vector_td<realType_t<T>, D>* __restrict__ traj_positions,
+                                   const T* __restrict__ samples, T* __restrict__ image,
+                                   const ConvolutionKernel<realType_t<T>, D, K>* kernel)
 {
     auto item_ct1 = sycl::ext::oneapi::this_work_item::get_nd_item<3>();
     const unsigned int sample_idx_in_frame =
@@ -246,7 +262,7 @@ NFFT_H_atomic_convolve_kernel(vector_td<unsigned int, D> matrix_size_os, vector_
     const vector_td<realType_t<T>,D> radius_vec(kernel->get_radius());
     
     // Limits of the subgrid to consider
-    const vector_td<int, D> lower_limit(sycl::ceil(sample_position - radius_vec));
+    const vector_td<int, D> lower_limit(ceil(sample_position - radius_vec));
     const vector_td<int, D> upper_limit(floor(sample_position + radius_vec));
 
     // Output to the grid.

@@ -32,10 +32,13 @@ cuNonCartesianKtSenseOperator<REAL,D>::mult_MH( cuNDArray< complext<REAL> >* in,
 // Instantiations
 //
 
-template class EXPORTGPUPMRI cuNonCartesianKtSenseOperator<float,2>;
-template class EXPORTGPUPMRI cuNonCartesianKtSenseOperator<float,3>;
-template class EXPORTGPUPMRI cuNonCartesianKtSenseOperator<float,4>;
+namespace Gadgetron {
 
-template class EXPORTGPUPMRI cuNonCartesianKtSenseOperator<double,2>;
-template class EXPORTGPUPMRI cuNonCartesianKtSenseOperator<double,3>;
-template class EXPORTGPUPMRI cuNonCartesianKtSenseOperator<double,4>;
+  template class EXPORTGPUPMRI cuNonCartesianKtSenseOperator<float,2>;
+  template class EXPORTGPUPMRI cuNonCartesianKtSenseOperator<float,3>;
+  template class EXPORTGPUPMRI cuNonCartesianKtSenseOperator<float,4>;
+  
+  template class EXPORTGPUPMRI cuNonCartesianKtSenseOperator<double,2>;
+  template class EXPORTGPUPMRI cuNonCartesianKtSenseOperator<double,3>;
+  template class EXPORTGPUPMRI cuNonCartesianKtSenseOperator<double,4>;
+}

@@ -230,8 +230,9 @@ namespace Gadgetron{
   template <>
   int cublas_axpy<float_complext>(dpct::blas::descriptor_ptr hndl, int n, const float_complext* a,
                                   const float_complext* x, int incx, float_complext* y, int incy) try {
+    auto alpha = *reinterpret_cast<const std::complex<float>*>(a);
     return DPCT_CHECK_ERROR(oneapi::mkl::blas::column_major::axpy(
-        hndl->get_queue(), n, dpct::get_value((const sycl::float2*)a, hndl->get_queue()), (std::complex<float>*)x, incx,
+        hndl->get_queue(), n, alpha, (std::complex<float>*)x, incx,
         (std::complex<float>*)y, incy));
   }
   catch (sycl::exception const& exc) {
@@ -242,9 +243,14 @@ namespace Gadgetron{
   template <>
   int cublas_axpy<double_complext>(dpct::blas::descriptor_ptr hndl, int n, const double_complext* a,
                                    const double_complext* x, int incx, double_complext* y, int incy) try {
-    return DPCT_CHECK_ERROR(oneapi::mkl::blas::column_major::axpy(
-        hndl->get_queue(), n, dpct::get_value((const sycl::double2*)a, hndl->get_queue()), (std::complex<double>*)x,
-        incx, (std::complex<double>*)y, incy));
+    // Workaround: oneMath cublas backend passes std::complex<double> (alignof=8)
+    // to cublasZaxpy_v2 which expects cuDoubleComplex (alignof=16), causing
+    // SIGSEGV on aligned SSE/AVX loads. Use a simple SYCL kernel instead.
+    double_complext alpha = *a;
+    hndl->get_queue().parallel_for(sycl::range<1>(n), [=](sycl::id<1> i) {
+        y[i * incy] = alpha * x[i * incx] + y[i * incy];
+    }).wait();
+    return 0;
   }
   catch (sycl::exception const& exc) {
     std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;

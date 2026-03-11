@@ -1,5 +1,5 @@
 ---
-MainSourceFile:  '/gadgetron2/toolboxes/nfft/ConvolutionKernel.hpp'
+MainSourceFile:  '/volume/gadgetron2/toolboxes/nfft/ConvolutionKernel.hpp'
 Replacements:
   - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
     Offset:          1
@@ -167,6 +167,393 @@ Replacements:
     Offset:          5700
     Length:          8
     ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          6417
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          6428
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          6816
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          6827
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          7145
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          7156
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          7455
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          7466
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          7728
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          7739
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          7995
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          8006
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          8266
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          8277
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          8531
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          8542
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          8737
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          8748
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          8906
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          8917
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          9531
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          9542
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          10126
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          10137
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          10448
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          10459
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          10761
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          10772
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          10938
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          10949
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          11343
+    Length:          139
+    ReplacementText: "sycl::sqrt(sqr(this->width_) / sqr(this->os_factor_[d]) *\n                sqr(this->os_factor_[d] - REAL(0.5)) - REAL(0.8))"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          11580
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          11591
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          13435
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          13446
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          13821
+    Length:          7
+    ReplacementText: 'sycl::sqrt(r)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          13927
+    Length:          11
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          13938
+    Length:          9
+    ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          14764
+    Length:          15
+    ReplacementText: 'dpct::pow(r, REAL(1))'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          14823
+    Length:          15
+    ReplacementText: 'r * r'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          14883
+    Length:          15
+    ReplacementText: 'dpct::pow(r, REAL(3))'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          14942
+    Length:          15
+    ReplacementText: 'dpct::pow(r, REAL(4))'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/ConvolutionKernel.hpp'
+    Offset:          15001
+    Length:          15
+    ReplacementText: 'dpct::pow(r, REAL(5))'
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''

@@ -1,4 +1,7 @@
 
+#define ONEAPI_BACKEND_LEVEL_ZERO_EXT
+#include <sycl/sycl.hpp>
+#include <dpct/dpct.hpp>
 #include "cuSDC.h"
 
 #include "cuGriddingConvolution.h"
@@ -14,28 +17,28 @@ namespace Gadgetron
     {
         void operator()(const cuNDArray<REAL>& src, cuNDArray<REAL>& dst)
         {
-            thrust::transform(dst.begin(),
-                              dst.end(),
-                              src.begin(),
-                              dst.begin(),
-                              safe_divides<REAL>());
+            std::transform(oneapi::dpl::execution::make_device_policy(dpct::get_in_order_queue()), dst.begin(),
+                           dst.end(), src.begin(), dst.begin(), safe_divides<REAL>());
         }
     };
 
     template<class REAL, unsigned int D>
     struct validates<cuNDArray, REAL, D>
     {
-        vector_td<size_t, D> operator()(const vector_td<size_t, D>& size)
-        {
+        vector_td<size_t, D> operator()(const vector_td<size_t, D>& size) try {
             // Get warp size of current device.
             int device;
-            if (cudaGetDevice(&device) != cudaSuccess)
+            if (DPCT_CHECK_ERROR(device = dpct::get_current_device_id()) != 0)
                 throw cuda_error("Could not retrieve the active device.");
             vector_td<size_t, D> warp_size(static_cast<size_t>(
                 cudaDeviceManager::Instance()->warp_size(device)));
             
             // Enforce that matrix size is a multiple of warp size.
             return ((size + warp_size - size_t(1)) / warp_size) * warp_size;
+        }
+        catch (sycl::exception const& exc) {
+          std::cerr << exc.what() << "Exception caught at file:" << __FILE__ << ", line:" << __LINE__ << std::endl;
+          std::exit(1);
         }
     };
     template <class REAL, unsigned int D>

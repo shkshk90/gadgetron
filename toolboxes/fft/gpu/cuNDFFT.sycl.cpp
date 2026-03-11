@@ -67,21 +67,16 @@ template<class T> void Gadgetron::timeswitch1D(cuNDArray<complext<T> >* inout){
         info::device::max_work_group_size. Adjust the work-group size if needed.
         */
         {
-                auto exp_props =
-                    sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
+
 
                 dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
                         auto inout_get_data_ptr_ct0 = inout->get_data_ptr();
 
                         cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
-                        /*
-                        DPCT1050:35: The template argument of the dpct_kernel_name could not be deduced. You need to
-                        update this code.
-                        */
                         cgh.parallel_for<dpct_kernel_name<class timeswitch_kernel1D_a0302a,
-                                                          dpct_placeholder /*Fix the type mannually*/>>(
-                            sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                                                          T>>(
+                            sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), [=](sycl::nd_item<3> item_ct1) {
                                     timeswitch_kernel1D(inout_get_data_ptr_ct0, nelements);
                             });
                 });
@@ -105,21 +100,16 @@ template<class T> void Gadgetron::timeswitch2D(cuNDArray<complext<T> >* inout){
         info::device::max_work_group_size. Adjust the work-group size if needed.
         */
         {
-                auto exp_props =
-                    sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
+
 
                 dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
                         auto inout_get_data_ptr_ct0 = inout->get_data_ptr();
 
                         cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
-                        /*
-                        DPCT1050:36: The template argument of the dpct_kernel_name could not be deduced. You need to
-                        update this code.
-                        */
                         cgh.parallel_for<dpct_kernel_name<class timeswitch_kernel2D_cbe240,
-                                                          dpct_placeholder /*Fix the type mannually*/>>(
-                            sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                                                          T>>(
+                            sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), [=](sycl::nd_item<3> item_ct1) {
                                     timeswitch_kernel2D(inout_get_data_ptr_ct0, nelements);
                             });
                 });
@@ -146,21 +136,16 @@ template<class T> void Gadgetron::timeswitch3D(cuNDArray<complext<T> >* inout){
         info::device::max_work_group_size. Adjust the work-group size if needed.
         */
         {
-                auto exp_props =
-                    sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
+
 
                 dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
                         auto inout_get_data_ptr_ct0 = inout->get_data_ptr();
 
                         cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
-                        /*
-                        DPCT1050:37: The template argument of the dpct_kernel_name could not be deduced. You need to
-                        update this code.
-                        */
                         cgh.parallel_for<dpct_kernel_name<class timeswitch_kernel3D_cba933,
-                                                          dpct_placeholder /*Fix the type mannually*/>>(
-                            sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                                                          T>>(
+                            sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), [=](sycl::nd_item<3> item_ct1) {
                                     timeswitch_kernel3D(inout_get_data_ptr_ct0, nelements);
                             });
                 });
@@ -192,21 +177,16 @@ template<class T> void Gadgetron::timeswitch(cuNDArray<complext<T> >* inout, int
         info::device::max_work_group_size. Adjust the work-group size if needed.
         */
         {
-                auto exp_props =
-                    sycl::ext::oneapi::experimental::properties{sycl::ext::oneapi::experimental::use_root_sync};
+
 
                 dpct::get_in_order_queue().submit([&](sycl::handler& cgh) {
                         auto inout_get_data_ptr_ct0 = inout->get_data_ptr();
 
                         cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
-                        /*
-                        DPCT1050:38: The template argument of the dpct_kernel_name could not be deduced. You need to
-                        update this code.
-                        */
                         cgh.parallel_for<dpct_kernel_name<class timeswitch_kernel_999838,
-                                                          dpct_placeholder /*Fix the type mannually*/>>(
-                            sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
+                                                          T>>(
+                            sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), [=](sycl::nd_item<3> item_ct1) {
                                     timeswitch_kernel(inout_get_data_ptr_ct0, dimsize, batchsize, nelements);
                             });
                 });

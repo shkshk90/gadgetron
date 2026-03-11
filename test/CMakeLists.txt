@@ -48,6 +48,10 @@ include(GoogleTest)
                 cuNDArray_blas_test.cpp.sycl.cpp
                 cuNDArray_utils_test.cpp.sycl.cpp
                 cuVector_td_test_kernels.sycl.cpp
+                cuNDFFT_test.cpp
+                cuSDC_test.cpp
+                cuNFFT_test.cpp
+                cuNDArray_operators_test.cpp
                 )
     endif ()
 

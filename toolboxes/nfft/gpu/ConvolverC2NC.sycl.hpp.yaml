@@ -1,10 +1,10 @@
 ---
-MainSourceFile:  '/gadgetron2/toolboxes/nfft/gpu/ConvolverC2NC.sycl.hpp'
+MainSourceFile:  '/volume/gadgetron2/toolboxes/nfft/gpu/ConvolverC2NC.sycl.hpp'
 Replacements:
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverC2NC.cuh'
     Offset:          0
     Length:          0
-    ReplacementText: "#define ONEAPI_BACKEND_LEVEL_ZERO_EXT\n#include <sycl/sycl.hpp>\n#include <dpct/dpct.hpp>\n#include <cmath>\n"
+    ReplacementText: "#define ONEAPI_BACKEND_LEVEL_ZERO_EXT\n#include <sycl/sycl.hpp>\n#include <dpct/dpct.hpp>\n"
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -23,6 +23,15 @@ Replacements:
     Offset:          871
     Length:          11
     ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverC2NC.cuh'
+    Offset:          1122
+    Length:          0
+    ReplacementText: ', char *_shared_mem'
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -83,9 +92,27 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverC2NC.cuh'
-    Offset:          3102
-    Length:          39
-    ReplacementText: 'sycl::fabs(sample_position-grid_position_real)'
+    Offset:          2834
+    Length:          0
+    ReplacementText: ', char *_shared_mem'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverC2NC.cuh'
+    Offset:          3262
+    Length:          0
+    ReplacementText: "    /*\n    DPCT1064:61: Migrated isfinite call is used in a macro/template definition and may not be valid for all macro/template uses. Adjust the code.\n    */\n"
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverC2NC.cuh'
+    Offset:          3271
+    Length:          16
+    ReplacementText: 'sycl::isfinite((double)weight)'
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -95,6 +122,15 @@ Replacements:
     Offset:          3503
     Length:          10
     ReplacementText: 'sycl::ext::oneapi::this_work_item::get_nd_item<3>().get_group(1)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverC2NC.cuh'
+    Offset:          3794
+    Length:          54
+    ReplacementText: '*(image+image_idx+batch)'
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -119,9 +155,45 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverC2NC.cuh'
+    Offset:          4969
+    Length:          0
+    ReplacementText: ', char *_shared_mem'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverC2NC.cuh'
+    Offset:          5348
+    Length:          0
+    ReplacementText: ', _shared_mem'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverC2NC.cuh'
     Offset:          5566
     Length:          11
     ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverC2NC.cuh'
+    Offset:          5958
+    Length:          0
+    ReplacementText: ', char *_shared_mem'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverC2NC.cuh'
+    Offset:          6409
+    Length:          0
+    ReplacementText: ', _shared_mem'
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -137,9 +209,45 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverC2NC.cuh'
+    Offset:          7022
+    Length:          0
+    ReplacementText: ', char *_shared_mem'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverC2NC.cuh'
+    Offset:          7529
+    Length:          0
+    ReplacementText: ', _shared_mem'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverC2NC.cuh'
     Offset:          7759
     Length:          11
     ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverC2NC.cuh'
+    Offset:          8151
+    Length:          0
+    ReplacementText: ', char *_shared_mem'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverC2NC.cuh'
+    Offset:          8737
+    Length:          0
+    ReplacementText: ', _shared_mem'
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -155,6 +263,15 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverC2NC.cuh'
+    Offset:          9330
+    Length:          0
+    ReplacementText: ', char *_shared_mem'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverC2NC.cuh'
     Offset:          9655
     Length:          10
     ReplacementText: 'sycl::ext::oneapi::this_work_item::get_nd_item<3>().get_group(1)'
@@ -164,9 +281,9 @@ Replacements:
     NewHostVarName:  ''
     BlockLevelFormatFlag: false
   - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverC2NC.cuh'
-    Offset:          9898
-    Length:          34
-    ReplacementText: 'sycl::ceil(sample_position - radius_vec)'
+    Offset:          10256
+    Length:          0
+    ReplacementText: ', _shared_mem'
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -176,6 +293,15 @@ Replacements:
     Offset:          10365
     Length:          11
     ReplacementText: ''
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverC2NC.cuh'
+    Offset:          10813
+    Length:          0
+    ReplacementText: ', char *_shared_mem'
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''
@@ -266,6 +392,24 @@ Replacements:
     Offset:          12131
     Length:          8
     ReplacementText: 'sycl::ext::oneapi::this_work_item::get_sub_group().get_local_range().get(0)'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverC2NC.cuh'
+    Offset:          12426
+    Length:          0
+    ReplacementText: ', _shared_mem'
+    ConstantFlag:    ''
+    ConstantOffset:  0
+    InitStr:         ''
+    NewHostVarName:  ''
+    BlockLevelFormatFlag: false
+  - FilePath:        '/gadgetron/toolboxes/nfft/gpu/ConvolverC2NC.cuh'
+    Offset:          12626
+    Length:          0
+    ReplacementText: ', _shared_mem'
     ConstantFlag:    ''
     ConstantOffset:  0
     InitStr:         ''

@@ -102,13 +102,9 @@ template<class T, unsigned int D> void cuTvOperator<T,D>::gradient (cuNDArray<T>
 
                         cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
-                        /*
-                        DPCT1050:33: The template argument of the dpct_kernel_name could not be deduced. You need to
-                        update this code.
-                        */
                         cgh.parallel_for<dpct_kernel_name<class tvGradient_kernel_16856b, REAL,
-                                                          dpct_placeholder /*Fix the type mannually*/,
-                                                          dpct_placeholder /*Fix the type mannually*/>>(
+                                                          T,
+                                                          dpct_kernel_scalar<D>>>(
                             sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
                                     tvGradient_kernel(in_get_data_ptr_i_prod_dims_ct0, out_get_data_ptr_i_prod_dims_ct1,
                                                       dims, limit__ct3, this_weight__ct4);
@@ -163,13 +159,9 @@ template<class T, unsigned int D> typename realType<T>::Type cuTvOperator<T,D>::
 
                         cgh.depends_on(dpct::get_current_device().get_in_order_queues_last_events());
 
-                        /*
-                        DPCT1050:34: The template argument of the dpct_kernel_name could not be deduced. You need to
-                        update this code.
-                        */
                         cgh.parallel_for<dpct_kernel_name<class tvMagnitude_kernel_862878, REAL,
-                                                          dpct_placeholder /*Fix the type mannually*/,
-                                                          dpct_placeholder /*Fix the type mannually*/>>(
+                                                          T,
+                                                          dpct_kernel_scalar<D>>>(
                             sycl::nd_range<3>(dimGrid * dimBlock, dimBlock), exp_props, [=](sycl::nd_item<3> item_ct1) {
                                     tvMagnitude_kernel(in_get_data_ptr_i_prod_dims_ct0,
                                                        out_get_data_ptr_i_prod_dims_ct1, dims, limit__ct3,
@@ -183,6 +175,7 @@ template<class T, unsigned int D> typename realType<T>::Type cuTvOperator<T,D>::
 	return asum(&out);
 }
 
+namespace Gadgetron {
 template class EXPORTGPUOPERATORS cuTvOperator<float,1>;
 template class EXPORTGPUOPERATORS cuTvOperator<float,2>;
 template class EXPORTGPUOPERATORS cuTvOperator<float,3>;
@@ -202,3 +195,4 @@ template class EXPORTGPUOPERATORS cuTvOperator<double_complext,1>;
 template class EXPORTGPUOPERATORS cuTvOperator<double_complext,2>;
 template class EXPORTGPUOPERATORS cuTvOperator<double_complext,3>;
 template class EXPORTGPUOPERATORS cuTvOperator<double_complext,4>;
+}
