@@ -11,8 +11,23 @@
 
 #include <sstream>
 #include <complex>
+#include <iostream>
 
 namespace Gadgetron{
+
+// RAII guard to ensure FFT plans are always destroyed
+struct FFTPlanGuard {
+    dpct::fft::fft_engine_ptr plan = nullptr;
+    FFTPlanGuard() = default;
+    FFTPlanGuard(const FFTPlanGuard&) = delete;
+    FFTPlanGuard& operator=(const FFTPlanGuard&) = delete;
+    ~FFTPlanGuard() {
+        if (plan) {
+            try { dpct::fft::fft_engine::destroy(plan); } catch (...) {}
+            plan = nullptr;
+        }
+    }
+};
 
 template<class T> cuNDFFT<T>* cuNDFFT<T>::instance()
   				{
@@ -118,7 +133,7 @@ void cuNDFFT<T>::fft_int(cuNDArray<complext<T>> *input,
 		elements_in_ft *= dims[i];
 	batches = input->get_number_of_elements() / elements_in_ft;
 
-        dpct::fft::fft_engine_ptr plan;
+        FFTPlanGuard guard;
         int ftres;
 
         std::vector<int> int_dims;
@@ -126,34 +141,36 @@ void cuNDFFT<T>::fft_int(cuNDArray<complext<T>> *input,
 		int_dims.push_back((int)dims[i]);
 
         ftres = DPCT_CHECK_ERROR(
-            plan = dpct::fft::fft_engine::create(
+            guard.plan = dpct::fft::fft_engine::create(
                 &dpct::get_in_order_queue(), ndim, &int_dims[0], &int_dims[0],
                 1, elements_in_ft, &int_dims[0], 1, elements_in_ft,
                 get_transform_type<T>(), batches));
         if (ftres != 0) {
-                std::stringstream ss;
-		ss << "cuNDFFT FFT plan failed: " << ftres;
-		throw std::runtime_error(ss.str());;
+		std::cerr << "cuNDFFT::fft_int plan creation failed: ftres=" << ftres
+		          << " ndim=" << ndim << " batches=" << batches
+		          << " elements_in_ft=" << elements_in_ft
+		          << " direction=" << direction << " dims=[";
+		for (size_t i = 0; i < int_dims.size(); i++)
+			std::cerr << (i ? "," : "") << int_dims[i];
+		std::cerr << "]" << std::endl;
+		throw std::runtime_error("cuNDFFT::fft_int FFT plan failed: " + std::to_string(ftres));
 	}
-
-
 
 	if (must_permute)
 		*input = permute(*input,new_dim_order);
 
-
 		for (size_t i =0; i < dims_to_transform->size(); i++)
 			timeswitch(input,dims_to_transform->at(i));
 
-        if (cuNDA_FFT_execute<T>(plan, input, direction) != 0) {
-                throw std::runtime_error("cuNDFFT FFT execute failed");;
-	}
-
-        ftres = DPCT_CHECK_ERROR(dpct::fft::fft_engine::destroy(plan));
-        if (ftres != 0) {
-                std::stringstream ss;
-		ss << "cuNDFFT FFT plan destroy failed: " << ftres;
-		throw std::runtime_error(ss.str());;
+        if (cuNDA_FFT_execute<T>(guard.plan, input, direction) != 0) {
+		std::cerr << "cuNDFFT::fft_int execute failed:"
+		          << " ndim=" << ndim << " batches=" << batches
+		          << " elements_in_ft=" << elements_in_ft
+		          << " direction=" << direction << " dims=[";
+		for (size_t i = 0; i < int_dims.size(); i++)
+			std::cerr << (i ? "," : "") << int_dims[i];
+		std::cerr << "]" << std::endl;
+		throw std::runtime_error("cuNDFFT::fft_int FFT execute failed");
 	}
 
 		for (size_t i =0; i < dims_to_transform->size(); i++)
@@ -167,44 +184,40 @@ void cuNDFFT<T>::fft_int(cuNDArray<complext<T>> *input,
 		*input = permute(*input,reverse_dim_order);
 }
 catch (sycl::exception const &exc) {
-  std::cerr << exc.what() << "Exception caught at file:" << __FILE__
-            << ", line:" << __LINE__ << std::endl;
+  std::cerr << "cuNDFFT::fft_int SYCL exception: " << exc.what()
+            << " [" << __FILE__ << ":" << __LINE__ << "]" << std::endl;
   std::exit(1);
 }
 
 template <class T>
 void cuNDFFT<T>::fft1_int(cuNDArray<complext<T>> *input, int direction,
                           bool do_scale) try {
-        dpct::fft::fft_engine_ptr plan;
+        FFTPlanGuard guard;
         int ftres;
 
         std::vector<int> int_dims {int(input->get_size(0))};
 	int elements_in_ft = input->get_size(0);
 	int batches = input->get_number_of_elements()/elements_in_ft;
         ftres = DPCT_CHECK_ERROR(
-            plan = dpct::fft::fft_engine::create(
+            guard.plan = dpct::fft::fft_engine::create(
                 &dpct::get_in_order_queue(), 1, &int_dims[0], &int_dims[0], 1,
                 elements_in_ft, &int_dims[0], 1, elements_in_ft,
                 get_transform_type<T>(), batches));
         if (ftres != 0) {
-                std::stringstream ss;
-		ss << "cuNDFFT FFT plan failed: " << ftres;
-		throw std::runtime_error(ss.str());;
+		std::cerr << "cuNDFFT::fft1_int plan creation failed: ftres=" << ftres
+		          << " dim0=" << int_dims[0] << " batches=" << batches
+		          << " direction=" << direction << std::endl;
+		throw std::runtime_error("cuNDFFT::fft1_int FFT plan failed: " + std::to_string(ftres));
 	}
 
 		timeswitch1D(input);
 
-        if (cuNDA_FFT_execute<T>(plan, input, direction) != 0) {
-                throw std::runtime_error("cuNDFFT FFT execute failed");;
+        if (cuNDA_FFT_execute<T>(guard.plan, input, direction) != 0) {
+		std::cerr << "cuNDFFT::fft1_int execute failed:"
+		          << " dim0=" << int_dims[0] << " batches=" << batches
+		          << " direction=" << direction << std::endl;
+		throw std::runtime_error("cuNDFFT::fft1_int FFT execute failed");
 	}
-
-        ftres = DPCT_CHECK_ERROR(dpct::fft::fft_engine::destroy(plan));
-        if (ftres != 0) {
-                std::stringstream ss;
-		ss << "cuNDFFT FFT plan destroy failed: " << ftres;
-		throw std::runtime_error(ss.str());;
-	}
-
 
 		timeswitch1D(input);
 	if (do_scale) {
@@ -212,44 +225,44 @@ void cuNDFFT<T>::fft1_int(cuNDArray<complext<T>> *input, int direction,
 	}
 }
 catch (sycl::exception const &exc) {
-  std::cerr << exc.what() << "Exception caught at file:" << __FILE__
-            << ", line:" << __LINE__ << std::endl;
+  std::cerr << "cuNDFFT::fft1_int SYCL exception: " << exc.what()
+            << " [" << __FILE__ << ":" << __LINE__ << "]" << std::endl;
   std::exit(1);
 }
 
 template <class T>
 void cuNDFFT<T>::fft2_int(cuNDArray<complext<T>> *input, int direction,
                           bool do_scale) try {
-        dpct::fft::fft_engine_ptr plan;
+        FFTPlanGuard guard;
         int ftres;
 
         std::vector<int> int_dims {int(input->get_size(1)),int(input->get_size(0))};
 	int elements_in_ft = input->get_size(0)*input->get_size(1);
 	int batches = input->get_number_of_elements()/elements_in_ft;
         ftres = DPCT_CHECK_ERROR(
-            plan = dpct::fft::fft_engine::create(
+            guard.plan = dpct::fft::fft_engine::create(
                 &dpct::get_in_order_queue(), 2, &int_dims[0], &int_dims[0], 1,
                 elements_in_ft, &int_dims[0], 1, elements_in_ft,
                 get_transform_type<T>(), batches));
         if (ftres != 0) {
-                std::stringstream ss;
-		ss << "cuNDFFT FFT plan failed: " << ftres;
-		throw std::runtime_error(ss.str());;
+		std::cerr << "cuNDFFT::fft2_int plan creation failed: ftres=" << ftres
+		          << " dims=[" << int_dims[0] << "," << int_dims[1] << "]"
+		          << " batches=" << batches
+		          << " elements_in_ft=" << elements_in_ft
+		          << " direction=" << direction << std::endl;
+		throw std::runtime_error("cuNDFFT::fft2_int FFT plan failed: " + std::to_string(ftres));
 	}
 
 		timeswitch2D(input);
 
-        if (cuNDA_FFT_execute<T>(plan, input, direction) != 0) {
-                throw std::runtime_error("cuNDFFT FFT execute failed");;
+        if (cuNDA_FFT_execute<T>(guard.plan, input, direction) != 0) {
+		std::cerr << "cuNDFFT::fft2_int execute failed:"
+		          << " dims=[" << int_dims[0] << "," << int_dims[1] << "]"
+		          << " batches=" << batches
+		          << " elements_in_ft=" << elements_in_ft
+		          << " direction=" << direction << std::endl;
+		throw std::runtime_error("cuNDFFT::fft2_int FFT execute failed");
 	}
-
-        ftres = DPCT_CHECK_ERROR(dpct::fft::fft_engine::destroy(plan));
-        if (ftres != 0) {
-                std::stringstream ss;
-		ss << "cuNDFFT FFT plan destroy failed: " << ftres;
-		throw std::runtime_error(ss.str());;
-	}
-
 
 		timeswitch2D(input);
 	if (do_scale) {
@@ -257,43 +270,43 @@ void cuNDFFT<T>::fft2_int(cuNDArray<complext<T>> *input, int direction,
 	}
 }
 catch (sycl::exception const &exc) {
-  std::cerr << exc.what() << "Exception caught at file:" << __FILE__
-            << ", line:" << __LINE__ << std::endl;
+  std::cerr << "cuNDFFT::fft2_int SYCL exception: " << exc.what()
+            << " [" << __FILE__ << ":" << __LINE__ << "]" << std::endl;
   std::exit(1);
 }
 template <class T>
 void cuNDFFT<T>::fft3_int(cuNDArray<complext<T>> *input, int direction,
                           bool do_scale) try {
-        dpct::fft::fft_engine_ptr plan;
+        FFTPlanGuard guard;
         int ftres;
 
         std::vector<int> int_dims {int(input->get_size(2)),int(input->get_size(1)),int(input->get_size(0))};
 	int elements_in_ft = input->get_size(0)*input->get_size(1)*input->get_size(2);
 	int batches = input->get_number_of_elements()/elements_in_ft;
         ftres = DPCT_CHECK_ERROR(
-            plan = dpct::fft::fft_engine::create(
+            guard.plan = dpct::fft::fft_engine::create(
                 &dpct::get_in_order_queue(), 3, &int_dims[0], &int_dims[0], 1,
                 elements_in_ft, &int_dims[0], 1, elements_in_ft,
                 get_transform_type<T>(), batches));
         if (ftres != 0) {
-                std::stringstream ss;
-		ss << "cuNDFFT FFT plan failed: " << ftres;
-		throw std::runtime_error(ss.str());;
+		std::cerr << "cuNDFFT::fft3_int plan creation failed: ftres=" << ftres
+		          << " dims=[" << int_dims[0] << "," << int_dims[1] << "," << int_dims[2] << "]"
+		          << " batches=" << batches
+		          << " elements_in_ft=" << elements_in_ft
+		          << " direction=" << direction << std::endl;
+		throw std::runtime_error("cuNDFFT::fft3_int FFT plan failed: " + std::to_string(ftres));
 	}
 
 		timeswitch3D(input);
 
-        if (cuNDA_FFT_execute<T>(plan, input, direction) != 0) {
-                throw std::runtime_error("cuNDFFT FFT execute failed");;
+        if (cuNDA_FFT_execute<T>(guard.plan, input, direction) != 0) {
+		std::cerr << "cuNDFFT::fft3_int execute failed:"
+		          << " dims=[" << int_dims[0] << "," << int_dims[1] << "," << int_dims[2] << "]"
+		          << " batches=" << batches
+		          << " elements_in_ft=" << elements_in_ft
+		          << " direction=" << direction << std::endl;
+		throw std::runtime_error("cuNDFFT::fft3_int FFT execute failed");
 	}
-
-        ftres = DPCT_CHECK_ERROR(dpct::fft::fft_engine::destroy(plan));
-        if (ftres != 0) {
-                std::stringstream ss;
-		ss << "cuNDFFT FFT plan destroy failed: " << ftres;
-		throw std::runtime_error(ss.str());;
-	}
-
 
 		timeswitch3D(input);
 
@@ -302,8 +315,8 @@ void cuNDFFT<T>::fft3_int(cuNDArray<complext<T>> *input, int direction,
 	}
 }
 catch (sycl::exception const &exc) {
-  std::cerr << exc.what() << "Exception caught at file:" << __FILE__
-            << ", line:" << __LINE__ << std::endl;
+  std::cerr << "cuNDFFT::fft3_int SYCL exception: " << exc.what()
+            << " [" << __FILE__ << ":" << __LINE__ << "]" << std::endl;
   std::exit(1);
 }
 template<class T> void

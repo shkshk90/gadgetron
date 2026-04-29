@@ -158,7 +158,7 @@ if (USE_SYCL)
     # SYCL compile and link flags (applied per-target, NOT globally,
     # to avoid SYCL's <cmath> wrapper breaking pure-CPU code)
     set(SYCL_COMPILE_FLAGS
-        -fsycl -fsycl-targets=nvptx64-nvidia-cuda
+        -fsycl -fsycl-targets=nvptx64-nvidia-cuda,
         -Xsycl-target-backend --cuda-gpu-arch=sm_80
         -Wno-array-bounds -Wno-switch -Wno-dynamic-class-memaccess
         -Wno-undefined-var-template -Wno-parentheses -Wno-inconsistent-missing-override
