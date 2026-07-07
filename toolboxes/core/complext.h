@@ -19,9 +19,21 @@
 
 namespace Gadgetron {
 
-    // Scalar math wrappers that work on both host and device.
-    // std:: versions are always available; on device, sycl:: builtins are also
-    // pulled in so that unqualified calls from device code resolve correctly.
+    // Scalar math wrappers that work on both host and device. std:: versions
+    // are used unconditionally on both host and device: SYCL/DPC++ device
+    // code can call standard C++ math functions directly (that's a core
+    // "single source" design goal of DPC++), so no separate sycl:: overload
+    // set is needed. Previously this block also pulled in the sycl:: builtins
+    // under __SYCL_DEVICE_ONLY__, but that made every unqualified call
+    // ambiguous under Intel's icpx/spir64 and Level-Zero targets (confirmed:
+    // atan2, sqrt, sin, cos, exp all hit "call to 'X' is ambiguous" —
+    // std::X and sycl::X are equally-good overload candidates with no
+    // tiebreaker). Removed rather than qualifying every call site
+    // individually, since some call sites (e.g. cuNDArray_elemwise.sycl.cpp's
+    // `using Gadgetron::sqrt; return sqrt(x);`) rely on overload resolution
+    // to pick between this scalar overload and Gadgetron's own complext<T>
+    // overload depending on the template instantiation — forcibly qualifying
+    // as std:: at the call site would break the complext<T> case.
     using std::abs;
     using std::sin;
     using std::cos;
@@ -30,15 +42,6 @@ namespace Gadgetron {
     using std::atan2;
     using std::cosh;
     using std::sinh;
-#ifdef __SYCL_DEVICE_ONLY__
-    using sycl::sin;
-    using sycl::cos;
-    using sycl::exp;
-    using sycl::sqrt;
-    using sycl::atan2;
-    using sycl::cosh;
-    using sycl::sinh;
-#endif
 
     /**
      * \class complext
@@ -336,7 +339,7 @@ namespace Gadgetron {
 
     template<class T>
     __inline__ T arg(complext<T> comp) {
-        return atan2(comp._imag, comp._real);
+        return std::atan2(comp._imag, comp._real);
     }
 
     template<class T, class S>

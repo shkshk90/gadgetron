@@ -132,6 +132,14 @@ if (USE_SYCL)
         message(FATAL_ERROR "USE_SYCL is enabled but the compiler does not support -fsycl. Use a SYCL-capable compiler (e.g. Intel DPC++ / icpx).")
     endif()
 
+    # Which GPU vendor the SYCL build targets. Defaults to cuda so existing
+    # NVIDIA configure/build invocations are unaffected.
+    set(SYCL_TARGET_BACKEND "cuda" CACHE STRING "SYCL target backend: cuda, intel, or amd")
+    set_property(CACHE SYCL_TARGET_BACKEND PROPERTY STRINGS cuda intel amd)
+    if (NOT SYCL_TARGET_BACKEND STREQUAL "cuda" AND NOT SYCL_TARGET_BACKEND STREQUAL "intel" AND NOT SYCL_TARGET_BACKEND STREQUAL "amd")
+        message(FATAL_ERROR "SYCL_TARGET_BACKEND must be one of: cuda, intel, amd (got '${SYCL_TARGET_BACKEND}')")
+    endif()
+
     # Required SYCL variables
     if (NOT DEFINED DPCT_INCLUDE_PATH)
         message(FATAL_ERROR "USE_SYCL requires DPCT_INCLUDE_PATH to be set (e.g. -DDPCT_INCLUDE_PATH=/path/to/dpct/include)")
@@ -156,17 +164,88 @@ if (USE_SYCL)
     endif()
 
     # SYCL compile and link flags (applied per-target, NOT globally,
-    # to avoid SYCL's <cmath> wrapper breaking pure-CPU code)
+    # to avoid SYCL's <cmath> wrapper breaking pure-CPU code).
+    # Target triple + backend arch flag depend on SYCL_TARGET_BACKEND. The
+    # cuda branch keeps its exact historical token sequence (including the
+    # stray trailing comma on the compile-flags triple, absent from the
+    # link-flags triple) so default behavior is byte-identical to before
+    # this option was introduced.
+    set(SYCL_BACKEND_WARNING_FLAGS "")
+    set(SYCL_BACKEND_LINK_FLAGS "")
+    if (SYCL_TARGET_BACKEND STREQUAL "cuda")
+        set(SYCL_COMPILE_TARGET_FLAGS -fsycl-targets=nvptx64-nvidia-cuda, -Xsycl-target-backend --cuda-gpu-arch=sm_80)
+        set(SYCL_LINK_TARGET_FLAGS -fsycl-targets=nvptx64-nvidia-cuda -Xsycl-target-backend --cuda-gpu-arch=sm_80)
+    elseif (SYCL_TARGET_BACKEND STREQUAL "intel")
+        # spir64 is generic/JIT'd SPIR-V — it doesn't guarantee ahead-of-time
+        # codegen for a specific GPU and can fall back to CPU/OpenCL
+        # depending on runtime device selection. intel_gpu_pvc is the
+        # explicit AOT device alias for Ponte Vecchio (confirmed against
+        # intel/llvm's own compiler docs), so device code is compiled
+        # directly for the PVC GPU this pipeline targets.
+        set(SYCL_COMPILE_TARGET_FLAGS -fsycl-targets=intel_gpu_pvc)
+        set(SYCL_LINK_TARGET_FLAGS -fsycl-targets=intel_gpu_pvc)
+    elseif (SYCL_TARGET_BACKEND STREQUAL "amd")
+        set(SYCL_COMPILE_TARGET_FLAGS -fsycl-targets=amdgcn-amd-amdhsa -Xsycl-target-backend --offload-arch=gfx942)
+        set(SYCL_LINK_TARGET_FLAGS -fsycl-targets=amdgcn-amd-amdhsa -Xsycl-target-backend --offload-arch=gfx942)
+        # oneDPL's SYCL backend requests reqd_sub_group_size(32) (NVIDIA/Intel
+        # warp width) as a codegen hint; amdgcn only supports 64-wide
+        # wavefronts, so the compiler rejects the attribute as invalid. This
+        # is harmless: oneDPL's reduce/scan kernels re-query the actual
+        # runtime sub-group width (via
+        # __get_reduce_then_scan_actual_sub_group_size(item.get_sub_group()))
+        # and use that for all loop bounds/shuffle counts — the attribute is
+        # a hint only, guarded by oneDPL's own
+        # _ONEDPL_SYCL_REQD_SUB_GROUP_SIZE_IF_SUPPORTED macro for exactly
+        # this case. Confirmed by reading oneDPL's
+        # parallel_backend_sycl_reduce_then_scan.h source; no correctness
+        # impact. Separately, Intel's own from-source SYCL runtime headers
+        # (sycl/ext/oneapi/experimental/opportunistic_group.hpp, an unused
+        # experimental extension pulled in transitively via <sycl/sycl.hpp>)
+        # trip an unrelated missing-return warning under the HIP target.
+        #
+        # NOTE: our from-source clang++ (built for the HIP backend) segfaults
+        # inside LLVM's loop vectorizer (LoopVectorizationPlanner::computeBestVF,
+        # "VPlan cost model and legacy cost model disagreed") while generating
+        # amdgcn device code for some gadgetron2 GPU kernels (first hit:
+        # cuCartesianSenseOperator.sycl.cpp's mult_M kernel). This is a known,
+        # recurring class of LLVM vectorizer bug (see llvm/llvm-project issues
+        # #100464, #105713, #107171, #107473, #111874, #114860). Four attempts
+        # to work around it via flags were tried and reverted per user
+        # decision (compile-scope -fno-vectorize/-fno-slp-vectorize, the same
+        # at link scope, -fno-sycl-rdc, and lld's -plugin-opt vectorizer
+        # flags) — none fully resolved it or they broke something else
+        # (-fno-sycl-rdc broke SYCL's own SYCL_EXTERNAL macro visibility).
+        # Left un-worked-around for now; AMD build is expected to still hit
+        # this crash until a real fix (e.g. a newer/patched LLVM, or isolating
+        # the exact kernel pattern that triggers it) is found.
+        set(SYCL_BACKEND_WARNING_FLAGS -Wno-incorrect-sub-group-size -Wno-return-type)
+        set(SYCL_BACKEND_LINK_FLAGS "")
+        # A nightly build tried earlier (since reverted back to the pinned
+        # v6.3.0 release) had a clang++ that failed to auto-locate its own
+        # libspirv bitcode for the amdgcn target at the default resource-dir
+        # path — apparent driver-lookup regression specific to that nightly,
+        # not seen on v6.3.0. Kept as an opportunistic, non-fatal fallback:
+        # native_build.amd.sh only sets SYCL_LIBSPIRV_PATH if its own search
+        # finds the file, so this is a no-op on v6.3.0. Scoped only to SYCL
+        # compile/link flags — NOT general CMAKE_CXX_FLAGS, since clang
+        # rejects it as an unused argument (-Werror,-Wunused-command-line-argument)
+        # on the many gadgetron2 files that don't pass -fsycl at all.
+        if (DEFINED SYCL_LIBSPIRV_PATH)
+            set(SYCL_BACKEND_WARNING_FLAGS ${SYCL_BACKEND_WARNING_FLAGS} -fsycl-libspirv-path=${SYCL_LIBSPIRV_PATH})
+            set(SYCL_BACKEND_LINK_FLAGS ${SYCL_BACKEND_LINK_FLAGS} -fsycl-libspirv-path=${SYCL_LIBSPIRV_PATH})
+        endif()
+    endif()
+
     set(SYCL_COMPILE_FLAGS
-        -fsycl -fsycl-targets=nvptx64-nvidia-cuda,
-        -Xsycl-target-backend --cuda-gpu-arch=sm_80
+        -fsycl ${SYCL_COMPILE_TARGET_FLAGS}
         -Wno-array-bounds -Wno-switch -Wno-dynamic-class-memaccess
         -Wno-undefined-var-template -Wno-parentheses -Wno-inconsistent-missing-override
         -Wno-unused-value -Wno-deprecated-declarations
         -Wno-bitwise-op-parentheses -Wno-reorder-ctor
         -Wno-comment -Wno-switch-bool
+        ${SYCL_BACKEND_WARNING_FLAGS}
     )
-    set(SYCL_LINK_FLAGS -fsycl -fsycl-targets=nvptx64-nvidia-cuda -Xsycl-target-backend --cuda-gpu-arch=sm_80)
+    set(SYCL_LINK_FLAGS -fsycl ${SYCL_LINK_TARGET_FLAGS} ${SYCL_BACKEND_LINK_FLAGS})
 
     add_definitions(-DUSE_SYCL)
     add_definitions(-DSYCL_DISABLE_FSYCL_SYCLHPP_WARNING)
@@ -178,15 +257,53 @@ if (USE_SYCL)
     include_directories(${MKL_INCLUDE_PATH})
     include_directories(${SYCL_INCLUDE_PATH})
 
-    # SYCL / oneMKL libraries (available globally via SYCL_LIBRARIES)
-    set(SYCL_LIBRARIES
-        ${LIBSYCL}
-        ${ONEMKL_PATH}/lib/libonemath.so
-        ${ONEMKL_PATH}/lib/libonemath_blas_cublas.so
-        ${ONEMKL_PATH}/lib/libonemath_sparse_blas_cusparse.so
-    )
+    # SYCL / oneMath libraries (available globally via SYCL_LIBRARIES).
+    # Backend .so names follow oneMath's libonemath_<domain>_<backend>.so
+    # convention (confirmed against the oneMath v0.9 support matrix: MKLGPU
+    # for Intel GPU, rocSPARSE/rocBLAS for AMD GPU both ship a sparse_blas
+    # backend, same as cuSPARSE does for the existing cuda path below).
+    if (SYCL_TARGET_BACKEND STREQUAL "cuda")
+        set(SYCL_LIBRARIES
+            ${LIBSYCL}
+            ${ONEMKL_PATH}/lib/libonemath.so
+            ${ONEMKL_PATH}/lib/libonemath_blas_cublas.so
+            ${ONEMKL_PATH}/lib/libonemath_sparse_blas_cusparse.so
+        )
+    elseif (SYCL_TARGET_BACKEND STREQUAL "intel")
+        # libonemath_blas_mklgpu.so / libonemath_sparse_blas_mklgpu.so are
+        # thin dispatch wrappers around real Intel MKL's own SYCL libraries
+        # (oneapi::mkl::blas::*, oneapi::mkl::sparse::* — note the older
+        # oneapi::mkl:: namespace, not oneMath's oneapi::math::) — they do
+        # not embed those implementations themselves. Confirmed by comparing
+        # to oneMath's own successful build link line, which explicitly
+        # listed these same real MKL libs. MKLROOT_LIB must be passed in by
+        # the build script (-DMKLROOT_LIB=<mkl>/lib).
+        if (NOT DEFINED MKLROOT_LIB)
+            message(FATAL_ERROR "SYCL_TARGET_BACKEND=intel requires MKLROOT_LIB to be set (e.g. -DMKLROOT_LIB=/path/to/mkl/lib)")
+        endif()
+        set(SYCL_LIBRARIES
+            ${LIBSYCL}
+            ${ONEMKL_PATH}/lib/libonemath.so
+            ${ONEMKL_PATH}/lib/libonemath_blas_mklgpu.so
+            ${ONEMKL_PATH}/lib/libonemath_sparse_blas_mklgpu.so
+            ${MKLROOT_LIB}/libmkl_sycl_blas.so
+            ${MKLROOT_LIB}/libmkl_sycl_sparse.so
+            ${MKLROOT_LIB}/libmkl_intel_ilp64.so
+            ${MKLROOT_LIB}/libmkl_sequential.so
+            ${MKLROOT_LIB}/libmkl_core.so
+            OpenCL
+        )
+    elseif (SYCL_TARGET_BACKEND STREQUAL "amd")
+        set(SYCL_LIBRARIES
+            ${LIBSYCL}
+            ${ONEMKL_PATH}/lib/libonemath.so
+            ${ONEMKL_PATH}/lib/libonemath_blas_rocblas.so
+            ${ONEMKL_PATH}/lib/libonemath_sparse_blas_rocsparse.so
+        )
+    endif()
 
     message(STATUS "SYCL support enabled")
+    message(STATUS "  SYCL_TARGET_BACKEND: ${SYCL_TARGET_BACKEND}")
     message(STATUS "  DPCT_INCLUDE_PATH: ${DPCT_INCLUDE_PATH}")
     message(STATUS "  ZERO_LEVEL_INCLUDE_PATH: ${ZERO_LEVEL_INCLUDE_PATH}")
     message(STATUS "  ONEAPI_DPL_INCLUDE_PATH: ${ONEAPI_DPL_INCLUDE_PATH}")
